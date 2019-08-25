@@ -1,0 +1,35 @@
+opam-version: "2.0"
+version: "1.0.0"
+
+maintainer: "xaviervdw@gmail.com"
+authors: [
+  "Didier Plaindoux <d.plaindoux@free.fr>"
+  "Pierre Ruyter <grimfw@gmail.com>"
+  "Xavier Van de Woestyne <xaviervdw@gmail.com>"
+]
+
+license: "MIT"
+tags: ["library" "standard" "monad"]
+homepage: "https://github.com/xvw/preface"
+dev-repo: "git+https://github.com/xvw/preface.git"
+bug-reports: "https://github.com/xvw/preface/issues"
+
+build: [
+  [ "dune" "subst" ]
+  [ "dune" "build" "-p" name "-j" jobs ]
+  [ "dune" "runtest" "-p" name ] {with-test}
+  [ "dune" "build" "@doc" "-p" name ] {with-doc}
+]
+
+depends: [
+  "ocaml" { >= "4.08.0" }
+  "dune"
+  "alcotest" {with-test}
+  "odoc"{with-doc}
+]
+
+synopsis: "An exploration of some theorical aspect of functional programming"
+description:"""
+Preface is a library dedicated to functional programming in OCaml.
+(Named in reference of Prelude)
+"""
