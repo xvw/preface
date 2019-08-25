@@ -1,0 +1,25 @@
+name: Build
+
+on: [pull_request]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: ocaml/opam2
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: opam init
+        env:
+          OPAMYES: 1
+        run: ./.github/workflows/scripts/init.sh
+
+      - name: dune build
+        run: |
+          opam install -y . --deps-only
+          eval `opam config env`
+          dune build
