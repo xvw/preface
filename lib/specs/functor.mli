@@ -11,6 +11,7 @@
 
 (** {1 Requirement} *)
 
+(** Standard requirement. *)
 module type REQUIREMENT = sig
   type 'a t
   (** The type holded by the [Functor]. *)
@@ -19,16 +20,21 @@ module type REQUIREMENT = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
-(** {1 API} *)
-
-(** The complete interface of a [Functor]. *)
-module type API = sig
+(** Requirement with replace *)
+module type FULL_REQUIREMENT = sig
   include REQUIREMENT
 
   val replace : 'a -> 'b t -> 'a t
   (** Create a new ['a t], replacing all values in the ['b t]
       by given a value of ['a].
   *)
+end
+
+(** {1 API} *)
+
+(** The complete interface of a [Functor]. *)
+module type API = sig
+  include FULL_REQUIREMENT
 
   val void : 'a t -> unit t
   (** Create a new [unit t], replacing all values in the ['a t] by [unit]. *)

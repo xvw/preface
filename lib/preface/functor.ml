@@ -1,10 +1,8 @@
 open Fun
 
-module For (REQUIREMENT : Specs.Functor.REQUIREMENT) :
+module Via_map_with_replace (REQUIREMENT : Specs.Functor.FULL_REQUIREMENT) :
   Specs.FUNCTOR with type 'a t = 'a REQUIREMENT.t = struct
   include REQUIREMENT
-
-  let replace value x = (map <% const) value x
 
   let void x = replace () x
 
@@ -19,4 +17,15 @@ module For (REQUIREMENT : Specs.Functor.REQUIREMENT) :
   end
 
   include Infix
+end
+
+module Via_map (REQUIREMENT : Specs.Functor.REQUIREMENT) :
+  Specs.FUNCTOR with type 'a t = 'a REQUIREMENT.t = struct
+  module Requirement = struct
+    include REQUIREMENT
+
+    let replace value x = (map <% const) value x
+  end
+
+  include Via_map_with_replace (Requirement)
 end
