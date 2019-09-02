@@ -12,3 +12,7 @@ end)
    http://gallium.inria.fr/blog/overriding-submodules/
 *)
 include (Functor : module type of Functor with type 'a t := 'a t)
+
+let eq f a b = f a b
+
+let pp pp' formater a = Format.fprintf formater "Identity (%a)" pp' a

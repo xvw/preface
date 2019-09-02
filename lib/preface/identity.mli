@@ -11,3 +11,11 @@ val pure : 'a -> 'a t
 module Functor : Specs.FUNCTOR with type 'a t = 'a t
 
 include module type of Functor with type 'a t := 'a t
+
+(** {2 Helpers} *)
+
+val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+(** Equality.*)
+
+val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
+(** Pretty printing. *)
