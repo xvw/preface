@@ -1,6 +1,7 @@
 open Fun
 
-module Via_map_with_replace (REQUIREMENT : Specs.Functor.FULL_REQUIREMENT) :
+module Via_map_with_replace
+    (REQUIREMENT : Specs.Functor.REQUIREMENT_WITH_REPLACE) :
   Specs.FUNCTOR with type 'a t = 'a REQUIREMENT.t = struct
   include REQUIREMENT
 

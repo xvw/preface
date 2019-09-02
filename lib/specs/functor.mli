@@ -20,8 +20,8 @@ module type REQUIREMENT = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
-(** Requirement with replace *)
-module type FULL_REQUIREMENT = sig
+(** Requirement with fixed version of [replace]. *)
+module type REQUIREMENT_WITH_REPLACE = sig
   include REQUIREMENT
 
   val replace : 'a -> 'b t -> 'a t
@@ -34,7 +34,7 @@ end
 
 (** The complete interface of a [Functor]. *)
 module type API = sig
-  include FULL_REQUIREMENT
+  include REQUIREMENT_WITH_REPLACE
 
   val void : 'a t -> unit t
   (** Create a new [unit t], replacing all values in the ['a t] by [unit]. *)
