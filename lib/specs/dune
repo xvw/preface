@@ -1,0 +1,6 @@
+(library
+ (name specs)
+ (public_name preface.specs)
+ (modules_without_implementation
+   specs
+   functor))

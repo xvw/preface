@@ -6,5 +6,11 @@ all:
 test:
 	dune runtest -j 1
 
+doc:
+	dune build @doc
+
 clean:
 	dune clean
+
+utop: all
+	dune utop
