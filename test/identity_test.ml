@@ -38,7 +38,7 @@ let should_map() =
 
 let should_void() =
     let expected = pure 42
-    and computed = map (fun _ -> 42) (void (pure 41)) // void testable does not exist (yet!)
+    and computed = map (fun _ -> 42) (void (pure 41)) (* void testable does not exist (yet!) *)
     in  Alcotest.(check (identity int))
             "should_void"
             expected
