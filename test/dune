@@ -1,3 +1,4 @@
 (test
  (name preface_test)
- (libraries alcotest))
+ (libraries alcotest
+            preface))
