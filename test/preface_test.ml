@@ -1,3 +1,3 @@
 let () =
   let open Alcotest in
-  run "Preface" [Identity_test.test_cases]
+  run "Preface" [Fun_test.test_cases; Identity_test.test_cases]
