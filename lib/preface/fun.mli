@@ -5,7 +5,7 @@
 val compose_left_to_right : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
 (** [(compose_left_to_right f g) x] is [g (f x)].  *)
 
-val compose_right_to_left : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+val compose_right_to_left : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 (** [(compose_right_to_left f g) x] is [f (g x)]. It is the
     mathematical composition.
 *)
@@ -16,7 +16,7 @@ module Infix : sig
   val ( %> ) : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
   (** [(f %> g) x] is [g (f x)]. Alias for {!val:compose_left_to_right} *)
 
-  val ( <% ) : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+  val ( <% ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
   (** [(f <% g) x] is [f (g x)]. Alias for {!val:compose_right_to_left} *)
 end
 
