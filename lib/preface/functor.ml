@@ -1,31 +1,34 @@
 open Fun
 
-module Make_with_replace (REQUIREMENT : Specs.Functor.REQUIREMENT_WITH_REPLACE) :
-  Specs.FUNCTOR with type 'a t = 'a REQUIREMENT.t = struct
-  include REQUIREMENT
+module Make_operation (Core : Specs.Functor.CORE) :
+  Specs.Functor.OPERATION with type 'a t = 'a Core.t = struct
+  type 'a t = 'a Core.t
+
+  let replace value x = (Core.map <% const) value x
 
   let void x = replace () x
-
-  module Infix = struct
-    let ( <$> ) = map
-
-    let ( <&> ) x f = map f x
-
-    let ( <$ ) value x = replace value x
-
-    let ( $> ) x value = replace value x
-  end
-
-  include Infix
 end
 
-module Make (REQUIREMENT : Specs.Functor.REQUIREMENT) :
-  Specs.FUNCTOR with type 'a t = 'a REQUIREMENT.t = struct
-  module Requirement = struct
-    include REQUIREMENT
+module Make_infix
+    (Core : Specs.Functor.CORE)
+    (Operation : Specs.Functor.OPERATION with type 'a t = 'a Core.t) :
+  Specs.Functor.INFIX with type 'a t = 'a Core.t = struct
+  type 'a t = 'a Operation.t
 
-    let replace value x = (map <% const) value x
-  end
+  let ( <$> ) = Core.map
 
-  include Make_with_replace (Requirement)
+  let ( <&> ) x f = Core.map f x
+
+  let ( <$ ) value x = Operation.replace value x
+
+  let ( $> ) x value = Operation.replace value x
+end
+
+module Make (Core : Specs.Functor.CORE) :
+  Specs.FUNCTOR with type 'a t = 'a Core.t = struct
+  include Core
+  module Operation = Make_operation (Core)
+  include Operation
+  module Infix = Make_infix (Core) (Operation)
+  include Infix
 end

@@ -9,10 +9,10 @@
     - [fmap (f <% g)] must be equivalent to [fmap f <% fmap g].
 *)
 
-(** {1 Requirement} *)
+(** {1 Structure anatomy} *)
 
 (** Standard requirement. *)
-module type REQUIREMENT = sig
+module type CORE = sig
   type 'a t
   (** The type holded by the [Functor]. *)
 
@@ -20,38 +20,47 @@ module type REQUIREMENT = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
-(** Requirement with fixed version of [replace]. *)
-module type REQUIREMENT_WITH_REPLACE = sig
-  include REQUIREMENT
+(** Operations *)
+module type OPERATION = sig
+  type 'a t
+  (** The type holded by the [Functor]. *)
 
   val replace : 'a -> 'b t -> 'a t
   (** Create a new ['a t], replacing all values in the ['b t]
       by given a value of ['a].
   *)
+
+  val void : 'a t -> unit t
+  (** Create a new [unit t], replacing all values in the ['a t] by [unit]. *)
+end
+
+(** Infix notation *)
+module type INFIX = sig
+  type 'a t
+  (** The type holded by the [Functor]. *)
+
+  val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
+  (** Infix version of {!val:map}. *)
+
+  val ( <&> ) : 'a t -> ('a -> 'b) -> 'b t
+  (** Flipped and infix version of {!val:map}. *)
+
+  val ( <$ ) : 'a -> 'b t -> 'a t
+  (** Infix version of {!val:replace}. *)
+
+  val ( $> ) : 'a t -> 'b -> 'b t
+  (** Flipped and infix version of {!val:replace}. *)
 end
 
 (** {1 API} *)
 
 (** The complete interface of a [Functor]. *)
 module type API = sig
-  include REQUIREMENT_WITH_REPLACE
+  include CORE
 
-  val void : 'a t -> unit t
-  (** Create a new [unit t], replacing all values in the ['a t] by [unit]. *)
+  include OPERATION with type 'a t := 'a t
 
-  module Infix : sig
-    val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
-    (** Infix version of {!val:map}. *)
-
-    val ( <&> ) : 'a t -> ('a -> 'b) -> 'b t
-    (** Flipped and infix version of {!val:map}. *)
-
-    val ( <$ ) : 'a -> 'b t -> 'a t
-    (** Infix version of {!val:replace}. *)
-
-    val ( $> ) : 'a t -> 'b -> 'b t
-    (** Flipped and infix version of {!val:replace}. *)
-  end
+  module Infix : INFIX with type 'a t := 'a t
 
   include module type of Infix
 end
