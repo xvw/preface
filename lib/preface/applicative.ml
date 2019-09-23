@@ -7,7 +7,7 @@ module Make_core_via_map_and_product
 
   type 'a t = 'a Core.t
 
-  let apply f a = Core.map (fun (f, a) -> f a) @@ Core.product f a
+  let apply f a = map (fun (f, a) -> f a) @@ product f a
 end
 
 module Make_core_via_apply (Core : Specs.Applicative.CORE_VIA_APPLY) :
