@@ -31,7 +31,8 @@ module Make_infix
     Requirements ([pure], [map], [apply] and [product]).
 *)
 
-module Make_via_map_and_product (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
+module Make_via_map_and_product
+    (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
   Specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t
 (** Incarnation of an [Applicative] for an ['a t] with standard
     Requirements ([pure], [map] and [product]).

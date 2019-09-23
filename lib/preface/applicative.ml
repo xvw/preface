@@ -56,7 +56,8 @@ module Make_infix
   let ( *> ) a b = b <* a
 end
 
-module Make_via_map_and_product (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
+module Make_via_map_and_product
+    (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
   Specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t = struct
   module Core = Make_core_via_map_and_product (Core_via_map_and_product)
   include Core
@@ -70,7 +71,7 @@ end
 
 module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
   Specs.APPLICATIVE with type 'a t = 'a Core_via_apply.t = struct
-  module Core =  Make_core_via_apply (Core_via_apply)
+  module Core = Make_core_via_apply (Core_via_apply)
   include Core
   module Operation = Make_operation (Core)
   include Operation
