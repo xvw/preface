@@ -30,7 +30,7 @@ module Functor = Functor
 (** Describes an object that can be mapped. *)
 
 module Applicative = Applicative
-(** TODO *)
+(** Describes an applicative functor *)
 
 (** {1 API Shortcuts}
     Shortcuts for the API of each objects (by convention, OCaml module types
@@ -38,3 +38,5 @@ module Applicative = Applicative
 *)
 
 module type FUNCTOR = Functor.API
+
+module type APPLICATIVE = Applicative.API

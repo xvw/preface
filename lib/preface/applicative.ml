@@ -1,39 +1,68 @@
 open Fun
 
-module Operation (Core : Specs.Applicative.Core) :
-  Specs.Applicative.Operation with type 'a t = 'a Core.t = struct
+module Make_via_map_and_product
+    (Core : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
+  Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
-  include Functor
 
-  let ap _f _a = failwith "Map not yet 'included'" (* WIP *)
+  type 'a t = 'a Core.t
 
-  let liftA f = ap @@ pure f
-
-  let liftA2 f a = ap @@ ap (pure f) a
-
-  let liftA3 f a b = ap @@ ap (ap (pure f) a) b
+  let apply f a = Core.map (fun (f, a) -> f a) @@ Core.product f a
 end
 
-module Syntax (Core : Specs.Applicative.Core) :
-  Specs.Applicative.Syntax with type 'a t = 'a Core.t = struct
+module Make_via_apply (Core : Specs.Applicative.CORE_VIA_APPLY) :
+  Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
-  include Operation (Core)
 
-  let ( let+ ) _x _f = failwith "Map not yet 'included'" (* WIP *)
+  type 'a t = 'a Core.t
 
-  let ( and+ ) = product
+  let map f a = apply (pure f) a
+
+  let product a b = apply (apply (pure (fun a b -> a, b)) a) b
 end
 
-module Infix (Core : Specs.Applicative.Core) :
-  Specs.Applicative.Infix with type 'a t = 'a Core.t = struct
-  include Core
-  include Operation (Core)
+module Make_operation (Core : Specs.Applicative.CORE) :
+  Specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
+  type 'a t = 'a Core.t
 
-  let ( <*> ) = ap
+  let liftA f = Core.apply @@ Core.pure f
+
+  let liftA2 f a = Core.apply @@ Core.apply (Core.pure f) a
+
+  let liftA3 f a b = Core.apply @@ Core.apply (Core.apply (Core.pure f) a) b
+end
+
+module Make_syntax (Core : Specs.Applicative.CORE) :
+  Specs.Applicative.SYNTAX with type 'a t = 'a Core.t = struct
+  type 'a t = 'a Core.t
+
+  let ( let+ ) x f = Core.map f x
+
+  let ( and+ ) = Core.product
+end
+
+module Make_infix
+    (Core : Specs.Applicative.CORE)
+    (Operation : Specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
+  Specs.Applicative.INFIX with type 'a t = 'a Core.t = struct
+  type 'a t = 'a Core.t
+
+  let ( <*> ) = Core.apply
 
   let ( <**> ) a f = f <*> a
 
-  let ( <* ) a b = liftA2 const a b
+  let ( <* ) a b = Operation.liftA2 const a b
 
   let ( *> ) a b = b <* a
+end
+
+module Make (Core : Specs.Applicative.CORE) :
+  Specs.APPLICATIVE with type 'a t = 'a Core.t = struct
+  include Core
+  module Operation = Make_operation (Core)
+  include Operation
+  module Syntax = Make_syntax (Core)
+  include Syntax
+  module Infix = Make_infix (Core) (Operation)
+  include Infix
 end
