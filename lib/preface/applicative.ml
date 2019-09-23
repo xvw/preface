@@ -1,6 +1,6 @@
 open Fun
 
-module Make_via_map_and_product
+module Make_core_via_map_and_product
     (Core : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
   Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
@@ -10,7 +10,7 @@ module Make_via_map_and_product
   let apply f a = Core.map (fun (f, a) -> f a) @@ Core.product f a
 end
 
-module Make_via_apply (Core : Specs.Applicative.CORE_VIA_APPLY) :
+module Make_core_via_apply (Core : Specs.Applicative.CORE_VIA_APPLY) :
   Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
 
@@ -56,8 +56,21 @@ module Make_infix
   let ( *> ) a b = b <* a
 end
 
-module Make (Core : Specs.Applicative.CORE) :
-  Specs.APPLICATIVE with type 'a t = 'a Core.t = struct
+module Make_via_map_and_product (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
+  Specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t = struct
+  module Core = Make_core_via_map_and_product (Core_via_map_and_product)
+  include Core
+  module Operation = Make_operation (Core)
+  include Operation
+  module Syntax = Make_syntax (Core)
+  include Syntax
+  module Infix = Make_infix (Core) (Operation)
+  include Infix
+end
+
+module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
+  Specs.APPLICATIVE with type 'a t = 'a Core_via_apply.t = struct
+  module Core =  Make_core_via_apply (Core_via_apply)
   include Core
   module Operation = Make_operation (Core)
   include Operation
