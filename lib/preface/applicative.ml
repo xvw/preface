@@ -5,16 +5,12 @@ module Make_core_via_map_and_product
   Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
 
-  type 'a t = 'a Core.t
-
   let apply f a = map (fun (f, a) -> f a) @@ product f a
 end
 
 module Make_core_via_apply (Core : Specs.Applicative.CORE_VIA_APPLY) :
   Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
-
-  type 'a t = 'a Core.t
 
   let map f a = apply (pure f) a
 
@@ -25,7 +21,7 @@ module Make_operation (Core : Specs.Applicative.CORE) :
   Specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
-  let liftA f = Core.apply @@ Core.pure f
+  let liftA = Core.map
 
   let liftA2 f a = Core.apply @@ Core.apply (Core.pure f) a
 
@@ -51,9 +47,9 @@ module Make_infix
 
   let ( <**> ) a f = f <*> a
 
-  let ( <* ) a b = Operation.liftA2 const a b
+  let ( *> ) a b = Operation.liftA2 const b a
 
-  let ( *> ) a b = b <* a
+  let ( <* ) a b = b *> a
 end
 
 module Make_via_map_and_product

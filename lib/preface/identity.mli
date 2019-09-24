@@ -10,7 +10,13 @@ val pure : 'a -> 'a t
 
 module Functor : Specs.FUNCTOR with type 'a t = 'a t
 
-include module type of Functor with type 'a t := 'a t
+(*include module type of Functor with type 'a t := 'a t*)
+
+(** {1 Applicative API} *)
+
+module Applicative : Specs.APPLICATIVE with type 'a t = 'a t
+
+(*include module type of Applicative with type 'a t := 'a t*)
 
 (** {2 Helpers} *)
 

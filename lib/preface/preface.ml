@@ -6,6 +6,7 @@ module Fun = Fun
 
 module Functor = Functor
 module Identity = Identity
+module Applicative = Applicative
 
 (** {1 Pervasives} *)
 

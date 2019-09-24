@@ -1,27 +1,19 @@
-(** An [Applicative] for [('a -> 'b) t] is TODO.
+(** An [Applicative] for [('a -> 'b) t] is an application functor from ['a t] to ['b t].
+
+    To have a predictable behaviour, the instance of [Applicative] must
+    obey some laws.
+
+    {1 Laws of [Applicative]}
+    - [apply (pure id)] must be equivalent to [id];
+    - [compose <$> u <*> v <*> w] must be equivalent to
+      [u <*> v <*> w];
+    - [f <$> pure x] must be equivalent to [pure (f x)];
+    - [u <*> pure x] must be equivalent to [(fun f -> f x) <$> u];
 *)
 
 (** {1 Structure anatomy} *)
 
-(** Standard requirement. *)
-module type CORE = sig
-  type 'a t
-  (** The type holded by the [Applicative]. *)
-
-  val pure : 'a -> 'a t
-  (** Create a new ['a t]. *)
-
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
-
-  val apply : ('a -> 'b) t -> 'a t -> 'b t
-  (** TODO *)
-
-  val product : 'a t -> 'b t -> ('a * 'b) t
-  (** TODO *)
-end
-
-(** Standard requirement . *)
+(** Requirement via [map] and [product]. *)
 module type CORE_VIA_MAP_AND_PRODUCT = sig
   type 'a t
   (** The type holded by the [Applicative]. *)
@@ -33,10 +25,10 @@ module type CORE_VIA_MAP_AND_PRODUCT = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val product : 'a t -> 'b t -> ('a * 'b) t
-  (** TODO *)
+  (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
 end
 
-(** Standard requirement. *)
+(** Requirement via [apply]. *)
 module type CORE_VIA_APPLY = sig
   type 'a t
   (** The type holded by the [Applicative]. *)
@@ -45,7 +37,14 @@ module type CORE_VIA_APPLY = sig
   (** Create a new ['a t]. *)
 
   val apply : ('a -> 'b) t -> 'a t -> 'b t
-  (** TODO *)
+  (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
+end
+
+(** Standard requirement. *)
+module type CORE = sig
+  include CORE_VIA_APPLY
+
+  include CORE_VIA_MAP_AND_PRODUCT with type 'a t := 'a t
 end
 
 (** Operations *)
@@ -54,13 +53,13 @@ module type OPERATION = sig
   (** The type holded by the [Applicative]. *)
 
   val liftA : ('a -> 'b) -> 'a t -> 'b t
-  (** TODO *)
+  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val liftA2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
-  (** TODO *)
+  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
 
   val liftA3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
-  (** TODO *)
+  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t] and ['c t] to ['d t]. *)
 end
 
 (** Syntax extensions *)
@@ -69,10 +68,10 @@ module type SYNTAX = sig
   (** The type holded by the [Applicative]. *)
 
   val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
-  (** TODO *)
+  (** Flipped mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val ( and+ ) : 'a t -> 'b t -> ('a * 'b) t
-  (** TODO *)
+  (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
 end
 
 (** Infix notations *)
@@ -81,21 +80,21 @@ module type INFIX = sig
   (** The type holded by the [Applicative]. *)
 
   val ( <*> ) : ('a -> 'b) t -> 'a t -> 'b t
-  (** TODO *)
+  (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 
   val ( <**> ) : 'a t -> ('a -> 'b) t -> 'b t
-  (** TODO *)
-
-  val ( <* ) : 'a t -> 'b t -> 'a t
-  (** TODO *)
+  (** Flipped applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 
   val ( *> ) : 'a t -> 'b t -> 'b t
-  (** TODO *)
+  (** Discard the value of the first argument. *)
+
+  val ( <* ) : 'a t -> 'b t -> 'a t
+  (** Discard the value of the second argument. *)
 end
 
 (** {1 API} *)
 
-(** The complete interface of a [Functor]. *)
+(** The complete interface of an [Applicative]. *)
 module type API = sig
   include CORE
 
