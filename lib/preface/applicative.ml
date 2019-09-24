@@ -21,11 +21,11 @@ module Make_operation (Core : Specs.Applicative.CORE) :
   Specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
-  let liftA = Core.map
+  let lift = Core.map
 
-  let liftA2 f a = Core.apply @@ Core.apply (Core.pure f) a
+  let lift2 f a = Core.apply @@ Core.apply (Core.pure f) a
 
-  let liftA3 f a b = Core.apply @@ Core.apply (Core.apply (Core.pure f) a) b
+  let lift3 f a b = Core.apply @@ Core.apply (Core.apply (Core.pure f) a) b
 end
 
 module Make_syntax (Core : Specs.Applicative.CORE) :
@@ -47,7 +47,7 @@ module Make_infix
 
   let ( <**> ) a f = f <*> a
 
-  let ( *> ) a b = Operation.liftA2 const b a
+  let ( *> ) a b = Operation.lift2 const b a
 
   let ( <* ) a b = b *> a
 end

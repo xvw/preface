@@ -52,13 +52,13 @@ module type OPERATION = sig
   type 'a t
   (** The type holded by the [Applicative]. *)
 
-  val liftA : ('a -> 'b) -> 'a t -> 'b t
+  val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
-  val liftA2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
+  val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
   (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
 
-  val liftA3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
+  val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
   (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t] and ['c t] to ['d t]. *)
 end
 

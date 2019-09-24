@@ -44,19 +44,19 @@ let should_apply_with_infix_operator () =
     expected
     computed
 
-let should_liftA () =
-  let expected = pure 42 and computed = liftA (( + ) 2) (pure 40) in
-  Alcotest.(check (identity int)) "should_liftA" expected computed
+let should_lift () =
+  let expected = pure 42 and computed = lift (( + ) 2) (pure 40) in
+  Alcotest.(check (identity int)) "should_ lift" expected computed
 
-let should_liftA2 () =
-  let expected = pure 42 and computed = liftA2 ( + ) (pure 40) (pure 2) in
-  Alcotest.(check (identity int)) "should_liftA2" expected computed
+let should_lift2 () =
+  let expected = pure 42 and computed = lift2 ( + ) (pure 40) (pure 2) in
+  Alcotest.(check (identity int)) "should_ lift2" expected computed
 
-let should_liftA3 () =
+let should_lift3 () =
   let add a b c = a + b + c in
   let expected = pure 42
-  and computed = liftA3 add (pure 36) (pure 4) (pure 2) in
-  Alcotest.(check (identity int)) "should_liftA3" expected computed
+  and computed = lift3 add (pure 36) (pure 4) (pure 2) in
+  Alcotest.(check (identity int)) "should_ lift3" expected computed
 
 let test_cases =
   let open Alcotest in
@@ -71,6 +71,6 @@ let test_cases =
     ; test_case "Second of product" `Quick should_product_second
     ; test_case "Apply" `Quick should_apply
     ; test_case "Infix Apply" `Quick should_apply_with_infix_operator
-    ; test_case "LiftA" `Quick should_liftA
-    ; test_case "LiftA2" `Quick should_liftA2
-    ; test_case "LiftA3" `Quick should_liftA3 ] )
+    ; test_case "Lift" `Quick should_lift
+    ; test_case "Lift2" `Quick should_lift2
+    ; test_case "Lift3" `Quick should_lift3 ] )
