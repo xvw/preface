@@ -8,10 +8,13 @@ module Functor = Functor.Make (struct
   let map f = f
 end)
 
-(* Trick to avoid Diamond problem:
-   http://gallium.inria.fr/blog/overriding-submodules/
-*)
-include (Functor : module type of Functor with type 'a t := 'a t)
+module Applicative = Applicative.Make_via_apply (struct
+  type nonrec 'a t = 'a t
+
+  let pure = pure
+
+  let apply f = f
+end)
 
 let eq f a b = f a b
 

@@ -20,8 +20,6 @@
     object (for example, the production of a module for a [Monad] is possible
     via at least 3 approaches). And [Functor], for example, does not handle
     any requirement.
-
-    PS: [Obj.API] is very often aliased as [OBJ].
 *)
 
 (** {1 Full Interfaces}
@@ -31,9 +29,14 @@
 module Functor = Functor
 (** Describes an object that can be mapped. *)
 
+module Applicative = Applicative
+(** Describes an applicative functor *)
+
 (** {1 API Shortcuts}
     Shortcuts for the API of each objects (by convention, OCaml module types
     are in uppercase.
 *)
 
 module type FUNCTOR = Functor.API
+
+module type APPLICATIVE = Applicative.API

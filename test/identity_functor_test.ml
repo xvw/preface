@@ -1,4 +1,5 @@
 open Preface.Identity
+open Preface.Identity.Functor
 
 (* Material required for Alcotest *)
 let identity a = Alcotest.testable (pp (Alcotest.pp a)) (eq ( = ))
@@ -49,7 +50,7 @@ let should_flipped_map_with_infix_operator () =
 
 let test_cases =
   let open Alcotest in
-  ( "Identity"
+  ( "Identity Functor"
   , [ test_case "Replace" `Quick should_replace
     ; test_case "Infix replace" `Quick should_replace_with_infix_operator
     ; test_case
