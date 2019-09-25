@@ -44,16 +44,47 @@ end
 module type OPERATION = sig
   type 'a t
   (** The type holded by the [Monad]. *)
+
+  val void : 'a t -> unit t
+
+  val compose_right_to_left : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
+
+  val lift : ('a -> 'b) -> 'a t -> 'b t
+  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
+
+  val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
+  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and
+      ['b t] to ['c t].
+  *)
+
+  val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
+  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t]
+      and ['b t] and ['c t] to ['d t].
+  *)
 end
 
 module type SYNTAX = sig
   type 'a t
   (** The type holded by the [Monad]. *)
+
+  val ( let* ) : 'a t -> ('a -> 'b t) -> 'b t
 end
 
 module type INFIX = sig
   type 'a t
   (** The type holded by the [Monad]. *)
+
+  val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
+
+  val ( =<< ) : ('a -> 'b t) -> 'a t -> 'b t
+
+  val ( >=> ) : ('a -> 'b t) -> ('b -> 'c t) -> 'a -> 'c t
+
+  val ( <=< ) : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
+
+  val ( >> ) : 'a t -> 'b t -> 'b t
+
+  val ( << ) : 'a t -> 'b t -> 'a t
 end
 
 (** {1 API} *)
