@@ -7,10 +7,3 @@ module Fun = Fun
 module Functor = Functor
 module Identity = Identity
 module Applicative = Applicative
-
-(** {1 Pervasives} *)
-
-(** Alias for {!val:Fun.id} *)
-let id x = Fun.id x
-
-include Fun.Infix
