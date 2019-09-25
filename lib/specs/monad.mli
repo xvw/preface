@@ -74,6 +74,8 @@ module type INFIX = sig
   type 'a t
   (** The type holded by the [Monad]. *)
 
+  val ( >|= ) : 'a t -> ('a -> 'b) -> 'b t
+
   val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
 
   val ( =<< ) : ('a -> 'b t) -> 'a t -> 'b t
