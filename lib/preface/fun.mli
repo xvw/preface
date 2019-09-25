@@ -10,6 +10,8 @@ val compose_right_to_left : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
     mathematical composition.
 *)
 
+val constant : 'a -> 'b -> 'a
+
 (** {1 Infix operators} *)
 
 module Infix : sig
