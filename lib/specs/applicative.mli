@@ -59,7 +59,7 @@ module type OPERATION = sig
   val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
   (** Mapping over from ['a] and ['b] to ['c] over ['a t] and
       ['b t] to ['c t].
-*)
+  *)
 
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
   (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t]
