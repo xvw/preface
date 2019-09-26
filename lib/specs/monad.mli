@@ -8,6 +8,7 @@ module type CORE_VIA_BIND = sig
   (** Create a new ['a t]. *)
 
   val bind : ('a -> 'b t) -> 'a t -> 'b t
+  (** [bind m f] passes the result of computation [m] to function [f]. *)
 end
 
 module type CORE_VIA_MAP_AND_JOIN = sig
@@ -21,6 +22,9 @@ module type CORE_VIA_MAP_AND_JOIN = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val join : 'a t t -> 'a t
+  (** [join] remove one level of monadic structure, projecting
+      its bound argument into the outer level.
+  *)
 end
 
 module type CORE_VIA_KLEISLI_COMPOSITION = sig
@@ -31,6 +35,8 @@ module type CORE_VIA_KLEISLI_COMPOSITION = sig
   (** Create a new ['a t]. *)
 
   val compose_left_to_right : ('a -> 'b t) -> ('b -> 'c t) -> 'a -> 'c t
+  (** Composing monadic functions using Kleisli Arrow (from left to right).
+  *)
 end
 
 module type CORE = sig
@@ -46,8 +52,11 @@ module type OPERATION = sig
   (** The type holded by the [Monad]. *)
 
   val void : 'a t -> unit t
+  (** Discard the result of evaluation. *)
 
   val compose_right_to_left : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
+  (** Composing monadic functions using Kleisli Arrow (from right to left).
+  *)
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -68,25 +77,43 @@ module type SYNTAX = sig
   (** The type holded by the [Monad]. *)
 
   val ( let* ) : 'a t -> ('a -> 'b t) -> 'b t
+  (** Syntaxic shortcuts for {!val:bind}:
+
+      [let* x = f] is equals to [x >>= f].
+  *)
 end
 
 module type INFIX = sig
   type 'a t
   (** The type holded by the [Monad]. *)
 
+  val ( =|< ) : ('a -> 'b) -> 'a t -> 'b t
+  (** Infix version of {!val:map}. *)
+
   val ( >|= ) : 'a t -> ('a -> 'b) -> 'b t
+  (** Infix flipped version of {!val:map}. *)
 
   val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
+  (** Infix flipped version of {!val:bind}. *)
 
   val ( =<< ) : ('a -> 'b t) -> 'a t -> 'b t
+  (** Infix version of {!val:bind}. *)
 
   val ( >=> ) : ('a -> 'b t) -> ('b -> 'c t) -> 'a -> 'c t
+  (** Infix version of {!val:compose_left_to_right}. *)
 
   val ( <=< ) : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
+  (** Infix version of {!val:compose_right_to_left}. *)
 
   val ( >> ) : 'a t -> 'b t -> 'b t
+  (** Sequentially compose two actions, discarding any value produced
+      by the first.
+  *)
 
   val ( << ) : 'a t -> 'b t -> 'a t
+  (** Sequentially compose two actions, discarding any value produced
+      by the second.
+  *)
 end
 
 (** {1 API} *)

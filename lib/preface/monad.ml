@@ -66,6 +66,8 @@ module Make_infix
 
   let ( >|= ) x f = Core.map f x
 
+  let ( =|< ) = Core.map
+
   let ( >>= ) x f = Core.bind f x
 
   let ( =<< ) = Core.bind
