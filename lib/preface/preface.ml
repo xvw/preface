@@ -2,15 +2,12 @@
 
 module Fun = Fun
 
-(** {2 Incarnations} *)
+(** {2 Constructions} *)
 
 module Functor = Functor
-module Identity = Identity
 module Applicative = Applicative
+module Monad = Monad
 
-(** {1 Pervasives} *)
+(** {2 Incarnations} *)
 
-(** Alias for {!val:Fun.id} *)
-let id x = Fun.id x
-
-include Fun.Infix
+module Identity = Identity

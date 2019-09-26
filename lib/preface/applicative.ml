@@ -23,9 +23,13 @@ module Make_operation (Core : Specs.Applicative.CORE) :
 
   let lift = Core.map
 
-  let lift2 f a = Core.(apply @@ apply (pure f) a)
+  let lift2 f a =
+    let open Core in
+    apply @@ apply (pure f) a
 
-  let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
+  let lift3 f a b =
+    let open Core in
+    apply @@ apply (apply (pure f) a) b
 end
 
 module Make_syntax (Core : Specs.Applicative.CORE) :
@@ -52,27 +56,56 @@ module Make_infix
   let ( <* ) a b = b *> a
 end
 
+module Make
+    (Core : Specs.Applicative.CORE)
+    (Operation : Specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Specs.Applicative.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
+  Specs.APPLICATIVE with type 'a t = 'a Core.t = struct
+  include Core
+  include Operation
+  include Syntax
+  include Infix
+  module Infix = Infix
+  module Syntax = Syntax
+end
+
 module Make_via_map_and_product
     (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
   Specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t = struct
   module Core = Make_core_via_map_and_product (Core_via_map_and_product)
-  include Core
   module Operation = Make_operation (Core)
-  include Operation
   module Syntax = Make_syntax (Core)
-  include Syntax
   module Infix = Make_infix (Core) (Operation)
+  include Core
+  include Operation
+  include Syntax
   include Infix
 end
 
 module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
   Specs.APPLICATIVE with type 'a t = 'a Core_via_apply.t = struct
   module Core = Make_core_via_apply (Core_via_apply)
-  include Core
   module Operation = Make_operation (Core)
-  include Operation
   module Syntax = Make_syntax (Core)
-  include Syntax
   module Infix = Make_infix (Core) (Operation)
+  include Core
+  include Operation
+  include Syntax
   include Infix
+end
+
+module Make_via_monad (Monad : Specs.MONAD) :
+  Specs.APPLICATIVE with type 'a t = 'a Monad.t = struct
+  include Make_via_apply (struct
+    type 'a t = 'a Monad.t
+
+    let pure = Monad.return
+
+    let apply fs xs =
+      let open Monad.Syntax in
+      let* f = fs in
+      let* x = xs in
+      pure (f x)
+  end)
 end

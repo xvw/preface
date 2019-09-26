@@ -10,6 +10,11 @@ val compose_right_to_left : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
     mathematical composition.
 *)
 
+val constant : 'a -> 'b -> 'a
+(** Produce a function that returns its first argument.
+    [const a b] returns always [a].
+ *)
+
 (** {1 Infix operators} *)
 
 module Infix : sig
