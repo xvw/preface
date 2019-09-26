@@ -2,9 +2,12 @@
 
 module Fun = Fun
 
-(** {2 Incarnations} *)
+(** {2 Constructions} *)
 
 module Functor = Functor
-module Identity = Identity
 module Applicative = Applicative
 module Monad = Monad
+
+(** {2 Incarnations} *)
+
+module Identity = Identity

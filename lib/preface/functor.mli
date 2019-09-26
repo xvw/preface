@@ -1,4 +1,4 @@
-(** Incarnation of a [Functor].  *)
+(** Modules for building [Functor] modules. *)
 
 (** {1 Internal construction of a [Functor] module} *)
 

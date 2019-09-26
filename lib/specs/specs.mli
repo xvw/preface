@@ -20,6 +20,31 @@
     object (for example, the production of a module for a [Monad] is possible
     via at least 3 approaches). And [Functor], for example, does not handle
     any requirement.
+
+    {3 Conventions}
+
+    To be able to let the user overload the operators of his choice,
+    the different modules are usually divided into several components:
+
+    - [Obj.CORE] : describes the basic operations of the object;
+    - [Obj.OPERATION] : describes the additional operations
+    (dependent on [CORE]) of the object;
+    - [Obj.INFIX] : Describes the infix operators of the object
+    (dependent on [CORE] and [OPERATION]);
+    - [Obj.SYNTAX] : Describes the syntactic operators ([let+], [let*]
+    and [and+] for example) of the object (dependencies vary depending
+    on the object).
+
+    Generally, the core and operations are included, where the syntax and
+    the infix operators are, in addition to being included, exposed in a
+    special sub-module to allow this kind of construction:
+
+    {[
+      let open My_monad.Infix in
+      My_monad.return y
+      >>= operation1
+      >>= operation2
+    ]}
 *)
 
 (** {1 Full Interfaces}
