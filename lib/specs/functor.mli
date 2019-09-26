@@ -40,16 +40,16 @@ module type INFIX = sig
   (** The type holded by the [Functor]. *)
 
   val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
-  (** Infix version of {!val:map}. *)
+  (** Infix version of {!val:CORE.map}. *)
 
   val ( <&> ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Flipped and infix version of {!val:map}. *)
+  (** Flipped and infix version of {!val:CORE.map}. *)
 
   val ( <$ ) : 'a -> 'b t -> 'a t
-  (** Infix version of {!val:replace}. *)
+  (** Infix version of {!val:OPERATION.replace}. *)
 
   val ( $> ) : 'a t -> 'b -> 'b t
-  (** Flipped and infix version of {!val:replace}. *)
+  (** Flipped and infix version of {!val:OPERATION.replace}. *)
 end
 
 (** {1 API} *)

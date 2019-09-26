@@ -94,3 +94,18 @@ module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
   include Syntax
   include Infix
 end
+
+module Make_via_monad (Monad : Specs.MONAD) :
+  Specs.APPLICATIVE with type 'a t = 'a Monad.t = struct
+  include Make_via_apply (struct
+    type 'a t = 'a Monad.t
+
+    let pure = Monad.return
+
+    let apply fs xs =
+      let open Monad.Syntax in
+      let* f = fs in
+      let* x = xs in
+      pure (f x)
+  end)
+end

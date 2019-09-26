@@ -15,6 +15,10 @@ module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
     Requirements ([pure] and [apply]).
 *)
 
+module Make_via_monad (Monad : Specs.MONAD) :
+  Specs.APPLICATIVE with type 'a t = 'a Monad.t
+(** Incarnation of an [Applicative] using a [Monad].*)
+
 module Make
     (Core : Specs.Applicative.CORE)
     (Operation : Specs.Applicative.OPERATION with type 'a t = 'a Core.t)
