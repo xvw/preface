@@ -23,9 +23,13 @@ module Make_operation (Core : Specs.Applicative.CORE) :
 
   let lift = Core.map
 
-  let lift2 f a = Core.(apply @@ apply (pure f) a)
+  let lift2 f a =
+    let open Core in
+    apply @@ apply (pure f) a
 
-  let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
+  let lift3 f a b =
+    let open Core in
+    apply @@ apply (apply (pure f) a) b
 end
 
 module Make_syntax (Core : Specs.Applicative.CORE) :
