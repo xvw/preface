@@ -1,3 +1,7 @@
+(** Modules for building [Applicative] modules. *)
+
+(** {1 Construction of an [Applicative] module} *)
+
 module Make_via_map_and_product
     (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
   Specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t
@@ -10,6 +14,18 @@ module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
 (** Incarnation of an [Applicative] for an ['a t] with standard
     Requirements ([pure] and [apply]).
 *)
+
+module Make
+    (Core : Specs.Applicative.CORE)
+    (Operation : Specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Specs.Applicative.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
+  Specs.APPLICATIVE with type 'a t = 'a Core.t
+(** Incarnation of an [Applicative] for an ['a t] using each components of 
+    an [Applicative].
+*)
+
+(** {1 Internal construction of an [Applicative] module} *)
 
 module Make_core_via_map_and_product
     (Core : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :

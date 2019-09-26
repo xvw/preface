@@ -24,7 +24,18 @@ module Make_infix
   let ( $> ) x value = Operation.replace value x
 end
 
-module Make (Core : Specs.Functor.CORE) :
+module Make
+    (Core : Specs.Functor.CORE)
+    (Operation : Specs.Functor.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Specs.Functor.INFIX with type 'a t = 'a Core.t) :
+  Specs.FUNCTOR with type 'a t = 'a Core.t = struct
+  include Core
+  include Operation
+  include Infix
+  module Infix = Infix
+end
+
+module Make_via_map (Core : Specs.Functor.CORE) :
   Specs.FUNCTOR with type 'a t = 'a Core.t = struct
   include Core
   module Operation = Make_operation (Core)

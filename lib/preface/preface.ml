@@ -7,3 +7,4 @@ module Fun = Fun
 module Functor = Functor
 module Identity = Identity
 module Applicative = Applicative
+module Monad = Monad

@@ -2,7 +2,7 @@ type 'a t = 'a
 
 let pure x = x
 
-module Functor = Functor.Make (struct
+module Functor = Functor.Make_via_map (struct
   type nonrec 'a t = 'a t
 
   let map f = f

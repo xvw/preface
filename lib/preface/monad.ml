@@ -79,6 +79,20 @@ module Make_infix
   let ( << ) ma _ = ma
 end
 
+module Make
+    (Core : Specs.Monad.CORE)
+    (Operation : Specs.Monad.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Specs.Monad.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Specs.Monad.SYNTAX with type 'a t = 'a Core.t) :
+  Specs.MONAD with type 'a t = 'a Core.t = struct
+  include Core
+  include Operation
+  include Syntax
+  include Infix
+  module Syntax = Syntax
+  module Infix = Infix
+end
+
 module Make_via_bind (Core_via_bind : Specs.Monad.CORE_VIA_BIND) :
   Specs.MONAD with type 'a t = 'a Core_via_bind.t = struct
   module Core = Make_core_via_bind (Core_via_bind)
