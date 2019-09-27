@@ -11,7 +11,7 @@ module type CORE_VIA_BIND = sig
   (** Create a new ['a t]. *)
 
   val bind : ('a -> 'b t) -> 'a t -> 'b t
-  (** [bind m f] passes the result of computation [m] to function [f]. *)
+  (** [bind f m] passes the result of computation [m] to function [f]. *)
 end
 
 (** Requirement via [map] and [join]. *)
@@ -85,9 +85,9 @@ module type SYNTAX = sig
   (** The type holded by the [Monad]. *)
 
   val ( let* ) : 'a t -> ('a -> 'b t) -> 'b t
-  (** Syntaxic shortcuts for {!val:CORE.bind}:
+  (** Syntaxic shortcuts for flipped version of {!val:CORE.bind}:
 
-      [let* x = f] is equals to [x >>= f].
+      [let* x = e in f] is equals to [bind (fun x -> f) e].
   *)
 end
 

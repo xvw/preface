@@ -55,6 +55,45 @@ let should_bind_with_infix_operator () =
     expected
     computed
 
+let should_lift () =
+  let expected = return 42 and computed = lift (( + ) 2) @@ return 40 in
+  Alcotest.(check (identity int)) "should_lift" expected computed
+
+let should_lift2 () =
+  let expected = return 42 and computed = lift2 ( + ) (return 40) (return 2) in
+  Alcotest.(check (identity int)) "should_lift2" expected computed
+
+let should_lift3 () =
+  let add a b c = a + b + c in
+  let expected = pure 42
+  and computed = lift3 add (pure 36) (pure 4) (pure 2) in
+  Alcotest.(check (identity int)) "should_lift3" expected computed
+
+let should_flipped_bind_with_syntax () =
+  let expected = pure 42
+  and computed =
+    let* x = pure 2 in
+    pure (x + 40)
+  in
+  Alcotest.(check (identity int))
+    "should_flipped_bind_with_syntax"
+    expected
+    computed
+
+let should_map_with_infix_operator () =
+  let expected = return 42 and computed = ( + ) 2 =|< return 40 in
+  Alcotest.(check (identity int))
+    "should_map_with_infix_operator"
+    expected
+    computed
+
+let should_flipped_map_with_infix_operator () =
+  let expected = return 42 and computed = return 40 >|= ( + ) 2 in
+  Alcotest.(check (identity int))
+    "should_flipped_bind_with_syntax"
+    expected
+    computed
+
 let test_cases =
   let open Alcotest in
   ( "Identity Monad"
@@ -64,4 +103,16 @@ let test_cases =
     ; test_case "Compose left to right" `Quick should_compose_left_to_right
     ; test_case "Void" `Quick should_void
     ; test_case "Compose right to left" `Quick should_compose_right_to_left
-    ; test_case "Infix Bind" `Quick should_bind_with_infix_operator ] )
+    ; test_case "Infix Bind" `Quick should_bind_with_infix_operator
+    ; test_case "Lift" `Quick should_lift
+    ; test_case "Lift2" `Quick should_lift2
+    ; test_case "Lift3" `Quick should_lift3
+    ; test_case
+        "Flipped Bind with syntax"
+        `Quick
+        should_flipped_bind_with_syntax
+    ; test_case "Map with infix operator" `Quick should_map_with_infix_operator
+    ; test_case
+        "Flipped Map with infix operator"
+        `Quick
+        should_flipped_map_with_infix_operator ] )
