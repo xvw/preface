@@ -3,7 +3,7 @@
  (public_name preface.specs)
  (modules_without_implementation
    specs
-   either
+   requirements
    functor
    applicative
    selective
