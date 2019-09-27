@@ -1,5 +1,5 @@
 open Preface.Identity
-open Preface.Identity.Functor
+open Preface.Identity.Functor.Infix
 open Preface.Identity.Applicative
 
 (* Material required for Alcotest *)
