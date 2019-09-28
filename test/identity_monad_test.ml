@@ -47,14 +47,6 @@ let should_compose_right_to_left () =
     expected
     computed
 
-let should_bind_with_infix_operator () =
-  let expected = return 42
-  and computed = return 40 >>= fun x -> return (x + 2) in
-  Alcotest.(check (identity int))
-    "should_bind_with_infix_operator"
-    expected
-    computed
-
 let should_lift () =
   let expected = return 42 and computed = lift (( + ) 2) @@ return 40 in
   Alcotest.(check (identity int)) "should_lift" expected computed
@@ -90,7 +82,57 @@ let should_map_with_infix_operator () =
 let should_flipped_map_with_infix_operator () =
   let expected = return 42 and computed = return 40 >|= ( + ) 2 in
   Alcotest.(check (identity int))
-    "should_flipped_bind_with_syntax"
+    "should_flipped_map_with_infix_operator"
+    expected
+    computed
+
+let should_flipped_bind_with_infix_operator () =
+  let expected = return 42
+  and computed = return 40 >>= fun x -> return (x + 2) in
+  Alcotest.(check (identity int))
+    "should_flipped_bind_with_infix_operator"
+    expected
+    computed
+
+let should_bind_with_infix_operator () =
+  let expected = return 42
+  and computed = (fun x -> return (x + 2)) =<< return 40 in
+  Alcotest.(check (identity int))
+    "should_bind_with_infix_operator"
+    expected
+    computed
+
+let should_compose_left_to_right_with_infix_operator () =
+  let expected = return "42"
+  and computed =
+    ((fun x -> return (x + 2)) >=> fun x -> return (string_of_int x)) 40
+  in
+  Alcotest.(check (identity string))
+    "should_compose_left_to_right_with_infix_operator"
+    expected
+    computed
+
+let should_compose_right_to_left_with_infix_operator () =
+  let expected = return "42"
+  and computed =
+    ((fun x -> return (string_of_int x)) <=< fun x -> return (x + 2)) 40
+  in
+  Alcotest.(check (identity string))
+    "should_compose_left_to_right_with_infix_operator"
+    expected
+    computed
+
+let should_discard_first_value () =
+  let expected = return 42 and computed = return "42" >> return 42 in
+  Alcotest.(check (identity int))
+    "should_discard_first_value"
+    expected
+    computed
+
+let should_discard_second_value () =
+  let expected = return 42 and computed = return 42 << return "42" in
+  Alcotest.(check (identity int))
+    "should_discard_second_value"
     expected
     computed
 
@@ -115,4 +157,22 @@ let test_cases =
     ; test_case
         "Flipped Map with infix operator"
         `Quick
-        should_flipped_map_with_infix_operator ] )
+        should_flipped_map_with_infix_operator
+    ; test_case
+        "Flipped Bind with infix operator"
+        `Quick
+        should_flipped_bind_with_infix_operator
+    ; test_case
+        "Bind with infix operator"
+        `Quick
+        should_bind_with_infix_operator
+    ; test_case
+        "Compose Left to Right with infix operator"
+        `Quick
+        should_compose_left_to_right_with_infix_operator
+    ; test_case
+        "Compose Right to Left with infix operator"
+        `Quick
+        should_compose_right_to_left_with_infix_operator
+    ; test_case "Discard First value" `Quick should_discard_first_value
+    ; test_case "Discard Second value" `Quick should_discard_second_value ] )
