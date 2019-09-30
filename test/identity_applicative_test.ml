@@ -1,5 +1,5 @@
 open Preface.Identity
-open Preface.Identity.Functor
+open Preface.Identity.Functor.Infix
 open Preface.Identity.Applicative
 
 (* Material required for Alcotest *)
@@ -23,17 +23,17 @@ let should_apply () =
 
 let should_lift () =
   let expected = pure 42 and computed = lift (( + ) 2) (pure 40) in
-  Alcotest.(check (identity int)) "should_ lift" expected computed
+  Alcotest.(check (identity int)) "should_lift" expected computed
 
 let should_lift2 () =
   let expected = pure 42 and computed = lift2 ( + ) (pure 40) (pure 2) in
-  Alcotest.(check (identity int)) "should_ lift2" expected computed
+  Alcotest.(check (identity int)) "should_lift2" expected computed
 
 let should_lift3 () =
   let add a b c = a + b + c in
   let expected = pure 42
   and computed = lift3 add (pure 36) (pure 4) (pure 2) in
-  Alcotest.(check (identity int)) "should_ lift3" expected computed
+  Alcotest.(check (identity int)) "should_lift3" expected computed
 
 let should_map_with_syntax () =
   let expected = pure 42
