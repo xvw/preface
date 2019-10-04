@@ -8,6 +8,20 @@ module Make_via_map (Core : Preface_specs.Functor.CORE) :
     Requirements ([map]).
 *)
 
+(**
+   {2 Example with [option]}
+
+   {[module Option = 
+     struct 
+       module Functor = Functor.Make_via_map (struct
+           type 'a t = 'a option
+           let map f opt = match opt with 
+             | None -> None 
+             | Some x -> Some (f x)
+         end)
+     end]}
+*)
+
 module Make
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
