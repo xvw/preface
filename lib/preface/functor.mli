@@ -1,11 +1,11 @@
-(** Modules for building [Functor] modules. *)
+(** Modules for building {!Preface_specs.FUNCTOR} modules. *)
 
 (** {1 Internal construction of a [Functor] module} *)
 
 module Make_via_map (Core : Preface_specs.Functor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 (** Incarnation of a [Functor] for an ['a t] with standard
-    Requirements ([map]). 
+    Requirements ([map]).
 *)
 
 module Make
@@ -17,7 +17,7 @@ module Make
     a [Functor].
 *)
 
-(** {1 Internal construction of a [Monad] module} *)
+(** {1 Internal construction of a [Functor] module} *)
 
 module Make_operation (Core : Preface_specs.Functor.CORE) :
   Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t
