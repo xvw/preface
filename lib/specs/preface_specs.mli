@@ -1,4 +1,4 @@
-(** The [Specs] module handle all signatures related to [Preface].
+(** The [Preface_specs] module handle all signatures related to [Preface].
     When any object is expressed in [Preface], its interfaces are often
     expressed in this module.
 
