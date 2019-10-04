@@ -8,6 +8,15 @@ module Make_via_map (Core : Preface_specs.Functor.CORE) :
     Requirements ([map]).
 *)
 
+module Make
+    (Core : Preface_specs.Functor.CORE)
+    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Core.t
+(** Incarnation of a [Functor] for an ['a t] using each components of 
+    a [Functor].
+*)
+
 (**
    {2 Example with [option]}
 
@@ -20,15 +29,6 @@ module Make_via_map (Core : Preface_specs.Functor.CORE) :
              | Some x -> Some (f x)
          end)
      end]}
-*)
-
-module Make
-    (Core : Preface_specs.Functor.CORE)
-    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t
-(** Incarnation of a [Functor] for an ['a t] using each components of 
-    a [Functor].
 *)
 
 (** {1 Internal construction of a [Functor] module} *)
