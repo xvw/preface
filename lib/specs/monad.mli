@@ -141,3 +141,10 @@ module type API = sig
 
   include module type of Infix
 end
+
+(** 
+   {1 Bibliography}
+
+   - {{: http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Monad.html} 
+   Haskell's documentation of a Monad}
+*)
