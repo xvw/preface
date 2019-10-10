@@ -147,4 +147,7 @@ end
 
    - {{: http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Monad.html} 
    Haskell's documentation of a Monad}
+   - {{: http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf} Monad for functional programming}
+   - {{: https://person.dibris.unige.it/moggi-eugenio/ftp/ic91.pdf} Notions of computations and monads}
+   - {{: https://wiki.haskell.org/All_About_Monads} All About Monads}
 *)
