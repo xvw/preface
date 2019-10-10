@@ -6,7 +6,7 @@
     To have a predictable behaviour, the instance of [Applicative] must
     obey some laws.
 
-    - [apply (pure id)] must be equivalent to [id];
+    - [(fun f x -> f x) (pure id)] must be equivalent to [id];
     - [compose <$> u <*> v <*> w] must be equivalent to
       [u <*> v <*> w];
     - [f <$> pure x] must be equivalent to [pure (f x)];

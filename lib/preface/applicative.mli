@@ -1,6 +1,132 @@
-(** Modules for building [Applicative] modules. *)
+(** Modules for building {!Preface_specs.APPLICATIVE} modules. *)
 
-(** {1 Construction of an [Applicative] module} *)
+(** {1 Tutorial}
+
+    As with [functors], [Applicative] allow multiple paths to build 
+    [applicative functors]. 
+
+    {2 Basics}
+
+    Unlike [Functor], [Applicative] offer several primitive ways to 
+    be built. These different approaches lead to the same combiners. 
+    It's up to you to choose the most flexible approach according to 
+    the context
+
+    {3 Using [pure] and [apply]}
+
+    This approach is by far the most popular. This is the default one used 
+    in Haskell. Here's an example with our well-know [Option] module.
+
+    {[
+      (* In: option.ml *)
+      module Applicative = Preface.Applicative.Make_via_apply(struct
+          type 'a t = 'a option
+          let pure x = Some x
+          let apply fa xa = 
+            match (fa, xa) with 
+            | Some f, Some x -> Some (f x) 
+            | _ -> None
+        end)
+    ]}
+
+    {[
+      (* In: option.mli *)
+      module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a option
+    ]}
+    
+    Now, your [Option] module is handling an [Applicative] module and 
+    you'll be able to use features offered by an [Applicative]. For example:
+
+    {[
+      let validate age name = 
+        let open Option.Applicative.Infix in 
+        (fun age name -> {age; name})
+        <$> (fun age -> if age < 0 then None else Some age)
+        <*> (fun name -> if String.length name < 3 then None else Some name)
+    ]}
+
+    {3 Using [pure] and [map] and [product]}
+    
+    Although this approach is less popular because it requires more code 
+    than the previous one, it is also possible to express an application 
+    via the [map] and [product] functions.
+
+    {[
+      (* In: option.ml *)
+      module Applicative = Preface.Applicative.Make_via_map_and_product(struct
+          type 'a t = 'a option
+
+          let pure x = Some x
+
+          let map f = function 
+            | Some x -> Some (f x) 
+            | None -> None
+
+          let product ox oy = 
+            match (ox, oy) with 
+            | Some x, Some y  -> Some (x,y)
+            | None -> None
+        end)
+    ]}
+
+    And exactly like the previous tutorial:
+    
+    {[
+      (* In: option.mli *)
+      module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a option
+    ]}
+
+    This approach makes it possible to pool work done in [Functor]. 
+    For example, if our [Option] module already has a [Functor] module, 
+    it would be possible to implement the [Applicative] in this way:
+
+    {[
+      module Applicative = Preface.Applicative.Make_via_map_and_product(struct
+          type 'a t = 'a option
+          let pure x = Some x
+          let map f x = Functor.map f x
+          let product ox oy = 
+            match (ox, oy) with 
+            | Some x, Some y  -> Some (x,y)
+            | None -> None
+        end)      
+    ]}
+
+    The crucial point of these two tutorials and despite the fact that 
+    they use different interfaces, they produce the same module.
+
+    {3 Using a Monad}
+
+    Since every [Monads] are an [Applicative Functor], you can produce 
+    an [Applicative] giving a [Monad]. (The reverse is not possible because 
+    some [Applicative] are not Monads. for example [Validation]).
+
+    So, let's imagine that we already have a [Monad] module in our 
+    [Option] module, here's an example how to make an [Applicative] 
+    module using a monad:
+
+    {[
+      module Applicative = 
+        Preface.Applicative.Make_via_monad(Monad)
+    ]}
+
+
+    And exactly like the previous tutorial:
+    
+    {[
+      (* In: option.mli *)
+      module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a option
+    ]}
+
+    {2 Advanced}
+*)
+
+(** {1 Documentation} *)
+
+(** {2 Construction} 
+    
+    Standard way to build an [Applicative Functor].
+*)
 
 module Make_via_map_and_product
     (Core_via_map_and_product : Preface_specs.Applicative
@@ -21,6 +147,13 @@ module Make_via_monad (Monad : Preface_specs.MONAD) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Monad.t
 (** Incarnation of an [Applicative] using a [Monad].*)
 
+(** {2 Manual construction} 
+    
+    Advanced way to build an [Applicative Functor], constructing and 
+    assembling a component-by-component an applicative functor. 
+    (In order to provide your own implementation for some features.)
+*)
+
 module Make
     (Core : Preface_specs.Applicative.CORE)
     (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
@@ -30,8 +163,6 @@ module Make
 (** Incarnation of an [Applicative] for an ['a t] using each components of 
     an [Applicative].
 *)
-
-(** {1 Internal construction of an [Applicative] module} *)
 
 module Make_core_via_map_and_product
     (Core : Preface_specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
