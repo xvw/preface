@@ -119,6 +119,66 @@
     ]}
 
     {2 Advanced}
+
+    Like for [Functor], an [Applicative] can be build step by step, offering 
+    our own implementation for each components. We just use {!Make} to
+    implement the components of our choice. Let's rewrite our
+    [Option.Applicative] in an another way:
+
+    First, let's define our [Core] module, the bedrock of the [Applicative].
+    {[
+      module Core : Preface_specs.Applicative.CORE = struct 
+          type 'a t = 'a option
+
+          let pure x = Some x
+
+          let map f = function 
+            | Some x -> Some (f x) 
+            | None -> None
+
+          let product ox oy = 
+            match (ox, oy) with 
+            | Some x, Some y  -> Some (x,y)
+            | None -> None
+
+          let apply fa xa = 
+            match (fa, xa) with 
+            | Some f, Some x -> Some (f x) 
+            | _ -> None        
+      end
+    ]}
+
+    With [Core], we can use {!Make_operation} to deal with the 
+    combinators of an [Applicative]:
+
+    {[
+      module Operation = Make_operation (Core)
+    ]}
+
+    Now, we can handle infix operators and syntactic shortcut using 
+    respectively {!Make_infix} and {!Make_syntax}:
+
+    {[
+      module Infix = Make_infix (Core) (Operation)
+      module Syntax = Make_syntax (Core)
+    ]}
+
+    Now, we have all required component of our [Applicative], let's 
+    putting it all together:
+
+    {[
+      module Applicative = Make (Core) (Operation) (Infix) (Syntax)
+    ]}
+
+    And as always:
+    
+    {[
+      (* In: option.mli *)
+      module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a option
+    ]}
+
+    Exactly like [Functor], [Applicative] can be built using different 
+    path, but in many cases, the simple approach is recommanded.
 *)
 
 (** {1 Documentation} *)
