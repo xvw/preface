@@ -4,7 +4,7 @@
     {2 Laws of [Applicative]}
 
     To have a predictable behaviour, the instance of [Applicative] must
-    obey some laws.
+    obey some laws. (For the same reason of the Functor's laws).
 
     - [(fun f x -> f x) (pure id)] must be equivalent to [id];
     - [compose <$> u <*> v <*> w] must be equivalent to

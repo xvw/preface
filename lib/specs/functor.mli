@@ -7,7 +7,8 @@
     {2 Laws of [Functor]}
 
     To have a predictable behaviour, the instance of [Functor] must
-    obey some laws.
+    obey some laws. The role of these laws is to guarantee [map] 
+    behaves sanely and actually performs a mapping operation.
 
     - [map id] must be equivalent to [id];
     - [map (f <% g)] must be equivalent to [map f <% map g].
