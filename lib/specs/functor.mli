@@ -9,8 +9,8 @@
     To have a predictable behaviour, the instance of [Functor] must
     obey some laws.
 
-    - [fmap id] must be equivalent to [id];
-    - [fmap (f <% g)] must be equivalent to [fmap f <% fmap g].
+    - [map id] must be equivalent to [id];
+    - [map (f <% g)] must be equivalent to [map f <% map g].
 *)
 
 (** {1 Structure anatomy} *)
