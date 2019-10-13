@@ -1,4 +1,4 @@
-(** An [Applicative] for [('a -> 'b) t] is an application functor
+(** An [Applicative] for [('a -> 'b) t] is an applicative functor
     from ['a t] to ['b t].
 
     {2 Laws of [Applicative]}
