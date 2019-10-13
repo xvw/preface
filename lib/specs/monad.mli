@@ -1,4 +1,34 @@
-(** A [Monad] - TODO *)
+(** A [Monad] for ['a t] is equiped by two things:
+    - a [return] function;
+    - a [bind] function.
+    
+    {2 Laws of [Monads]}
+    
+    Exactly like [Functor] and [Applicative]. An instance of 
+    [Monad] must obey some laws. But there is three paths of 
+    expressing theses laws:
+
+    {3 Using [bind]}
+
+    - [return a >>= f ] must be equivalent to [f a]
+    - [m >>= return] must be equivalent to [m]
+    - [(m >>= f) >>= g] must be equivalent to [m >>= (fun x -> f x >>= g)]
+
+    {3 Using [map] and [join]}
+    
+    - [join <% join] must be equivalent to [join <% (map join)]
+    - [join <% pure] must be equivalent to [id] and to [join <% map pure]
+    - [map id] must be equivalent to [id]
+    - [map (g <% f)] must be equivalent to [map g <% map f]
+    - [map f <% join] must be equivalent to [join <% map (map f)]
+    - [map f <% pure] must be equivalent to [pure <% f]
+
+    {3 Using the Kleisli composition}
+
+    - [return >=> g] must be equivalent to [g]
+    - [f >=> return] must be equivalent to [f]
+    - [(f >=> g) >=> h] must be equivalent to [f >=> (g >=> h)]
+*)
 
 (** {1 Structure anatomy} *)
 
