@@ -1,7 +1,8 @@
 open Fun
 open Fun.Infix
 
-module Make_core_via_map_and_duplicate (Core : Specs.Comonad.CORE_VIA_MAP_AND_DUPLICATE) :
+module Make_core_via_map_and_duplicate
+    (Core : Specs.Comonad.CORE_VIA_MAP_AND_DUPLICATE) :
   Specs.Comonad.CORE with type 'a t = 'a Core.t = struct
   include Core
   include Functor
@@ -22,7 +23,8 @@ module Make_core_via_extend (Core : Specs.Comonad.CORE_VIA_EXTEND) :
   let map f = extend (extract %> f)
 end
 
-module Make_core_via_cokleisli_composition (Core : Specs.Comonad.CORE_VIA_COKLEISLI_COMPOSITION) :
+module Make_core_via_cokleisli_composition
+    (Core : Specs.Comonad.CORE_VIA_COKLEISLI_COMPOSITION) :
   Specs.Comonad.CORE with type 'a t = 'a Core.t = struct
   include Core
 
@@ -57,7 +59,6 @@ module Make_infix
   let ( =<= ) = Operation.compose_right_to_left
 end
 
-
 module Make
     (Core : Specs.Comonad.CORE)
     (Operation : Specs.Comonad.OPERATION with type 'a t = 'a Core.t)
@@ -69,7 +70,8 @@ module Make
   module Infix = Infix
 end
 
-module Make_via_map_and_duplicate (Core_via_map_and_duplicate : Specs.Comonad.CORE_VIA_MAP_AND_DUPLICATE) :
+module Make_via_map_and_duplicate
+    (Core_via_map_and_duplicate : Specs.Comonad.CORE_VIA_MAP_AND_DUPLICATE) :
   Specs.COMONAD with type 'a t = 'a Core_via_map_and_duplicate.t = struct
   module Core = Make_core_via_map_and_duplicate (Core_via_map_and_duplicate)
   module Operation = Make_operation (Core)
@@ -89,9 +91,12 @@ module Make_via_extend (Core_via_extend : Specs.Comonad.CORE_VIA_EXTEND) :
   include Infix
 end
 
-module Make_via_cokleisli_composition (Core_via_cokleisli_composition : Specs.Comonad.CORE_VIA_COKLEISLI_COMPOSITION) :
+module Make_via_cokleisli_composition
+    (Core_via_cokleisli_composition : Specs.Comonad
+                                      .CORE_VIA_COKLEISLI_COMPOSITION) :
   Specs.COMONAD with type 'a t = 'a Core_via_cokleisli_composition.t = struct
-  module Core = Make_core_via_cokleisli_composition (Core_via_cokleisli_composition)
+  module Core =
+    Make_core_via_cokleisli_composition (Core_via_cokleisli_composition)
   module Operation = Make_operation (Core)
   module Infix = Make_infix (Core) (Operation)
   include Core

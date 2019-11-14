@@ -55,12 +55,11 @@ module type OPERATION = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
-  val lift : ('a -> 'b) -> ('a t -> 'b t)
+  val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Promotes a function to a [Comonad] *)
 
   val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
   (** Composing monadic functions using Co-Kleisli Arrow (from right to left). *)
-
 end
 
 (** Infix notations. *)
