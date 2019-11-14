@@ -56,10 +56,35 @@ module type OPERATION = sig
   (** The type holded by the [Comonad]. *)
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
-  (** Promotes a function to a [Comonad] *)
+  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
+
+  val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
+  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and
+      ['b t] to ['c t].
+  *)
+
+  val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
+  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t]
+      and ['b t] and ['c t] to ['d t].
+  *)
 
   val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
-  (** Composing monadic functions using Co-Kleisli Arrow (from right to left). *)
+  (** Composing comonadic functions using Co-Kleisli Arrow (from right to left). *)
+
+  val fix : ('a t -> 'a) t -> 'a
+  (** Fix point for [Comonad] *)
+end
+
+(** Syntax *)
+module type SYNTAX = sig
+  type 'a t
+  (** The type holded by the [Comonad]. *)
+
+  val ( let@ ) : 'a t -> ('a t -> 'b) -> 'b t
+  (** Syntaxic shortcuts for version of {!val:CORE.extend}:
+
+      [let@ x = e in f] is equals to [extend f e].
+  *)
 end
 
 (** Infix notations. *)
@@ -78,6 +103,18 @@ module type INFIX = sig
 
   val ( =<= ) : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
   (** Infix version of {!val:OPERATION.compose_right_to_left}. *)
+
+  val ( <@@> ) : 'a t -> ('a -> 'b) t -> 'b t
+  (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
+
+  val ( <@> ) : ('a -> 'b) t -> 'a t -> 'b t
+  (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
+
+  val ( @> ) : 'a t -> 'b t -> 'b t
+  (** Discard the value of the first argument. *)
+
+  val ( <@ ) : 'a t -> 'b t -> 'a t
+  (** Discard the value of the second argument. *)
 end
 
 (** {1 API} *)
@@ -87,6 +124,10 @@ module type API = sig
   include CORE
 
   include OPERATION with type 'a t := 'a t
+
+  module Syntax : SYNTAX with type 'a t := 'a t
+
+  include module type of Syntax
 
   module Infix : INFIX with type 'a t := 'a t
 

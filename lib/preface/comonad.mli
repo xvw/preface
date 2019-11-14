@@ -16,6 +16,7 @@ module Make_via_cokleisli_composition
 module Make
     (Core : Specs.Comonad.CORE)
     (Operation : Specs.Comonad.OPERATION with type 'a t = 'a Core.t)
+    (Syntax : Specs.Comonad.SYNTAX with type 'a t = 'a Core.t)
     (Infix : Specs.Comonad.INFIX with type 'a t = 'a Core.t) :
   Specs.COMONAD with type 'a t = 'a Core.t
 
