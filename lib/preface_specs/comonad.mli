@@ -3,7 +3,7 @@
 (** {1 Structure anatomy} *)
 
 (** Requirement via [bind]. *)
-module type CORE_VIA_DUPLICATE = sig
+module type CORE_VIA_MAP_AND_DUPLICATE = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
@@ -12,6 +12,9 @@ module type CORE_VIA_DUPLICATE = sig
 
   val duplicate : 'a t -> 'a t t
   (** Dual of join. *)
+
+  val map : ('a -> 'b) -> 'a t -> 'b t
+  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
 (** Requirement via [map] and [join]. *)
@@ -34,13 +37,13 @@ module type CORE_VIA_COKLEISLI_COMPOSITION = sig
   val extract : 'a t -> 'a
   (** Extract a ['a] from  ['a t]. *)
 
-  val cocompose_left_to_right : ('a t -> 'b) -> ('b t -> 'c) -> 'a t -> 'c
+  val compose_left_to_right : ('a t -> 'b) -> ('b t -> 'c) -> 'a t -> 'c
   (** Composing monadic functions using Co-Kleisli Arrow (from left to right). *)
 end
 
 (** Standard requirement. *)
 module type CORE = sig
-  include CORE_VIA_DUPLICATE
+  include CORE_VIA_MAP_AND_DUPLICATE
 
   include CORE_VIA_EXTEND with type 'a t := 'a t
 
@@ -52,8 +55,12 @@ module type OPERATION = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
+  val lift : ('a -> 'b) -> ('a t -> 'b t)
+  (** Promotes a function to a [Comonad] *)
+
+  val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
+  (** Composing monadic functions using Co-Kleisli Arrow (from right to left). *)
+
 end
 
 (** Infix notations. *)
@@ -61,12 +68,17 @@ module type INFIX = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
+  val ( =>> ) : 'a t -> ('a t -> 'b) -> 'b t
+  (** Infix flipped version of {!val:CORE.extend}. *)
+
+  val ( <<= ) : ('a t -> 'b) -> 'a t -> 'b t
+  (** Infix version of {!val:CORE.extend}. *)
+
   val ( =>= ) : ('a t -> 'b) -> ('b t -> 'c) -> 'a t -> 'c
-  (** Infix version of {!val:CORE.cocompose_left_to_right}. *)
+  (** Infix version of {!val:CORE.compose_left_to_right}. *)
 
   val ( =<= ) : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
-  (** Infix version of {!val:OPERATION.cocompose_right_to_left}. *)
-
+  (** Infix version of {!val:OPERATION.compose_right_to_left}. *)
 end
 
 (** {1 API} *)

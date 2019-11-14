@@ -67,6 +67,9 @@ module Selective = Selective
 module Monad = Monad
 (** Describe a monad. *)
 
+module Comonad = Comonad
+(** Describe a monad. *)
+
 (** {1 API Shortcuts}
     Shortcuts for the API of each objects (by convention, OCaml module types
     are in uppercase).
@@ -79,6 +82,8 @@ module type APPLICATIVE = Applicative.API
 module type SELECTIVE = Selective.API
 
 module type MONAD = Monad.API
+
+module type COMONAD = Comonad.API
 
 (** {1 Abstract data types} *)
 
