@@ -6,4 +6,4 @@ let () =
     ; Identity_functor_test.test_cases
     ; Identity_applicative_test.test_cases
     ; Identity_monad_test.test_cases
-    ; Stream_comonad_test.test_cases ]
+    ; Nats_comonad_test.test_cases ]
