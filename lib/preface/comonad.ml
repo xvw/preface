@@ -57,10 +57,6 @@ module Make_operation (Core : Specs.Comonad.CORE) :
     map @@ extract @@ lift2 f a b
 
   let compose_right_to_left f g = Core.compose_left_to_right g f
-
-  let rec fix f =
-    let open Core in
-    extract f (extend fix f)
 end
 
 module Make_infix

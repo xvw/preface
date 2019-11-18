@@ -1,14 +1,20 @@
-(** A [Comonad] - TODO *)
+(** A [Comonad] is the dual of the [Monad].
+
+    {1 Laws of [Comonad]}
+    - [extract duplicate wa] must be equivalent to [wa]
+    - [extend extract wa] must be equivalent to [wa]
+    - [duplicate duplicate wa] must be equivalent to [extend duplicate wa]
+*)
 
 (** {1 Structure anatomy} *)
 
-(** Requirement via [bind]. *)
+(** Requirement via [map] and [duplicate]. *)
 module type CORE_VIA_MAP_AND_DUPLICATE = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
   val extract : 'a t -> 'a
-  (** Extract a ['a] from  ['a t]. Dual of return*)
+  (** Extract a ['a] from  ['a t]. Dual of return. *)
 
   val duplicate : 'a t -> 'a t t
   (** Dual of join. *)
@@ -17,7 +23,7 @@ module type CORE_VIA_MAP_AND_DUPLICATE = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
-(** Requirement via [map] and [join]. *)
+(** Requirement via [extend]. *)
 module type CORE_VIA_EXTEND = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
@@ -29,7 +35,7 @@ module type CORE_VIA_EXTEND = sig
   (** Dual of bind. *)
 end
 
-(** Requirement via [co_compose_left_to_right]. *)
+(** Requirement via [compose_left_to_right]. *)
 module type CORE_VIA_COKLEISLI_COMPOSITION = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
@@ -70,9 +76,6 @@ module type OPERATION = sig
 
   val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
   (** Composing comonadic functions using Co-Kleisli Arrow (from right to left). *)
-
-  val fix : ('a t -> 'a) t -> 'a
-  (** Fix point for [Comonad] *)
 end
 
 (** Syntax *)
