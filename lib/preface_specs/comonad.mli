@@ -1,9 +1,18 @@
 (** A [Comonad] is the dual of the [Monad].
 
     {1 Laws of [Comonad]}
-    - [extract duplicate wa] must be equivalent to [wa]
-    - [extend extract wa] must be equivalent to [wa]
-    - [duplicate duplicate wa] must be equivalent to [extend duplicate wa]
+    - [extend extract] must be equivalent to [id]
+    - [(extend %> extract) f] must be equivalent to [f]
+    - [extend g %> extend f] must be equivalent to [extend (extend g %> f)]
+    - [f =>= extract] must be equivalent to [f]
+    - [extract =>= f] must be equivalent to [f]
+    - [(f =>= g) =>= h] must be equivalent to [f =>= (g =>= h)]
+    - [extract <% duplicate] must be equivalent to [id]
+    - [fmap extract <% duplicate] must be equivalent to [id]
+    - [duplicate %> duplicate] must be equivalent to [fmap duplicate <% duplicate]
+    - [extend f] must be equivalent to [fmap f <% duplicate]
+    - [duplicate] must be equivalent to [extend id]
+    - [fmap f] must be equivalent to [extend (f <% extract)]
 *)
 
 (** {1 Structure anatomy} *)
@@ -29,7 +38,7 @@ module type CORE_VIA_EXTEND = sig
   (** The type holded by the [Comonad]. *)
 
   val extract : 'a t -> 'a
-  (** Extract a ['a] from  ['a t]. *)
+  (** Extract a ['a] from  ['a t]. Dual of return. *)
 
   val extend : ('a t -> 'b) -> 'a t -> 'b t
   (** Dual of bind. *)
@@ -41,7 +50,7 @@ module type CORE_VIA_COKLEISLI_COMPOSITION = sig
   (** The type holded by the [Comonad]. *)
 
   val extract : 'a t -> 'a
-  (** Extract a ['a] from  ['a t]. *)
+  (** Extract a ['a] from  ['a t]. Dual of return. *)
 
   val compose_left_to_right : ('a t -> 'b) -> ('b t -> 'c) -> 'a t -> 'c
   (** Composing monadic functions using Co-Kleisli Arrow (from left to right). *)
