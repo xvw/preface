@@ -68,7 +68,7 @@ module Monad = Monad
 (** Describe a monad. *)
 
 module Comonad = Comonad
-(** Describe a monad. *)
+(** Describe a comonad. *)
 
 (** {1 API Shortcuts}
     Shortcuts for the API of each objects (by convention, OCaml module types
