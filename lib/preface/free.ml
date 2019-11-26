@@ -8,8 +8,8 @@ module Make_free_functor (F : Specs.Functor.CORE) :
 end
 
 module Make_free_applicative (F : Specs.Functor.CORE) :
-  Specs.Applicative.CORE_VIA_APPLY with type 'a t = 'a Specs.Free.CORE(F).t =
-struct
+  Specs.Applicative.CORE with type 'a t = 'a Specs.Free.CORE(F).t =
+Applicative.Make_core_via_apply (struct
   include Specs.Free.CORE (F)
   include Make_free_functor (F)
 
@@ -19,4 +19,18 @@ struct
     match f with
     | Return f' -> map f' a
     | FlatMap f' -> FlatMap (F.map (fun f -> apply f a) f')
-end
+end)
+
+module Make_free_monad (F : Specs.Functor.CORE) :
+  Specs.Monad.CORE with type 'a t = 'a Specs.Free.CORE(F).t =
+Monad.Make_core_via_bind (struct
+  include Specs.Free.CORE (F)
+  include Make_free_functor (F)
+  include Make_free_applicative (F)
+
+  let return = pure
+
+  let rec bind f = function
+    | Return a -> f a
+    | FlatMap a -> FlatMap (F.map (bind f) a)
+end)
