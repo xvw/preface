@@ -4,7 +4,7 @@
 (** {1 Structure anatomy} *)
 
 (** Standard requirement. *)
-module CORE_with_type (Type : sig
+module CORE (Type : sig
   type 'a t
 end) : sig
   type 'a t =
@@ -12,9 +12,7 @@ end) : sig
     | FlatMap of 'a t Type.t
 end
 
-module type CORE = module type of CORE_with_type
-
 (** {1 API} *)
 
-module type API = CORE
+module type API = module type of CORE
 (** The complete interface of a [Functor]. *)
