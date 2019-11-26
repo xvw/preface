@@ -1,15 +1,16 @@
 module Make_free_functor (F : Specs.Functor.CORE) :
-  Specs.Functor.CORE with type 'a t = 'a Specs.Free.CORE(F).t = struct
+  Specs.FUNCTOR with type 'a t = 'a Specs.Free.CORE(F).t =
+Functor.Make_via_map(struct
   include Specs.Free.CORE (F)
 
   let rec map f = function
     | Return v -> Return (f v)
     | FlatMap f' -> FlatMap (F.map (map f) f')
-end
+end)
 
 module Make_free_applicative (F : Specs.Functor.CORE) :
-  Specs.Applicative.CORE with type 'a t = 'a Specs.Free.CORE(F).t =
-Applicative.Make_core_via_apply (struct
+  Specs.APPLICATIVE with type 'a t = 'a Specs.Free.CORE(F).t =
+Applicative.Make_via_apply (struct
   include Specs.Free.CORE (F)
   include Make_free_functor (F)
 
@@ -22,8 +23,8 @@ Applicative.Make_core_via_apply (struct
 end)
 
 module Make_free_monad (F : Specs.Functor.CORE) :
-  Specs.Monad.CORE with type 'a t = 'a Specs.Free.CORE(F).t =
-Monad.Make_core_via_bind (struct
+  Specs.MONAD with type 'a t = 'a Specs.Free.CORE(F).t =
+Monad.Make_via_bind (struct
   include Specs.Free.CORE (F)
   include Make_free_functor (F)
   include Make_free_applicative (F)
