@@ -6,6 +6,7 @@ module Fun = Fun
 
 module Functor = Functor
 module Applicative = Applicative
+module Selective = Selective
 module Monad = Monad
 
 (** {2 Incarnations} *)

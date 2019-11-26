@@ -1,4 +1,12 @@
 (library
  (name specs)
  (public_name preface.specs)
- (modules_without_implementation specs functor applicative monad))
+ (modules_without_implementation
+   specs
+   requirements
+   functor
+   applicative
+   selective
+   monad
+ )
+)

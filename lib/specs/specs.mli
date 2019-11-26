@@ -47,6 +47,10 @@
     ]}
 *)
 
+(** {1 Misc} *)
+
+module Requirements = Requirements
+
 (** {1 Full Interfaces}
     Each objects, packed with requirements and API.
 *)
@@ -57,16 +61,27 @@ module Functor = Functor
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
+module Selective = Selective
+(** Describes a selective applicative functor. *)
+
 module Monad = Monad
 (** Describe a monad. *)
 
 (** {1 API Shortcuts}
     Shortcuts for the API of each objects (by convention, OCaml module types
-    are in uppercase.
+    are in uppercase).
 *)
 
 module type FUNCTOR = Functor.API
 
 module type APPLICATIVE = Applicative.API
 
+module type SELECTIVE = Selective.API
+
 module type MONAD = Monad.API
+
+(** {1 Abstract data types} *)
+
+module type EITHER = Requirements.EITHER
+(** [EITHER] hold a types which represents values with two possibilites.
+*)
