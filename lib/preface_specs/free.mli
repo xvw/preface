@@ -9,7 +9,7 @@ module CORE (Type : sig
 end) : sig
   type 'a t =
     | Return of 'a
-    | FlatMap of 'a t Type.t
+    | Bind of 'a t Type.t
 end
 
 (** {1 API} *)
