@@ -70,7 +70,7 @@ module Monad = Monad
 module Free = Free
 (** Describe a free monade. *)
 
-module Freeer = Freeer
+module FreeEr = FreeEr
 (** Describe a free monade. *)
 
 (** {1 API Shortcuts}
@@ -88,7 +88,7 @@ module type MONAD = Monad.API
 
 module type FREE = Free.API
 
-module type FREEER = Freeer.API
+module type FREEER = FreeEr.API
 
 (** {1 Abstract data types} *)
 

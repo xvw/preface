@@ -1,7 +1,6 @@
 (library
  (name preface_specs)
  (public_name preface.specs)
-<<<<<<< HEAD
  (modules_without_implementation
    preface_specs
    requirements
@@ -10,6 +9,6 @@
    selective
    monad
    free
-   freeer
+   freeEr
  )
 )
