@@ -103,6 +103,70 @@ let should_swapped_infix_select_right () =
     expected
     computed
 
+let should_or_true_false () =
+  let expected = pure true
+  and computed = (pure true) <||> (pure false) in
+  Alcotest.(check (identity bool))
+    "should_or_true_false"
+    expected
+    computed
+
+let should_or_false_false () =
+  let expected = pure false
+  and computed = (pure false) <||> (pure false) in
+  Alcotest.(check (identity bool))
+    "should_or_false_false"
+    expected
+    computed
+
+let should_or_true_true () =
+  let expected = pure true
+  and computed = (pure true) <||> (pure true) in
+  Alcotest.(check (identity bool))
+    "should_or_true_true"
+    expected
+    computed
+
+let should_or_false_true () =
+  let expected = pure true
+  and computed = (pure false) <||> (pure true) in
+  Alcotest.(check (identity bool))
+    "should_or_false_true"
+    expected
+    computed
+
+let should_and_true_false () =
+  let expected = pure false
+  and computed = (pure true) <&&> (pure false) in
+  Alcotest.(check (identity bool))
+    "should_and_true_false"
+    expected
+    computed
+
+let should_and_false_false () =
+  let expected = pure false
+  and computed = (pure false) <&&> (pure false) in
+  Alcotest.(check (identity bool))
+    "should_and_false_false"
+    expected
+    computed
+
+let should_and_true_true () =
+  let expected = pure true
+  and computed = (pure true) <&&> (pure true) in
+  Alcotest.(check (identity bool))
+    "should_and_true_true"
+    expected
+    computed
+
+let should_and_false_true () =
+  let expected = pure false
+  and computed = (pure false) <&&> (pure true) in
+  Alcotest.(check (identity bool))
+    "should_and_false_true"
+    expected
+    computed
+
 let test_cases =
   let open Alcotest in
   ( "Selective Applicative",
@@ -123,4 +187,12 @@ let test_cases =
         "Swapped infix select right"
         `Quick
         should_swapped_infix_select_right;
+      test_case "Or true false" `Quick should_or_true_false;
+      test_case "Or true true"  `Quick should_or_true_true;
+      test_case "Or false false" `Quick should_or_false_false;
+      test_case "Or false true" `Quick should_or_false_true;
+      test_case "And true false" `Quick should_and_true_false;
+      test_case "And true true"  `Quick should_and_true_true;
+      test_case "And false false" `Quick should_and_false_false;
+      test_case "And false true" `Quick should_and_false_true
     ] )
