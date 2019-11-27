@@ -54,7 +54,7 @@ module type INFIX = sig
 
   val ( <*? ) : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
 
-  val ( ?*> ) : ('a -> 'b) t -> ('a, 'b) Either.t t -> 'b t
+  val ( *?> ) : ('a -> 'b) t -> ('a, 'b) Either.t t -> 'b t
 
   val ( <||> ) : bool t -> bool t -> bool t
 

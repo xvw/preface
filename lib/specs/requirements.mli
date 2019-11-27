@@ -16,13 +16,16 @@ module type EITHER = sig
   val right : 'b -> ('a, 'b) t
   (** Creates a disjonction with second case. *)
 
+  val value_of : ('a, 'a) t -> 'a
+  (** Get the value of the disjonction. *)
+
   val left_of : ('a, 'b) t -> 'a
   (** Get the first value of the disjonction. *)
 
   val right_of : ('a, 'b) t -> 'b
   (** Get the second value of the disjonction. *)
 
-  val map_left : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
+  val map_left : ('a -> 'c) -> ('a, 'b) t -> ('c, 'b) t
   (** Mapping over the first value of the disjonction. *)
 
   val map_right : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t

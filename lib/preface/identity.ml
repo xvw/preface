@@ -16,6 +16,21 @@ module Applicative = Applicative.Make_via_apply (struct
   let apply f = f
 end)
 
+module Selective (E : Specs.EITHER) =
+  Selective.Make_via_applicative
+    (Applicative)
+    (struct
+      type nonrec 'a t = 'a t
+
+      module Either = E
+
+      let pure = pure
+
+      let select e f =
+        let open Either in
+        value_of @@ map_left f e
+    end)
+
 module Monad = Monad.Make_via_bind (struct
   type nonrec 'a t = 'a t
 

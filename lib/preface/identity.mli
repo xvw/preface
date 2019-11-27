@@ -18,6 +18,10 @@ module Applicative : Specs.APPLICATIVE with type 'a t = 'a t
 
 (*include module type of Applicative with type 'a t := 'a t*)
 
+(** {1 Selective API} *)
+
+module Selective (E : Specs.EITHER) : Specs.SELECTIVE with type 'a t = 'a t
+
 (** {1 Monad API} *)
 
 module Monad : Specs.MONAD with type 'a t = 'a t
