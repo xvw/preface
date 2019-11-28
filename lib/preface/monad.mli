@@ -1,5 +1,51 @@
 (** Modules for building {!Preface_specs.MONAD} modules. *)
 
+(** {1 Tutorial}
+
+    As with [Functor] and [Applicative], a [Monad] allow multiple 
+    path to build a [Monad] module.
+
+    {2 Basics} 
+
+    As [Applicative], [Monad] offer several primitive ways to be 
+    built. These different approaches lead to the same combiners.
+    It's up to you to choose the most flexible approach according 
+    to the context.
+
+    {3 Using [bind]}
+
+    This approach is by far the most popular. This is the default one used 
+    in Haskell. Here's an example with our well-know [Option] module.
+
+    {[
+      (* In: option.ml *)
+      module Monad = Preface.Monad.Make_via_bind(struct 
+          type 'a t = 'a option 
+          let return x = Some x 
+          let bind f = function 
+            | Some x -> f x 
+            | None -> None
+        end)
+    ]}
+
+    {[
+      (* In: option.mli *)
+      module Monad : Preface_specs.MONAD with type 'a t = 'a option
+    ]}
+
+    Now, your [Option] module is handling a [Monad] module and you'll be
+    be able to use features offered by a [Monad]. For example: 
+
+    {[
+      let operation = 
+        let open Option.Monad.Infix in 
+        return 45
+        >>= (fun x -> Some (x + 10))
+        >|= (fun x -> x + 20)
+    ]}
+
+*)
+
 (** {1 Documentation} *)
 
 (** {1 Construction} 

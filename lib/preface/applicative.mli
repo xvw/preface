@@ -10,7 +10,7 @@
     Unlike [Functor], [Applicative] offer several primitive ways to 
     be built. These different approaches lead to the same combiners. 
     It's up to you to choose the most flexible approach according to 
-    the context
+    the context.
 
     {3 Using [pure] and [apply]}
 
