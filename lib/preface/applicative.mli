@@ -48,7 +48,7 @@
     {3 Using [pure] and [map] and [product]}
     
     Although this approach is less popular because it requires more code 
-    than the previous one, it is also possible to express an application 
+    than the previous one, it is also possible to express an applicative
     via the [map] and [product] functions.
 
     {[
@@ -121,7 +121,7 @@
     {2 Advanced}
 
     Like for [Functor], an [Applicative] can be build step by step, offering 
-    our own implementation for each components. We just use {!Make} to
+    your own implementation for each component. We just use {!Make} to
     implement the components of our choice. Let's rewrite our
     [Option.Applicative] in an another way:
 

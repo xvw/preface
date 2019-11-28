@@ -44,7 +44,36 @@
         >|= (fun x -> x + 20)
     ]}
 
+    
+    {3 Using [map] and [join]}
+    
+    You can express a Monad using [map] and [join]. For example, 
+    let's try to implement a [List] monad:
+
+    {[
+      (* In: list.ml *)
+      module Monad = Preface.Monad.Make_via_map_and_join(struct 
+          type 'a t = 'a option 
+          let return x = [x]
+          let map = Stdlib.List.map
+          let join = Stdlib.List.concat
+        end)
+    ]}
+
+    {[
+      (* In: list.mli *)
+      module Monad : Preface_specs.MONAD with type 'a t = 'a list
+    ]}
+
+    {2 Advanced}
+
+    As you can see in the documentation, you can express a monad using 
+    the [Kleisli composition] and exactly like [Functor] and [Applicative],
+    you can build a monad step by step, offering your own implementation for
+    each component.
 *)
+
+
 
 (** {1 Documentation} *)
 
