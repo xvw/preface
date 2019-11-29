@@ -19,8 +19,8 @@
       module Functor = Preface.Functor.Make_via_map(struct
           type 'a t = 'a option
           let map f = function 
-            | None -> None 
             | Some x -> Some (f x)
+            | None -> None 
         end)
     ]}
 
@@ -45,7 +45,7 @@
 
     {2 Advanced}
 
-    In the previous example, we we used an approach that uses a minimal
+    In the previous example, we used an approach that uses a minimal
     interface to build all the functionality of a [functor]. Now, let's
     imagine that we want to provide our own implementation for [replace]. 
     To acheive that (an avoiding the combinatorial explosion, exposing a 
@@ -57,8 +57,8 @@
       module Core : Preface_specs.Functor.CORE = struct
         type 'a t = 'a option
         let map f = function 
-          | None -> None 
           | Some x -> Some (f x)
+          | None -> None 
       end
     ]}
 
@@ -67,9 +67,9 @@
     {[
       module Operation : Preface_specs.Functor.OPERATION = struct
         type 'a t = 'a option 
-        let replace value = function 
-          | None -> 
+        let replace value = function  
           | Some x -> Some value
+          | None -> None
                         
         let void x = replace () x
       end

@@ -7,7 +7,7 @@
 
     {2 Basics}
 
-    Unlike [Functor], [Applicative] offer several primitive ways to 
+    Unlike [Functor], [Applicative] offers several primitive ways to 
     be built. These different approaches lead to the same combiners. 
     It's up to you to choose the most flexible approach according to 
     the context.
@@ -45,7 +45,7 @@
         <*> (fun name -> if String.length name < 3 then None else Some name)
     ]}
 
-    {3 Using [pure] and [map] and [product]}
+    {3 Using [pure], [map] and [product]}
     
     Although this approach is less popular because it requires more code 
     than the previous one, it is also possible to express an applicative
@@ -65,7 +65,7 @@
           let product ox oy = 
             match (ox, oy) with 
             | Some x, Some y  -> Some (x,y)
-            | None -> None
+            | _ -> None
         end)
     ]}
 
@@ -88,14 +88,14 @@
           let product ox oy = 
             match (ox, oy) with 
             | Some x, Some y  -> Some (x,y)
-            | None -> None
+            | _ -> None
         end)      
     ]}
 
     The crucial point of these two tutorials and despite the fact that 
     they use different interfaces, they produce the same module.
 
-    {3 Using a Monad}
+    {3 Using a [Monad]}
 
     Since every [Monads] are an [Applicative Functor], you can produce 
     an [Applicative] giving a [Monad]. (The reverse is not possible because 
@@ -109,7 +109,6 @@
       module Applicative = 
         Preface.Applicative.Make_via_monad(Monad)
     ]}
-
 
     And exactly like the previous tutorial:
     
