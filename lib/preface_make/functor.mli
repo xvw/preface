@@ -114,8 +114,6 @@ module Via_map (Core : Preface_specs.Functor.CORE) :
     component-by-component functor. (In order to provide your own 
     implementation for some features.)
 *)
-module Make_via_map (Core : Specs.Functor.CORE) :
-  Specs.FUNCTOR with type 'a t = 'a Core.t
 
 (** Incarnation of a [Functor] using each components of
     a [Functor].

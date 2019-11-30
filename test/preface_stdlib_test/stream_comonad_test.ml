@@ -1,5 +1,5 @@
-open Preface.Stream
-open Preface.Stream.Comonad
+open Preface_stdlib.Stream
+open Preface_stdlib.Stream.Comonad
 
 let rec numbers n = stream n (lazy (numbers (n + 1)))
 

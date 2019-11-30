@@ -2,7 +2,7 @@ type 'a t = C of 'a * 'a t Lazy.t
 
 let stream a l = C (a, l)
 
-module Comonad = Comonad.Make_via_map_and_duplicate (struct
+module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
   type nonrec 'a t = 'a t
 
   let extract = function
