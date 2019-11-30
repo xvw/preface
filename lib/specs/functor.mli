@@ -1,12 +1,17 @@
 (** A [Functor] for ['a t] is mappable from ['a] to ['b].
     So for all ['a t], we can go to ['b t] using the [map] function.
+    In other words, if we have a type ['a t] and a function 
+    [val map: ('a -> 'b) -> 'a t -> 'b t] (respecting laws), it is 
+    a [Functor].
+
+    {2 Laws of [Functor]}
 
     To have a predictable behaviour, the instance of [Functor] must
-    obey some laws.
+    obey some laws. The role of these laws is to guarantee [map] 
+    behaves sanely and actually performs a mapping operation.
 
-    {1 Laws of [Functor]}
-    - [fmap id] must be equivalent to [id];
-    - [fmap (f <% g)] must be equivalent to [fmap f <% fmap g].
+    - [map id] must be equivalent to [id];
+    - [map (f <% g)] must be equivalent to [map f <% map g].
 *)
 
 (** {1 Structure anatomy} *)
@@ -64,3 +69,9 @@ module type API = sig
 
   include module type of Infix
 end
+
+(** 
+   {1 Bibliography}
+
+   - {{: https://wiki.haskell.org/Functor} Haskell's documentation of a Functor}
+*)

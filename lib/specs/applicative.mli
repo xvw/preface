@@ -1,11 +1,12 @@
-(** An [Applicative] for [('a -> 'b) t] is an application functor
+(** An [Applicative] for [('a -> 'b) t] is an applicative functor
     from ['a t] to ['b t].
 
-    To have a predictable behaviour, the instance of [Applicative] must
-    obey some laws.
+    {2 Laws of [Applicative]}
 
-    {1 Laws of [Applicative]}
-    - [apply (pure id)] must be equivalent to [id];
+    To have a predictable behaviour, the instance of [Applicative] must
+    obey some laws. (For the same reason of the Functor's laws).
+
+    - [(fun f x -> f x) (pure id)] must be equivalent to [id];
     - [compose <$> u <*> v <*> w] must be equivalent to
       [u <*> v <*> w];
     - [f <$> pure x] must be equivalent to [pure (f x)];
@@ -113,3 +114,12 @@ module type API = sig
 
   include module type of Infix
 end
+
+(** 
+   {1 Bibliography}
+
+   - {{: http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Applicative.html} 
+   Haskell's documentation of an Applicative Functor}
+   - {{: http://www.staff.city.ac.uk/~ross/papers/Applicative.html} 
+   Applicative Programming with Effects}
+*)

@@ -1,8 +1,8 @@
 (library
- (name specs)
+ (name preface_specs)
  (public_name preface.specs)
  (modules_without_implementation
-   specs
+   preface_specs
    requirements
    functor
    applicative

@@ -77,3 +77,12 @@ module type API = sig
 
   include module type of Infix with module Either := Either
 end
+
+(** 
+   {1 Bibliography}
+
+   - {{: http://hackage.haskell.org/package/selective} 
+   Haskell's documentation of a Selective Application Functor}
+   - {{: https://www.staff.ncl.ac.uk/andrey.mokhov/selective-functors.pdf} 
+   Selective Applicative Functors}
+*)

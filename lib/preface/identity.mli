@@ -8,19 +8,19 @@ val pure : 'a -> 'a t
 
 (** {1 Functor API} *)
 
-module Functor : Specs.FUNCTOR with type 'a t = 'a t
+module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 
 (*include module type of Functor with type 'a t := 'a t*)
 
 (** {1 Applicative API} *)
 
-module Applicative : Specs.APPLICATIVE with type 'a t = 'a t
+module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 
 (*include module type of Applicative with type 'a t := 'a t*)
 
 (** {1 Monad API} *)
 
-module Monad : Specs.MONAD with type 'a t = 'a t
+module Monad : Preface_specs.MONAD with type 'a t = 'a t
 
 (*include module type of Monad with type 'a t := 'a t*)
 

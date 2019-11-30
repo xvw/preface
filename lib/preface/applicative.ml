@@ -1,15 +1,15 @@
 open Fun
 
 module Make_core_via_map_and_product
-    (Core : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
-  Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
+    (Core : Preface_specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
+  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
 
   let apply f a = map (fun (f, a) -> f a) @@ product f a
 end
 
-module Make_core_via_apply (Core : Specs.Applicative.CORE_VIA_APPLY) :
-  Specs.Applicative.CORE with type 'a t = 'a Core.t = struct
+module Make_core_via_apply (Core : Preface_specs.Applicative.CORE_VIA_APPLY) :
+  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
 
   let map f a = apply (pure f) a
@@ -17,8 +17,8 @@ module Make_core_via_apply (Core : Specs.Applicative.CORE_VIA_APPLY) :
   let product a b = apply (apply (pure (fun a b -> a, b)) a) b
 end
 
-module Make_operation (Core : Specs.Applicative.CORE) :
-  Specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
+module Make_operation (Core : Preface_specs.Applicative.CORE) :
+  Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
   let lift = Core.map
@@ -32,8 +32,8 @@ module Make_operation (Core : Specs.Applicative.CORE) :
     apply @@ apply (apply (pure f) a) b
 end
 
-module Make_syntax (Core : Specs.Applicative.CORE) :
-  Specs.Applicative.SYNTAX with type 'a t = 'a Core.t = struct
+module Make_syntax (Core : Preface_specs.Applicative.CORE) :
+  Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
   let ( let+ ) x f = Core.map f x
@@ -42,9 +42,9 @@ module Make_syntax (Core : Specs.Applicative.CORE) :
 end
 
 module Make_infix
-    (Core : Specs.Applicative.CORE)
-    (Operation : Specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
-  Specs.Applicative.INFIX with type 'a t = 'a Core.t = struct
+    (Core : Preface_specs.Applicative.CORE)
+    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
+  Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
   let ( <*> ) = Core.apply
@@ -57,11 +57,11 @@ module Make_infix
 end
 
 module Make
-    (Core : Specs.Applicative.CORE)
-    (Operation : Specs.Applicative.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Specs.Applicative.INFIX with type 'a t = 'a Core.t)
-    (Syntax : Specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
-  Specs.APPLICATIVE with type 'a t = 'a Core.t = struct
+    (Core : Preface_specs.Applicative.CORE)
+    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Core.t = struct
   include Core
   include Operation
   include Syntax
@@ -71,8 +71,10 @@ module Make
 end
 
 module Make_via_map_and_product
-    (Core_via_map_and_product : Specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
-  Specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t = struct
+    (Core_via_map_and_product : Preface_specs.Applicative
+                                .CORE_VIA_MAP_AND_PRODUCT) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t =
+struct
   module Core = Make_core_via_map_and_product (Core_via_map_and_product)
   module Operation = Make_operation (Core)
   module Syntax = Make_syntax (Core)
@@ -83,8 +85,9 @@ module Make_via_map_and_product
   include Infix
 end
 
-module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
-  Specs.APPLICATIVE with type 'a t = 'a Core_via_apply.t = struct
+module Make_via_apply
+    (Core_via_apply : Preface_specs.Applicative.CORE_VIA_APPLY) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Core_via_apply.t = struct
   module Core = Make_core_via_apply (Core_via_apply)
   module Operation = Make_operation (Core)
   module Syntax = Make_syntax (Core)
@@ -95,8 +98,8 @@ module Make_via_apply (Core_via_apply : Specs.Applicative.CORE_VIA_APPLY) :
   include Infix
 end
 
-module Make_via_monad (Monad : Specs.MONAD) :
-  Specs.APPLICATIVE with type 'a t = 'a Monad.t = struct
+module Make_via_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Monad.t = struct
   include Make_via_apply (struct
     type 'a t = 'a Monad.t
 
