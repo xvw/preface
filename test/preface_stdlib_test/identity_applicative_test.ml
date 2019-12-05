@@ -1,6 +1,6 @@
-open Preface.Identity
-open Preface.Identity.Functor.Infix
-open Preface.Identity.Applicative
+open Preface_stdlib.Identity
+open Preface_stdlib.Identity.Functor.Infix
+open Preface_stdlib.Identity.Applicative
 
 (* Material required for Alcotest *)
 let identity a = Alcotest.testable (pp @@ Alcotest.pp a) @@ eq ( = )
@@ -31,8 +31,7 @@ let should_lift2 () =
 
 let should_lift3 () =
   let add a b c = a + b + c in
-  let expected = pure 42
-  and computed = lift3 add (pure 36) (pure 4) (pure 2) in
+  let expected = pure 42 and computed = lift3 add (pure 36) (pure 4) (pure 2) in
   Alcotest.(check (identity int)) "should_lift3" expected computed
 
 let should_map_with_syntax () =
@@ -81,26 +80,28 @@ let should_flipped_discard_with_infix_operator () =
 
 let test_cases =
   let open Alcotest in
-  ( "Identity Applicative"
-  , [ test_case "Map" `Quick should_map
-    ; test_case "First of product" `Quick should_product_first
-    ; test_case "Second of product" `Quick should_product_second
-    ; test_case "Apply" `Quick should_apply
-    ; test_case "Lift" `Quick should_lift
-    ; test_case "Lift2" `Quick should_lift2
-    ; test_case "Lift3" `Quick should_lift3
-    ; test_case "Map using syntax" `Quick should_map_with_syntax
-    ; test_case
+  ( "Identity Applicative",
+    [
+      test_case "Map" `Quick should_map;
+      test_case "First of product" `Quick should_product_first;
+      test_case "Second of product" `Quick should_product_second;
+      test_case "Apply" `Quick should_apply;
+      test_case "Lift" `Quick should_lift;
+      test_case "Lift2" `Quick should_lift2;
+      test_case "Lift3" `Quick should_lift3;
+      test_case "Map using syntax" `Quick should_map_with_syntax;
+      test_case
         "Map and Product using syntax"
         `Quick
-        should_map_and_product_with_syntax
-    ; test_case "Infix Apply" `Quick should_apply_with_infix_operator
-    ; test_case
+        should_map_and_product_with_syntax;
+      test_case "Infix Apply" `Quick should_apply_with_infix_operator;
+      test_case
         "Infix Flipped Apply"
         `Quick
-        should_flipped_apply_with_infix_operator
-    ; test_case "Infix Discard" `Quick should_discard_with_infix_operator
-    ; test_case
+        should_flipped_apply_with_infix_operator;
+      test_case "Infix Discard" `Quick should_discard_with_infix_operator;
+      test_case
         "Infix Flipped Discard"
         `Quick
-        should_flipped_discard_with_infix_operator ] )
+        should_flipped_discard_with_infix_operator;
+    ] )

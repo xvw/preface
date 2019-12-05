@@ -1,14 +1,14 @@
-(** {1 Standard Library} *)
+(** Wrapper around each component of [Preface]. *)
 
-module Fun = Fun
+(** {2 Signatures} *)
+
+module Specs = Preface_specs
 
 (** {2 Constructions} *)
 
-module Functor = Functor
-module Applicative = Applicative
-module Selective = Selective
-module Monad = Monad
+module Make = Preface_make
 
-(** {2 Incarnations} *)
+(** {2 Standard Library} *)
 
-module Identity = Identity
+module Fun = Preface_core.Fun
+include Preface_stdlib

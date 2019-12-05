@@ -1,6 +1,6 @@
-open Fun
+open Preface_core.Fun
 
-module Make_operation (Core : Preface_specs.Functor.CORE) :
+module Operation (Core : Preface_specs.Functor.CORE) :
   Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
@@ -9,7 +9,7 @@ module Make_operation (Core : Preface_specs.Functor.CORE) :
   let void x = replace () x
 end
 
-module Make_infix
+module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Functor.INFIX with type 'a t = 'a Core.t = struct
@@ -24,7 +24,7 @@ module Make_infix
   let ( $> ) x value = Operation.replace value x
 end
 
-module Make
+module Via
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
@@ -35,11 +35,11 @@ module Make
   module Infix = Infix
 end
 
-module Make_via_map (Core : Preface_specs.Functor.CORE) :
+module Via_map (Core : Preface_specs.Functor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t = struct
   include Core
-  module Operation = Make_operation (Core)
+  module Operation = Operation (Core)
   include Operation
-  module Infix = Make_infix (Core) (Operation)
+  module Infix = Infix (Core) (Operation)
   include Infix
 end

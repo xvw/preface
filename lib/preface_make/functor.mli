@@ -11,12 +11,12 @@
     {2 Basics}
 
     The most common way to build a [Functor] is to use the module 
-    {!Make_via_map}. For example, here is the way to have a [Functor] 
+    {!Via_map}. For example, here is the way to have a [Functor] 
     module inside an [Option] module:
 
     {[
       (* In: option.ml *)
-      module Functor = Preface.Functor.Make_via_map(struct
+      module Functor = Preface_make.Functor.Via_map(struct
           type 'a t = 'a option
           let map f = function 
             | Some x -> Some (f x)
@@ -49,7 +49,7 @@
     interface to build all the functionality of a [functor]. Now, let's
     imagine that we want to provide our own implementation for [replace]. 
     To acheive that (an avoiding the combinatorial explosion, exposing a 
-    lot of parametrized modules) we can use the module {!Make}. For example, 
+    lot of parametrized modules) we can use the module {!Via}. For example, 
     reimplement our [Option.Functor] in an another way:
 
     First, let's define our [Core] module.
@@ -76,13 +76,13 @@
     ]}
 
     Since [Infix] are just infix shortcuts, We do not want to 
-    have to write the module by hand, so we can use {!Make_infix}:
+    have to write the module by hand, so we can use {!Infix}:
 
-    {[ module Infix = Preface.Functor.Make_infix (Core) (Operation) ]}
+    {[ module Infix = Preface_make.Functor.Infix (Core) (Operation) ]}
 
     And now, we can just instanciate the [Functor]:
 
-    {[ module Functor = Preface.Functor.Make (Core) (Operation) (Infix) ]}
+    {[ module Functor = Preface.Functor.Via (Core) (Operation) (Infix) ]}
 
     And in the [mli], same of the previous tutorial:
     {[module Functor : Preface_specs.FUNCTOR with type 'a t = 'a option]}
@@ -104,9 +104,9 @@
     Standard way to build a [Functor].
 *)
 
-module Make_via_map (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 (** Incarnation of a [Functor] with standard requirements ([map]).*)
+module Via_map (Core : Preface_specs.Functor.CORE) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 
 (** {2 Manual construction} 
     
@@ -115,22 +115,22 @@ module Make_via_map (Core : Preface_specs.Functor.CORE) :
     implementation for some features.)
 *)
 
-module Make
+(** Incarnation of a [Functor] using each components of 
+    a [Functor].
+*)
+module Via
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
-(** Incarnation of a [Functor] using each components of 
-    a [Functor].
-*)
 
-module Make_operation (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t
 (** Incarnation of a [Functor.Operation] with standard Requirements ([map]). 
 *)
+module Operation (Core : Preface_specs.Functor.CORE) :
+  Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t
 
-module Make_infix
+(** Incarnation of a [Functor.Infix] with functional API of a [Functor]. *)
+module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Functor.INFIX with type 'a t = 'a Core.t
-(** Incarnation of a [Functor.Infix] with functional API of a [Functor]. *)

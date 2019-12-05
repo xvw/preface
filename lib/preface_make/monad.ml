@@ -1,6 +1,6 @@
-open Fun
+open Preface_core.Fun
 
-module Make_core_via_bind (Core : Preface_specs.Monad.CORE_VIA_BIND) :
+module Core_via_bind (Core : Preface_specs.Monad.CORE_WITH_BIND) :
   Preface_specs.Monad.CORE with type 'a t = 'a Core.t = struct
   include Core
 
@@ -11,8 +11,7 @@ module Make_core_via_bind (Core : Preface_specs.Monad.CORE_VIA_BIND) :
   let compose_left_to_right f g x = bind g (f x)
 end
 
-module Make_core_via_map_and_join
-    (Core : Preface_specs.Monad.CORE_VIA_MAP_AND_JOIN) :
+module Core_via_map_and_join (Core : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
   Preface_specs.Monad.CORE with type 'a t = 'a Core.t = struct
   include Core
 
@@ -21,8 +20,8 @@ module Make_core_via_map_and_join
   let compose_left_to_right f g x = bind g (f x)
 end
 
-module Make_core_via_kleisli_composition
-    (Core : Preface_specs.Monad.CORE_VIA_KLEISLI_COMPOSITION) :
+module Core_via_kleisli_composition
+    (Core : Preface_specs.Monad.CORE_WITH_KLEISLI_COMPOSITION) :
   Preface_specs.Monad.CORE with type 'a t = 'a Core.t = struct
   include Core
 
@@ -33,7 +32,7 @@ module Make_core_via_kleisli_composition
   let map f m = bind (return <% f) m
 end
 
-module Make_operation (Core : Preface_specs.Monad.CORE) :
+module Operation (Core : Preface_specs.Monad.CORE) :
   Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
@@ -52,14 +51,14 @@ module Make_operation (Core : Preface_specs.Monad.CORE) :
     bind (fun a -> bind (fun b -> bind (fun c -> return (f a b c)) mc) mb) ma
 end
 
-module Make_syntax (Core : Preface_specs.Monad.CORE) :
+module Syntax (Core : Preface_specs.Monad.CORE) :
   Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
   let ( let* ) m f = Core.bind f m
 end
 
-module Make_infix
+module Infix
     (Core : Preface_specs.Monad.CORE)
     (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Monad.INFIX with type 'a t = 'a Core.t = struct
@@ -82,7 +81,7 @@ module Make_infix
   let ( << ) ma _ = ma
 end
 
-module Make
+module Via
     (Core : Preface_specs.Monad.CORE)
     (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Monad.INFIX with type 'a t = 'a Core.t)
@@ -96,40 +95,40 @@ module Make
   module Infix = Infix
 end
 
-module Make_via_bind (Core_via_bind : Preface_specs.Monad.CORE_VIA_BIND) :
-  Preface_specs.MONAD with type 'a t = 'a Core_via_bind.t = struct
-  module Core = Make_core_via_bind (Core_via_bind)
-  module Operation = Make_operation (Core)
-  module Syntax = Make_syntax (Core)
-  module Infix = Make_infix (Core) (Operation)
+module Via_bind (Core_with_bind : Preface_specs.Monad.CORE_WITH_BIND) :
+  Preface_specs.MONAD with type 'a t = 'a Core_with_bind.t = struct
+  module Core = Core_via_bind (Core_with_bind)
+  module Operation = Operation (Core)
+  module Syntax = Syntax (Core)
+  module Infix = Infix (Core) (Operation)
   include Core
   include Operation
   include Syntax
   include Infix
 end
 
-module Make_via_map_and_join
-    (Core_via_map_and_join : Preface_specs.Monad.CORE_VIA_MAP_AND_JOIN) :
-  Preface_specs.MONAD with type 'a t = 'a Core_via_map_and_join.t = struct
-  module Core = Make_core_via_map_and_join (Core_via_map_and_join)
-  module Operation = Make_operation (Core)
-  module Syntax = Make_syntax (Core)
-  module Infix = Make_infix (Core) (Operation)
+module Via_map_and_join
+    (Core_with_map_and_join : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
+  Preface_specs.MONAD with type 'a t = 'a Core_with_map_and_join.t = struct
+  module Core = Core_via_map_and_join (Core_with_map_and_join)
+  module Operation = Operation (Core)
+  module Syntax = Syntax (Core)
+  module Infix = Infix (Core) (Operation)
   include Core
   include Operation
   include Syntax
   include Infix
 end
 
-module Make_via_kleisli_composition
-    (Core_via_kleisli_composition : Preface_specs.Monad
-                                    .CORE_VIA_KLEISLI_COMPOSITION) :
-  Preface_specs.MONAD with type 'a t = 'a Core_via_kleisli_composition.t =
+module Via_kleisli_composition
+    (Core_with_kleisli_composition : Preface_specs.Monad
+                                     .CORE_WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.MONAD with type 'a t = 'a Core_with_kleisli_composition.t =
 struct
-  module Core = Make_core_via_kleisli_composition (Core_via_kleisli_composition)
-  module Operation = Make_operation (Core)
-  module Syntax = Make_syntax (Core)
-  module Infix = Make_infix (Core) (Operation)
+  module Core = Core_via_kleisli_composition (Core_with_kleisli_composition)
+  module Operation = Operation (Core)
+  module Syntax = Syntax (Core)
+  module Infix = Infix (Core) (Operation)
   include Core
   include Operation
   include Syntax

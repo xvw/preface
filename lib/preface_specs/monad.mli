@@ -33,7 +33,7 @@
 (** {1 Structure anatomy} *)
 
 (** Requirement via [bind]. *)
-module type CORE_VIA_BIND = sig
+module type CORE_WITH_BIND = sig
   type 'a t
   (** The type holded by the [Monad]. *)
 
@@ -45,7 +45,7 @@ module type CORE_VIA_BIND = sig
 end
 
 (** Requirement via [map] and [join]. *)
-module type CORE_VIA_MAP_AND_JOIN = sig
+module type CORE_WITH_MAP_AND_JOIN = sig
   type 'a t
   (** The type holded by the [Monad]. *)
 
@@ -62,7 +62,7 @@ module type CORE_VIA_MAP_AND_JOIN = sig
 end
 
 (** Requirement via [compose_left_to_right]. *)
-module type CORE_VIA_KLEISLI_COMPOSITION = sig
+module type CORE_WITH_KLEISLI_COMPOSITION = sig
   type 'a t
   (** The type holded by the [Monad]. *)
 
@@ -76,11 +76,11 @@ end
 
 (** Standard requirement. *)
 module type CORE = sig
-  include CORE_VIA_BIND
+  include CORE_WITH_BIND
 
-  include CORE_VIA_MAP_AND_JOIN with type 'a t := 'a t
+  include CORE_WITH_MAP_AND_JOIN with type 'a t := 'a t
 
-  include CORE_VIA_KLEISLI_COMPOSITION with type 'a t := 'a t
+  include CORE_WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
 end
 
 (** Operations. *)

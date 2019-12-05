@@ -19,7 +19,7 @@
 
     {[
       (* In: option.ml *)
-      module Applicative = Preface.Applicative.Make_via_apply(struct
+      module Applicative = Preface_make.Applicative.Via_apply(struct
           type 'a t = 'a option
           let pure x = Some x
           let apply fa xa = 
@@ -53,7 +53,7 @@
 
     {[
       (* In: option.ml *)
-      module Applicative = Preface.Applicative.Make_via_map_and_product(struct
+      module Applicative = Preface_make.Applicative.Via_map_and_product(struct
           type 'a t = 'a option
 
           let pure x = Some x
@@ -81,7 +81,7 @@
     it would be possible to implement the [Applicative] in this way:
 
     {[
-      module Applicative = Preface.Applicative.Make_via_map_and_product(struct
+      module Applicative = Preface_make.Via_map_and_product(struct
           type 'a t = 'a option
           let pure x = Some x
           let map f x = Functor.map f x
@@ -107,7 +107,7 @@
 
     {[
       module Applicative = 
-        Preface.Applicative.Make_via_monad(Monad)
+        Preface_make.Applicative.Via_monad(Monad)
     ]}
 
     And exactly like the previous tutorial:
@@ -147,26 +147,28 @@
       end
     ]}
 
-    With [Core], we can use {!Make_operation} to deal with the 
+    With [Core], we can use {!Operation} to deal with the 
     combinators of an [Applicative]:
 
     {[
-      module Operation = Make_operation (Core)
+      module Operation = Preface_make.Applicative.Operation (Core)
     ]}
 
     Now, we can handle infix operators and syntactic shortcut using 
-    respectively {!Make_infix} and {!Make_syntax}:
+    respectively {!Infix} and {!Syntax}:
 
     {[
-      module Infix = Make_infix (Core) (Operation)
-      module Syntax = Make_syntax (Core)
+      module Infix = Preface_make.Applicative.Infix (Core) (Operation)
+      module Syntax = Preface_make.Applicative.Syntax (Core)
     ]}
 
     Now, we have all required component of our [Applicative], let's 
     putting it all together:
 
     {[
-      module Applicative = Make (Core) (Operation) (Infix) (Syntax)
+      module Applicative = 
+        Preface_make.Applicative.Via 
+          (Core) (Operation) (Infix) (Syntax)
     ]}
 
     And as always:
@@ -187,24 +189,23 @@
     Standard way to build an [Applicative Functor].
 *)
 
-module Make_via_map_and_product
-    (Core_via_map_and_product : Preface_specs.Applicative
-                                .CORE_VIA_MAP_AND_PRODUCT) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Core_via_map_and_product.t
 (** Incarnation of an [Applicative] with standard requirements 
     ([pure], [map] and [product]).
 *)
+module Via_map_and_product
+    (Core_with_map_and_product : Preface_specs.Applicative
+                                 .CORE_WITH_MAP_AND_PRODUCT) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_map_and_product.t
 
-module Make_via_apply
-    (Core_via_apply : Preface_specs.Applicative.CORE_VIA_APPLY) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Core_via_apply.t
 (** Incarnation of an [Applicative] with standard requirements 
     ([pure] and [apply]).
 *)
+module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_apply.t
 
-module Make_via_monad (Monad : Preface_specs.MONAD) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Monad.t
 (** Incarnation of an [Applicative] using a [Monad].*)
+module Via_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Monad.t
 
 (** {2 Manual construction} 
     
@@ -213,44 +214,44 @@ module Make_via_monad (Monad : Preface_specs.MONAD) :
     (In order to provide your own implementation for some features.)
 *)
 
-module Make
+(** Incarnation of an [Applicative] using each components of an [Applicative].
+*)
+module Via
     (Core : Preface_specs.Applicative.CORE)
     (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Core.t
-(** Incarnation of an [Applicative] using each components of an [Applicative].
-*)
 
-module Make_core_via_map_and_product
-    (Core : Preface_specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
-  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t
 (** Incarnation of an [Applicative.Core] for an ['a t] with standard
     Requirements ([pure], [map] and [product]).
 *)
-
-module Make_core_via_apply (Core : Preface_specs.Applicative.CORE_VIA_APPLY) :
+module Core_via_map_and_product
+    (Core : Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Core.t
+
 (** Incarnation of an [Applicative.Core] with standard requirements 
     ([pure], [apply]).
 *)
+module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) :
+  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t
 
-module Make_operation (Core : Preface_specs.Applicative.CORE) :
-  Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t
 (** Incarnation of an [Applicative.Operation] with standard requirements 
     ([pure], [map], [apply] and [product]).
 *)
+module Operation (Core : Preface_specs.Applicative.CORE) :
+  Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t
 
-module Make_syntax (Core : Preface_specs.Applicative.CORE) :
-  Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t
 (** Incarnation of an [Applicative.Syntax] with standard requirements 
     ([pure], [map], [apply] and [product]).
 *)
+module Syntax (Core : Preface_specs.Applicative.CORE) :
+  Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t
 
-module Make_infix
-    (Core : Preface_specs.Applicative.CORE)
-    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t
 (** Incarnation of an [Applicative.Infix] with standard requirements 
     ([pure], [map], [apply] and [product]).
 *)
+module Infix
+    (Core : Preface_specs.Applicative.CORE)
+    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
+  Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t

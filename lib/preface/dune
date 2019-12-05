@@ -1,4 +1,4 @@
 (library
  (name preface)
  (public_name preface)
- (libraries preface.specs))
+ (libraries preface.core preface.specs preface.make preface.stdlib))
