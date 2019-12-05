@@ -18,7 +18,7 @@
 (** {1 Structure anatomy} *)
 
 (** Requirement via [map] and [duplicate]. *)
-module type CORE_VIA_MAP_AND_DUPLICATE = sig
+module type CORE_WITH_MAP_AND_DUPLICATE = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
@@ -33,7 +33,7 @@ module type CORE_VIA_MAP_AND_DUPLICATE = sig
 end
 
 (** Requirement via [extend]. *)
-module type CORE_VIA_EXTEND = sig
+module type CORE_WITH_EXTEND = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
@@ -45,7 +45,7 @@ module type CORE_VIA_EXTEND = sig
 end
 
 (** Requirement via [compose_left_to_right]. *)
-module type CORE_VIA_COKLEISLI_COMPOSITION = sig
+module type CORE_WITH_COKLEISLI_COMPOSITION = sig
   type 'a t
   (** The type holded by the [Comonad]. *)
 
@@ -58,11 +58,11 @@ end
 
 (** Standard requirement. *)
 module type CORE = sig
-  include CORE_VIA_MAP_AND_DUPLICATE
+  include CORE_WITH_MAP_AND_DUPLICATE
 
-  include CORE_VIA_EXTEND with type 'a t := 'a t
+  include CORE_WITH_EXTEND with type 'a t := 'a t
 
-  include CORE_VIA_COKLEISLI_COMPOSITION with type 'a t := 'a t
+  include CORE_WITH_COKLEISLI_COMPOSITION with type 'a t := 'a t
 end
 
 (** Operations. *)

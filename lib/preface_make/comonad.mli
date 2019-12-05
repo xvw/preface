@@ -3,14 +3,14 @@
 (** {1 Construction of a [Comonad] module} *)
 
 module Via_map_and_duplicate
-    (Core : Preface_specs.Comonad.CORE_VIA_MAP_AND_DUPLICATE) :
+    (Core : Preface_specs.Comonad.CORE_WITH_MAP_AND_DUPLICATE) :
   Preface_specs.COMONAD with type 'a t = 'a Core.t
 
-module Via_extend (Core : Preface_specs.Comonad.CORE_VIA_EXTEND) :
+module Via_extend (Core : Preface_specs.Comonad.CORE_WITH_EXTEND) :
   Preface_specs.COMONAD with type 'a t = 'a Core.t
 
 module Via_cokleisli_composition
-    (Core : Preface_specs.Comonad.CORE_VIA_COKLEISLI_COMPOSITION) :
+    (Core : Preface_specs.Comonad.CORE_WITH_COKLEISLI_COMPOSITION) :
   Preface_specs.COMONAD with type 'a t = 'a Core.t
 
 module Make
@@ -23,14 +23,14 @@ module Make
 (** {1 Internal construction of a [Comonad] module} *)
 
 module Core_via_map_and_duplicate
-    (Core : Preface_specs.Comonad.CORE_VIA_MAP_AND_DUPLICATE) :
+    (Core : Preface_specs.Comonad.CORE_WITH_MAP_AND_DUPLICATE) :
   Preface_specs.Comonad.CORE with type 'a t = 'a Core.t
 
-module Core_via_extend (Core : Preface_specs.Comonad.CORE_VIA_EXTEND) :
+module Core_via_extend (Core : Preface_specs.Comonad.CORE_WITH_EXTEND) :
   Preface_specs.Comonad.CORE with type 'a t = 'a Core.t
 
 module Core_via_cokleisli_composition
-    (Core : Preface_specs.Comonad.CORE_VIA_COKLEISLI_COMPOSITION) :
+    (Core : Preface_specs.Comonad.CORE_WITH_COKLEISLI_COMPOSITION) :
   Preface_specs.Comonad.CORE with type 'a t = 'a Core.t
 
 module Operation (Core : Preface_specs.Comonad.CORE) :
