@@ -16,7 +16,7 @@
 (** {1 Structure anatomy} *)
 
 (** Requirement via [map] and [product]. *)
-module type CORE_VIA_MAP_AND_PRODUCT = sig
+module type CORE_WITH_MAP_AND_PRODUCT = sig
   type 'a t
   (** The type holded by the [Applicative]. *)
 
@@ -31,7 +31,7 @@ module type CORE_VIA_MAP_AND_PRODUCT = sig
 end
 
 (** Requirement via [apply]. *)
-module type CORE_VIA_APPLY = sig
+module type CORE_WITH_APPLY = sig
   type 'a t
   (** The type holded by the [Applicative]. *)
 
@@ -44,9 +44,9 @@ end
 
 (** Standard requirement. *)
 module type CORE = sig
-  include CORE_VIA_APPLY
+  include CORE_WITH_APPLY
 
-  include CORE_VIA_MAP_AND_PRODUCT with type 'a t := 'a t
+  include CORE_WITH_MAP_AND_PRODUCT with type 'a t := 'a t
 end
 
 (** Operations *)

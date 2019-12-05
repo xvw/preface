@@ -1,14 +1,14 @@
 open Fun
 
 module Core_via_map_and_product
-    (Core : Preface_specs.Applicative.CORE_VIA_MAP_AND_PRODUCT) :
+    (Core : Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
 
   let apply f a = map (fun (f, a) -> f a) @@ product f a
 end
 
-module Core_via_apply (Core : Preface_specs.Applicative.CORE_VIA_APPLY) :
+module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Core.t = struct
   include Core
 
@@ -72,7 +72,7 @@ end
 
 module Via_map_and_product
     (Core_with_map_and_product : Preface_specs.Applicative
-                                 .CORE_VIA_MAP_AND_PRODUCT) :
+                                 .CORE_WITH_MAP_AND_PRODUCT) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_map_and_product.t =
 struct
   module Core = Core_via_map_and_product (Core_with_map_and_product)
@@ -85,7 +85,7 @@ struct
   include Infix
 end
 
-module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_VIA_APPLY) :
+module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_apply.t = struct
   module Core = Core_via_apply (Core_with_apply)
   module Operation = Operation (Core)

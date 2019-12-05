@@ -82,14 +82,14 @@
 
 (** Incarnation of a [Monad] with standard requirement ([return] and [bind]).
 *)
-module Via_bind (Core_with_bind : Preface_specs.Monad.CORE_VIA_BIND) :
+module Via_bind (Core_with_bind : Preface_specs.Monad.CORE_WITH_BIND) :
   Preface_specs.MONAD with type 'a t = 'a Core_with_bind.t
 
 (** Incarnation of a [Monad] with map and join requirement 
     ([return], [join] and [map]).
 *)
 module Via_map_and_join
-    (Core_with_map_and_join : Preface_specs.Monad.CORE_VIA_MAP_AND_JOIN) :
+    (Core_with_map_and_join : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
   Preface_specs.MONAD with type 'a t = 'a Core_with_map_and_join.t
 
 (** Incarnation of a [Monad] with kleisli composition requirement 
@@ -97,7 +97,7 @@ module Via_map_and_join
 *)
 module Via_kleisli_composition
     (Core_with_kleisli_composition : Preface_specs.Monad
-                                     .CORE_VIA_KLEISLI_COMPOSITION) :
+                                     .CORE_WITH_KLEISLI_COMPOSITION) :
   Preface_specs.MONAD with type 'a t = 'a Core_with_kleisli_composition.t
 
 (** {2 Manual construction} 
@@ -118,20 +118,20 @@ module Via
 (** Incarnation of a [Monad.Core] with standard requirement 
     ([return] and [bind]).
 *)
-module Core_via_bind (Core : Preface_specs.Monad.CORE_VIA_BIND) :
+module Core_via_bind (Core : Preface_specs.Monad.CORE_WITH_BIND) :
   Preface_specs.Monad.CORE with type 'a t = 'a Core.t
 
 (** Incarnation of a [Monad.Core] with map and join requirement 
     ([return], [join] and [map]).
 *)
-module Core_via_map_and_join (Core : Preface_specs.Monad.CORE_VIA_MAP_AND_JOIN) :
+module Core_via_map_and_join (Core : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
   Preface_specs.Monad.CORE with type 'a t = 'a Core.t
 
 (** Incarnation of a [Monad.Core] with kleisli composition requirement 
     ([return] and [compose_left_to_right]).
 *)
 module Core_via_kleisli_composition
-    (Core : Preface_specs.Monad.CORE_VIA_KLEISLI_COMPOSITION) :
+    (Core : Preface_specs.Monad.CORE_WITH_KLEISLI_COMPOSITION) :
   Preface_specs.Monad.CORE with type 'a t = 'a Core.t
 
 (** Incarnation of a [Monad.Operation] with [Monad.Core].*)

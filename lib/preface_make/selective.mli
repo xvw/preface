@@ -4,13 +4,13 @@
 
 module Via_applicative
     (Applicative : Preface_specs.APPLICATIVE)
-    (Select : Preface_specs.Selective.CORE_VIA_SELECT
+    (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Applicative.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Select.t
 
 module Via_functor
     (Functor : Preface_specs.FUNCTOR)
-    (Select : Preface_specs.Selective.CORE_VIA_SELECT
+    (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Select.t
 
@@ -29,7 +29,7 @@ module Via
 
 module Core_via_functor
     (Functor : Preface_specs.FUNCTOR)
-    (Select : Preface_specs.Selective.CORE_VIA_SELECT
+    (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t) :
   Preface_specs.Selective.CORE
     with type 'a t = 'a Functor.t
@@ -37,7 +37,7 @@ module Core_via_functor
 
 module Core_via_applicative
     (Applicative : Preface_specs.APPLICATIVE)
-    (Select : Preface_specs.Selective.CORE_VIA_SELECT
+    (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Applicative.t) :
   Preface_specs.Selective.CORE
     with type 'a t = 'a Applicative.t

@@ -5,7 +5,7 @@
 
 (** {1 Structure anatomy} *)
 
-module type CORE_VIA_SELECT = sig
+module type CORE_WITH_SELECT = sig
   type 'a t
 
   module Either : Requirements.EITHER
@@ -17,7 +17,7 @@ end
 
 (** Standard requirement. *)
 module type CORE = sig
-  include CORE_VIA_SELECT
+  include CORE_WITH_SELECT
 
   include Applicative.CORE with type 'a t := 'a t
 end
