@@ -4,4 +4,5 @@
  (libraries
    preface.core
    preface.specs
-   preface.make))
+   preface.make
+   preface.stdlib))

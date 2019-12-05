@@ -1,6 +1,4 @@
-(** {1 Standard Library} *)
-
-module Fun = Preface_core.Fun
+(** Wrapper around each component of [Preface]. *)
 
 (** {2 Signatures} *)
 
@@ -10,6 +8,7 @@ module Specs = Preface_specs
 
 module Make = Preface_make
 
-(** {2 Incarnations} *)
+(** {2 Standard Library} *)
 
-module Identity = Identity
+module Fun = Preface_core.Fun
+include Preface_stdlib
