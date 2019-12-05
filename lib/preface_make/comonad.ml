@@ -101,9 +101,11 @@ module Make
 end
 
 module Via_map_and_duplicate
-    (Core : Preface_specs.Comonad.CORE_WITH_MAP_AND_DUPLICATE) :
-  Preface_specs.COMONAD with type 'a t = 'a Core.t = struct
-  module Core = Core_via_map_and_duplicate (Core)
+    (Core_with_map_and_duplicate : Preface_specs.Comonad
+                                   .CORE_WITH_MAP_AND_DUPLICATE) :
+  Preface_specs.COMONAD with type 'a t = 'a Core_with_map_and_duplicate.t =
+struct
+  module Core = Core_via_map_and_duplicate (Core_with_map_and_duplicate)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -113,9 +115,9 @@ module Via_map_and_duplicate
   include Infix
 end
 
-module Via_extend (Core : Preface_specs.Comonad.CORE_WITH_EXTEND) :
-  Preface_specs.COMONAD with type 'a t = 'a Core.t = struct
-  module Core = Core_via_extend (Core)
+module Via_extend (Core_with_extend : Preface_specs.Comonad.CORE_WITH_EXTEND) :
+  Preface_specs.COMONAD with type 'a t = 'a Core_with_extend.t = struct
+  module Core = Core_via_extend (Core_with_extend)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -126,10 +128,11 @@ module Via_extend (Core : Preface_specs.Comonad.CORE_WITH_EXTEND) :
 end
 
 module Via_cokleisli_composition
-    (Via_cokleisli_composition : Preface_specs.Comonad
-                                 .CORE_WITH_COKLEISLI_COMPOSITION) :
-  Preface_specs.COMONAD with type 'a t = 'a Via_cokleisli_composition.t = struct
-  module Core = Core_via_cokleisli_composition (Via_cokleisli_composition)
+    (Core_with_cokleisli_composition : Preface_specs.Comonad
+                                       .CORE_WITH_COKLEISLI_COMPOSITION) :
+  Preface_specs.COMONAD with type 'a t = 'a Core_with_cokleisli_composition.t =
+struct
+  module Core = Core_via_cokleisli_composition (Core_with_cokleisli_composition)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
