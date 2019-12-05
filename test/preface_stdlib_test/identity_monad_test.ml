@@ -1,5 +1,5 @@
-open Preface.Identity
-open Preface.Identity.Monad
+open Preface_stdlib.Identity
+open Preface_stdlib.Identity.Monad
 
 (* Material required for Alcotest *)
 let identity a = Alcotest.testable (pp @@ Alcotest.pp a) @@ eq ( = )

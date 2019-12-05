@@ -1,6 +1,6 @@
-open Preface.Identity
-open Preface.Identity.Functor.Infix
-open Preface.Identity.Applicative
+open Preface_stdlib.Identity
+open Preface_stdlib.Identity.Functor.Infix
+open Preface_stdlib.Identity.Applicative
 
 (* Material required for Alcotest *)
 let identity a = Alcotest.testable (pp @@ Alcotest.pp a) @@ eq ( = )
