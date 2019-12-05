@@ -1,11 +1,14 @@
 (** {1 Standard Library} *)
 
-module Fun = Fun
+module Fun = Preface_core.Fun
+
+(** {2 Signatures} *)
+
+module Specs = Preface_specs
 
 (** {2 Constructions} *)
 
-module Selective = Selective
-module Monad = Monad
+module Make = Preface_make
 
 (** {2 Incarnations} *)
 

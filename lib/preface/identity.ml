@@ -8,7 +8,7 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map f = f
 end)
 
-module Applicative = Applicative.Make_via_apply (struct
+module Applicative = Preface_make.Applicative.Via_apply (struct
   type nonrec 'a t = 'a t
 
   let pure = pure
@@ -16,7 +16,7 @@ module Applicative = Applicative.Make_via_apply (struct
   let apply f = f
 end)
 
-module Monad = Monad.Make_via_bind (struct
+module Monad = Preface_make.Monad.Via_bind (struct
   type nonrec 'a t = 'a t
 
   let return = pure
