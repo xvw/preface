@@ -4,7 +4,6 @@ module Fun = Fun
 
 (** {2 Constructions} *)
 
-module Functor = Functor
 module Applicative = Applicative
 module Selective = Selective
 module Monad = Monad
