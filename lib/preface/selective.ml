@@ -1,4 +1,4 @@
-open Fun
+open Preface_core.Fun
 
 module Make_core_via_functor
     (Functor : Preface_specs.FUNCTOR)

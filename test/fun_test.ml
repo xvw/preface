@@ -1,4 +1,4 @@
-open Preface.Fun
+open Preface_core.Fun
 
 let should_compose_right_to_left () =
   let expected = "42"

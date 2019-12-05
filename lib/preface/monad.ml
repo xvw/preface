@@ -1,4 +1,4 @@
-open Fun
+open Preface_core.Fun
 
 module Make_core_via_bind (Core : Preface_specs.Monad.CORE_VIA_BIND) :
   Preface_specs.Monad.CORE with type 'a t = 'a Core.t = struct

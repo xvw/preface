@@ -1,4 +1,4 @@
-open Fun
+open Preface_core.Fun
 
 module Make_operation (Core : Preface_specs.Functor.CORE) :
   Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t = struct
