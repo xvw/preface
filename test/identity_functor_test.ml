@@ -50,17 +50,19 @@ let should_flipped_map_with_infix_operator () =
 
 let test_cases =
   let open Alcotest in
-  ( "Identity Functor"
-  , [ test_case "Replace" `Quick should_replace
-    ; test_case "Infix replace" `Quick should_replace_with_infix_operator
-    ; test_case
+  ( "Identity Functor",
+    [
+      test_case "Replace" `Quick should_replace;
+      test_case "Infix replace" `Quick should_replace_with_infix_operator;
+      test_case
         "Infix flipped replace"
         `Quick
-        should_flipped_replace_with_infix_operator
-    ; test_case "Void" `Quick should_void
-    ; test_case "Map" `Quick should_map
-    ; test_case "Infix map" `Quick should_map_with_infix_operator
-    ; test_case
+        should_flipped_replace_with_infix_operator;
+      test_case "Void" `Quick should_void;
+      test_case "Map" `Quick should_map;
+      test_case "Infix map" `Quick should_map_with_infix_operator;
+      test_case
         "Infix flipped map"
         `Quick
-        should_flipped_map_with_infix_operator ] )
+        should_flipped_map_with_infix_operator;
+    ] )

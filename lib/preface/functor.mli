@@ -104,9 +104,9 @@
     Standard way to build a [Functor].
 *)
 
+(** Incarnation of a [Functor] with standard requirements ([map]).*)
 module Make_via_map (Core : Preface_specs.Functor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
-(** Incarnation of a [Functor] with standard requirements ([map]).*)
 
 (** {2 Manual construction} 
     
@@ -115,22 +115,22 @@ module Make_via_map (Core : Preface_specs.Functor.CORE) :
     implementation for some features.)
 *)
 
+(** Incarnation of a [Functor] using each components of 
+    a [Functor].
+*)
 module Make
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
-(** Incarnation of a [Functor] using each components of 
-    a [Functor].
-*)
 
-module Make_operation (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t
 (** Incarnation of a [Functor.Operation] with standard Requirements ([map]). 
 *)
+module Make_operation (Core : Preface_specs.Functor.CORE) :
+  Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t
 
+(** Incarnation of a [Functor.Infix] with functional API of a [Functor]. *)
 module Make_infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Functor.INFIX with type 'a t = 'a Core.t
-(** Incarnation of a [Functor.Infix] with functional API of a [Functor]. *)

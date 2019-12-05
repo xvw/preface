@@ -26,14 +26,16 @@ let should_compose_left_to_right_with_infix_operator () =
 
 let test_cases =
   let open Alcotest in
-  ( "Fun"
-  , [ test_case "Right to left composition" `Quick should_compose_left_to_right
-    ; test_case
+  ( "Fun",
+    [
+      test_case "Right to left composition" `Quick should_compose_left_to_right;
+      test_case
         "Right to left infix composition"
         `Quick
-        should_compose_left_to_right_with_infix_operator
-    ; test_case "Left to right composition" `Quick should_compose_right_to_left
-    ; test_case
+        should_compose_left_to_right_with_infix_operator;
+      test_case "Left to right composition" `Quick should_compose_right_to_left;
+      test_case
         "Left to right infix composition"
         `Quick
-        should_compose_right_to_left_with_infix_operator ] )
+        should_compose_right_to_left_with_infix_operator;
+    ] )
