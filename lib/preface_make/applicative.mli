@@ -248,7 +248,7 @@ module Operation (Core : Preface_specs.Applicative.CORE) :
 module Syntax (Core : Preface_specs.Applicative.CORE) :
   Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t
 
-(** Incarnation of an [Applicative.Infix] with standard requirements 
+(** Incarnation of an [Applicative.Infix] with standard requirements
     ([pure], [map], [apply] and [product]).
 *)
 module Infix

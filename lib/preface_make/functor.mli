@@ -2,7 +2,7 @@
 
 (** {1 Tutorial}
 
-    In order to be modular, [Preface] offers multiple way to build a 
+    In order to be modular, [Preface] offers multiple way to build a
     {!Preface_specs.FUNCTOR}. In many case, you just have to use the 
     parametrized module {!Make_via_map}, but in some particular cases,
     you want to be able to write each component of a [Functor].
@@ -115,7 +115,7 @@ module Via_map (Core : Preface_specs.Functor.CORE) :
     implementation for some features.)
 *)
 
-(** Incarnation of a [Functor] using each components of 
+(** Incarnation of a [Functor] using each components of
     a [Functor].
 *)
 module Via

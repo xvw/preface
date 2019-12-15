@@ -1,4 +1,4 @@
-.PHONY: all test clean fmt
+.PHONY: all test clean utop fmt
 
 all:
 	dune build
