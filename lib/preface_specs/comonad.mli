@@ -1,6 +1,6 @@
 (** A [Comonad] is the dual of the [Monad].
 
-    {1 Laws of [Comonad]}
+    {2 Laws of [Comonad]}
     - [extend extract] must be equivalent to [id]
     - [(extend %> extract) f] must be equivalent to [f]
     - [extend g %> extend f] must be equivalent to [extend (extend g %> f)]
