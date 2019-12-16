@@ -114,6 +114,24 @@ let sequential_validation_4 () =
     expected
     computed
 
+let divide_by x y = if x = 0 then None else Some (y / x)
+
+let sequential_computing_1 () =
+  let expected = Some 25
+  and computed =
+    let open Monad in
+    return 48 >|= succ >|= succ >>= divide_by 2
+  in
+  Alcotest.(check (option int)) "Sequential computing 1" expected computed
+
+let sequential_computing_2 () =
+  let expected = None
+  and computed =
+    let open Monad in
+    return 48 >|= succ >>= divide_by 0 >|= succ >>= divide_by 2
+  in
+  Alcotest.(check (option int)) "Sequential computing 1" expected computed
+
 let test_cases =
   let open Alcotest in
   ( "Option",
@@ -128,4 +146,6 @@ let test_cases =
       test_case "Sequential validation 2" `Quick sequential_validation_2;
       test_case "Sequential validation 3" `Quick sequential_validation_3;
       test_case "Sequential validation 4" `Quick sequential_validation_4;
+      test_case "Sequential computing 1" `Quick sequential_computing_1;
+      test_case "Sequential computing 2" `Quick sequential_computing_2;
     ] )
