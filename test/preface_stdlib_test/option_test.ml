@@ -134,7 +134,7 @@ let sequential_computing_2 () =
 
 let test_cases =
   let open Alcotest in
-  ( "Option",
+  ( "Option Validation",
     [
       test_case "Map scenario 1" `Quick map_scenario_1;
       test_case "Map scenario 2" `Quick map_scenario_2;
