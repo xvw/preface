@@ -1,4 +1,7 @@
-(** Exposes [Identity.t]. *)
+(** Exposes [Identity.t]. 
+    
+    This module is mainly used as a "proof of concept" and as a test tool.
+*)
 
 type 'a t
 (** A wrapper around a value. *)

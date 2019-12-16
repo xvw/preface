@@ -1,0 +1,131 @@
+open Preface_core.Fun
+open Preface_stdlib.Option
+
+let option a = Alcotest.testable (pp @@ Alcotest.pp a) @@ eq ( = )
+
+let map_scenario_1 () =
+  let expected = Some 31
+  and computed =
+    Some 20
+    |> Functor.map succ
+    |> Functor.map (fun x -> x + 9)
+    |> Functor.map succ
+  in
+  Alcotest.(check (option int)) "map_scenario_1" expected computed
+
+let map_scenario_2 () =
+  let expected = None
+  and computed =
+    Some 20 |> Functor.map succ |> constant None |> Functor.map (fun x -> x + 9)
+  in
+  Alcotest.(check (option int)) "map_scenario_2" expected computed
+
+let create age name = age, name
+
+let is_positive number = if number >= 0 then Some number else None
+
+let is_potential_name name = if String.length name >= 3 then Some name else None
+
+let parallel_validation_1 () =
+  let expected = Some (10, "John Doe")
+  and computed =
+    let open Applicative in
+    create <$> is_positive 10 <*> is_potential_name "John Doe"
+  in
+  Alcotest.(check (option (pair int string)))
+    "parallel_validation_1"
+    expected
+    computed
+
+let parallel_validation_2 () =
+  let expected = None
+  and computed =
+    let open Applicative in
+    create <$> is_positive (-12) <*> is_potential_name "John Doe"
+  in
+  Alcotest.(check (option (pair int string)))
+    "parallel_validation_2"
+    expected
+    computed
+
+let parallel_validation_3 () =
+  let expected = None
+  and computed =
+    let open Applicative in
+    create <$> is_positive 10 <*> is_potential_name "J"
+  in
+  Alcotest.(check (option (pair int string)))
+    "parallel_validation_2"
+    expected
+    computed
+
+let parallel_validation_4 () =
+  let expected = None
+  and computed =
+    let open Applicative in
+    create <$> is_positive (-10) <*> is_potential_name "J"
+  in
+  Alcotest.(check (option (pair int string)))
+    "parallel_validation_2"
+    expected
+    computed
+
+let sequential_validation_1 () =
+  let expected = Some (10, "John Doe")
+  and computed =
+    let open Monad in
+    is_positive 10 >|= create >>= fun f -> is_potential_name "John Doe" >|= f
+  in
+  Alcotest.(check (option (pair int string)))
+    "Sequential_Validation_1"
+    expected
+    computed
+
+let sequential_validation_2 () =
+  let expected = None
+  and computed =
+    let open Monad in
+    is_positive (-10) >|= create >>= fun f -> is_potential_name "John Doe" >|= f
+  in
+  Alcotest.(check (option (pair int string)))
+    "Sequential_Validation_2"
+    expected
+    computed
+
+let sequential_validation_3 () =
+  let expected = None
+  and computed =
+    let open Monad in
+    is_positive 10 >|= create >>= fun f -> is_potential_name "J" >|= f
+  in
+  Alcotest.(check (option (pair int string)))
+    "Sequential_Validation_1"
+    expected
+    computed
+
+let sequential_validation_4 () =
+  let expected = None
+  and computed =
+    let open Monad in
+    is_positive (-10) >|= create >>= fun f -> is_potential_name "J" >|= f
+  in
+  Alcotest.(check (option (pair int string)))
+    "Sequential_Validation_1"
+    expected
+    computed
+
+let test_cases =
+  let open Alcotest in
+  ( "Option",
+    [
+      test_case "Map scenario 1" `Quick map_scenario_1;
+      test_case "Map scenario 2" `Quick map_scenario_2;
+      test_case "Parallel validation 1" `Quick parallel_validation_1;
+      test_case "Parallel validation 2" `Quick parallel_validation_2;
+      test_case "Parallel validation 3" `Quick parallel_validation_3;
+      test_case "Parallel validation 4" `Quick parallel_validation_4;
+      test_case "Sequential validation 1" `Quick sequential_validation_1;
+      test_case "Sequential validation 2" `Quick sequential_validation_2;
+      test_case "Sequential validation 3" `Quick sequential_validation_3;
+      test_case "Sequential validation 4" `Quick sequential_validation_4;
+    ] )

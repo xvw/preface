@@ -1,3 +1,9 @@
+(** Exposes [Option.t].
+    
+    The Option module allows you to deal with the presence or absence 
+    of value.
+*)
+
 type 'a t = 'a option
 
 (** {1 Implementation} *)
