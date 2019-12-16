@@ -1,6 +1,6 @@
 (** Exposes [Option.t].
-    
-    The Option module allows you to deal with the presence or absence 
+
+    The Option module allows you to deal with the presence or absence
     of value.
 *)
 
