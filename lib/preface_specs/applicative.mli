@@ -85,6 +85,9 @@ module type INFIX = sig
   type 'a t
   (** The type holded by the [Applicative]. *)
 
+  val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
+  (** Infix version of {!val:CORE.map}. *)
+
   val ( <*> ) : ('a -> 'b) t -> 'a t -> 'b t
   (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 

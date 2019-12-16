@@ -47,6 +47,8 @@ module Infix
   Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
+  let ( <$> ) = Core.map
+
   let ( <*> ) = Core.apply
 
   let ( <**> ) a f = f <*> a

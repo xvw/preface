@@ -1,5 +1,4 @@
 open Preface_stdlib.Identity
-open Preface_stdlib.Identity.Functor.Infix
 open Preface_stdlib.Identity.Applicative
 
 (* Material required for Alcotest *)
