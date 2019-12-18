@@ -1,6 +1,6 @@
-module Make_free_functor (F : Preface_specs.Functor.CORE) :
+module Free_functor (F : Preface_specs.Functor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = 'a Preface_specs.Free.CORE(F).t =
-Functor.Make_via_map(struct
+Functor.Via_map(struct
   include Preface_specs.Free.CORE (F)
 
   let rec map f = function
@@ -8,11 +8,11 @@ Functor.Make_via_map(struct
     | Bind f' -> Bind (F.map (map f) f')
 end)
 
-module Make_free_applicative (F : Preface_specs.Functor.CORE) :
+module Free_applicative (F : Preface_specs.Functor.CORE) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Preface_specs.Free.CORE(F).t =
-Applicative.Make_via_apply (struct
+Applicative.Via_apply (struct
   include Preface_specs.Free.CORE (F)
-  include Make_free_functor (F)
+  include Free_functor (F)
 
   let pure a = Return a
 
@@ -22,12 +22,12 @@ Applicative.Make_via_apply (struct
     | Bind f' -> Bind (F.map (fun f -> apply f a) f')
 end)
 
-module Make_free_monad (F : Preface_specs.Functor.CORE) :
+module Free_monad (F : Preface_specs.Functor.CORE) :
   Preface_specs.MONAD with type 'a t = 'a Preface_specs.Free.CORE(F).t =
-Monad.Make_via_bind (struct
+Monad.Via_bind (struct
   include Preface_specs.Free.CORE (F)
-  include Make_free_functor (F)
-  include Make_free_applicative (F)
+  include Free_functor (F)
+  include Free_applicative (F)
 
   let return = pure
 

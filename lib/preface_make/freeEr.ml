@@ -1,9 +1,9 @@
-open Fun.Infix
+open Preface_core.Fun.Infix
 
-module Make_freeEr_functor (F : sig
+module FreeEr_functor (F : sig
   type 'a t
 end) : Preface_specs.FUNCTOR with type 'a t = 'a Preface_specs.FreeEr.CORE(F).t =
-Functor.Make_via_map(struct
+Functor.Via_map(struct
   include Preface_specs.FreeEr.CORE (F)
 
   let rec map f = function
@@ -11,13 +11,13 @@ Functor.Make_via_map(struct
     | Bind (i, c) -> Bind (i, c %> map f)
 end)
 
-module Make_freeEr_applicative (F : sig
+module FreeEr_applicative (F : sig
   type 'a t
 end) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Preface_specs.FreeEr.CORE(F).t =
-Applicative.Make_via_apply (struct
+Applicative.Via_apply (struct
   include Preface_specs.FreeEr.CORE (F)
-  include Make_freeEr_functor (F)
+  include FreeEr_functor (F)
 
   let pure a = Return a
 
@@ -27,14 +27,14 @@ Applicative.Make_via_apply (struct
     | Bind (i, c) -> Bind (i, c %> (fun f -> apply f a))
 end)
 
-module Make_freeEr_monad (F : sig
+module FreeEr_monad (F : sig
   type 'a t
 end) :
   Preface_specs.MONAD with type 'a t = 'a Preface_specs.FreeEr.CORE(F).t =
-Monad.Make_via_bind (struct
+Monad.Via_bind (struct
   include Preface_specs.FreeEr.CORE (F)
-  include Make_freeEr_functor (F)
-  include Make_freeEr_applicative (F)
+  include FreeEr_functor (F)
+  include FreeEr_applicative (F)
 
   let return = pure
 
