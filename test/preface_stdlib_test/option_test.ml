@@ -1,8 +1,6 @@
 open Preface_core.Fun
 open Preface_stdlib.Option
 
-let option a = Alcotest.testable (pp @@ Alcotest.pp a) @@ eq ( = )
-
 let map_scenario_1 () =
   let expected = Some 31
   and computed =

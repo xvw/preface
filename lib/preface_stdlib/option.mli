@@ -73,6 +73,9 @@ module Monad : Preface_specs.MONAD with type 'a t = 'a t
 
 (** {1 Helpers} *)
 
+val pure : 'a -> 'a t
+(** Create a value from ['a] to ['a t]. *)
+
 val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality.*)
 

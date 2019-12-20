@@ -1,5 +1,7 @@
 type 'a t = 'a option
 
+let pure x = Some x
+
 module Functor = Preface_make.Functor.Via_map (struct
   type nonrec 'a t = 'a t
 
@@ -11,7 +13,7 @@ end)
 module Applicative = Preface_make.Applicative.Via_apply (struct
   type nonrec 'a t = 'a t
 
-  let pure x = Some x
+  let pure = pure
 
   let apply fa xa =
     match fa, xa with
