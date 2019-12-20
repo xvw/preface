@@ -1,37 +1,33 @@
-open Preface_stdlib.Identity
-open Preface_stdlib.Identity.Applicative
-
-(* Material required for Alcotest *)
-let identity a = Alcotest.testable (pp @@ Alcotest.pp a) @@ eq ( = )
+open Preface_stdlib.Option.Applicative
 
 let should_map () =
   let expected = pure 42 and computed = map (( + ) 2) @@ pure 40 in
-  Alcotest.(check (identity int)) "should_map" expected computed
+  Alcotest.(check (option int)) "should_map" expected computed
 
 let should_product_first () =
   let expected = pure 42 and computed = fst <$> product (pure 42) (pure 2) in
-  Alcotest.(check (identity int)) "should_product_first" expected computed
+  Alcotest.(check (option int)) "should_product_first" expected computed
 
 let should_product_second () =
   let expected = pure 42 and computed = snd <$> product (pure 2) (pure 42) in
-  Alcotest.(check (identity int)) "should_product_second" expected computed
+  Alcotest.(check (option int)) "should_product_second" expected computed
 
 let should_apply () =
   let expected = pure 42 and computed = apply (pure @@ ( + ) 2) @@ pure 40 in
-  Alcotest.(check (identity int)) "should_apply" expected computed
+  Alcotest.(check (option int)) "should_apply" expected computed
 
 let should_lift () =
   let expected = pure 42 and computed = lift (( + ) 2) (pure 40) in
-  Alcotest.(check (identity int)) "should_lift" expected computed
+  Alcotest.(check (option int)) "should_lift" expected computed
 
 let should_lift2 () =
   let expected = pure 42 and computed = lift2 ( + ) (pure 40) (pure 2) in
-  Alcotest.(check (identity int)) "should_lift2" expected computed
+  Alcotest.(check (option int)) "should_lift2" expected computed
 
 let should_lift3 () =
   let add a b c = a + b + c in
   let expected = pure 42 and computed = lift3 add (pure 36) (pure 4) (pure 2) in
-  Alcotest.(check (identity int)) "should_lift3" expected computed
+  Alcotest.(check (option int)) "should_lift3" expected computed
 
 let should_map_with_syntax () =
   let expected = pure 42
@@ -39,7 +35,7 @@ let should_map_with_syntax () =
     let+ x = pure 40 in
     x + 2
   in
-  Alcotest.(check (identity int)) "should_map" expected computed
+  Alcotest.(check (option int)) "should_map" expected computed
 
 let should_map_and_product_with_syntax () =
   let expected = pure 42
@@ -47,39 +43,39 @@ let should_map_and_product_with_syntax () =
     let+ f = pure ( + ) and+ x = pure 40 and+ y = pure 2 in
     f x y
   in
-  Alcotest.(check (identity int)) "should_map" expected computed
+  Alcotest.(check (option int)) "should_map" expected computed
 
 let should_apply_with_infix_operator () =
   let expected = pure 42 and computed = ( + ) <$> pure 40 <*> pure 2 in
-  Alcotest.(check (identity int))
+  Alcotest.(check (option int))
     "should_apply_with_infix_operator"
     expected
     computed
 
 let should_flipped_apply_with_infix_operator () =
   let expected = pure 42 and computed = pure 40 <**> pure (( + ) 2) in
-  Alcotest.(check (identity int))
+  Alcotest.(check (option int))
     "should_flipped_apply_with_infix_operator"
     expected
     computed
 
 let should_discard_with_infix_operator () =
   let expected = pure 42 and computed = pure 2 *> pure 42 in
-  Alcotest.(check (identity int))
+  Alcotest.(check (option int))
     "should_discard_with_infix_operator"
     expected
     computed
 
 let should_flipped_discard_with_infix_operator () =
   let expected = pure 42 and computed = pure 42 <* pure 2 in
-  Alcotest.(check (identity int))
+  Alcotest.(check (option int))
     "should_flipped_apply_with_infix_operator"
     expected
     computed
 
 let test_cases =
   let open Alcotest in
-  ( "Identity Applicative",
+  ( "Option Applicative",
     [
       test_case "Map" `Quick should_map;
       test_case "First of product" `Quick should_product_first;
