@@ -4,12 +4,12 @@
 (** {1 Structure anatomy} *)
 
 (** Standard requirement. *)
-module CORE (Type : sig
-  type 'a t
-end) : sig
+module CORE : sig
+  type 'a data
+
   type _ t =
     | Return : 'a -> 'a t
-    | Bind : 'b Type.t * ('b -> 'a t) -> 'a t
+    | Bind : 'b data * ('b -> 'a t) -> 'a t
         (** The type holded by the [Free]. *)
 end
 
