@@ -56,6 +56,8 @@ module Syntax (Core : Preface_specs.Monad.CORE) :
   type 'a t = 'a Core.t
 
   let ( let* ) m f = Core.bind f m
+
+  let ( let+ ) m f = Core.map f m
 end
 
 module Infix

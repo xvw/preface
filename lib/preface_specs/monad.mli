@@ -119,6 +119,12 @@ module type SYNTAX = sig
 
       [let* x = e in f] is equals to [bind (fun x -> f) e].
   *)
+
+  val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
+  (** Syntaxic shortcuts for flipped version of {!val:CORE.map}:
+      
+      [let+ x = e in f] is equals to [map (fun x -> f) e].
+  *)
 end
 
 (** Infix notations. *)
