@@ -1,6 +1,11 @@
 (** Exposes [Identity.t].
 
     This module is mainly used as a "proof of concept" and as a test tool.
+
+    {1 Capabilities}
+    - {!val:Functor}
+    - {!val:Applicative}
+    - {!val:Monad}
 *)
 
 type 'a t

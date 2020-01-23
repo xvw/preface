@@ -1,5 +1,11 @@
 (** Exposes [Option.t].
 
+    {1 Capabilities}
+    - {!val:Functor}
+    - {!val:Applicative}
+    - {!val:Monad}
+
+    {1 Use cases}
     The Option module allows you to deal with the presence or absence
     of value. Here is some use-cases:
 
@@ -17,7 +23,7 @@
 
     Let's add some rules:
     - an [age] must be positive;
-    - a name must have at least 2 characters.
+    - a [name] must have at least 2 characters.
 
     {[
       let age_validation age = 
