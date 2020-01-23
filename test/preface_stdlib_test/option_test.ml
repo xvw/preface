@@ -1,6 +1,21 @@
 open Preface_core.Fun
 open Preface_stdlib.Option
 
+module Functor_test = Support.Functor (struct
+  include Preface_stdlib.Option
+  include Functor
+end)
+
+module Applicative_test = Support.Applicative (struct
+  include Preface_stdlib.Option
+  include Applicative
+end)
+
+module Monad_test = Support.Monad (struct
+  include Preface_stdlib.Option
+  include Monad
+end)
+
 let map_scenario_1 () =
   let expected = Some 31
   and computed =
@@ -132,18 +147,23 @@ let sequential_computing_2 () =
 
 let test_cases =
   let open Alcotest in
-  ( "Option Validation",
-    [
-      test_case "Map scenario 1" `Quick map_scenario_1;
-      test_case "Map scenario 2" `Quick map_scenario_2;
-      test_case "Parallel validation 1" `Quick parallel_validation_1;
-      test_case "Parallel validation 2" `Quick parallel_validation_2;
-      test_case "Parallel validation 3" `Quick parallel_validation_3;
-      test_case "Parallel validation 4" `Quick parallel_validation_4;
-      test_case "Sequential validation 1" `Quick sequential_validation_1;
-      test_case "Sequential validation 2" `Quick sequential_validation_2;
-      test_case "Sequential validation 3" `Quick sequential_validation_3;
-      test_case "Sequential validation 4" `Quick sequential_validation_4;
-      test_case "Sequential computing 1" `Quick sequential_computing_1;
-      test_case "Sequential computing 2" `Quick sequential_computing_2;
-    ] )
+  [
+    "Option Functor", Functor_test.cases;
+    "Option Applicative", Applicative_test.cases;
+    "Option Monad", Monad_test.cases;
+    ( "Option Validation",
+      [
+        test_case "Map scenario 1" `Quick map_scenario_1;
+        test_case "Map scenario 2" `Quick map_scenario_2;
+        test_case "Parallel validation 1" `Quick parallel_validation_1;
+        test_case "Parallel validation 2" `Quick parallel_validation_2;
+        test_case "Parallel validation 3" `Quick parallel_validation_3;
+        test_case "Parallel validation 4" `Quick parallel_validation_4;
+        test_case "Sequential validation 1" `Quick sequential_validation_1;
+        test_case "Sequential validation 2" `Quick sequential_validation_2;
+        test_case "Sequential validation 3" `Quick sequential_validation_3;
+        test_case "Sequential validation 4" `Quick sequential_validation_4;
+        test_case "Sequential computing 1" `Quick sequential_computing_1;
+        test_case "Sequential computing 2" `Quick sequential_computing_2;
+      ] );
+  ]
