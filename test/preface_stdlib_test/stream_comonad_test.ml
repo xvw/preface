@@ -96,28 +96,30 @@ let should_discard_second () =
 
 let test_cases =
   let open Alcotest in
-  ( "Stream Comonad",
-    [
-      test_case "Extract" `Quick should_extract;
-      test_case "Extend" `Quick should_extend;
-      test_case "Infix Extend" `Quick should_infix_extend;
-      test_case "Flipped Infix Extend" `Quick should_flipped_infix_extend;
-      test_case "Compose right to left" `Quick should_compose_right_to_left;
-      test_case "Lift" `Quick should_lift;
-      test_case "Lift2" `Quick should_lift2;
-      test_case "Lift3" `Quick should_lift3;
-      test_case "Syntax Extend" `Quick should_syntax_extend;
-      test_case "Compose left to right" `Quick should_compose_left_to_right;
-      test_case
-        "Infix Compose left to right"
-        `Quick
-        should_infix_compose_left_to_right;
-      test_case
-        "Infix Compose right to left"
-        `Quick
-        should_infix_compose_right_to_left;
-      test_case "Apply" `Quick should_apply;
-      test_case "Inverse apply" `Quick should_inverse_apply;
-      test_case "Discard first" `Quick should_discard_first;
-      test_case "Discard second" `Quick should_discard_second;
-    ] )
+  [
+    ( "Stream Comonad",
+      [
+        test_case "Extract" `Quick should_extract;
+        test_case "Extend" `Quick should_extend;
+        test_case "Infix Extend" `Quick should_infix_extend;
+        test_case "Flipped Infix Extend" `Quick should_flipped_infix_extend;
+        test_case "Compose right to left" `Quick should_compose_right_to_left;
+        test_case "Lift" `Quick should_lift;
+        test_case "Lift2" `Quick should_lift2;
+        test_case "Lift3" `Quick should_lift3;
+        test_case "Syntax Extend" `Quick should_syntax_extend;
+        test_case "Compose left to right" `Quick should_compose_left_to_right;
+        test_case
+          "Infix Compose left to right"
+          `Quick
+          should_infix_compose_left_to_right;
+        test_case
+          "Infix Compose right to left"
+          `Quick
+          should_infix_compose_right_to_left;
+        test_case "Apply" `Quick should_apply;
+        test_case "Inverse apply" `Quick should_inverse_apply;
+        test_case "Discard first" `Quick should_discard_first;
+        test_case "Discard second" `Quick should_discard_second;
+      ] );
+  ]

@@ -65,10 +65,13 @@ module Selective = Selective
 (** Describes a selective applicative functor. *)
 
 module Monad = Monad
-(** Describe a monad. *)
+(** Describes a monad. *)
 
 module Comonad = Comonad
-(** Describe a comonad. *)
+(** Describes a comonad. *)
+
+module Traversable = Traversable
+(** Describes a traversable. *)
 
 (** {1 API Shortcuts}
     Shortcuts for the API of each objects (by convention, OCaml module types
@@ -84,6 +87,8 @@ module type SELECTIVE = Selective.API
 module type MONAD = Monad.API
 
 module type COMONAD = Comonad.API
+
+module type TRAVERSABLE = Traversable.API
 
 (** {1 Abstract data types} *)
 

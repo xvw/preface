@@ -4,7 +4,7 @@ all:
 	dune build
 
 test:
-	dune runtest -j 1
+	dune runtest --no-buffer -j 1
 
 doc:
 	dune build @doc
