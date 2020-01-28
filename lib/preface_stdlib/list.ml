@@ -28,11 +28,11 @@ module Applicative = struct
 
       let traverse =
         let open A.Infix in
-        let rec aux f = function
+        let rec traverse f = function
           | [] -> A.pure []
-          | x :: xs -> Stdlib.List.cons <$> f x <*> aux f xs
+          | x :: xs -> Stdlib.List.cons <$> f x <*> traverse f xs
         in
-        aux
+        traverse
     end
 
     include Preface_make.Traversable.Via_applicative (A) (T)
@@ -60,14 +60,14 @@ module Monad = struct
 
       let traverse =
         let open M.Syntax in
-        let rec aux f = function
+        let rec traverse f = function
           | [] -> M.return []
           | x :: xs ->
               let* h = f x in
-              let* t = aux f xs in
+              let* t = traverse f xs in
               M.return (Stdlib.List.cons h t)
         in
-        aux
+        traverse
     end
 
     include Preface_make.Traversable.Via_monad (M) (T)
@@ -77,12 +77,12 @@ module Monad = struct
 end
 
 let eq f a b =
-  let rec aux = function
+  let rec eq = function
     | [], [] -> true
-    | x :: xs, y :: ys -> f x y && aux (xs, ys)
+    | x :: xs, y :: ys -> f x y && eq (xs, ys)
     | _ -> false
   in
-  aux (a, b)
+  eq (a, b)
 
 let pp pp' formater list =
   let pp_sep ppf () = Format.fprintf ppf "@; " in
