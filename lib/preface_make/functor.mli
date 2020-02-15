@@ -98,10 +98,11 @@
 
 (** Incarnation of a [Functor] with standard requirements ([map]).*)
 module Via_map (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t
+  Preface_specs.FUNCTOR with type 'a t := 'a Core.t
 
 (** {2 Manual construction}
 
+    include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
     Advanced way to build a [Functor], constructing and assembling a
     component-by-component functor. (In order to provide your own implementation
     for some features.) *)
@@ -111,14 +112,14 @@ module Via
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t
+  Preface_specs.FUNCTOR with type 'a t := 'a Core.t
 
 (** Incarnation of a [Functor.Operation] with standard Requirements ([map]). *)
 module Operation (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t
+  Preface_specs.Functor.OPERATION with type 'a t := 'a Core.t
 
 (** Incarnation of a [Functor.Infix] with functional API of a [Functor]. *)
 module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Functor.INFIX with type 'a t = 'a Core.t
+  Preface_specs.Functor.INFIX with type 'a t := 'a Core.t

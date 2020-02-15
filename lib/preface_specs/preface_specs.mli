@@ -51,6 +51,12 @@ module Requirements = Requirements
 module Functor = Functor
 (** Describes an object that can be mapped. *)
 
+module Functor2 = Functor2
+(** Describes a {!Functor} parametrized by 2 types. *)
+
+module Functor3 = Functor3
+(** Describes a {!Functor} parametrized by 3 types. *)
+
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
@@ -72,6 +78,10 @@ module Traversable = Traversable
     in uppercase). *)
 
 module type FUNCTOR = Functor.API
+
+module type FUNCTOR2 = Functor2.API
+
+module type FUNCTOR3 = Functor3.API
 
 module type APPLICATIVE = Applicative.API
 

@@ -1,45 +1,52 @@
-open Preface_core.Fun
+module Operation (Core : Preface_specs.Functor.CORE) =
+Functor2.Operation (struct
+  type (_, 'a) t = 'a Core.t
 
-module Operation (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
-
-  let replace value x = (Core.map <% const) value x
-
-  let void x = replace () x
-end
+  include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+end)
 
 module Infix
     (Core : Preface_specs.Functor.CORE)
-    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Functor.INFIX with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Operation.t
+    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) =
+  Functor2.Infix
+    (struct
+      type (_, 'a) t = 'a Core.t
 
-  let ( <$> ) = Core.map
+      include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+    end)
+    (struct
+      type (_, 'a) t = 'a Operation.t
 
-  let ( <&> ) x f = Core.map f x
-
-  let ( <$ ) value x = Operation.replace value x
-
-  let ( $> ) x value = Operation.replace value x
-end
+      include (
+        Operation :
+          Preface_specs.Functor.OPERATION with type 'a t := 'a Operation.t )
+    end)
 
 module Via
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t = struct
-  include Core
-  include Operation
-  include Infix
-  module Infix = Infix
-end
+    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Operation.t) =
+  Functor2.Via
+    (struct
+      type (_, 'a) t = 'a Core.t
 
-module Via_map (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t = struct
-  include Core
-  module Operation = Operation (Core)
-  include Operation
-  module Infix = Infix (Core) (Operation)
-  include Infix
-end
+      include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+    end)
+    (struct
+      type (_, 'a) t = 'a Operation.t
+
+      include (
+        Operation :
+          Preface_specs.Functor.OPERATION with type 'a t := 'a Operation.t )
+    end)
+    (struct
+      type (_, 'a) t = 'a Operation.t
+
+      include (Infix : Preface_specs.Functor.INFIX with type 'a t := 'a Infix.t)
+    end)
+
+module Via_map (Core : Preface_specs.Functor.CORE) = Functor2.Via_map (struct
+  type (_, 'a) t = 'a Core.t
+
+  include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+end)

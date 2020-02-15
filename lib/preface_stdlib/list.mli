@@ -13,7 +13,7 @@ type 'a t = 'a list
 
 (** {1 Implementation} *)
 
-module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
+module Functor : Preface_specs.FUNCTOR with type 'a t := 'a t
 (** {2 Functor API} *)
 
 (** {2 Applicative API}
