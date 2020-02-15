@@ -23,7 +23,7 @@ build: [
 
 depends: [
   "ocaml" { >= "4.08.0" }
-  "dune"
+  "dune" { >= "1.11" }
   "alcotest" {with-test}
   "odoc"{with-doc}
 ]
