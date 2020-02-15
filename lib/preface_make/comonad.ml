@@ -48,13 +48,9 @@ module Operation (Core : Preface_specs.Comonad.CORE) :
 
   let lift = Core.map
 
-  let lift2 f a =
-    let open Core in
-    map @@ extract @@ lift f a
+  let lift2 f a = Core.(map @@ extract @@ lift f a)
 
-  let lift3 f a b =
-    let open Core in
-    map @@ extract @@ lift2 f a b
+  let lift3 f a b = Core.(map @@ extract @@ lift2 f a b)
 
   let compose_right_to_left f g = Core.compose_left_to_right g f
 end
@@ -73,15 +69,11 @@ module Infix
 
   let ( =<= ) = Operation.compose_right_to_left
 
-  let ( <@> ) f a =
-    let open Core in
-    map (extract f) a
+  let ( <@> ) f a = Core.(map (extract f) a)
 
   let ( <@@> ) a f = f <@> a
 
-  let ( <@ ) a =
-    let open Core in
-    map @@ extract @@ map constant a
+  let ( <@ ) a = Core.(map @@ extract @@ map constant a)
 
   let ( @> ) a b = b <@ a
 end

@@ -16,6 +16,7 @@ module Applicative = struct
 
     let apply fs xs =
       Stdlib.List.(concat @@ map (fun f -> map (fun x -> f x) xs) fs)
+    ;;
   end)
 
   module Traversable (A : Preface_specs.APPLICATIVE) :
@@ -33,6 +34,7 @@ module Applicative = struct
           | x :: xs -> Stdlib.List.cons <$> f x <*> traverse f xs
         in
         traverse
+      ;;
     end
 
     include Preface_make.Traversable.Via_applicative (A) (T)
@@ -63,11 +65,12 @@ module Monad = struct
         let rec traverse f = function
           | [] -> M.return []
           | x :: xs ->
-              let* h = f x in
-              let* t = traverse f xs in
-              M.return (Stdlib.List.cons h t)
+            let* h = f x in
+            let* t = traverse f xs in
+            M.return (Stdlib.List.cons h t)
         in
         traverse
+      ;;
     end
 
     include Preface_make.Traversable.Via_monad (M) (T)
@@ -78,12 +81,14 @@ end
 
 let eq f a b =
   let rec eq = function
-    | [], [] -> true
-    | x :: xs, y :: ys -> f x y && eq (xs, ys)
+    | ([], []) -> true
+    | (x :: xs, y :: ys) -> f x y && eq (xs, ys)
     | _ -> false
   in
   eq (a, b)
+;;
 
 let pp pp' formater list =
   let pp_sep ppf () = Format.fprintf ppf "@; " in
   Format.(fprintf formater "@[[%a]@]" (pp_print_list ~pp_sep pp') list)
+;;

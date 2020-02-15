@@ -42,13 +42,12 @@ module Operation (Core : Preface_specs.Monad.CORE) :
 
   let lift = Core.map
 
-  let lift2 f ma mb =
-    let open Core in
-    bind (fun a -> bind (fun b -> return (f a b)) mb) ma
+  let lift2 f ma mb = Core.(bind (fun a -> bind (fun b -> return (f a b)) mb) ma)
 
   let lift3 f ma mb mc =
     let open Core in
     bind (fun a -> bind (fun b -> bind (fun c -> return (f a b c)) mc) mb) ma
+  ;;
 end
 
 module Syntax (Core : Preface_specs.Monad.CORE) :
@@ -78,7 +77,7 @@ module Infix
 
   let ( <=< ) = Operation.compose_right_to_left
 
-  let ( >> ) ma mb = ma >>= fun _ -> mb
+  let ( >> ) ma mb = ma >>= (fun _ -> mb)
 
   let ( << ) ma _ = ma
 end

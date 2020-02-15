@@ -15,7 +15,8 @@ end)
 
 let test_cases =
   [
-    "Identity Functor", Functor_test.cases;
-    "Identity Applicative", Applicative_test.cases;
-    "Identity Monad", Monad_test.cases;
+    ("Identity Functor", Functor_test.cases)
+  ; ("Identity Applicative", Applicative_test.cases)
+  ; ("Identity Monad", Monad_test.cases)
   ]
+;;

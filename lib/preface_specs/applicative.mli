@@ -1,17 +1,15 @@
-(** An [Applicative] for [('a -> 'b) t] is an applicative functor
-    from ['a t] to ['b t].
+(** An [Applicative] for [('a -> 'b) t] is an applicative functor from ['a t] to
+    ['b t].
 
     {2 Laws of [Applicative]}
 
-    To have a predictable behaviour, the instance of [Applicative] must
-    obey some laws. (For the same reason of the Functor's laws).
+    To have a predictable behaviour, the instance of [Applicative] must obey
+    some laws. (For the same reason of the Functor's laws).
 
     - [(fun f x -> f x) (pure id)] must be equivalent to [id];
-    - [compose <$> u <*> v <*> w] must be equivalent to
-      [u <*> v <*> w];
+    - [compose <$> u <*> v <*> w] must be equivalent to [u <*> v <*> w];
     - [f <$> pure x] must be equivalent to [pure (f x)];
-    - [u <*> pure x] must be equivalent to [(fun f -> f x) <$> u];
-*)
+    - [u <*> pure x] must be equivalent to [(fun f -> f x) <$> u]; *)
 
 (** {1 Structure anatomy} *)
 
@@ -58,14 +56,11 @@ module type OPERATION = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
-  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and
-      ['b t] to ['c t].
-  *)
+  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
 
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
-  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t]
-      and ['b t] and ['c t] to ['d t].
-  *)
+  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
+      and ['c t] to ['d t]. *)
 end
 
 (** Syntax extensions *)
@@ -118,11 +113,9 @@ module type API = sig
   include module type of Infix
 end
 
-(** 
-   {1 Bibliography}
+(** {1 Bibliography}
 
-   - {{: http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Applicative.html} 
-   Haskell's documentation of an Applicative Functor}
-   - {{: http://www.staff.city.ac.uk/~ross/papers/Applicative.html} 
-   Applicative Programming with Effects}
-*)
+    - {{:http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Applicative.html}
+      Haskell's documentation of an Applicative Functor}
+    - {{:http://www.staff.city.ac.uk/~ross/papers/Applicative.html} Applicative
+      Programming with Effects} *)
