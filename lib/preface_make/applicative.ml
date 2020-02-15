@@ -14,7 +14,7 @@ module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) :
 
   let map f a = apply (pure f) a
 
-  let product a b = apply (apply (pure (fun a b -> a, b)) a) b
+  let product a b = apply (apply (pure (fun a b -> (a, b))) a) b
 end
 
 module Operation (Core : Preface_specs.Applicative.CORE) :
@@ -23,13 +23,9 @@ module Operation (Core : Preface_specs.Applicative.CORE) :
 
   let lift = Core.map
 
-  let lift2 f a =
-    let open Core in
-    apply @@ apply (pure f) a
+  let lift2 f a = Core.(apply @@ apply (pure f) a)
 
-  let lift3 f a b =
-    let open Core in
-    apply @@ apply (apply (pure f) a) b
+  let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
 end
 
 module Syntax (Core : Preface_specs.Applicative.CORE) :
@@ -111,5 +107,6 @@ module Via_monad (Monad : Preface_specs.MONAD) :
       let* f = fs in
       let* x = xs in
       pure (f x)
+    ;;
   end)
 end

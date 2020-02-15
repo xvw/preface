@@ -44,13 +44,14 @@ module Operation (Core : Preface_specs.Selective.CORE) :
     let a = map Either.(map_right left) s
     and b = map (compose_right_to_left Either.right) l in
     select (select a b) r
+  ;;
 
   let if_ predicate if_true unless =
     let open Core in
     branch
       (map (fun b -> Either.(if b then left () else right ())) predicate)
-      (map constant if_true)
-      (map constant unless)
+      (map constant if_true) (map constant unless)
+  ;;
 
   let when_ predicate action = if_ predicate action (Core.pure ())
 

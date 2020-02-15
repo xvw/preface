@@ -7,15 +7,14 @@
 
     {2 Basics}
 
-    As [Monad], [Comonad] offer several primitive ways to be
-    built. These different approaches lead to the same combiners.
-    It's up to you to choose the most flexible approach according
-    to the context.
+    As [Monad], [Comonad] offer several primitive ways to be built. These
+    different approaches lead to the same combiners. It's up to you to choose
+    the most flexible approach according to the context.
 
     {3 Using [map] and [duplicate]}
 
-    Here's an example with the [Stream] module implementing [Comonad]
-    using [map] and [duplicate].
+    Here's an example with the [Stream] module implementing [Comonad] using
+    [map] and [duplicate].
 
     {[
       (* In: stream.ml *)
@@ -23,17 +22,20 @@
 
       let stream a l = C (a, l)
 
-      module Comonad = Preface_make.Monad.Via_map_and_duplicate(struct
-          type 'a t = 'a t
-          let extract = function
-            | C (a, _) -> a
-          let rec duplicate = function
-            | C (a, s) -> C (C (a, s), lazy (duplicate @@ Lazy.force s))
-          let rec map f = function
-            | C (a, s) -> C (f a, lazy (map f @@ Lazy.force s))
-        end)
-    ]}
+      module Comonad = Preface_make.Monad.Via_map_and_duplicate (struct
+        type 'a t = 'a t
 
+        let extract = function C (a, _) -> a
+
+        let rec duplicate = function
+          | C (a, s) -> C (C (a, s), lazy (duplicate @@ Lazy.force s))
+        ;;
+
+        let rec map f = function
+          | C (a, s) -> C (f a, lazy (map f @@ Lazy.force s))
+        ;;
+      end)
+    ]}
     {[
       (* In: stream.mli *)
       type 'a t
@@ -43,15 +45,16 @@
       module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
     ]}
 
-    Now, your [Stream] module is handling a [Comonad] module and you'll be
-    be able to use features offered by a [Comonad]. For example:
+    Now, your [Stream] module is handling a [Comonad] module and you'll be be
+    able to use features offered by a [Comonad]. For example:
 
     {[
       let natural =
-          let rec natural n = stream n (lazy (natural (n + 1))) in
-          natural 0
+        let rec natural n = stream n (lazy (natural (n + 1))) in
+        natural 0
+      ;;
 
-      let natural_positive = increment <<= (1 + extract s)
+      let natural_positive = increment <<= 1 + extract s
     ]}
 
     {3 Using [extend]}
@@ -64,13 +67,15 @@
 
       let stream a l = C (a, l)
 
-      module Comonad = Preface_make.Monad.Via_map_and_duplicate(struct
-          type 'a t = 'a t
-          let extract = function
-            | C (a, _) -> a
-          let rec extend f = function
-            | C (_, s') as s -> C (f s, lazy (extend f @@ Lazy.force s'))
-       end)
+      module Comonad = Preface_make.Monad.Via_map_and_duplicate (struct
+        type 'a t = 'a t
+
+        let extract = function C (a, _) -> a
+
+        let rec extend f = function
+          | C (_, s') as s -> C (f s, lazy (extend f @@ Lazy.force s'))
+        ;;
+      end)
     ]}
 
     {3 Using [compose_left_to_right]}
@@ -83,18 +88,19 @@
 
       let stream a l = C (a, l)
 
-      module Comonad = Preface_make.Monad.Via_map_and_duplicate(struct
-          type 'a t = 'a t
-          let extract = function
-            | C (a, _) -> a
-          let compose_left_to_right f g at =
-            let rec extend f = function
-            | C (_, s') as s -> C (f s, lazy (extend f @@ Lazy.force s')) in
-            g @@ extend f at
-        end)
-    ]}
+      module Comonad = Preface_make.Monad.Via_map_and_duplicate (struct
+        type 'a t = 'a t
 
-*)
+        let extract = function C (a, _) -> a
+
+        let compose_left_to_right f g at =
+          let rec extend f = function
+            | C (_, s') as s -> C (f s, lazy (extend f @@ Lazy.force s'))
+          in
+          g @@ extend f at
+        ;;
+      end)
+    ]} *)
 
 (** {1 Construction of a [Comonad] module} *)
 

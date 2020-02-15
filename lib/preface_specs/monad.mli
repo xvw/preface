@@ -1,21 +1,21 @@
 (** A [Monad] for ['a t] is equiped by two things:
+
     - a [return] function;
     - a [bind] function.
-    
+
     {2 Laws of [Monads]}
-    
-    Exactly like [Functor] and [Applicative]. An instance of 
-    [Monad] must obey some laws. But there is three paths of 
-    expressing theses laws:
+
+    Exactly like [Functor] and [Applicative]. An instance of [Monad] must obey
+    some laws. But there is three paths of expressing theses laws:
 
     {3 Using [bind]}
 
-    - [return a >>= f ] must be equivalent to [f a]
+    - [return a >>= f] must be equivalent to [f a]
     - [m >>= return] must be equivalent to [m]
     - [(m >>= f) >>= g] must be equivalent to [m >>= (fun x -> f x >>= g)]
 
     {3 Using [map] and [join]}
-    
+
     - [join <% join] must be equivalent to [join <% (map join)]
     - [join <% pure] must be equivalent to [id] and to [join <% map pure]
     - [map id] must be equivalent to [id]
@@ -27,8 +27,7 @@
 
     - [return >=> g] must be equivalent to [g]
     - [f >=> return] must be equivalent to [f]
-    - [(f >=> g) >=> h] must be equivalent to [f >=> (g >=> h)]
-*)
+    - [(f >=> g) >=> h] must be equivalent to [f >=> (g >=> h)] *)
 
 (** {1 Structure anatomy} *)
 
@@ -56,9 +55,8 @@ module type CORE_WITH_MAP_AND_JOIN = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val join : 'a t t -> 'a t
-  (** [join] remove one level of monadic structure, projecting
-      its bound argument into the outer level.
-  *)
+  (** [join] remove one level of monadic structure, projecting its bound
+      argument into the outer level. *)
 end
 
 (** Requirement via [compose_left_to_right]. *)
@@ -70,8 +68,7 @@ module type CORE_WITH_KLEISLI_COMPOSITION = sig
   (** Create a new ['a t]. *)
 
   val compose_left_to_right : ('a -> 'b t) -> ('b -> 'c t) -> 'a -> 'c t
-  (** Composing monadic functions using Kleisli Arrow (from left to right).
-  *)
+  (** Composing monadic functions using Kleisli Arrow (from left to right). *)
 end
 
 (** Standard requirement. *)
@@ -92,21 +89,17 @@ module type OPERATION = sig
   (** Discard the result of evaluation. *)
 
   val compose_right_to_left : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
-  (** Composing monadic functions using Kleisli Arrow (from right to left).
-  *)
+  (** Composing monadic functions using Kleisli Arrow (from right to left). *)
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
-  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and
-      ['b t] to ['c t].
-  *)
+  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
 
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
-  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t]
-      and ['b t] and ['c t] to ['d t].
-  *)
+  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
+      and ['c t] to ['d t]. *)
 end
 
 (** Syntax extensions. *)
@@ -117,14 +110,12 @@ module type SYNTAX = sig
   val ( let* ) : 'a t -> ('a -> 'b t) -> 'b t
   (** Syntaxic shortcuts for flipped version of {!val:CORE.bind}:
 
-      [let* x = e in f] is equals to [bind (fun x -> f) e].
-  *)
+      [let* x = e in f] is equals to [bind (fun x -> f) e]. *)
 
   val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
   (** Syntaxic shortcuts for flipped version of {!val:CORE.map}:
-      
-      [let+ x = e in f] is equals to [map (fun x -> f) e].
-  *)
+
+      [let+ x = e in f] is equals to [map (fun x -> f) e]. *)
 end
 
 (** Infix notations. *)
@@ -151,14 +142,12 @@ module type INFIX = sig
   (** Infix version of {!val:OPERATION.compose_right_to_left}. *)
 
   val ( >> ) : 'a t -> 'b t -> 'b t
-  (** Sequentially compose two actions, discarding any value produced
-      by the first.
-  *)
+  (** Sequentially compose two actions, discarding any value produced by the
+      first. *)
 
   val ( << ) : 'a t -> 'b t -> 'a t
-  (** Sequentially compose two actions, discarding any value produced
-      by the second.
-  *)
+  (** Sequentially compose two actions, discarding any value produced by the
+      second. *)
 end
 
 (** {1 API} *)
@@ -178,12 +167,12 @@ module type API = sig
   include module type of Infix
 end
 
-(** 
-   {1 Bibliography}
+(** {1 Bibliography}
 
-   - {{: http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Monad.html} 
-   Haskell's documentation of a Monad}
-   - {{: http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf} Monad for functional programming}
-   - {{: https://person.dibris.unige.it/moggi-eugenio/ftp/ic91.pdf} Notions of computations and monads}
-   - {{: https://wiki.haskell.org/All_About_Monads} All About Monads}
-*)
+    - {{:http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Monad.html}
+      Haskell's documentation of a Monad}
+    - {{:http://homepages.inf.ed.ac.uk/wadler/papers/marktoberdorf/baastad.pdf}
+      Monad for functional programming}
+    - {{:https://person.dibris.unige.it/moggi-eugenio/ftp/ic91.pdf} Notions of
+      computations and monads}
+    - {{:https://wiki.haskell.org/All_About_Monads} All About Monads} *)

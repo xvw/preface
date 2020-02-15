@@ -1,6 +1,7 @@
 (** A [Comonad] is the dual of the [Monad].
 
     {2 Laws of [Comonad]}
+
     - [extend extract] must be equivalent to [id]
     - [(extend %> extract) f] must be equivalent to [f]
     - [extend g %> extend f] must be equivalent to [extend (extend g %> f)]
@@ -9,11 +10,11 @@
     - [(f =>= g) =>= h] must be equivalent to [f =>= (g =>= h)]
     - [extract <% duplicate] must be equivalent to [id]
     - [fmap extract <% duplicate] must be equivalent to [id]
-    - [duplicate %> duplicate] must be equivalent to [fmap duplicate <% duplicate]
+    - [duplicate %> duplicate] must be equivalent to
+      [fmap duplicate <% duplicate]
     - [extend f] must be equivalent to [fmap f <% duplicate]
     - [duplicate] must be equivalent to [extend id]
-    - [fmap f] must be equivalent to [extend (f <% extract)]
-*)
+    - [fmap f] must be equivalent to [extend (f <% extract)] *)
 
 (** {1 Structure anatomy} *)
 
@@ -23,7 +24,7 @@ module type CORE_WITH_MAP_AND_DUPLICATE = sig
   (** The type holded by the [Comonad]. *)
 
   val extract : 'a t -> 'a
-  (** Extract a ['a] from  ['a t]. Dual of return. *)
+  (** Extract a ['a] from ['a t]. Dual of return. *)
 
   val duplicate : 'a t -> 'a t t
   (** Dual of join. *)
@@ -38,7 +39,7 @@ module type CORE_WITH_EXTEND = sig
   (** The type holded by the [Comonad]. *)
 
   val extract : 'a t -> 'a
-  (** Extract a ['a] from  ['a t]. Dual of return. *)
+  (** Extract a ['a] from ['a t]. Dual of return. *)
 
   val extend : ('a t -> 'b) -> 'a t -> 'b t
   (** Dual of bind. *)
@@ -50,7 +51,7 @@ module type CORE_WITH_COKLEISLI_COMPOSITION = sig
   (** The type holded by the [Comonad]. *)
 
   val extract : 'a t -> 'a
-  (** Extract a ['a] from  ['a t]. Dual of return. *)
+  (** Extract a ['a] from ['a t]. Dual of return. *)
 
   val compose_left_to_right : ('a t -> 'b) -> ('b t -> 'c) -> 'a t -> 'c
   (** Composing monadic functions using Co-Kleisli Arrow (from left to right). *)
@@ -74,14 +75,11 @@ module type OPERATION = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
-  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and
-      ['b t] to ['c t].
-  *)
+  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
 
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
-  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t]
-      and ['b t] and ['c t] to ['d t].
-  *)
+  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
+      and ['c t] to ['d t]. *)
 
   val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
   (** Composing comonadic functions using Co-Kleisli Arrow (from right to left). *)
@@ -95,8 +93,7 @@ module type SYNTAX = sig
   val ( let@ ) : 'a t -> ('a t -> 'b) -> 'b t
   (** Syntaxic shortcuts for version of {!val:CORE.extend}:
 
-      [let@ x = e in f] is equals to [extend f e].
-  *)
+      [let@ x = e in f] is equals to [extend f e]. *)
 end
 
 (** Infix notations. *)

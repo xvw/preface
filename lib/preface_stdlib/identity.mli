@@ -3,10 +3,10 @@
     This module is mainly used as a "proof of concept" and as a test tool.
 
     {1 Capabilities}
+
     - {!val:Functor}
     - {!val:Applicative}
-    - {!val:Monad}
-*)
+    - {!val:Monad} *)
 
 type 'a t
 (** A wrapper around a value. *)

@@ -1,7 +1,6 @@
-(** A [Selective] (applicative functor) allows to declare effects statically
-    and select which execute dynamically. It is an algebraic structure between
-    [Applicative] and [Monad].
-*)
+(** A [Selective] (applicative functor) allows to declare effects statically and
+    select which execute dynamically. It is an algebraic structure between
+    [Applicative] and [Monad]. *)
 
 (** {1 Structure anatomy} *)
 
@@ -78,11 +77,9 @@ module type API = sig
   include module type of Infix with module Either := Either
 end
 
-(** 
-   {1 Bibliography}
+(** {1 Bibliography}
 
-   - {{: http://hackage.haskell.org/package/selective} 
-   Haskell's documentation of a Selective Application Functor}
-   - {{: https://www.staff.ncl.ac.uk/andrey.mokhov/selective-functors.pdf} 
-   Selective Applicative Functors}
-*)
+    - {{:http://hackage.haskell.org/package/selective} Haskell's documentation
+      of a Selective Application Functor}
+    - {{:https://www.staff.ncl.ac.uk/andrey.mokhov/selective-functors.pdf}
+      Selective Applicative Functors} *)

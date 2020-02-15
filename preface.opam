@@ -1,5 +1,5 @@
 opam-version: "2.0"
-version: "1.0.0"
+version: "dev"
 
 maintainer: "xaviervdw@gmail.com"
 authors: [
@@ -23,7 +23,7 @@ build: [
 
 depends: [
   "ocaml" { >= "4.08.0" }
-  "dune"
+  "dune" { >= "1.11" }
   "alcotest" {with-test}
   "odoc"{with-doc}
 ]

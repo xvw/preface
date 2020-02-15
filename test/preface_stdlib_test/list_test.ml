@@ -15,7 +15,8 @@ end)
 
 let test_cases =
   [
-    "List Functor", Functor_test.cases;
-    "List Applicative", Applicative_test.cases;
-    "List Monad", Monad_test.cases;
+    ("List Functor", Functor_test.cases)
+  ; ("List Applicative", Applicative_test.cases)
+  ; ("List Monad", Monad_test.cases)
   ]
+;;

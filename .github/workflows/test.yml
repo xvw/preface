@@ -1,25 +1,24 @@
-name: Test
-
-on: [pull_request]
-
+name: Preface
+on: [push]
 jobs:
-
-  build:
-    runs-on: ubuntu-latest
-
-    container:
-      image: ocaml/opam2
-
+  run:
+    name: Tests
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [macos-latest, ubuntu-latest]
+        ocaml-version: [ '4.09.0', '4.08.1', '4.08.0' ]
     steps:
-      - uses: actions/checkout@v1
-
-      - name: opam init
-        env:
-          OPAMYES: 1
-        run: ./.github/workflows/scripts/init.sh
-
-      - name: dune runtest
-        run: |
-          opam install -y . --deps-only --with-test
-          eval `opam config env`
-          dune runtest -j 1
+    - uses: actions/checkout@master
+    - uses: avsm/setup-ocaml@v1.0
+      with:
+        ocaml-version: ${{ matrix.ocaml-version }}
+    - run: opam pin add preface.dev -n .
+    - name: Packages
+      run: opam depext -yt preface
+    - name: Dependencies
+      run: opam install -t . --deps-only
+    - name: Build
+      run: opam exec -- dune build
+    - name: Test
+      run: opam exec -- dune runtest
