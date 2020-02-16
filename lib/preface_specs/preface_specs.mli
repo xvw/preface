@@ -60,6 +60,12 @@ module Functor3 = Functor3
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
+module Applicative2 = Applicative2
+(** Describes a {!Applicative} parametrized by 2 types. *)
+
+module Applicative3 = Applicative3
+(** Describes a {!Applicative} parametrized by 3 types. *)
+
 module Selective = Selective
 (** Describes a selective applicative functor. *)
 
@@ -84,6 +90,10 @@ module type FUNCTOR2 = Functor2.API
 module type FUNCTOR3 = Functor3.API
 
 module type APPLICATIVE = Applicative.API
+
+module type APPLICATIVE2 = Applicative2.API
+
+module type APPLICATIVE3 = Applicative3.API
 
 module type SELECTIVE = Selective.API
 

@@ -36,6 +36,8 @@ module Operation (Core : Preface_specs.Selective.CORE) :
   Preface_specs.Selective.OPERATION
     with type 'a t = 'a Core.t
      and module Either = Core.Either = struct
+  type 'a t = 'a Core.t
+
   include Applicative.Operation (Core)
   module Either = Core.Either
 
@@ -64,6 +66,8 @@ module Infix
   Preface_specs.Selective.INFIX
     with type 'a t = 'a Core.t
      and module Either = Core.Either = struct
+  type 'a t = 'a Core.t
+
   include Applicative.Infix (Core) (Operation)
   module Either = Core.Either
 
@@ -78,6 +82,8 @@ end
 
 module Syntax (Core : Preface_specs.Selective.CORE) :
   Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t = struct
+  type 'a t = 'a Core.t
+
   include Applicative.Syntax (Core)
 end
 

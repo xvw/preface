@@ -8,6 +8,8 @@
    functor2
    functor
    applicative
+   applicative2
+   applicative3
    selective
    monad
    comonad

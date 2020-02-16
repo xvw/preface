@@ -1,112 +1,102 @@
-open Fun
-
 module Core_via_map_and_product
-    (Core : Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT) :
-  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t = struct
-  include Core
+    (Core : Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT) =
+Applicative2.Core_via_map_and_product (struct
+  type (_, 'a) t = 'a Core.t
 
-  let apply f a = map (fun (f, a) -> f a) @@ product f a
-end
+  include (
+    Core :
+      Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT
+        with type 'a t := 'a Core.t )
+end)
 
-module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) :
-  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t = struct
-  include Core
+module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) =
+Applicative2.Core_via_apply (struct
+  type (_, 'a) t = 'a Core.t
 
-  let map f a = apply (pure f) a
+  include (
+    Core : Preface_specs.Applicative.CORE_WITH_APPLY with type 'a t := 'a Core.t )
+end)
 
-  let product a b = apply (apply (pure (fun a b -> (a, b))) a) b
-end
+module Operation (Core : Preface_specs.Applicative.CORE) =
+Applicative2.Operation (struct
+  type (_, 'a) t = 'a Core.t
 
-module Operation (Core : Preface_specs.Applicative.CORE) :
-  Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
+  include (Core : Preface_specs.Applicative.CORE with type 'a t := 'a Core.t)
+end)
 
-  let lift = Core.map
+module Syntax (Core : Preface_specs.Applicative.CORE) =
+Applicative2.Syntax (struct
+  type (_, 'a) t = 'a Core.t
 
-  let lift2 f a = Core.(apply @@ apply (pure f) a)
-
-  let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
-end
-
-module Syntax (Core : Preface_specs.Applicative.CORE) :
-  Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
-
-  let ( let+ ) x f = Core.map f x
-
-  let ( and+ ) = Core.product
-end
+  include (Core : Preface_specs.Applicative.CORE with type 'a t := 'a Core.t)
+end)
 
 module Infix
     (Core : Preface_specs.Applicative.CORE)
-    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
+    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) =
+  Applicative2.Infix
+    (struct
+      type (_, 'a) t = 'a Core.t
 
-  let ( <$> ) = Core.map
+      include (Core : Preface_specs.Applicative.CORE with type 'a t := 'a Core.t)
+    end)
+    (struct
+      type (_, 'a) t = 'a Operation.t
 
-  let ( <*> ) = Core.apply
-
-  let ( <**> ) a f = f <*> a
-
-  let ( *> ) a b = Operation.lift2 const b a
-
-  let ( <* ) a b = b *> a
-end
+      include (
+        Operation :
+          Preface_specs.Applicative.OPERATION with type 'a t := 'a Operation.t )
+    end)
 
 module Via
     (Core : Preface_specs.Applicative.CORE)
     (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t)
-    (Syntax : Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Core.t = struct
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-  module Infix = Infix
-  module Syntax = Syntax
-end
+    (Infix : Preface_specs.Applicative.INFIX with type 'a t = 'a Operation.t)
+    (Syntax : Preface_specs.Applicative.SYNTAX with type 'a t = 'a Infix.t) =
+  Applicative2.Via
+    (struct
+      type (_, 'a) t = 'a Core.t
+
+      include (Core : Preface_specs.Applicative.CORE with type 'a t := 'a Core.t)
+    end)
+    (struct
+      type (_, 'a) t = 'a Operation.t
+
+      include (
+        Operation :
+          Preface_specs.Applicative.OPERATION with type 'a t := 'a Operation.t )
+    end)
+    (struct
+      type (_, 'a) t = 'a Infix.t
+
+      include (
+        Infix : Preface_specs.Applicative.INFIX with type 'a t := 'a Infix.t )
+    end)
+    (struct
+      type (_, 'a) t = 'a Syntax.t
+
+      include (
+        Syntax : Preface_specs.Applicative.SYNTAX with type 'a t := 'a Syntax.t )
+    end)
 
 module Via_map_and_product
     (Core_with_map_and_product : Preface_specs.Applicative
-                                 .CORE_WITH_MAP_AND_PRODUCT) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_map_and_product.t =
-struct
-  module Core = Core_via_map_and_product (Core_with_map_and_product)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-end
+                                 .CORE_WITH_MAP_AND_PRODUCT) =
+Applicative2.Via_map_and_product (struct
+  type (_, 'a) t = 'a Core_with_map_and_product.t
 
-module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_apply.t = struct
-  module Core = Core_via_apply (Core_with_apply)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-end
+  include (
+    Core_with_map_and_product :
+      Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT
+        with type 'a t := 'a Core_with_map_and_product.t )
+end)
 
-module Via_monad (Monad : Preface_specs.MONAD) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Monad.t = struct
-  include Via_apply (struct
-    type 'a t = 'a Monad.t
+module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) =
+Applicative2.Via_apply (struct
+  type (_, 'a) t = 'a Core_with_apply.t
 
-    let pure = Monad.return
-
-    let apply fs xs =
-      let open Monad.Syntax in
-      let* f = fs in
-      let* x = xs in
-      pure (f x)
-    ;;
-  end)
-end
+  include (
+    Core_with_apply :
+      Preface_specs.Applicative.CORE_WITH_APPLY
+        with type 'a t := 'a Core_with_apply.t )
+end)

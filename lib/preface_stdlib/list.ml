@@ -9,6 +9,8 @@ module Functor = Preface_make.Functor.Via_map (struct
 end)
 
 module Applicative = struct
+  type nonrec 'a t = 'a t
+
   module A = Preface_make.Applicative.Via_apply (struct
     type nonrec 'a t = 'a t
 
