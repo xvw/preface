@@ -69,7 +69,7 @@ module Traversable = Traversable
 module Free = Free
 (** Describe a free monade. *)
 
-module FreeEr = FreeEr
+module Freer = Freer
 (** Describe a free monade. *)
 
 (** {1 API Shortcuts}
@@ -91,7 +91,7 @@ module type TRAVERSABLE = Traversable.API
 
 module type FREE = Free.API
 
-module type FREEER = FreeEr.API
+module type FREER = Freer.API
 
 (** {1 Abstract data types} *)
 

@@ -4,7 +4,7 @@ open Preface_core.Fun.Infix
 
 module Via (F : sig
   type 'a data
-end) : Preface_specs.FREEER with type 'a data = 'a F.data = struct
+end) : Preface_specs.FREER with type 'a data = 'a F.data = struct
   type 'a data = 'a F.data
 
   type 'a t =
@@ -15,13 +15,13 @@ end
 
 (** *)
 
-module With_pure (CORE : Preface_specs.FREEER) = struct
+module With_pure (CORE : Preface_specs.FREER) = struct
   include CORE
 
   let pure a = Return a
 end
 
-module With_map (CORE : Preface_specs.FREEER) = struct
+module With_map (CORE : Preface_specs.FREER) = struct
   include CORE
 
   let rec map f = function
@@ -31,12 +31,12 @@ end
 
 (** *)
 
-module Via_functor (CORE : Preface_specs.FREEER) :
+module Via_functor (CORE : Preface_specs.FREER) :
   Preface_specs.FUNCTOR with type 'a t = 'a CORE.t = Functor.Via_map (struct
   include With_map (CORE)
 end)
 
-module Via_applicative (CORE : Preface_specs.FREEER) :
+module Via_applicative (CORE : Preface_specs.FREER) :
   Preface_specs.APPLICATIVE with type 'a t = 'a CORE.t =
 Applicative.Via_apply (struct
   include With_pure (CORE)
@@ -48,7 +48,7 @@ Applicative.Via_apply (struct
     | Bind (i, c) -> Bind (i, c %> (fun f -> apply f a))
 end)
 
-module Via_monad (CORE : Preface_specs.FREEER) :
+module Via_monad (CORE : Preface_specs.FREER) :
   Preface_specs.MONAD with type 'a t = 'a CORE.t = Monad.Via_bind (struct
   include With_pure (CORE)
 
