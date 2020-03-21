@@ -5,13 +5,14 @@
     For instance arithmetic operations can be transposed using CPS approach.
 
     {[
-      val add : int -> int -> (int -> 'b) -> 'b
+      val add : int -> int -> { run: 'b.(int -> 'b) -> 'b }
 
-      let add x y k = k (x + y)
+      let add x y = pure (x + y)
     ]}
 
-    The continutation [k] habits the type [(int -> 'b) -> 'b] which is the
-    specialization of the following generalized from [('a -> 'b) -> 'b].
+    The continuation habits the type [{ run : 'b.(int -> 'b) -> 'b}] which is
+    the specialization of the following generalized from
+    [{run : 'b.('a -> 'b) -> 'b}].
 
     The continuation [Functor], [Applicative] and [Monad] gives us the
     capability to manipulate such functions thanks to corresponding functions
@@ -20,28 +21,22 @@
     {2 Contruction}
 
     The first step consists in building a continuation module specifying the
-    result type. This is the role of the module [Make].
+    result type. This is the role of the module [Continuation].
 
-    {[
-      module Continuation = Preface_stdlib.Continuation.Make (struct
-        type t = int
-      end)
-    ]}
+    {[ module Continuation = Preface_stdlib.Continuation ]}
 
     Therefore the module [Continuation] exposes the continuation type
-    [('a -> int) -> int]. It also provides modules like [Functor], [Applicative]
-    and [Monad].
+    [{run : 'b.('a -> 'b) -> 'b}]. It also provides modules like [Functor],
+    [Applicative] and [Monad].
 
     {2 Example}
 
     {[
-      module Continuation = Preface_stdlib.Continuation.Make (struct
-        type t = int
-      end)
+      module Continuation = Preface_stdlib.Continuation
 
-      let add x y k = k (x + y)
+      let add x y = pure (x + y)
 
-      let mult x y k = k (x * y)
+      let mult x y = pure (x * y)
 
       let delta b a c =
         let open Continuation in
