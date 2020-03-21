@@ -53,20 +53,17 @@
       ;;
     ]} *)
 
-(** {1 Module} *)
-module Make : sig
-  type 'a t = { run : 'r. ('a -> 'r) -> 'r }
-  (** {1 Type} *)
+type 'a t = { run : 'r. ('a -> 'r) -> 'r }
+(** {1 Type} *)
 
-  val pure : 'a -> 'a t
-  (** {2 Promotion} *)
+val pure : 'a -> 'a t
+(** {2 Promotion} *)
 
-  module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-  (** {2 Functor API} *)
+module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
+(** {2 Functor API} *)
 
-  module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
-  (** {2 Applicative API} *)
+module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
+(** {2 Applicative API} *)
 
-  module Monad : Preface_specs.MONAD with type 'a t = 'a t
-  (** {2 Monad API} *)
-end
+module Monad : Preface_specs.MONAD with type 'a t = 'a t
+(** {2 Monad API} *)
