@@ -54,10 +54,8 @@
     ]} *)
 
 (** {1 Module} *)
-module Make (R : sig
-  type t
-end) : sig
-  type 'a t = ('a -> R.t) -> R.t
+module Make : sig
+  type 'a t = { run : 'r. ('a -> 'r) -> 'r }
   (** {1 Type} *)
 
   val pure : 'a -> 'a t

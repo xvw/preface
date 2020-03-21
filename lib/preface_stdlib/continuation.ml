@@ -1,14 +1,11 @@
 open Preface_core.Fun.Infix
 
-module Make (R : sig
-  type t
-end) =
-struct
-  type 'a t = ('a -> R.t) -> R.t
+module Make = struct
+  type 'a t = { run : 'r. ('a -> 'r) -> 'r }
 
-  let pure c k = k c
+  let pure c = { run = (fun k -> k c) }
 
-  let map f c k = c @@ (f %> k)
+  let map f c = { run = (fun k -> c.run @@ (f %> k)) }
 
   module Functor = Preface_make.Functor.Via_map (struct
     type nonrec 'a t = 'a t
@@ -23,7 +20,9 @@ struct
 
     let map = map
 
-    let product ca cb k = ca (fun a -> cb (fun b -> k (a, b)))
+    let product ca cb =
+      { run = (fun k -> ca.run (fun a -> cb.run (fun b -> k (a, b)))) }
+    ;;
   end)
 
   module Monad = Preface_make.Monad.Via_map_and_join (struct
@@ -33,6 +32,6 @@ struct
 
     let map = map
 
-    let join c k = c (fun c' -> c' k)
+    let join c = { run = (fun k -> c.run (fun c' -> c'.run k)) }
   end)
 end

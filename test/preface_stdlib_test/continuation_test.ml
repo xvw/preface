@@ -1,12 +1,5 @@
-module Continuation = Preface_stdlib.Continuation.Make (struct
-  type t = int
-end)
-
+module Continuation = Preface_stdlib.Continuation.Make
 open Continuation
-
-let add x y k = k (x + y)
-
-let mult x y k = k (x * y)
 
 let should_map () =
   let open Continuation.Functor in
@@ -24,6 +17,8 @@ let should_apply () =
 ;;
 
 let should_bind () =
+  let add x y = pure (x + y)
+  and mult x y = pure (x * y) in
   let open Continuation.Monad in
   let expected = 42 in
   let computed = add 3 4 >>= mult 3 >>= mult 2 in
