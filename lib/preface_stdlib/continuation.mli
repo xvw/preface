@@ -26,7 +26,7 @@
     {[ module Continuation = Preface_stdlib.Continuation ]}
 
     Therefore the module [Continuation] exposes the continuation type
-    [{run : 'b.('a -> 'b) -> 'b}]. It also provides modules like [Functor],
+    [{run : 'b. ('a -> 'b) -> 'b}]. It also provides modules like [Functor],
     [Applicative] and [Monad].
 
     {2 Example}
