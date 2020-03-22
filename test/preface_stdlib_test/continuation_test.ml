@@ -18,11 +18,12 @@ let should_apply () =
 
 let should_bind () =
   let add x y = pure (x + y)
-  and mult x y = pure (x * y) in
+  and mult x y = pure (x * y)
+  and to_string v = pure (string_of_int v) in
   let open Continuation.Monad in
-  let expected = 42 in
-  let computed = add 3 4 >>= mult 3 >>= mult 2 in
-  Alcotest.(check int) "should_bind" expected @@ computed.run (fun x -> x)
+  let expected = "42" in
+  let computed = add 3 4 >>= mult 3 >>= mult 2 >>= to_string in
+  Alcotest.(check string) "should_bind" expected @@ computed.run (fun x -> x)
 ;;
 
 let test_cases =
