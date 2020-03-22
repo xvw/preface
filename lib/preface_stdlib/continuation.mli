@@ -5,14 +5,14 @@
     For instance arithmetic operations can be transposed using CPS approach.
 
     {[
-      val add : int -> int -> { run: 'b.(int -> 'b) -> 'b }
+      val add : int -> int -> { run: 'b. (int -> 'b) -> 'b }
 
       let add x y = pure (x + y)
     ]}
 
-    The continuation habits the type [{ run : 'b.(int -> 'b) -> 'b}] which is
+    The continuation habits the type [{ run : 'b. (int -> 'b) -> 'b}] which is
     the specialization of the following generalized from
-    [{run : 'b.('a -> 'b) -> 'b}].
+    [{run : 'b. ('a -> 'b) -> 'b}].
 
     The continuation [Functor], [Applicative] and [Monad] gives us the
     capability to manipulate such functions thanks to corresponding functions
@@ -34,13 +34,11 @@
     {[
       module Continuation = Preface_stdlib.Continuation
 
-      let add x y = pure (x + y)
-
-      let mult x y = pure (x * y)
-
       let delta b a c =
         let open Continuation in
         let open Continuation.Applicative in
+        let add x y = pure (x + y)
+        and mult x y = pure (x * y) in
         let+ bb = mult b b
         and+ a4 = mult a 4
         and+ c = pure c in
