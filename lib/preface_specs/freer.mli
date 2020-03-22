@@ -1,5 +1,4 @@
-(** TODO
-*)
+(** TODO *)
 
 (** {1 Structure anatomy} *)
 
