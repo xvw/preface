@@ -1,15 +1,15 @@
 (** TODO *)
 
-module Free (Functor : Preface_specs.Functor.CORE) = struct
-  open Preface_core.Fun
-  module F = Functor
+module Free (Functor : Preface_specs.FUNCTOR) = struct
+  module Functor = Functor
 
   type 'a t =
     | Return : 'a -> 'a t
-    | Bind : 'a t F.t -> 'a t
+    | Bind : 'a t Functor.t -> 'a t
 
   let eta f =
-    compose_right_to_left (fun a -> Bind a) (F.map (fun a -> Return a)) f
+    let open Preface_core.Fun in
+    compose_right_to_left (fun a -> Bind a) (Functor.map (fun a -> Return a)) f
   ;;
 end
 
@@ -18,7 +18,8 @@ module Free_functor (Free : Preface_specs.FREE) = Functor.Via_map (struct
 
   let rec map f =
     let open Free in
-    (function Return v -> Return (f v) | Bind f' -> Bind (F.map (map f) f'))
+    function
+    | Return v -> Return (f v) | Bind f' -> Bind (Functor.map (map f) f')
   ;;
 end)
 
@@ -32,7 +33,7 @@ Applicative.Via_apply (struct
     let open Free in
     match f with
     | Return f' -> map f' a
-    | Bind f' -> Bind (F.map (fun f -> apply f a) f')
+    | Bind f' -> Bind (Functor.map (fun f -> apply f a) f')
   ;;
 end)
 
@@ -43,6 +44,6 @@ module Free_monad (Free : Preface_specs.FREE) = Monad.Via_bind (struct
   let return = pure
 
   let rec bind f =
-    Free.((function Return a -> f a | Bind a -> Bind (F.map (bind f) a)))
+    Free.((function Return a -> f a | Bind a -> Bind (Functor.map (bind f) a)))
   ;;
 end)
