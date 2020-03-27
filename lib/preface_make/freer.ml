@@ -10,7 +10,7 @@ struct
     | Return : 'a -> 'a t
     | Bind : 'b g * ('b -> 'a t) -> 'a t
 
-  let eta f = Bind (f, (fun a -> Return a))
+  let lift f = Bind (f, (fun a -> Return a))
 end
 
 module With_pure (Freer : Preface_specs.FREER) = struct

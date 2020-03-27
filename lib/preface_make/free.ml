@@ -7,7 +7,7 @@ module Via_functor (Functor : Preface_specs.FUNCTOR) = struct
     | Return : 'a -> 'a t
     | Bind : 'a t Functor.t -> 'a t
 
-  let eta f =
+  let lift f =
     let open Preface_core.Fun in
     compose_right_to_left (fun a -> Bind a) (Functor.map (fun a -> Return a)) f
   ;;

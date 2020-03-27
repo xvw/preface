@@ -11,7 +11,7 @@ module CORE : sig
     | Return : 'a -> 'a t
     | Bind : 'a t Functor.t -> 'a t
 
-  val eta : 'a Functor.t -> 'a t
+  val lift : 'a Functor.t -> 'a t
   (** Lifting function from [Functor.t] to [t] *)
 end
 
