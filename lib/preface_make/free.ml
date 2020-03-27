@@ -1,6 +1,6 @@
 (** TODO *)
 
-module Free (Functor : Preface_specs.FUNCTOR) = struct
+module Via_functor (Functor : Preface_specs.FUNCTOR) = struct
   module Functor = Functor
 
   type 'a t =
