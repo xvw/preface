@@ -22,7 +22,7 @@
 
       let stream a l = C (a, l)
 
-      module Comonad = Preface_make.Monad.Via_map_and_duplicate (struct
+      module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
         type 'a t = 'a t
 
         let extract = function C (a, _) -> a
@@ -67,7 +67,7 @@
 
       let stream a l = C (a, l)
 
-      module Comonad = Preface_make.Monad.Via_map_and_duplicate (struct
+      module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
         type 'a t = 'a t
 
         let extract = function C (a, _) -> a
@@ -88,7 +88,7 @@
 
       let stream a l = C (a, l)
 
-      module Comonad = Preface_make.Monad.Via_map_and_duplicate (struct
+      module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
         type 'a t = 'a t
 
         let extract = function C (a, _) -> a
