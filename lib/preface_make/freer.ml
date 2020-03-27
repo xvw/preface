@@ -30,12 +30,12 @@ end
 
 (**  *)
 
-module Via_functor (Freer : Preface_specs.FREER) :
+module Functor_via_freer (Freer : Preface_specs.FREER) :
   Preface_specs.FUNCTOR with type 'a t = 'a Freer.t = Functor.Via_map (struct
   include With_map (Freer)
 end)
 
-module Via_applicative (Freer : Preface_specs.FREER) :
+module Applicative_via_freer (Freer : Preface_specs.FREER) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Freer.t =
 Applicative.Via_apply (struct
   include With_pure (Freer)
@@ -49,7 +49,7 @@ Applicative.Via_apply (struct
   ;;
 end)
 
-module Via_monad (Freer : Preface_specs.FREER) :
+module Monad_via_freer (Freer : Preface_specs.FREER) :
   Preface_specs.MONAD with type 'a t = 'a Freer.t = Monad.Via_bind (struct
   include With_pure (Freer)
 

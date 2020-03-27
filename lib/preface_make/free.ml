@@ -13,7 +13,7 @@ module Via_functor (Functor : Preface_specs.FUNCTOR) = struct
   ;;
 end
 
-module Free_functor (Free : Preface_specs.FREE) = Functor.Via_map (struct
+module Functor_via_free (Free : Preface_specs.FREE) = Functor.Via_map (struct
   type 'a t = 'a Free.t
 
   let rec map f =
@@ -23,9 +23,9 @@ module Free_functor (Free : Preface_specs.FREE) = Functor.Via_map (struct
   ;;
 end)
 
-module Free_applicative (Free : Preface_specs.FREE) =
+module Applicative_via_free (Free : Preface_specs.FREE) =
 Applicative.Via_apply (struct
-  include Free_functor (Free)
+  include Functor_via_free (Free)
 
   let pure a = Free.(Return a)
 
@@ -37,9 +37,9 @@ Applicative.Via_apply (struct
   ;;
 end)
 
-module Free_monad (Free : Preface_specs.FREE) = Monad.Via_bind (struct
-  include Free_functor (Free)
-  include Free_applicative (Free)
+module Monad_via_free (Free : Preface_specs.FREE) = Monad.Via_bind (struct
+  include Functor_via_free (Free)
+  include Applicative_via_free (Free)
 
   let return = pure
 
