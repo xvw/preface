@@ -1,8 +1,8 @@
-(** Modules for building [FreeEr] modules. *)
+(** Modules for building [Freer] modules. *)
 
 module Via (F : sig
-  type 'a data
-end) : Preface_specs.FREER with type 'a data = 'a F.data
+  type 'a g
+end) : Preface_specs.FREER with type 'a g = 'a F.g
 
 module Via_functor (CORE : Preface_specs.FREER) :
   Preface_specs.FUNCTOR with type 'a t = 'a CORE.t

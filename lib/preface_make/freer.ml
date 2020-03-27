@@ -1,14 +1,16 @@
 open Preface_core.Fun.Infix
 
 module Via (F : sig
-  type 'a data
-end) : Preface_specs.FREER with type 'a data = 'a F.data = struct
-  type 'a data = 'a F.data
+  type 'a g
+end) =
+struct
+  type 'a g = 'a F.g
 
   type 'a t =
-    (* How to prevent this type definition here? *)
     | Return : 'a -> 'a t
-    | Bind : 'b data * ('b -> 'a t) -> 'a t
+    | Bind : 'b g * ('b -> 'a t) -> 'a t
+
+  let eta f = Bind (f, (fun a -> Return a))
 end
 
 module With_pure (CORE : Preface_specs.FREER) = struct

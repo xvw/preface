@@ -4,12 +4,15 @@
 
 (** Standard requirement. *)
 module CORE : sig
-  type 'a data
+  type 'a g
 
+  (** The type holded by [Freer]. *)
   type _ t =
     | Return : 'a -> 'a t
-    | Bind : 'b data * ('b -> 'a t) -> 'a t
-        (** The type holded by the [Free]. *)
+    | Bind : 'b g * ('b -> 'a t) -> 'a t
+
+  val eta : 'a g -> 'a t
+  (** Lifting function from [g] to [t] *)
 end
 
 (** {1 API} *)

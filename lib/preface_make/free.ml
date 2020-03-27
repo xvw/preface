@@ -1,7 +1,20 @@
-module Free_functor (F : Preface_specs.Functor.CORE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Preface_specs.Free.CORE(F).t =
-Functor.Via_map (struct
-  include Preface_specs.Free.CORE (F)
+(** TODO *)
+
+module Free (F : Preface_specs.Functor.CORE) = struct
+  open Preface_core.Fun
+  module F = F
+
+  type 'a t =
+    | Return : 'a -> 'a t
+    | Bind : 'a t F.t -> 'a t
+
+  let eta f =
+    compose_right_to_left (fun a -> Bind a) (F.map (fun a -> Return a)) f
+  ;;
+end
+
+module Free_functor (F : Preface_specs.Functor.CORE) = Functor.Via_map (struct
+  include Preface_specs.Free.CORE
 
   let rec map f = function
     | Return v -> Return (f v)
@@ -9,10 +22,9 @@ Functor.Via_map (struct
   ;;
 end)
 
-module Free_applicative (F : Preface_specs.Functor.CORE) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Preface_specs.Free.CORE(F).t =
+module Free_applicative (F : Preface_specs.Functor.CORE) =
 Applicative.Via_apply (struct
-  include Preface_specs.Free.CORE (F)
+  include Preface_specs.Free.CORE
   include Free_functor (F)
 
   let pure a = Return a
@@ -25,9 +37,9 @@ Applicative.Via_apply (struct
 end)
 
 module Free_monad (F : Preface_specs.Functor.CORE) :
-  Preface_specs.MONAD with type 'a t = 'a Preface_specs.Free.CORE(F).t =
+  Preface_specs.MONAD with type 'a t = 'a Preface_specs.Free.CORE.t =
 Monad.Via_bind (struct
-  include Preface_specs.Free.CORE (F)
+  include Preface_specs.Free.CORE
   include Free_functor (F)
   include Free_applicative (F)
 
