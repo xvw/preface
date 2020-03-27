@@ -17,7 +17,7 @@
 (** Standard requirement. *)
 module type CORE = sig
   type 'a t
-  (** The type holded by the [Functor]. *)
+  (** The type held by the [Functor]. *)
 
   val map : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -26,7 +26,7 @@ end
 (** Operations *)
 module type OPERATION = sig
   type 'a t
-  (** The type holded by the [Functor]. *)
+  (** The type held by the [Functor]. *)
 
   val replace : 'a -> 'b t -> 'a t
   (** Create a new ['a t], replacing all values in the ['b t] by given a value
@@ -39,7 +39,7 @@ end
 (** Infix notation *)
 module type INFIX = sig
   type 'a t
-  (** The type holded by the [Functor]. *)
+  (** The type held by the [Functor]. *)
 
   val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
   (** Infix version of {!val:CORE.map}. *)

@@ -16,7 +16,7 @@
 (** Requirement via [map] and [product]. *)
 module type CORE_WITH_MAP_AND_PRODUCT = sig
   type 'a t
-  (** The type holded by the [Applicative]. *)
+  (** The type held by the [Applicative]. *)
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
@@ -31,7 +31,7 @@ end
 (** Requirement via [apply]. *)
 module type CORE_WITH_APPLY = sig
   type 'a t
-  (** The type holded by the [Applicative]. *)
+  (** The type held by the [Applicative]. *)
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
@@ -50,7 +50,7 @@ end
 (** Operations *)
 module type OPERATION = sig
   type 'a t
-  (** The type holded by the [Applicative]. *)
+  (** The type held by the [Applicative]. *)
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -66,7 +66,7 @@ end
 (** Syntax extensions *)
 module type SYNTAX = sig
   type 'a t
-  (** The type holded by the [Applicative]. *)
+  (** The type held by the [Applicative]. *)
 
   val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
   (** Flipped mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -78,7 +78,7 @@ end
 (** Infix notations *)
 module type INFIX = sig
   type 'a t
-  (** The type holded by the [Applicative]. *)
+  (** The type held by the [Applicative]. *)
 
   val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
   (** Infix version of {!val:CORE.map}. *)
