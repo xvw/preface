@@ -141,11 +141,11 @@ module type INFIX = sig
   val ( <=< ) : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
   (** Infix version of {!val:OPERATION.compose_right_to_left}. *)
 
-  val ( >> ) : 'a t -> 'b t -> 'b t
+  val ( >> ) : unit t -> 'b t -> 'b t
   (** Sequentially compose two actions, discarding any value produced by the
       first. *)
 
-  val ( << ) : 'a t -> 'b t -> 'a t
+  val ( << ) : 'a t -> unit t -> 'a t
   (** Sequentially compose two actions, discarding any value produced by the
       second. *)
 end

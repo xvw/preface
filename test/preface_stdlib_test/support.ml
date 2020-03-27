@@ -174,14 +174,14 @@ end = struct
 
   let should_discard_with_infix_operator () =
     let expected = pure 42
-    and computed = pure 2 *> pure 42 in
+    and computed = pure () *> pure 42 in
     Alcotest.(check (subject int))
       "should_discard_with_infix_operator" expected computed
   ;;
 
   let should_flipped_discard_with_infix_operator () =
     let expected = pure 42
-    and computed = pure 42 <* pure 2 in
+    and computed = pure 42 <* pure () in
     Alcotest.(check (subject int))
       "should_flipped_apply_with_infix_operator" expected computed
   ;;
@@ -349,14 +349,14 @@ end = struct
 
   let should_discard_first_value () =
     let expected = return 42
-    and computed = return "42" >> return 42 in
+    and computed = return () >> return 42 in
     Alcotest.(check (subject int))
       "should_discard_first_value" expected computed
   ;;
 
   let should_discard_second_value () =
     let expected = return 42
-    and computed = return 42 << return "42" in
+    and computed = return 42 << return () in
     Alcotest.(check (subject int))
       "should_discard_second_value" expected computed
   ;;
