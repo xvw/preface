@@ -122,3 +122,12 @@ module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Functor.INFIX with type 'a t = 'a Core.t
+
+(** {1 Functor composition} *)
+
+module Id : Preface_specs.FUNCTOR with type 'a t = 'a
+(** Identity for functor composition *)
+
+(** Const for functor composition *)
+module Const (T : Preface_specs.Requirements.Type) :
+  Preface_specs.FUNCTOR with type _ t = T.t

@@ -27,3 +27,8 @@ module type EITHER = sig
   val map_both : ('a -> 'c) -> ('b -> 'd) -> ('a, 'b) t -> ('c, 'd) t
   (** Mapping over the two values of the disjonction. *)
 end
+
+(** Type for curryfication at the functor level *)
+module type Type = sig
+  type t
+end

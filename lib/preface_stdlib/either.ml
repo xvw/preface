@@ -1,10 +1,18 @@
-open Preface_core.Fun
-
 type ('a, 'b) t =
   | Left of 'a
   | Right of 'b
 
 let pure x = Right x
+
+module EitherF (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) =
+Preface_make.Functor.Via_map (struct
+  type nonrec 'a t = ('a F.t, 'a G.t) t
+
+  let map f = function
+    | Left x -> Left (F.map f x)
+    | Right x -> Right (G.map f x)
+  ;;
+end)
 
 module Bifunctor = Preface_make.Bifunctor.Via_bimap (struct
   type nonrec ('a, 'b) t = ('a, 'b) t
@@ -12,14 +20,9 @@ module Bifunctor = Preface_make.Bifunctor.Via_bimap (struct
   let bimap f g = function Left x -> Left (f x) | Right x -> Right (g x)
 end)
 
-module Functor (T : sig
-  type t
-end) =
-Preface_make.Functor.Via_map (struct
-  type nonrec 'a t = (T.t, 'a) t
-
-  let map f x = Bifunctor.bimap id f x
-end)
+module Functor (T : Preface_specs.Requirements.Type) :
+  Preface_specs.FUNCTOR with type 'a t = (T.t, 'a) t =
+  EitherF (Preface_make.Functor.Const (T)) (Preface_make.Functor.Id)
 
 module Applicative (T : sig
   type t

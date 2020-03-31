@@ -43,3 +43,15 @@ module Via_map (Core : Preface_specs.Functor.CORE) :
   module Infix = Infix (Core) (Operation)
   include Infix
 end
+
+module Id = Via_map (struct
+  type 'a t = 'a
+
+  let map f x = f x
+end)
+
+module Const (T : Preface_specs.Requirements.Type) = Via_map (struct
+  type _ t = T.t
+
+  let map _ x = x
+end)
