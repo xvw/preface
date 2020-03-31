@@ -1,4 +1,4 @@
-(** A [Functor] is a type constructor that takes two type arguments and is a
+(** A [Bifunctor] is a type constructor that takes two type arguments and is a
     [Functor] in both arguments. *)
 
 (** Requirement via [bimap]. *)
