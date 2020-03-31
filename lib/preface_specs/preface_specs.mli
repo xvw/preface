@@ -51,6 +51,9 @@ module Requirements = Requirements
 module Functor = Functor
 (** Describes an object that can be mapped. *)
 
+module Bifunctor = Bifunctor
+(** Describes a functor with two type parameters *)
+
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
@@ -72,6 +75,8 @@ module Traversable = Traversable
     in uppercase). *)
 
 module type FUNCTOR = Functor.API
+
+module type BIFUNCTOR = Bifunctor.API
 
 module type APPLICATIVE = Applicative.API
 
