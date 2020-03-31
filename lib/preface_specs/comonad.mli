@@ -21,7 +21,7 @@
 (** Requirement via [map] and [duplicate]. *)
 module type CORE_WITH_MAP_AND_DUPLICATE = sig
   type 'a t
-  (** The type holded by the [Comonad]. *)
+  (** The type held by the [Comonad]. *)
 
   val extract : 'a t -> 'a
   (** Extract a ['a] from ['a t]. Dual of return. *)
@@ -36,7 +36,7 @@ end
 (** Requirement via [extend]. *)
 module type CORE_WITH_EXTEND = sig
   type 'a t
-  (** The type holded by the [Comonad]. *)
+  (** The type held by the [Comonad]. *)
 
   val extract : 'a t -> 'a
   (** Extract a ['a] from ['a t]. Dual of return. *)
@@ -48,7 +48,7 @@ end
 (** Requirement via [compose_left_to_right]. *)
 module type CORE_WITH_COKLEISLI_COMPOSITION = sig
   type 'a t
-  (** The type holded by the [Comonad]. *)
+  (** The type held by the [Comonad]. *)
 
   val extract : 'a t -> 'a
   (** Extract a ['a] from ['a t]. Dual of return. *)
@@ -69,7 +69,7 @@ end
 (** Operations. *)
 module type OPERATION = sig
   type 'a t
-  (** The type holded by the [Comonad]. *)
+  (** The type held by the [Comonad]. *)
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -88,7 +88,7 @@ end
 (** Syntax *)
 module type SYNTAX = sig
   type 'a t
-  (** The type holded by the [Comonad]. *)
+  (** The type held by the [Comonad]. *)
 
   val ( let@ ) : 'a t -> ('a t -> 'b) -> 'b t
   (** Syntaxic shortcuts for version of {!val:CORE.extend}:
@@ -99,7 +99,7 @@ end
 (** Infix notations. *)
 module type INFIX = sig
   type 'a t
-  (** The type holded by the [Comonad]. *)
+  (** The type held by the [Comonad]. *)
 
   val ( =>> ) : 'a t -> ('a t -> 'b) -> 'b t
   (** Infix flipped version of {!val:CORE.extend}. *)

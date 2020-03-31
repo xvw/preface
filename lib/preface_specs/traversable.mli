@@ -11,10 +11,10 @@
 (** Standard requirement. *)
 module type CORE = sig
   type 'a t
-  (** The type holded by the [Traversable]. *)
+  (** The type held by the [Traversable]. *)
 
   type 'a iter
-  (** The iterable type holded by the [Traversable]. *)
+  (** The iterable type held by the [Traversable]. *)
 
   val traverse : ('a -> 'b t) -> 'a iter -> 'b iter t
   (** Map each element of a structure to an action, evaluate these actions from
@@ -24,10 +24,10 @@ end
 (** Operations *)
 module type OPERATION = sig
   type 'a t
-  (** The type holded by the [Traversable]. *)
+  (** The type held by the [Traversable]. *)
 
   type 'a iter
-  (** The iterable type holded by the [Traversable]. *)
+  (** The iterable type held by the [Traversable]. *)
 
   val sequence : 'a t iter -> 'a iter t
   (** Evaluate each action in the structure from left to right, and collect the

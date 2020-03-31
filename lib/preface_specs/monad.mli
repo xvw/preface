@@ -34,7 +34,7 @@
 (** Requirement via [bind]. *)
 module type CORE_WITH_BIND = sig
   type 'a t
-  (** The type holded by the [Monad]. *)
+  (** The type held by the [Monad]. *)
 
   val return : 'a -> 'a t
   (** Create a new ['a t]. *)
@@ -46,7 +46,7 @@ end
 (** Requirement via [map] and [join]. *)
 module type CORE_WITH_MAP_AND_JOIN = sig
   type 'a t
-  (** The type holded by the [Monad]. *)
+  (** The type held by the [Monad]. *)
 
   val return : 'a -> 'a t
   (** Create a new ['a t]. *)
@@ -62,7 +62,7 @@ end
 (** Requirement via [compose_left_to_right]. *)
 module type CORE_WITH_KLEISLI_COMPOSITION = sig
   type 'a t
-  (** The type holded by the [Monad]. *)
+  (** The type held by the [Monad]. *)
 
   val return : 'a -> 'a t
   (** Create a new ['a t]. *)
@@ -83,7 +83,7 @@ end
 (** Operations. *)
 module type OPERATION = sig
   type 'a t
-  (** The type holded by the [Monad]. *)
+  (** The type held by the [Monad]. *)
 
   val void : 'a t -> unit t
   (** Discard the result of evaluation. *)
@@ -105,7 +105,7 @@ end
 (** Syntax extensions. *)
 module type SYNTAX = sig
   type 'a t
-  (** The type holded by the [Monad]. *)
+  (** The type held by the [Monad]. *)
 
   val ( let* ) : 'a t -> ('a -> 'b t) -> 'b t
   (** Syntaxic shortcuts for flipped version of {!val:CORE.bind}:
@@ -121,7 +121,7 @@ end
 (** Infix notations. *)
 module type INFIX = sig
   type 'a t
-  (** The type holded by the [Monad]. *)
+  (** The type held by the [Monad]. *)
 
   val ( =|< ) : ('a -> 'b) -> 'a t -> 'b t
   (** Infix version of {!val:CORE.map}. *)
@@ -141,11 +141,11 @@ module type INFIX = sig
   val ( <=< ) : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
   (** Infix version of {!val:OPERATION.compose_right_to_left}. *)
 
-  val ( >> ) : 'a t -> 'b t -> 'b t
+  val ( >> ) : unit t -> 'b t -> 'b t
   (** Sequentially compose two actions, discarding any value produced by the
       first. *)
 
-  val ( << ) : 'a t -> 'b t -> 'a t
+  val ( << ) : 'a t -> unit t -> 'a t
   (** Sequentially compose two actions, discarding any value produced by the
       second. *)
 end
