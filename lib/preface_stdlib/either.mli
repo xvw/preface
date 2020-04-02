@@ -1,6 +1,13 @@
-(** Exposes [Either.t] *)
+(** Exposes [Either.t]
 
-(** {1 Types} *)
+    {1 Capabilities}
+
+    - {!val:Bifunctor}
+    - {!val:Functor} where ['a] of [('a, 'b) t] is delayed
+    - {!val:Applicative} where ['a] of [('a, 'b) t] is delayed
+    - {!val:Monad} where ['a] of [('a, 'b) t] is delayed *)
+
+(** {1 Type} *)
 
 type ('a, 'b) t =
   | Left of 'a
@@ -32,3 +39,15 @@ val pure : 'b -> ('a, 'b) t
 (** Create a value from ['b] to [('a, 'b) t]. *)
 
 include Preface_specs.Requirements.EITHER with type ('a, 'b) t := ('a, 'b) t
+
+val eq :
+  ('a -> 'a -> bool) -> ('b -> 'b -> bool) -> ('a, 'b) t -> ('a, 'b) t -> bool
+(** Equality. *)
+
+val pp :
+     (Format.formatter -> 'a -> unit)
+  -> (Format.formatter -> 'b -> unit)
+  -> Format.formatter
+  -> ('a, 'b) t
+  -> unit
+(** Pretty printing. *)

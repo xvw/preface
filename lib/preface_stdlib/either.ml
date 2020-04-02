@@ -58,3 +58,15 @@ let map_right = Bifunctor.snd
 let map = Bifunctor.snd
 
 let map_both = Bifunctor.bimap
+
+let eq f g left right =
+  match (left, right) with
+  | (Left x, Left y) -> f x y
+  | (Right x, Right y) -> g x y
+  | _ -> false
+;;
+
+let pp f g formater = function
+  | Left x -> Format.fprintf formater "Left (%a)" f x
+  | Right x -> Format.fprintf formater "Right (%a)" g x
+;;
