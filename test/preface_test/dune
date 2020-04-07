@@ -1,0 +1,5 @@
+(library
+ (name preface_test)
+ (public_name preface.test)
+ (libraries alcotest qcheck-core qcheck-alcotest preface.core preface.specs
+   preface.make preface.stdlib))
