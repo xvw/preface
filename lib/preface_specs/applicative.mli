@@ -9,7 +9,7 @@
     - [(fun f x -> f x) (pure id)] must be equivalent to [id];
     - [compose <$> u <*> v <*> w] must be equivalent to [u <*> v <*> w];
     - [f <$> pure x] must be equivalent to [pure (f x)];
-    - [u <*> pure x] must be equivalent to [(fun f -> f x) <$> u]; *)
+    - [u <*> pure x] must be equivalent to [pure (|> x) <*> u]; *)
 
 (** {1 Structure anatomy} *)
 
@@ -61,6 +61,10 @@ module type OPERATION = sig
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
   (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
       and ['c t] to ['d t]. *)
+
+  val replace : 'a -> 'b t -> 'a t
+  (** Create a new ['a t], replacing all values in the ['b t] by given a value
+      of ['a]. *)
 end
 
 (** Syntax extensions *)
@@ -94,6 +98,12 @@ module type INFIX = sig
 
   val ( <* ) : 'a t -> unit t -> 'a t
   (** Discard the value of the second argument. *)
+
+  val ( <$ ) : 'a -> 'b t -> 'a t
+  (** Infix version of {!val:OPERATION.replace}. *)
+
+  val ( $> ) : 'a t -> 'b -> 'b t
+  (** Flipped and infix version of {!val:OPERATION.replace}. *)
 end
 
 (** {1 API} *)
