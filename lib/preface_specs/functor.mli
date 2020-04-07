@@ -10,7 +10,7 @@
     actually performs a mapping operation.
 
     - [map id] must be equivalent to [id];
-    - [map (f <% g)] must be equivalent to [map f <% map g]. *)
+    - [map (f % g)] must be equivalent to [map f % map g]. *)
 
 (** {1 Structure anatomy} *)
 
