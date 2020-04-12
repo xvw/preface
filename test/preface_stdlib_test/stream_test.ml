@@ -121,6 +121,37 @@ let should_discard_second () =
   Alcotest.(check int) "should_discard_second" expected computed
 ;;
 
+let hd_get_a_value () =
+  let expected = 42
+  and computed = hd (numbers 42) in
+  Alcotest.(check int) "should_extract_head" expected computed
+;;
+
+let tl_get_a_stream () =
+  let expected = 43
+  and computed = hd (tl (numbers 42)) in
+  Alcotest.(check int) "should_extract_head_of_tail" expected computed
+;;
+
+let cons_test () =
+  let expected = 68
+  and expected2 = 0
+  and computed = hd (68 <:> naturals)
+  and computed2 = hd (tl (68 <:> naturals)) in
+  Alcotest.(check int) "should_extract_head_of_cons" expected computed;
+  Alcotest.(check int) "should_extract_head_of_cons" expected2 computed2
+;;
+
+let access_test () =
+  match naturals.%[1000] with
+  | Ok x -> Alcotest.(check int) "should_access" 1000 x
+  | _ -> assert false
+;;
+
+let access_test_2 () =
+  (match naturals.%[-10] with Error _ -> assert true | _ -> assert false)
+;;
+
 let test_cases =
   let open Alcotest in
   [
@@ -144,6 +175,11 @@ let test_cases =
       ; test_case "Inverse apply" `Quick should_inverse_apply
       ; test_case "Discard first" `Quick should_discard_first
       ; test_case "Discard second" `Quick should_discard_second
+      ; test_case "Get head" `Quick hd_get_a_value
+      ; test_case "Get head of tail" `Quick tl_get_a_stream
+      ; test_case "Cons" `Quick cons_test
+      ; test_case "Access with valid offset" `Quick access_test
+      ; test_case "Access with invalid offset" `Quick access_test_2
       ] )
   ]
 ;;
