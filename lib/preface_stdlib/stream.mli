@@ -23,11 +23,6 @@
 type 'a t
 (** A stream of ['a]. *)
 
-(** {1 Exceptions} *)
-
-exception Negative_position of int
-(** Fired when a position is negative. *)
-
 (** {1 Implementation} *)
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t

@@ -1,7 +1,5 @@
 type 'a t = C of 'a * 'a t Lazy.t
 
-exception Negative_position of int
-
 let stream a l = C (a, l)
 
 let rec pure x = C (x, lazy (pure x))
@@ -59,20 +57,20 @@ module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
   let rec map f = function C (a, s) -> C (f a, lazy (map f @@ Lazy.force s))
 end)
 
-let rec at i s =
-  if i < 0
-  then Try.error (Negative_position i)
-  else if i = 0
-  then Try.ok (hd s)
-  else at (pred i) (tl s)
+let at i s =
+  let open Try.Monad.Syntax in
+  let* index = Exn.check_position i in
+  let rec aux_at i s =
+    if i = 0 then Try.ok (hd s) else aux_at (pred i) (tl s)
+  in
+  aux_at index s
 ;;
 
-let rec drop i s =
-  if i < 0
-  then Try.error (Negative_position i)
-  else if i = 0
-  then Try.ok s
-  else drop (pred i) (tl s)
+let drop i s =
+  let open Try.Monad.Syntax in
+  let* index = Exn.check_position i in
+  let rec aux_drop i s = if i = 0 then Try.ok s else aux_drop (pred i) (tl s) in
+  aux_drop index s
 ;;
 
 module Infix = struct
