@@ -1,5 +1,8 @@
 open Preface_stdlib.Stream
 open Preface_stdlib.Stream.Comonad
+module Try = Preface_stdlib.Try
+
+let subject_try a = Alcotest.testable (Try.pp (Alcotest.pp a)) (Try.eq ( = ))
 
 let rec numbers n = stream n (lazy (numbers (n + 1)))
 
@@ -121,10 +124,73 @@ let should_discard_second () =
   Alcotest.(check int) "should_discard_second" expected computed
 ;;
 
+let hd_get_a_value () =
+  let expected = 42
+  and computed = hd (numbers 42) in
+  Alcotest.(check int) "should_extract_head" expected computed
+;;
+
+let tl_get_a_stream () =
+  let expected = 43
+  and computed = hd (tl (numbers 42)) in
+  Alcotest.(check int) "should_extract_head_of_tail" expected computed
+;;
+
+let cons_test () =
+  let expected = 68
+  and expected2 = 0
+  and computed = hd (68 <:> naturals)
+  and computed2 = hd (tl (68 <:> naturals)) in
+  Alcotest.(check int) "should_extract_head_of_cons" expected computed;
+  Alcotest.(check int) "should_extract_head_of_cons" expected2 computed2
+;;
+
+let access_test () =
+  let expected = Try.ok 1000
+  and computed = naturals.%[1000] in
+  Alcotest.(check (subject_try int)) "should_access" expected computed
+;;
+
+let access_test_2 () =
+  let expected = Try.error (Preface_stdlib.Exn.Negative_position (-10))
+  and computed = naturals.%[-10] in
+  Alcotest.(check (subject_try int)) "access_should_fail" expected computed
+;;
+
+let fibonacci () =
+  let rec fb a b = stream (a + b) (lazy (fb b (a + b))) in
+  let fib = 0 <:> stream 1 (lazy (fb 0 1)) in
+  Alcotest.(check (subject_try int)) "fibonacci 0" (Try.ok 0) fib.%[0];
+  Alcotest.(check (subject_try int)) "fibonacci 2" (Try.ok 1) fib.%[2];
+  Alcotest.(check (subject_try int)) "fibonacci 6" (Try.ok 8) fib.%[6];
+  Alcotest.(check (subject_try int)) "fibonacci 16" (Try.ok 987) fib.%[16]
+;;
+
+let drop_take_test () =
+  let open Try.Monad.Infix in
+  let expected = Try.ok [ 4; 5; 6; 7 ]
+  and computed = drop 4 naturals >>= take 4 in
+  Alcotest.(check (subject_try (list int)))
+    "access_drop_and_take" expected computed
+;;
+
+let take_while_test () =
+  let expected = [ 0; 1; 2; 3; 4 ]
+  and computed = take_while (fun x -> x < 5) naturals in
+  Alcotest.(check (list int)) "should_take_while" expected computed
+;;
+
+let drop_while_test () =
+  let expected = Try.ok [ 5; 6; 7; 8; 9; 10 ]
+  and computed = drop_while (fun x -> x < 5) naturals |> take 6 in
+  Alcotest.(check (subject_try (list int)))
+    "should_drop_while" expected computed
+;;
+
 let test_cases =
   let open Alcotest in
   [
-    ( "Stream Comonad"
+    ( "Stream"
     , [
         test_case "Extract" `Quick should_extract
       ; test_case "Extend" `Quick should_extend
@@ -144,6 +210,15 @@ let test_cases =
       ; test_case "Inverse apply" `Quick should_inverse_apply
       ; test_case "Discard first" `Quick should_discard_first
       ; test_case "Discard second" `Quick should_discard_second
+      ; test_case "Get head" `Quick hd_get_a_value
+      ; test_case "Get head of tail" `Quick tl_get_a_stream
+      ; test_case "Cons" `Quick cons_test
+      ; test_case "Access with valid offset" `Quick access_test
+      ; test_case "Access with invalid offset" `Quick access_test_2
+      ; test_case "Get fibonacci numbers" `Quick fibonacci
+      ; test_case "Drop and take" `Quick drop_take_test
+      ; test_case "Takewhile" `Quick take_while_test
+      ; test_case "Dropwhile" `Quick drop_while_test
       ] )
   ]
 ;;
