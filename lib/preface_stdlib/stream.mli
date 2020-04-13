@@ -16,6 +16,16 @@
       let rec numbers n = stream n (lazy (numbers (n + 1)))
 
       let naturals = numbers 0
+    ]}
+
+    Or define all of fibonacci numbers:
+
+    {[
+      let rec fib_sum a b = stream (a + b) (lazy (fib_sum b (a + b))) in
+
+      let fibonacci = 0 <:> stream 1 (lazy (fib_sum 0 1)) in
+
+      let fib6th = fibonacci.%[6] (* Gives the 6th number of fibonacci. *)
     ]} *)
 
 (** {1 Type} *)
@@ -42,6 +52,9 @@ module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)
 
+val repeat : 'a -> 'a t
+(** Alias of {!val:pure}. [repeat x] creates a stream filled with [x]. *)
+
 val stream : 'a -> 'a t Lazy.t -> 'a t
 (** Build a stream manually. *)
 
@@ -63,6 +76,19 @@ val at : int -> 'a t -> 'a Try.t
 val drop : int -> 'a t -> 'a t Try.t
 (** [drop n stream] drop the [n]th values of the [stream]. The function may fail
     if the position if negative.*)
+
+val take : int -> 'a t -> 'a list Try.t
+(** [take n stream] returns the firsts [n] elements of [stream] as [list]. *)
+
+val take_while : ('a -> bool) -> 'a t -> 'a list
+(** [take_while p stream] returns all first elements of [stream] as [list]
+    satisfying the predicate [p]. Be careful, the function may diverge if every
+    element of the stream are satisfying the predicate [p].*)
+
+val drop_while : ('a -> bool) -> 'a t -> 'a t
+(** [drop_while p stream] drop all first elements of [stream] satisfying the
+    predicate [p]. Be careful, the function may diverge if every element of the
+    stream are satisfying the predicate [p].*)
 
 (** {1 Infix} *)
 
