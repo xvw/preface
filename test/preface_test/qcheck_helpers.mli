@@ -57,6 +57,9 @@ module Gen : sig
   val continuation : 'a t -> 'a Preface_stdlib.Continuation.t t
   (** Generator for [Continuation.t].*)
 
+  val stream : 'a t -> 'a Preface_stdlib.Stream.t t
+  (** Generator for [Stream.t].*)
+
   (** {2 Gen exception} *)
 
   exception A
@@ -88,6 +91,9 @@ module Arbitrary : sig
 
   val continuation : 'a t -> 'a Preface_stdlib.Continuation.t t
   (** Arbitrary for [Continuation.t].*)
+
+  val stream : 'a t -> 'a Preface_stdlib.Stream.t t
+  (** Arbitrary for [Stream.t].*)
 end
 
 (** {2 Helper as sample} *)

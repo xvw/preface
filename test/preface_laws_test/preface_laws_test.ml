@@ -7,5 +7,6 @@ let () =
     @ Validation_test.cases
     @ List_test.cases
     @ Either_test.cases
-    @ Continuation_test.cases )
+    @ Continuation_test.cases
+    @ Stream_test.cases )
 ;;

@@ -40,6 +40,8 @@ module Gen = struct
 
   let continuation f state = Preface_stdlib.Continuation.pure (f state)
 
+  let stream f state = Preface_stdlib.Stream.pure (f state)
+
   exception A
 
   exception B
@@ -114,6 +116,11 @@ module Arbitrary = struct
 
   let continuation l =
     let gen = Gen.continuation (QCheck.gen l) in
+    QCheck.make gen
+  ;;
+
+  let stream l =
+    let gen = Gen.stream (QCheck.gen l) in
     QCheck.make gen
   ;;
 end
