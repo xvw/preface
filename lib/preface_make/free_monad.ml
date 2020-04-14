@@ -17,18 +17,17 @@ module Over (F : Preface_specs.FUNCTOR) = struct
     loop_run
   ;;
 
-  module Functor : Preface_specs.FUNCTOR with type 'a t := 'a t = (
-    Functor.Via_map (struct
-      type nonrec 'a t = 'a t
+  module Functor =
+  Functor.Via_map (struct
+    type nonrec 'a t = 'a t
 
-      let rec map f = function
-        | Return v -> Return (f v)
-        | Bind f' -> Bind (F.map (map f) f')
-      ;;
-    end) :
-      Preface_specs.FUNCTOR with type 'a t := 'a t )
+    let rec map f = function
+      | Return v -> Return (f v)
+      | Bind f' -> Bind (F.map (map f) f')
+    ;;
+  end)
 
-  module Applicative : Preface_specs.APPLICATIVE with type 'a t := 'a t =
+  module Applicative =
   Applicative.Via_apply (struct
     type nonrec 'a t = 'a t
 
