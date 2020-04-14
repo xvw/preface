@@ -49,7 +49,16 @@ module Monad = struct
 
     let return = pure
 
-    let bind f list = Stdlib.List.fold_right (fun x acc -> f x @ acc) list []
+    (* Implementation from OCaml 4.10.0 *)
+    let bind f =
+      let rec aux_bind acc = function
+        | [] -> Stdlib.List.rev acc
+        | x :: tail ->
+          let xs = f x in
+          aux_bind (Stdlib.List.rev_append xs acc) tail
+      in
+      aux_bind []
+    ;;
   end)
 
   module Traversable (M : Preface_specs.MONAD) :
