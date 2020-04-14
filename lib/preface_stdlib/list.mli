@@ -30,7 +30,8 @@ end
 
 (** {2 Monad API}
 
-    Monad and Traversable for [List.t]. *)
+    Monad and Traversable for [List.t]. The implementation of [bind] come from
+    [concat_map] in OCaml's Stdlib (available since OCaml 4.10) *)
 module Monad : sig
   (** {2 Traversable using Monadic form} *)
   module Traversable (M : Preface_specs.MONAD) :
