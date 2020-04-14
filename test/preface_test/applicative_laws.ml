@@ -82,6 +82,200 @@ module Make_with_post_hook
         Hook.(apply left = apply right))
   ;;
 
+  let apply =
+    let f_x =
+      QCheck.pair
+        (Req.arbitrary X.arbitrary)
+        (QCheck.fun1 X.observable F.arbitrary)
+    in
+    QCheck.Test.make ~count:100
+      ~name:"apply f a = map (fun (f, a) -> f a) @@ product f a" f_x
+      (fun (x, fi) ->
+        let open Applicative in
+        let f = pure (QCheck.Fn.apply fi) in
+        let left = apply f x
+        and right = map (fun (f, a) -> f a) @@ product f x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let map =
+    let f_x =
+      QCheck.pair
+        (Req.arbitrary X.arbitrary)
+        (QCheck.fun1 X.observable F.arbitrary)
+    in
+    QCheck.Test.make ~count:100 ~name:"map f a = apply (pure f) a" f_x
+      (fun (x, fi) ->
+        let open Applicative in
+        let f = QCheck.Fn.apply fi in
+        let left = map f x
+        and right = apply (pure f) x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let product =
+    let f_x =
+      QCheck.pair (Req.arbitrary X.arbitrary) (Req.arbitrary F.arbitrary)
+    in
+    QCheck.Test.make ~count:100
+      ~name:"product a b = apply (apply (pure (fun a  -> (a, b)))) b" f_x
+      (fun (a, b) ->
+        let open Applicative in
+        let left = product a b
+        and right = apply (apply (pure (fun a b -> (a, b))) a) b in
+        Hook.(apply left = apply right))
+  ;;
+
+  let lift =
+    let f_x =
+      QCheck.pair
+        (Req.arbitrary X.arbitrary)
+        (QCheck.fun1 X.observable F.arbitrary)
+    in
+    QCheck.Test.make ~count:100 ~name:"lift = map" f_x (fun (x, fi) ->
+        let open Applicative in
+        let f = QCheck.Fn.apply fi in
+        let left = map f x
+        and right = lift f x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let lift2 =
+    let f_x =
+      QCheck.triple
+        (Req.arbitrary X.arbitrary)
+        (Req.arbitrary F.arbitrary)
+        (QCheck.fun2 X.observable F.observable F.arbitrary)
+    in
+    QCheck.Test.make ~count:100 ~name:"lift2 f a = apply @@ apply (pure f) a"
+      f_x (fun (a, b, fi) ->
+        let open Applicative in
+        let f = QCheck.Fn.apply fi in
+        let left = (apply @@ apply (pure f) a) b
+        and right = lift2 f a b in
+        Hook.(apply left = apply right))
+  ;;
+
+  let lift3 =
+    let f_x =
+      QCheck.quad
+        (Req.arbitrary X.arbitrary)
+        (Req.arbitrary F.arbitrary)
+        (Req.arbitrary U.arbitrary)
+        (QCheck.fun3 X.observable F.observable U.observable U.arbitrary)
+    in
+    QCheck.Test.make ~count:100
+      ~name:"lift3 f a = apply @@ apply (apply (pure f) a) b" f_x
+      (fun (a, b, c, fi) ->
+        let open Applicative in
+        let f = QCheck.Fn.apply fi in
+        let left = (apply @@ apply (apply (pure f) a) b) c
+        and right = lift3 f a b c in
+        Hook.(apply left = apply right))
+  ;;
+
+  let replace =
+    let inputs = QCheck.pair (Req.arbitrary X.arbitrary) F.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"replace = map % const" inputs
+      (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Applicative.replace value x
+        and right = (Applicative.map % const) value x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_map =
+    let f = QCheck.fun1 X.observable F.arbitrary in
+    let inputs = QCheck.pair f (Req.arbitrary X.arbitrary) in
+    QCheck.Test.make ~count:100 ~name:"<$> = map" inputs (fun (f_i, x) ->
+        let f = QCheck.Fn.apply f_i in
+        let left = Applicative.(f <$> x)
+        and right = Applicative.map f x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_replace =
+    let inputs = QCheck.pair (Req.arbitrary X.arbitrary) F.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"%> = replace" inputs (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Applicative.(value <$ x)
+        and right = (Applicative.map % const) value x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_rreplace =
+    let inputs = QCheck.pair (Req.arbitrary X.arbitrary) F.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"<% = flip % replace" inputs
+      (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Applicative.(x $> value)
+        and right = (Applicative.map % const) value x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_apply =
+    let f_x =
+      QCheck.pair
+        (Req.arbitrary X.arbitrary)
+        (QCheck.fun1 X.observable F.arbitrary)
+    in
+    QCheck.Test.make ~count:100 ~name:"<*> = apply" f_x (fun (x, fi) ->
+        let open Applicative in
+        let f = pure (QCheck.Fn.apply fi) in
+        let left = apply f x
+        and right = f <*> x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_rapply =
+    let f_x =
+      QCheck.pair
+        (Req.arbitrary X.arbitrary)
+        (QCheck.fun1 X.observable F.arbitrary)
+    in
+    QCheck.Test.make ~count:100 ~name:"<**> = flip % apply" f_x (fun (x, fi) ->
+        let open Applicative in
+        let f = pure (QCheck.Fn.apply fi) in
+        let left = apply f x
+        and right = x <**> f in
+        Hook.(apply left = apply right))
+  ;;
+
+  let syntax_map =
+    let f_x =
+      QCheck.pair
+        (Req.arbitrary X.arbitrary)
+        (QCheck.fun1 X.observable F.arbitrary)
+    in
+    QCheck.Test.make ~count:100 ~name:"(let+ x = a in f x) = (f <$> a)" f_x
+      (fun (x, fi) ->
+        let open Applicative in
+        let f = QCheck.Fn.apply fi in
+        let left = map f x
+        and right =
+          let+ a = x in
+          f a
+        in
+        Hook.(apply left = apply right))
+  ;;
+
+  let syntax_product =
+    let f_x =
+      QCheck.pair (Req.arbitrary X.arbitrary) (Req.arbitrary F.arbitrary)
+    in
+    QCheck.Test.make ~count:100
+      ~name:"(let+ x = a and+ y = b in (a, b)) = (product a b)" f_x
+      (fun (a, b) ->
+        let open Applicative in
+        let left = product a b
+        and right =
+          let+ x = a
+          and+ y = b in
+          (x, y)
+        in
+        Hook.(apply left = apply right))
+  ;;
+
   let cases =
     ( Req.suite_name ^ " applicative"
     , List.map QCheck_alcotest.to_alcotest
@@ -92,6 +286,20 @@ module Make_with_post_hook
         ; composition
         ; additional_laws_1
         ; additional_laws_2
+        ; apply
+        ; map
+        ; product
+        ; lift
+        ; lift2
+        ; lift3
+        ; replace
+        ; infix_map
+        ; infix_replace
+        ; infix_rreplace
+        ; infix_apply
+        ; infix_rapply
+        ; syntax_map
+        ; syntax_product
         ] )
   ;;
 end
