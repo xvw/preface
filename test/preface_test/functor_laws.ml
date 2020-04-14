@@ -28,10 +28,76 @@ module Make_with_post_hook
         Hook.(apply left = apply right))
   ;;
 
+  let replace =
+    let inputs = QCheck.pair (Req.arbitrary X.arbitrary) F.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"replace = map % const" inputs
+      (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Functor.replace value x
+        and right = (Functor.map % const) value x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let void =
+    let inputs = Req.arbitrary X.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"void = replace ()" inputs (fun x ->
+        let left = Functor.void x
+        and right = Functor.replace () x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_map =
+    let f = QCheck.fun1 X.observable F.arbitrary in
+    let inputs = QCheck.pair f (Req.arbitrary X.arbitrary) in
+    QCheck.Test.make ~count:100 ~name:"<$> = map" inputs (fun (f_i, x) ->
+        let f = QCheck.Fn.apply f_i in
+        let left = Functor.(f <$> x)
+        and right = Functor.map f x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_rmap =
+    let f = QCheck.fun1 X.observable F.arbitrary in
+    let inputs = QCheck.pair f (Req.arbitrary X.arbitrary) in
+    QCheck.Test.make ~count:100 ~name:"<&> = flip % map" inputs (fun (f_i, x) ->
+        let f = QCheck.Fn.apply f_i in
+        let left = Functor.(x <&> f)
+        and right = Functor.map f x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_replace =
+    let inputs = QCheck.pair (Req.arbitrary X.arbitrary) F.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"%> = replace" inputs (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Functor.(value <$ x)
+        and right = (Functor.map % const) value x in
+        Hook.(apply left = apply right))
+  ;;
+
+  let infix_rreplace =
+    let inputs = QCheck.pair (Req.arbitrary X.arbitrary) F.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"<% = flip % replace" inputs
+      (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Functor.(x $> value)
+        and right = (Functor.map % const) value x in
+        Hook.(apply left = apply right))
+  ;;
+
   let cases =
     ( Req.suite_name ^ " functor"
     , List.map QCheck_alcotest.to_alcotest
-        [ preserve_identity; preserve_morphisms ] )
+        [
+          preserve_identity
+        ; preserve_morphisms
+        ; replace
+        ; void
+        ; infix_map
+        ; infix_rmap
+        ; infix_replace
+        ; infix_rreplace
+        ] )
   ;;
 end
 
