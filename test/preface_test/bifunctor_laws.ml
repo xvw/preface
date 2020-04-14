@@ -107,6 +107,50 @@ module Make
         left = right)
   ;;
 
+  let bimap_fst_id =
+    let f = QCheck.fun1 L.observable F.arbitrary in
+    let arbitrary = QCheck.pair (b l r) f in
+    QCheck.Test.make ~count:100 ~name:"fst f = bimap f id" arbitrary
+      (fun (x, f_i) ->
+        let open Preface_core.Fun in
+        let f = QCheck.Fn.apply f_i in
+        let left = Bifunctor.bimap f id x
+        and right = Bifunctor.fst f x in
+        left = right)
+  ;;
+
+  let bimap_snd_id =
+    let f = QCheck.fun1 R.observable F.arbitrary in
+    let arbitrary = QCheck.pair (b l r) f in
+    QCheck.Test.make ~count:100 ~name:"snd f = bimap id f" arbitrary
+      (fun (x, f_i) ->
+        let open Preface_core.Fun in
+        let f = QCheck.Fn.apply f_i in
+        let left = Bifunctor.bimap id f x
+        and right = Bifunctor.snd f x in
+        left = right)
+  ;;
+
+  let replace_fst =
+    let inputs = QCheck.pair (b l r) G.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"replace = map % const" inputs
+      (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Bifunctor.replace_fst value x
+        and right = Bifunctor.fst (const value) x in
+        left = right)
+  ;;
+
+  let replace_snd =
+    let inputs = QCheck.pair (b l r) G.arbitrary in
+    QCheck.Test.make ~count:100 ~name:"replace = map % const" inputs
+      (fun (x, value) ->
+        let open Preface_core.Fun in
+        let left = Bifunctor.replace_snd value x
+        and right = Bifunctor.snd (const value) x in
+        left = right)
+  ;;
+
   let cases =
     ( Req.suite_name ^ " Bifunctor"
     , List.map QCheck_alcotest.to_alcotest
@@ -118,6 +162,10 @@ module Make
         ; bimap_parametricity
         ; fst_parametricity
         ; snd_parametricity
+        ; bimap_fst_id
+        ; bimap_snd_id
+        ; replace_fst
+        ; replace_snd
         ] )
   ;;
 end
