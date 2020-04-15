@@ -68,7 +68,10 @@ let read_alice_twice () =
 
 let read_alice_write_it () =
   let open IO in
-  let program = ask "Alice" >>= tell in
+  let program =
+    let* name = ask "Alice" in
+    tell name
+  in
   let output = ref [] in
   let expected = [ "Ask Alice?"; "Tell Alice" ]
   and _ = IO.run (runConsoleIO output) program in
@@ -77,7 +80,11 @@ let read_alice_write_it () =
 
 let read_alice_write_hello_alice () =
   let open IO in
-  let program = ask "Alice" >>= (fun n -> tell "Hello" >> tell n) in
+  let program =
+    let* name = ask "Alice" in
+    let* () = tell "Hello" in
+    tell name
+  in
   let output = ref [] in
   let expected = [ "Ask Alice?"; "Tell Hello"; "Tell Alice" ]
   and _ = IO.run (runConsoleIO output) program in
