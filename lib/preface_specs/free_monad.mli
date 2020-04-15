@@ -1,4 +1,5 @@
-(** TODO *)
+(** A [Free_monad] allows you to build a monad from a given
+    functor. *)
 
 (** {1 Structure anatomy} *)
 
@@ -9,7 +10,7 @@ module type CORE = sig
     | Return of 'a
     | Bind of 'a t f
 
-  val eta : 'a f -> 'a t
+  val liftF : 'a f -> 'a t
 
   val run : ('a f -> 'a) -> 'a t -> 'a
 end

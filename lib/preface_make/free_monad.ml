@@ -7,7 +7,7 @@ module Over (F : Preface_specs.FUNCTOR) = struct
     | Return of 'a
     | Bind of 'a t f
 
-  let eta f = Bind (F.map (fun a -> Return a) f)
+  let liftF f = Bind (F.map (fun a -> Return a) f)
 
   let run f =
     let rec loop_run = function

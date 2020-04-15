@@ -29,9 +29,9 @@ let runConsoleIO output = function
     k "Alice"
 ;;
 
-let tell x = IO.eta (ConsoleIO.Tell (x, ()))
+let tell x = IO.liftF (ConsoleIO.Tell (x, ()))
 
-let ask = IO.eta (ConsoleIO.Ask id)
+let ask = IO.liftF (ConsoleIO.Ask id)
 
 let write_hello () =
   let program = tell "Hello" in
