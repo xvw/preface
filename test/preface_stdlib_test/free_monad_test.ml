@@ -5,20 +5,18 @@ module ConsoleIO = struct
     | Tell of (string * 'a)
     | Ask of (string -> 'a)
 
-  include (
-    Preface_make.Functor.Via_map (struct
-      type nonrec 'a t = 'a t
+  module Functor = Preface_make.Functor.Via_map (struct
+    type nonrec 'a t = 'a t
 
-      let map f x =
-        match x with
-        | Tell (s, k) -> Tell (s, f k)
-        | Ask k -> Ask (fun s -> f (k s))
-      ;;
-    end) :
-      Preface_specs.FUNCTOR with type 'a t := 'a t )
+    let map f x =
+      match x with
+      | Tell (s, k) -> Tell (s, f k)
+      | Ask k -> Ask (fun s -> f (k s))
+    ;;
+  end)
 end
 
-module IO = Preface_make.Free_monad.Over (ConsoleIO)
+module IO = Preface_make.Free_monad.Over (ConsoleIO.Functor)
 
 (** interpreter corner *)
 let runConsoleIO output = function
