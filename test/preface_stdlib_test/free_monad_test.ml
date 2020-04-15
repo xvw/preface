@@ -2,69 +2,87 @@ open Preface_core.Fun
 
 module ConsoleIO = struct
   type 'a t =
-    | Tell of (string * 'a)
-    | Ask of (string -> 'a)
+    | Tell of (string * (unit -> 'a))
+    | Ask of (string * (string -> 'a))
 
   module Functor = Preface_make.Functor.Via_map (struct
     type nonrec 'a t = 'a t
 
     let map f x =
       match x with
-      | Tell (s, k) -> Tell (s, f k)
-      | Ask k -> Ask (fun s -> f (k s))
+      | Tell (s, k) -> Tell (s, (fun () -> f (k ())))
+      | Ask (s, k) -> Ask (s, (fun s -> f (k s)))
     ;;
   end)
 end
 
-module IO = Preface_make.Free_monad.Over (ConsoleIO.Functor)
+module IO = Preface_make.Free_monad.Over_functor (ConsoleIO.Functor)
 
 (** interpreter corner *)
 let runConsoleIO output = function
   | ConsoleIO.Tell (s, k) ->
-    let _ = print_string @@ "Execute Tell" ^ s
-    and _ = output := !output @ [ s ] in
-    k
-  | ConsoleIO.Ask k ->
-    let _ = print_string "Execute ask" in
-    k "Alice"
+    let () = output := !output @ [ "Tell " ^ s ] in
+    k ()
+  | ConsoleIO.Ask (s, k) ->
+    let () = output := !output @ [ "Ask " ^ s ^ "?" ] in
+    k s
 ;;
 
-let tell x = IO.liftF (ConsoleIO.Tell (x, ()))
+let tell x = IO.liftF (ConsoleIO.Tell (x, (fun () -> ())))
 
-let ask = IO.liftF (ConsoleIO.Ask id)
+let ask s = IO.liftF (ConsoleIO.Ask (s, id))
 
 let write_hello () =
   let program = tell "Hello" in
   let output = ref [] in
-  let expected = [ "Hello" ]
+  let expected = [ "Tell Hello" ]
   and _ = IO.run (runConsoleIO output) program in
   Alcotest.(check (list string)) "write hello" expected !output
 ;;
 
-let read_alice () =
-  let program = ask in
+let write_hello_alice () =
+  let open IO in
+  let program = tell "Hello" >> tell "Alice" in
   let output = ref [] in
-  let expected = []
+  let expected = [ "Tell Hello"; "Tell Alice" ]
+  and _ = IO.run (runConsoleIO output) program in
+  Alcotest.(check (list string)) "write Hello Alice" expected !output
+;;
+
+let read_alice () =
+  let program = ask "Alice" in
+  let output = ref [] in
+  let expected = [ "Ask Alice?" ]
+  and _ = IO.run (runConsoleIO output) program in
+  Alcotest.(check (list string)) "read alice" expected !output
+;;
+
+let read_alice_twice () =
+  let open IO in
+  let program = ask "Alice" >>= (fun _ -> ask "Wonderland") in
+  let output = ref [] in
+  let expected = [ "Ask Alice?"; "Ask Wonderland?" ]
   and _ = IO.run (runConsoleIO output) program in
   Alcotest.(check (list string)) "read alice" expected !output
 ;;
 
 let read_alice_write_it () =
   let open IO in
-  let program = ask >>= tell in
+  let program = ask "Alice" >>= tell in
   let output = ref [] in
-  let expected = [ "Alice" ]
+  let expected = [ "Ask Alice?"; "Tell Alice" ]
   and _ = IO.run (runConsoleIO output) program in
   Alcotest.(check (list string)) "read alice and write it" expected !output
 ;;
 
-let read_alice_write_hello () =
+let read_alice_write_hello_alice () =
   let open IO in
-  let program = ask >>= (fun n -> tell "Hello" >> tell n) in
+  let program = ask "Alice" >>= (fun n -> tell "Hello" >>= (fun _ -> tell n)) in
   let output = ref [] in
-  let expected = [ "Alice"; "Hello" ]
+  let expected = [ "Ask Alice?"; "Tell Hello"; "Tell Alice" ]
   and _ = IO.run (runConsoleIO output) program in
-  Alcotest.(check (list string)) "read alice and write hello" expected !output
+  Alcotest.(check (list string))
+    "read Alice and write Hello Alice" expected !output
 ;;
 
 let test_cases =
@@ -73,9 +91,12 @@ let test_cases =
     ( "Free Monad"
     , [
         test_case "write hello" `Quick write_hello
+      ; test_case "write hello alice" `Quick write_hello_alice
       ; test_case "read alice" `Quick read_alice
+      ; test_case "read alice twice" `Quick read_alice_twice
       ; test_case "read alice and write it" `Quick read_alice_write_it
-      ; test_case "read alice and write hello" `Quick read_alice_write_hello
+      ; test_case "read alice and write hello" `Quick
+          read_alice_write_hello_alice
       ] )
   ]
 ;;

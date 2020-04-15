@@ -1,5 +1,4 @@
-(** A [Free_monad] allows you to build a monad from a given
-    functor. *)
+(** A [Free_monad] allows you to build a monad from a given functor. *)
 
 (** {1 Structure anatomy} *)
 

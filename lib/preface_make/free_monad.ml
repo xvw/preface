@@ -1,6 +1,6 @@
 (** TODO *)
 
-module Over (F : Preface_specs.FUNCTOR) = struct
+module Over_functor (F : Preface_specs.FUNCTOR) = struct
   type 'a f = 'a F.t
 
   type 'a t =
