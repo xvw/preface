@@ -17,8 +17,7 @@ module Over (F : Preface_specs.FUNCTOR) = struct
     loop_run
   ;;
 
-  module Functor =
-  Functor.Via_map (struct
+  module Functor = Functor.Via_map (struct
     type nonrec 'a t = 'a t
 
     let rec map f = function
@@ -27,8 +26,7 @@ module Over (F : Preface_specs.FUNCTOR) = struct
     ;;
   end)
 
-  module Applicative =
-  Applicative.Via_apply (struct
+  module Applicative = Applicative.Via_apply (struct
     type nonrec 'a t = 'a t
 
     let rec map f = function
@@ -45,8 +43,7 @@ module Over (F : Preface_specs.FUNCTOR) = struct
     ;;
   end)
 
-  module Monad : Preface_specs.MONAD with type 'a t := 'a t =
-  Monad.Via_bind (struct
+  module Monad = Monad.Via_bind (struct
     type nonrec 'a t = 'a t
 
     let return a = Return a
@@ -57,5 +54,5 @@ module Over (F : Preface_specs.FUNCTOR) = struct
     ;;
   end)
 
-  include Monad
+  include (Monad : Preface_specs.MONAD with type 'a t := 'a t)
 end

@@ -23,9 +23,9 @@ module type API = sig
 
   module Applicative : Applicative.API with type 'a t = 'a t
 
-  module Monad : Monad.API with type 'a t := 'a t
+  module Monad : Monad.API with type 'a t = 'a t
 
-  include module type of Monad
+  include module type of Monad with type 'a t := 'a t
 end
 
 (** The complete interface of a [Free_monad]. *)
