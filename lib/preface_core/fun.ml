@@ -8,6 +8,8 @@ module Infix = struct
   let ( %> ) = compose_left_to_right
 
   let ( <% ) = compose_right_to_left
+
+  let ( % ) = compose_right_to_left
 end
 
 include Infix

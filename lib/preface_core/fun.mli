@@ -21,6 +21,9 @@ module Infix : sig
 
   val ( <% ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
   (** [(f <% g) x] is [f (g x)]. Alias for {!val:compose_right_to_left} *)
+
+  val ( % ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+  (** [(f <% g) x] is [f (g x)]. Alias for {!val:compose_right_to_left} *)
 end
 
 (** {1 Shadowing the [Stdlib]} *)

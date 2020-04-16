@@ -1,4 +1,4 @@
-open Fun
+open Preface_core.Fun
 
 module Core_via_map_and_product
     (Core : Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT) :
@@ -26,6 +26,8 @@ module Operation (Core : Preface_specs.Applicative.CORE) :
   let lift2 f a = Core.(apply @@ apply (pure f) a)
 
   let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
+
+  let replace value x = (Core.map <% const) value x
 end
 
 module Syntax (Core : Preface_specs.Applicative.CORE) :
@@ -52,6 +54,10 @@ module Infix
   let ( *> ) a b = Operation.lift2 const b a
 
   let ( <* ) a b = b *> a
+
+  let ( <$ ) value x = Operation.replace value x
+
+  let ( $> ) x value = Operation.replace value x
 end
 
 module Via
