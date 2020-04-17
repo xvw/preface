@@ -1,4 +1,4 @@
-version = 0.14.0
+version = 0.14.1
 margin = 80
 max-indent = 68
 
@@ -29,12 +29,9 @@ doc-comments-padding = 2
 doc-comments-tag-only = default
 dock-collection-brackets = true
 
-escape-chars = preserve
-escape-strings = preserve
 exp-grouping = preserve
 
 extension-indent = 2
-extension-sugar = preserve
 
 field-space = loose
 
