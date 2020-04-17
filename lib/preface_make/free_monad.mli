@@ -5,7 +5,7 @@
     In order to be modular, [Preface] offers multiple way to build a
     {!Preface_specs.FREE_MONAD}. In many case, you just have to use the
     parametrized module {!Over_functor}, but in some particular cases, you want
-    to be able to create ir from an [Applicative] or another [Monad]
+    to be able to create it from an [Applicative] or another [Monad]
 
     {2 Basics}
 
@@ -22,10 +22,6 @@
     The first piece of this jigsaw should be an Algebraic Data Type (ADT) and it's
     dedicated [map] function. In a language like Haskell such mapping function can be
     automatically derived. In [Preface] this is not the case yet.
-
-    The type definition here is an ADT and not a Generalized ADT, because it uses
-    an embedded visitor. It's in fact the application of the Yoneda lemma to make it
-    isomorphic to the corresponding definition.
 
     {[
       (* file: store.ml *)
@@ -52,12 +48,13 @@
     simply created using the parametric module `Over_functor`.
 
     {[
-      module StoreFree = Preface_make.Free_monad.Over_functor (Store.Functor)
+      module Store_free = Preface_make.Free_monad.Over_functor (Store.Functor)
     ]}
 
-    {3 Defining one interpet}
+    {3 Defining an interpeter}
 
-    Then we can propose one interpretation using an OCaml side effect for instance.
+    Then we can propose one interpretation using an OCaml side effect for instance,
+    here the side effect is a mutable reference
 
     {[
       let runStore l = function
@@ -75,29 +72,29 @@
     function which creates a data of the [Free_monad] from a data of the [Functor].
 
     {[
-      let get k = StoreFree.liftF (Store.Get (k, id))
-      let set k v = StoreFree.liftF (Store.Set (k, v, id)))
+      let get k = Store_free.liftF (Store.Get (k, id))
+      let set k v = Store_free.liftF (Store.Set (k, v, id)))
     ]}
 
     {3 Using the [Free_monad]}
 
-    We can now, with this material, create and run programs. For the program creation
-    since a [Free_monad] is a Preface [Monad], we can use langage extensions like
-    [let*] for a syntetic and expressive program definition. For this purpose the
+    Now we are able to define programs and run these programs. For the program
+    creation since a [Free_monad] is a Preface [Monad], we can use langage extensions
+    like [let*] for a syntetic and expressive program definition. For this purpose, the
     corresponding module should be opened.
 
-    Finally the interpret can be executed with the [run] functions defined in the
+    Finally the interpreter can be executed with the [run] functions defined in the
     generated [Free_monad] module.
 
     {[
       let program =
-        let open StoreFree.Syntax in
+        let open Store_free.Syntax in
         let* () = set "k1" "v1" in
         get "k1"
       ;;
 
       let l = ref [] in
-      StoreFree.run (runStore l) program
+      Store_free.run (runStore l) program
     ]}
 
     {2 Conclusion}
