@@ -58,7 +58,10 @@ let read_alice () =
 
 let read_alice_and_wonderland () =
   let open IO in
-  let program = ask "Alice" >> ask "Wonderland" in
+  let program =
+    let* _ = ask "Alice" in
+    ask "Wonderland"
+  in
   let output = ref [] in
   let expected = [ "Ask Alice?"; "Ask Wonderland?" ]
   and _ = IO.run (runConsoleIO output) program in
