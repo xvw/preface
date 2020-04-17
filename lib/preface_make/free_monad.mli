@@ -14,18 +14,18 @@
 
     {2 A complete example}
 
-    In this example we propose to define a Store where strings can be store and
+    In this example we propose a Store where strings can be stored and
     retrieved with a key which is also a string.
 
     {3 Defining a [Functor]}
 
     The first piece of this jigsaw should be an Algebraic Data Type (ADT) and it's
-    dedicated [map] function. In language like Haskell such map function can be
+    dedicated [map] function. In a language like Haskell such mapping function can be
     automatically derived. In [Preface] this is not the case yet.
 
     The type definition here is an ADT and not a Generalized ADT, because it uses
-    an embedded visitor and the application of the Yoneda lemma to make it isomorphic
-    to the corresponding.
+    an embedded visitor. It's in fact the application of the Yoneda lemma to make it
+    isomorphic to the corresponding definition.
 
     {[
       (* file: store.ml *)
@@ -52,7 +52,7 @@
     simply created using the parametric module `Over_functor`.
 
     {[
-      module StoreFree = Preface_make.Free_monad.Over_functor (StoreFunctor)
+      module StoreFree = Preface_make.Free_monad.Over_functor (Store.Functor)
     ]}
 
     {3 Defining one interpet}
@@ -69,10 +69,10 @@
       ;;
     ]}
 
-    Now we propose two operations i.e. [set] and [get]. This operations are
-    reified thanks to the ADT definition. Reification here means a [set] (resp. [get])
-    operation is denoted by the constructor [Set] (resp. [Get]) thanks to the [liftF]
-    function which create a data of the [Free_monad] from a data from the [Functor].
+    Now we propose two operations i.e. [set] and [get]. This operations are reified
+    thanks to the ADT definition. Reification here means a [set] (resp. [get])
+    operation is denoted by the constructor [Set] (resp. [Get]) using to the [liftF]
+    function which creates a data of the [Free_monad] from a data of the [Functor].
 
     {[
       let get k = StoreFree.liftF (Store.Get (k, id))
@@ -82,7 +82,7 @@
     {3 Using the [Free_monad]}
 
     We can now, with this material, create and run programs. For the program creation
-    since a [Free_monad] is a Preface [Monad], we can used langage extensions like
+    since a [Free_monad] is a Preface [Monad], we can use langage extensions like
     [let*] for a syntetic and expressive program definition. For this purpose the
     corresponding module should be opened.
 
