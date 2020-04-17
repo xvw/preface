@@ -18,7 +18,10 @@ end
 
 module IO = Preface_make.Free_monad.Over_functor (ConsoleIO.Functor)
 
-(** interpreter corner *)
+let tell x = IO.liftF (ConsoleIO.Tell (x, id))
+
+let ask s = IO.liftF (ConsoleIO.Ask (s, id))
+
 let runConsoleIO output = function
   | ConsoleIO.Tell (s, k) ->
     let () = output := !output @ [ "Tell " ^ s ] in
@@ -27,10 +30,6 @@ let runConsoleIO output = function
     let () = output := !output @ [ "Ask " ^ s ^ "?" ] in
     k s
 ;;
-
-let tell x = IO.liftF (ConsoleIO.Tell (x, (fun () -> ())))
-
-let ask s = IO.liftF (ConsoleIO.Ask (s, id))
 
 let write_hello () =
   let program = tell "Hello" in
@@ -57,7 +56,7 @@ let read_alice () =
   Alcotest.(check (list string)) "read alice" expected !output
 ;;
 
-let read_alice_twice () =
+let read_alice_and_wonderland () =
   let open IO in
   let program = ask "Alice" >> ask "Wonderland" in
   let output = ref [] in
@@ -100,7 +99,7 @@ let test_cases =
         test_case "write hello" `Quick write_hello
       ; test_case "write hello alice" `Quick write_hello_alice
       ; test_case "read alice" `Quick read_alice
-      ; test_case "read alice twice" `Quick read_alice_twice
+      ; test_case "read alice twice" `Quick read_alice_and_wonderland
       ; test_case "read alice and write it" `Quick read_alice_write_it
       ; test_case "read alice and write hello" `Quick
           read_alice_write_hello_alice

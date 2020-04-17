@@ -1,6 +1,4 @@
-(** TODO *)
-
-module Over_functor (F : Preface_specs.FUNCTOR) = struct
+module Via_map (F : Preface_specs.Functor.CORE) = struct
   type 'a f = 'a F.t
 
   type 'a t =
@@ -56,3 +54,7 @@ module Over_functor (F : Preface_specs.FUNCTOR) = struct
 
   include (Monad : Preface_specs.MONAD with type 'a t := 'a t)
 end
+
+module Over_functor (A : Preface_specs.FUNCTOR) = Via_map (A)
+module Over_applicative (A : Preface_specs.APPLICATIVE) = Via_map (A)
+module Over_monad (A : Preface_specs.MONAD) = Via_map (A)
