@@ -10,5 +10,6 @@ let () =
     @ List_monad_traversable_option_test.test_cases
     @ Stream_test.test_cases
     @ Continuation_test.test_cases
-    @ Free_monad_test.test_cases )
+    @ Free_monad_test.test_cases
+    @ Freer_monad_test.test_cases )
 ;;

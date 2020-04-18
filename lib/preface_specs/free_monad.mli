@@ -6,9 +6,9 @@
 
 module type CORE = sig
   type 'a f
-  (** The type holded by the [Functor]. *)
+  (** The type held by the [Functor]. *)
 
-  (** The type holded by the [Free_monad]. *)
+  (** The type held by the [Free_monad]. *)
   type 'a t =
     | Return of 'a
     | Bind of 'a t f

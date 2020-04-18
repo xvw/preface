@@ -4,11 +4,11 @@
 
 (** Standard requirement. *)
 module type TYPE = sig
-  type 'a f
+  type 'a t
 end
 
 module type CORE = sig
-  include TYPE
+  type 'a f
 
   (** The type holded by [Freer]. *)
   type _ t =
