@@ -14,7 +14,7 @@ module type CORE = sig
     | Bind of 'a t f
 
   val liftF : 'a f -> 'a t
-  (** Create a new ['a t]. *)
+  (** Create a new ['a t] from a ['a f]. *)
 
   val run : ('a f -> 'a) -> 'a t -> 'a
   (** Execute a given interpret for given data *)

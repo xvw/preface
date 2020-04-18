@@ -106,7 +106,7 @@
     ways. In addition, [liftF] and [run] capabilities are provided for the
     interpretation layer. *)
 
-(** {2 Constructors} *)
+(** {1 Constructors} *)
 
 (** Incarnation of a [Free_monad] from a [Functor] *)
 module Over_functor (F : Preface_specs.FUNCTOR) :

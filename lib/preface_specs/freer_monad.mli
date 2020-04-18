@@ -1,4 +1,6 @@
-(** TODO *)
+(** A [Freer_monad] allows you to build a monad from a given type. Such monad is
+    equiped with two additional functions: one dedicated to the creation of a
+    new data and another one for the interpretation. *)
 
 (** {1 Structure anatomy} *)
 
@@ -9,6 +11,7 @@ end
 
 module type CORE = sig
   type 'a f
+  (** The parametric type. *)
 
   (** The type holded by [Freer]. *)
   type _ t =
@@ -16,7 +19,7 @@ module type CORE = sig
     | Bind : 'b f * ('b -> 'a t) -> 'a t
 
   val liftF : 'a f -> 'a t
-  (** Lifting function from [g] to [t] *)
+  (** Create a new ['a t] from a ['a f]. *)
 end
 
 (** {1 API} *)
