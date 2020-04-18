@@ -72,6 +72,9 @@ module Traversable = Traversable
 module Free_monad = Free_monad
 (** Describes a free monad. *)
 
+module Freer_monad = Freer_monad
+(** Describes a freer monad. *)
+
 (** {1 API Shortcuts}
 
     Shortcuts for the API of each objects (by convention, OCaml module types are
@@ -92,6 +95,8 @@ module type COMONAD = Comonad.API
 module type TRAVERSABLE = Traversable.API
 
 module type FREE_MONAD = Free_monad.API
+
+module type FREER_MONAD = Freer_monad.API
 
 (** {1 Abstract data types} *)
 
