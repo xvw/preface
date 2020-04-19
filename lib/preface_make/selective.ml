@@ -1,6 +1,6 @@
 open Preface_core.Fun
 
-module Core_via_functor
+module Core_over_functor_and_either
     (Either : Preface_core.Requirements.EITHER)
     (Functor : Preface_specs.FUNCTOR)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
@@ -23,7 +23,7 @@ module Core_via_functor
   include Applicative.Core_via_apply (Ap)
 end
 
-module Core_via_applicative
+module Core_over_applicative_and_either
     (Either : Preface_core.Requirements.EITHER)
     (Applicative : Preface_specs.APPLICATIVE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
@@ -36,7 +36,7 @@ module Core_via_applicative
   include Select
 end
 
-module Operation
+module Operation_over_either
     (Either : Preface_core.Requirements.EITHER)
     (Core : Preface_specs.Selective.CORE
               with type ('a, 'b) either = ('a, 'b) Either.t) :
@@ -66,7 +66,7 @@ module Operation
   let rec while_ action = when_ action (while_ action)
 end
 
-module Infix
+module Infix_over_either
     (Either : Preface_core.Requirements.EITHER)
     (Core : Preface_specs.Selective.CORE
               with type ('a, 'b) either = ('a, 'b) Either.t)
@@ -89,7 +89,7 @@ module Infix
   let ( <&&> ) left right = Operation.if_ left right (Core.pure false)
 end
 
-module Syntax
+module Syntax_over_either
     (Either : Preface_core.Requirements.EITHER)
     (Core : Preface_specs.Selective.CORE
               with type ('a, 'b) either = ('a, 'b) Either.t) :
@@ -97,7 +97,7 @@ module Syntax
   include Applicative.Syntax (Core)
 end
 
-module Via
+module Over_either
     (Either : Preface_core.Requirements.EITHER)
     (Core : Preface_specs.Selective.CORE
               with type ('a, 'b) either = ('a, 'b) Either.t)
@@ -119,7 +119,7 @@ module Via
   module Syntax = Syntax
 end
 
-module Over_functor
+module Over_functor_and_either
     (Either : Preface_core.Requirements.EITHER)
     (Functor : Preface_specs.FUNCTOR)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
@@ -128,17 +128,17 @@ module Over_functor
   Preface_specs.SELECTIVE
     with type 'a t = 'a Select.t
      and type ('a, 'b) either = ('a, 'b) Either.t = struct
-  module Core = Core_via_functor (Either) (Functor) (Select)
-  module Operation = Operation (Either) (Core)
-  module Infix = Infix (Either) (Core) (Operation)
-  module Syntax = Syntax (Either) (Core)
+  module Core = Core_over_functor_and_either (Either) (Functor) (Select)
+  module Operation = Operation_over_either (Either) (Core)
+  module Infix = Infix_over_either (Either) (Core) (Operation)
+  module Syntax = Syntax_over_either (Either) (Core)
   include Core
   include Operation
   include Infix
   include Syntax
 end
 
-module Over_applicative
+module Over_applicative_and_either
     (Either : Preface_core.Requirements.EITHER)
     (Applicative : Preface_specs.APPLICATIVE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
@@ -147,12 +147,21 @@ module Over_applicative
   Preface_specs.SELECTIVE
     with type 'a t = 'a Select.t
      and type ('a, 'b) either = ('a, 'b) Either.t = struct
-  module Core = Core_via_applicative (Either) (Applicative) (Select)
-  module Operation = Operation (Either) (Core)
-  module Infix = Infix (Either) (Core) (Operation)
-  module Syntax = Syntax (Either) (Core)
+  module Core = Core_over_applicative_and_either (Either) (Applicative) (Select)
+  module Operation = Operation_over_either (Either) (Core)
+  module Infix = Infix_over_either (Either) (Core) (Operation)
+  module Syntax = Syntax_over_either (Either) (Core)
   include Core
   include Operation
   include Infix
   include Syntax
 end
+
+module Over_applicative = Over_applicative_and_either (Preface_core.Either)
+module Over_functor = Over_functor_and_either (Preface_core.Either)
+module Core_over_functor = Core_over_functor_and_either (Preface_core.Either)
+module Core_over_applicative =
+  Core_over_applicative_and_either (Preface_core.Either)
+module Operation_over = Operation_over_either (Preface_core.Either)
+module Infix_over = Infix_over_either (Preface_core.Either)
+module Syntax_over = Syntax_over_either (Preface_core.Either)
