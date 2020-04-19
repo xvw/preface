@@ -67,9 +67,9 @@ module Infix
   include Applicative.Infix (Core) (Operation)
   module Either = Core.Either
 
-  let ( <*? ) = Core.select
+  let ( <?* ) = Core.select
 
-  let ( ?*> ) f x = x <*? f
+  let ( *?> ) f x = x <?* f
 
   let ( <||> ) left right = Operation.if_ left (Core.pure true) right
 

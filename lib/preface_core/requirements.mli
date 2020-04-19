@@ -18,12 +18,4 @@ module type EITHER = sig
 
   val map_right : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
   (** Mapping over the second value of the disjonction. *)
-
-  val map : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
-  (** Mapping over the second value of the disjonction.
-
-      alias of {!val:map_right} by convention. *)
-
-  val map_both : ('a -> 'c) -> ('b -> 'd) -> ('a, 'b) t -> ('c, 'd) t
-  (** Mapping over the two values of the disjonction. *)
 end

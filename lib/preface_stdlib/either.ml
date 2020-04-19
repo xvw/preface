@@ -1,6 +1,6 @@
 open Preface_core.Fun
 
-type ('a, 'b) t =
+type ('a, 'b) t = ('a, 'b) Preface_core.Either.t =
   | Left of 'a
   | Right of 'b
 
@@ -54,10 +54,6 @@ let right = pure
 let map_left = Bifunctor.fst
 
 let map_right = Bifunctor.snd
-
-let map = Bifunctor.snd
-
-let map_both = Bifunctor.bimap
 
 let eq f g left right =
   match (left, right) with

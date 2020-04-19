@@ -9,7 +9,7 @@
 
 (** {1 Type} *)
 
-type ('a, 'b) t =
+type ('a, 'b) t = ('a, 'b) Preface_core.Either.t =
   | Left of 'a
   | Right of 'b
 

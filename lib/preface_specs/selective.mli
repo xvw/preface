@@ -7,7 +7,7 @@
 module type CORE_WITH_SELECT = sig
   type 'a t
 
-  module Either : Requirements.EITHER
+  module Either : Preface_core.Requirements.EITHER
 
   val pure : 'a -> 'a t
 
@@ -27,7 +27,7 @@ module type OPERATION = sig
 
   include Applicative.OPERATION with type 'a t := 'a t
 
-  module Either : Requirements.EITHER
+  module Either : Preface_core.Requirements.EITHER
 
   val branch : ('a, 'b) Either.t t -> ('a -> 'c) t -> ('b -> 'c) t -> 'c t
 
@@ -49,11 +49,11 @@ module type INFIX = sig
 
   include Applicative.INFIX with type 'a t := 'a t
 
-  module Either : Requirements.EITHER
+  module Either : Preface_core.Requirements.EITHER
 
-  val ( <*? ) : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
+  val ( <?* ) : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
 
-  val ( ?*> ) : ('a -> 'b) t -> ('a, 'b) Either.t t -> 'b t
+  val ( *?> ) : ('a -> 'b) t -> ('a, 'b) Either.t t -> 'b t
 
   val ( <||> ) : bool t -> bool t -> bool t
 
