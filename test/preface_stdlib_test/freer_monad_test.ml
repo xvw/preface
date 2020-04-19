@@ -23,8 +23,8 @@ let runConsoleIO output = function
 
 let runConsole output =
   let open IO in
-  let r c = runConsoleIO output c in
-  { run = r }
+  let i c = runConsoleIO output c in
+  { interpreter = i }
 ;;
 
 let write_hello () =

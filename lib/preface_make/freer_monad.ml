@@ -9,13 +9,13 @@ module Via_type (Type : Preface_specs.Freer_monad.TYPE) = struct
 
   let liftF f = Bind (f, (fun a -> Return a))
 
-  type interpreter = { run : 'a. 'a f -> 'a }
+  type interpreter = { interpreter : 'a. 'a f -> 'a }
 
-  let run interpreter =
+  let run f =
     let rec loop_run = function
       | Return a -> a
       | Bind (intermediate, continuation) ->
-        loop_run (continuation (interpreter.run intermediate))
+        loop_run (continuation (f.interpreter intermediate))
     in
     loop_run
   ;;

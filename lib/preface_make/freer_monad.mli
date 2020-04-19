@@ -68,15 +68,15 @@
 
     Therefor the [Freer_monad] requires an interpeter with the following type:
 
-    {[ type interpret = { run : 'a. 'a Store.t -> 'a } ]}
+    {[ type interpret = { interpreter : 'a. 'a Store.t -> 'a } ]}
 
     Such interpreter shoud be created thanks to a function with an embedded let
     which provides the more general type i.e. `'a. 'a Store.t -> 'a`.
 
     {[
       let interpreter l =
-        let r = runStore l in
-        Store_free.{ run = r }
+        let i = runStore l in
+        Store_free.{ interpreter = i }
       ;;
     ]}
 
