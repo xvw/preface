@@ -157,6 +157,24 @@ module Over_applicative_and_either
   include Syntax
 end
 
+module Select_from_monad_and_either
+    (Either : Preface_core.Requirements.EITHER)
+    (Monad : Preface_specs.MONAD) :
+  Preface_specs.Selective.CORE_WITH_SELECT
+    with type 'a t = 'a Monad.t
+     and type ('a, 'b) either = ('a, 'b) Either.t = struct
+  type 'a t = 'a Monad.t
+
+  type ('a, 'b) either = ('a, 'b) Either.t
+
+  let pure = Monad.return
+
+  let select xs fs =
+    let open Monad.Infix in
+    xs >>= (fun x -> Either.case x (fun a -> fs >|= (fun f -> f a)) pure)
+  ;;
+end
+
 module Over_applicative = Over_applicative_and_either (Preface_core.Either)
 module Over_functor = Over_functor_and_either (Preface_core.Either)
 module Core_over_functor = Core_over_functor_and_either (Preface_core.Either)
@@ -165,3 +183,4 @@ module Core_over_applicative =
 module Operation_over = Operation_over_either (Preface_core.Either)
 module Infix_over = Infix_over_either (Preface_core.Either)
 module Syntax_over = Syntax_over_either (Preface_core.Either)
+module Select_from_monad = Select_from_monad_and_either (Preface_core.Either)

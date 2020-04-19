@@ -101,6 +101,11 @@ module Syntax_over
               with type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
   Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t
 
+module Select_from_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.Selective.CORE_WITH_SELECT
+    with type 'a t = 'a Monad.t
+     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
+
 (** {2 Giving [Either]} *)
 
 module Core_over_functor_and_either
@@ -147,3 +152,10 @@ module Syntax_over_either
     (Core : Preface_specs.Selective.CORE
               with type ('a, 'b) either = ('a, 'b) Either.t) :
   Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t
+
+module Select_from_monad_and_either
+    (Either : Preface_core.Requirements.EITHER)
+    (Monad : Preface_specs.MONAD) :
+  Preface_specs.Selective.CORE_WITH_SELECT
+    with type 'a t = 'a Monad.t
+     and type ('a, 'b) either = ('a, 'b) Either.t

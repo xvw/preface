@@ -88,6 +88,11 @@ module Monad = struct
   include M
 end
 
+module Selective =
+  Preface_make.Selective.Over_applicative
+    (Applicative)
+    (Preface_make.Selective.Select_from_monad (Monad))
+
 let eq f a b =
   let rec eq = function
     | ([], []) -> true

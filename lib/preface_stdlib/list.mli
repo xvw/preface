@@ -4,6 +4,7 @@
 
     - {!val:Functor}
     - {!val:Applicative}
+    - {!val:Selective}
     - {!val:Monad}
     - [Traversable] for {!val:Applicative} and {!val:Monad} *)
 
@@ -27,6 +28,12 @@ module Applicative : sig
   include Preface_specs.APPLICATIVE with type 'a t = 'a t
   (** {2 Applicative API} *)
 end
+
+(** {2 Selective API} *)
+module Selective :
+  Preface_specs.SELECTIVE
+    with type 'a t = 'a t
+     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 (** {2 Monad API}
 
