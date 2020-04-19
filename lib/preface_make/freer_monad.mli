@@ -1,16 +1,14 @@
-(** Modules for building {!Preface_specs.FREE_MONAD} modules. *)
+(** Modules for building {!Preface_specs.FREER_MONAD} modules. *)
 
 (** {1 Tutorial}
 
-    In order to be modular, [Preface] offers multiple way to build a
-    {!Preface_specs.FREE_MONAD}. In many case, you just have to use the
-    parametrized module {!Over_functor}, but in some particular cases, you want
-    to be able to create it from an [Applicative] or another [Monad]
+    [Preface] offers only one way to build a {!Preface_specs.FREER_MONAD}. You
+    just have to use the parametrized module {!Via_type}.
 
     {2 Basics}
 
-    The most common way to build a [Free_monad] is to use the module
-    {!Over_functor}.
+    The most common way to build a [Freer_monad] is to use the module
+    {!Via_type}.
 
     {2 A complete example}
 
@@ -30,27 +28,15 @@
         type 'a t =
           | Get of (string * (string option -> 'a))
           | Set of (string * string * (unit -> 'a))
-
-        module Functor = Preface_make.Functor.Via_map (struct
-          type nonrec 'a t = 'a t
-
-          let map f x =
-            match x with
-            | Get (k, r) -> Get (k, (fun s -> f (r s)))
-            | Set (k, v, r) -> Set (k, v, (fun () -> f (r ())))
-          ;;
-        end)
       end
     ]}
 
-    {3 Creating the [Free_monad]}
+    {3 Creating the [Freer_monad]}
 
     Thanks to the [Preface] library the corresponding [Free_monad] you be simply
     created using the parametric module `Over_functor`.
 
-    {[
-      module Store_free = Preface_make.Free_monad.Over_functor (Store.Functor)
-    ]}
+    {[ module Store_free = Preface_make.Freer_monad.Via_type (Store) ]}
 
     {3 Defining an interpeter}
 
@@ -78,7 +64,23 @@
       let set k v = Store_free.liftF (Store.Set (k, v, id)))
     ]}
 
-    {3 Using the [Free_monad]}
+    {3 Building the interpreter}
+
+    Therefor the [Freer_monad] requires an interpeter with the following type:
+
+    {[ type interpret = { interpreter : 'a. 'a Store.t -> 'a } ]}
+
+    Such interpreter shoud be created thanks to a function with an embedded let
+    which provides the more general type i.e. `'a. 'a Store.t -> 'a`.
+
+    {[
+      let interpreter l =
+        let i = runStore l in
+        Store_free.{ interpreter = i }
+      ;;
+    ]}
+
+    {3 Using the [Freer_monad]}
 
     Now we are able to define programs and run these programs. For the program
     creation since a [Free_monad] is a Preface [Monad], we can use langage
@@ -99,26 +101,16 @@
     {[
       let main =
         let l = ref [] in
-        Store_free.run (runStore l) program
+        Store_free.run (interpreter l) program
       ;;
     ]}
 
     {2 Conclusion}
 
-    [Preface] makes it possible to construct free monads in several different
-    ways. In addition, [liftF] and [run] capabilities are provided for the
-    interpretation layer. *)
+    [Preface] makes it possible to construct freer monads. In addition, [liftF]
+    and [run] capabilities are provided for the interpretation layer. *)
 
 (** {1 Constructors} *)
 
-(** Incarnation of a [Free_monad] from a [Functor] *)
-module Over_functor (F : Preface_specs.FUNCTOR) :
-  Preface_specs.FREE_MONAD with type 'a f = 'a F.t
-
-(** Incarnation of a [Free_monad] from an [Applicative] *)
-module Over_applicative (F : Preface_specs.APPLICATIVE) :
-  Preface_specs.FREE_MONAD with type 'a f = 'a F.t
-
-(** Incarnation of a [Free_monad] from a [Monad] *)
-module Over_monad (F : Preface_specs.MONAD) :
-  Preface_specs.FREE_MONAD with type 'a f = 'a F.t
+module Via_type (T : Preface_specs.Freer_monad.TYPE) :
+  Preface_specs.FREER_MONAD with type 'a f = 'a T.t
