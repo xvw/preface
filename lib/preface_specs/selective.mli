@@ -7,11 +7,11 @@
 module type CORE_WITH_SELECT = sig
   type 'a t
 
-  module Either : Preface_core.Requirements.EITHER
+  type ('a, 'b) either
 
   val pure : 'a -> 'a t
 
-  val select : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
+  val select : ('a, 'b) either t -> ('a -> 'b) t -> 'b t
 end
 
 (** Standard requirement. *)
@@ -25,11 +25,11 @@ end
 module type OPERATION = sig
   type 'a t
 
+  type ('a, 'b) either
+
   include Applicative.OPERATION with type 'a t := 'a t
 
-  module Either : Preface_core.Requirements.EITHER
-
-  val branch : ('a, 'b) Either.t t -> ('a -> 'c) t -> ('b -> 'c) t -> 'c t
+  val branch : ('a, 'b) either t -> ('a -> 'c) t -> ('b -> 'c) t -> 'c t
 
   val if_ : bool t -> 'a t -> 'a t -> 'a t
 
@@ -47,13 +47,13 @@ end
 module type INFIX = sig
   type 'a t
 
+  type ('a, 'b) either
+
   include Applicative.INFIX with type 'a t := 'a t
 
-  module Either : Preface_core.Requirements.EITHER
+  val ( <?* ) : ('a, 'b) either t -> ('a -> 'b) t -> 'b t
 
-  val ( <?* ) : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
-
-  val ( *?> ) : ('a -> 'b) t -> ('a, 'b) Either.t t -> 'b t
+  val ( *?> ) : ('a -> 'b) t -> ('a, 'b) either t -> 'b t
 
   val ( <||> ) : bool t -> bool t -> bool t
 
@@ -66,7 +66,8 @@ end
 module type API = sig
   include CORE
 
-  include OPERATION with type 'a t := 'a t and module Either := Either
+  include
+    OPERATION with type 'a t := 'a t and type ('a, 'b) either := ('a, 'b) either
 
   module Syntax : SYNTAX with type 'a t := 'a t
 
@@ -74,7 +75,7 @@ module type API = sig
 
   module Infix : INFIX with type 'a t := 'a t
 
-  include module type of Infix with module Either := Either
+  include module type of Infix with type ('a, 'b) either := ('a, 'b) either
 end
 
 (** {1 Bibliography}
