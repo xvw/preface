@@ -22,19 +22,16 @@ let runConsoleIO output = function
 ;;
 
 let runConsole output =
-  let rec loop_run = function
-    | IO.Return a -> a
-    | IO.Bind (intermediate, continuation) ->
-      loop_run (continuation (runConsoleIO output intermediate))
-  in
-  loop_run
+  let open IO in
+  let r c = runConsoleIO output c in
+  { run = r }
 ;;
 
 let write_hello () =
   let program = tell "Hello" in
   let output = ref [] in
   let expected = [ "Tell Hello" ]
-  and _ = runConsole output program in
+  and _ = IO.run (runConsole output) program in
   Alcotest.(check (list string)) "write hello" expected !output
 ;;
 
@@ -43,7 +40,7 @@ let write_hello_alice () =
   let program = tell "Hello" >> tell "Alice" in
   let output = ref [] in
   let expected = [ "Tell Hello"; "Tell Alice" ]
-  and _ = runConsole output program in
+  and _ = IO.run (runConsole output) program in
   Alcotest.(check (list string)) "write Hello Alice" expected !output
 ;;
 
@@ -51,7 +48,7 @@ let read_alice () =
   let program = ask "Alice" in
   let output = ref [] in
   let expected = [ "Ask Alice?" ]
-  and _ = runConsole output program in
+  and _ = IO.run (runConsole output) program in
   Alcotest.(check (list string)) "read alice" expected !output
 ;;
 
@@ -63,7 +60,7 @@ let read_alice_and_wonderland () =
   in
   let output = ref [] in
   let expected = [ "Ask Alice?"; "Ask Wonderland?" ]
-  and _ = runConsole output program in
+  and _ = IO.run (runConsole output) program in
   Alcotest.(check (list string)) "read alice" expected !output
 ;;
 
@@ -75,7 +72,7 @@ let read_alice_write_it () =
   in
   let output = ref [] in
   let expected = [ "Ask Alice?"; "Tell Alice" ]
-  and _ = runConsole output program in
+  and _ = IO.run (runConsole output) program in
   Alcotest.(check (list string)) "read alice and write it" expected !output
 ;;
 
@@ -88,7 +85,7 @@ let read_alice_write_hello_alice () =
   in
   let output = ref [] in
   let expected = [ "Ask Alice?"; "Tell Hello"; "Tell Alice" ]
-  and _ = runConsole output program in
+  and _ = IO.run (runConsole output) program in
   Alcotest.(check (list string))
     "read Alice and write Hello Alice" expected !output
 ;;

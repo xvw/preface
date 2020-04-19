@@ -85,19 +85,22 @@
     extensions like [let*] for a syntetic and expressive program definition. For
     this purpose, the corresponding module should be opened.
 
-    Finally the interpreter can be executed with the [run] functions defined in
-    the generated [Free_monad] module.
-
     {[
       let program =
         let open Store_free.Syntax in
         let* () = set "k1" "v1" in
         get "k1"
       ;;
+    ]}
 
+    Finally the interpreter can be executed with the [run] functions defined in
+    the generated [Free_monad] module.
+
+    {[
+      let main =
+        let l = ref [] in
+        Store_free.run (runStore l) program
       ;;
-      let l = ref [] in
-      Store_free.run (runStore l) program
     ]}
 
     {2 Conclusion}

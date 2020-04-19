@@ -64,31 +64,28 @@
       let set k v = Store_free.liftF (Store.Set (k, v, id)))
     ]}
 
-    {3 Executing the interpreter}
+    {3 Building the interpreter}
 
-    The execution should be defined for each interpreter even if the loop seems
-    to be the same. The general mecanism is defined by the following function:
+    Therefor the [Freer_monad] requires an interpeter with the following type:
+
+    {[ type interpret = { run : 'a. 'a Store.t -> 'a } ]}
+
+    Such interpreter shoud be created thanks to a function with an embedded let
+    which provides the more general type i.e. `'a. 'a Store.t -> 'a`.
 
     {[
-      let run l =
-        let rec loop_run = function
-          | IO.Return a -> a
-          | IO.Bind (intermediate, continuation) ->
-            loop_run (continuation (runStore l intermediate))
-        in
-        loop_run
+      let interpreter l =
+        let r = runStore l in
+        Store_free.{ run = r }
       ;;
     ]}
 
-    {3 Using the [Freer_monad] and the corresponding execution}
+    {3 Using the [Freer_monad]}
 
     Now we are able to define programs and run these programs. For the program
     creation since a [Free_monad] is a Preface [Monad], we can use langage
     extensions like [let*] for a syntetic and expressive program definition. For
     this purpose, the corresponding module should be opened.
-
-    Finally the interpreter can be defines in order to execute given program
-    with a specific interpreter.
 
     {[
       let program =
@@ -96,16 +93,22 @@
         let* () = set "k1" "v1" in
         get "k1"
       ;;
+    ]}
 
+    Finally the interpreter can be executed with the [run] functions defined in
+    the generated [Free_monad] module.
+
+    {[
+      let main =
+        let l = ref [] in
+        Store_free.run (interpreter l) program
       ;;
-      let l = ref [] in
-      run l program
     ]}
 
     {2 Conclusion}
 
-    [Preface] makes it possible to construct freer monads but the execution
-    should be provided. *)
+    [Preface] makes it possible to construct freer monads. In addition, [liftF]
+    and [run] capabilities are provided for the interpretation layer. *)
 
 (** {1 Constructors} *)
 

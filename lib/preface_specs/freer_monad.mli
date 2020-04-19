@@ -20,6 +20,12 @@ module type CORE = sig
 
   val liftF : 'a f -> 'a t
   (** Create a new ['a t] from a ['a f]. *)
+
+  type interpreter = { run : 'a. 'a f -> 'a }
+  (** Interpreter type *)
+
+  val run : interpreter -> 'a t -> 'a
+  (** Execute a given interpret for given data *)
 end
 
 (** {1 API} *)

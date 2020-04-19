@@ -3,11 +3,22 @@ open Preface_core.Fun.Infix
 module Via_type (Type : Preface_specs.Freer_monad.TYPE) = struct
   type 'a f = 'a Type.t
 
-  type 'a t =
+  type _ t =
     | Return : 'a -> 'a t
     | Bind : 'b f * ('b -> 'a t) -> 'a t
 
   let liftF f = Bind (f, (fun a -> Return a))
+
+  type interpreter = { run : 'a. 'a f -> 'a }
+
+  let run interpreter =
+    let rec loop_run = function
+      | Return a -> a
+      | Bind (intermediate, continuation) ->
+        loop_run (continuation (interpreter.run intermediate))
+    in
+    loop_run
+  ;;
 
   module Functor = Functor.Via_map (struct
     type nonrec 'a t = 'a t
