@@ -5,6 +5,7 @@ let () =
     @ Option_test.test_cases
     @ List_test.test_cases
     @ Try_test.test_cases
+    @ State_test.test_cases
     @ Validation_test.test_cases
     @ List_applicative_traversable_option_test.test_cases
     @ List_monad_traversable_option_test.test_cases
