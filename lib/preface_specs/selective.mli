@@ -44,11 +44,23 @@ module type OPERATION = sig
   val if_ : bool t -> 'a t -> 'a t -> 'a t
   (** Same of [branch] but using a [Boolean] as disjunction. *)
 
+  val bind_bool : bool t -> (bool -> 'a t) -> 'a t
+  (** [Monad.bin] specialized for Boolean. *)
+
   val when_ : bool t -> unit t -> unit t
   (** Conditionnally perform an effect. *)
 
-  val while_ : bool t -> unit t
-  (** Check an effectful computation while it is holds. *)
+  val any : ('a -> bool t) -> 'a list -> bool t
+  (** Selective version of [List.exists]. *)
+
+  val all : ('a -> bool t) -> 'a list -> bool t
+  (** Selective version of [List.for_all]. *)
+
+  val or_ : bool t -> bool t -> bool t
+  (** Or combinator. *)
+
+  val and_ : bool t -> bool t -> bool t
+  (** And combinator. *)
 end
 
 (** Syntax extensions. *)
@@ -74,10 +86,10 @@ module type INFIX = sig
   (** Flipped infix version of {!val:CORE.select}. *)
 
   val ( <||> ) : bool t -> bool t -> bool t
-  (** Or combinator. *)
+  (** Infix version of {!val:CORE.or_}. *)
 
   val ( <&&> ) : bool t -> bool t -> bool t
-  (** And combinator. *)
+  (** Infix version of {!val:CORE.and_}. *)
 end
 
 (** {1 API} *)

@@ -61,9 +61,25 @@ module Operation_over_either
       (map constant if_true) (map constant unless)
   ;;
 
+  let bind_bool x f = if_ x (f false) (f true)
+
   let when_ predicate action = if_ predicate action (Core.pure ())
 
-  let rec while_ action = when_ action (while_ action)
+  let or_ left right = if_ left (Core.pure true) right
+
+  let and_ left right = if_ left right (Core.pure false)
+
+  let any predicate list =
+    List.fold_left
+      (fun acc elt -> or_ acc (predicate elt))
+      (Core.pure true) list
+  ;;
+
+  let all predicate list =
+    List.fold_left
+      (fun acc elt -> and_ acc (predicate elt))
+      (Core.pure true) list
+  ;;
 end
 
 module Infix_over_either
@@ -84,9 +100,9 @@ module Infix_over_either
 
   let ( *?> ) f x = x <?* f
 
-  let ( <||> ) left right = Operation.if_ left (Core.pure true) right
+  let ( <||> ) = Operation.or_
 
-  let ( <&&> ) left right = Operation.if_ left right (Core.pure false)
+  let ( <&&> ) = Operation.and_
 end
 
 module Syntax_over_either
