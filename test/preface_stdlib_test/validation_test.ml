@@ -152,6 +152,87 @@ let validation_formlet_invalid4 () =
     "Should be invalid" expected computed
 ;;
 
+module Shape = struct
+  (* Implementation of Validation's test from:
+     https://github.com/snowleopard/selective/blob/master/examples/Validation.hs
+  *)
+
+  type radius = int
+
+  type width = int
+
+  type height = int
+
+  type shape =
+    | Circle of radius
+    | Rectangle of (width * height)
+
+  let eq l r =
+    match (l, r) with
+    | (Circle x, Circle y) -> x = y
+    | (Rectangle (w, h), Rectangle (w2, h2)) -> w = w2 && h = h2
+    | _ -> false
+  ;;
+
+  let pp ppf = function
+    | Circle x -> Format.fprintf ppf "Circle(%d)" x
+    | Rectangle (w, h) -> Format.fprintf ppf "Rectangle(%d, %d)" w h
+  ;;
+
+  exception Fail of string
+
+  let circle r = Circle r
+
+  let rectangle w h = Rectangle (w, h)
+
+  let make choice r w h =
+    Selective.(if_ choice (circle <$> r) (rectangle <$> w <*> h))
+  ;;
+end
+
+let testable = Alcotest.testable (pp Shape.pp) (eq Shape.eq)
+
+let validation_shape_1 () =
+  let expected = Ok (Shape.circle 1)
+  and computed =
+    Shape.make (Ok true) (Ok 1)
+      (Error [ Shape.Fail "width" ])
+      (Error [ Shape.Fail "height" ])
+  in
+  Alcotest.check testable "Should be a valid circle" expected computed
+;;
+
+let validation_shape_2 () =
+  let expected = Ok (Shape.rectangle 2 3)
+  and computed =
+    Shape.make (Ok false) (Error [ Shape.Fail "radius" ]) (Ok 2) (Ok 3)
+  in
+  Alcotest.check testable "Should be a valid rectangle" expected computed
+;;
+
+let validation_shape_3 () =
+  let expected = Error [ Shape.Fail "height" ]
+  and computed =
+    Shape.make (Ok false)
+      (Error [ Shape.Fail "radius" ])
+      (Ok 2)
+      (Error [ Shape.Fail "height" ])
+  in
+  Alcotest.check testable "Should be a invalid with height" expected computed
+;;
+
+let validation_shape_4 () =
+  let expected = Error [ Shape.Fail "width"; Shape.Fail "height" ]
+  and computed =
+    Shape.make (Ok false)
+      (Error [ Shape.Fail "radius" ])
+      (Error [ Shape.Fail "width" ])
+      (Error [ Shape.Fail "height" ])
+  in
+  Alcotest.check testable "Should be invalid with width and height" expected
+    computed
+;;
+
 let test_cases =
   [
     ("Validation Functor", Functor_test.cases)
@@ -170,6 +251,12 @@ let test_cases =
           validation_formlet_invalid3
       ; test_case "Simple validation with failure (everything is bad)" `Quick
           validation_formlet_invalid4
+      ; test_case "Simple validation of Circle" `Quick validation_shape_1
+      ; test_case "Simple validation of Rectangle" `Quick validation_shape_2
+      ; test_case "Simple validation of Rectangle with one failure" `Quick
+          validation_shape_3
+      ; test_case "Simple validation of Rectangle with two failures" `Quick
+          validation_shape_4
       ] )
   ]
 ;;

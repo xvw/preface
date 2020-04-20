@@ -25,6 +25,26 @@ module Applicative = Preface_make.Applicative.Via_apply (struct
   ;;
 end)
 
+module Selective =
+  Preface_make.Selective.Over_applicative
+    (Applicative)
+    (struct
+      type nonrec 'a t = 'a t
+
+      type ('a, 'b) either = ('a, 'b) Preface_core.Either.t =
+        | Left of 'a
+        | Right of 'b
+
+      let pure = pure
+
+      let select either f =
+        match either with
+        | Ok (Left a) -> Applicative.map (( |> ) a) f
+        | Ok (Right b) -> Ok b
+        | Error e -> Error e
+      ;;
+    end)
+
 module Monad = Preface_make.Monad.Via_bind (struct
   type nonrec 'a t = 'a t
 
@@ -40,14 +60,11 @@ let case f g = function Ok x -> f x | Error exns -> g exns
 let eq f a b =
   match (a, b) with
   | (Ok x, Ok y) -> f x y
-  | (Error xs, Error ys) ->
-    List.eq (fun x y -> Printexc.(exn_slot_id x = exn_slot_id y)) xs ys
+  | (Error xs, Error ys) -> List.eq Exn.eq xs ys
   | _ -> false
 ;;
 
 let pp pp' formater = function
-  | Error exn ->
-    let exn_str = List.Functor.map Printexc.to_string exn in
-    Format.(fprintf formater "Error %a" (List.pp pp_print_string) exn_str)
+  | Error exn -> Format.(fprintf formater "Error %a" (List.pp Exn.pp) exn)
   | Ok x -> Format.fprintf formater "Ok (%a)" pp' x
 ;;
