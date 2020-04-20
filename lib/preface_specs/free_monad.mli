@@ -13,7 +13,7 @@ module type CORE = sig
     | Return of 'a
     | Bind of 'a t f
 
-  val liftF : 'a f -> 'a t
+  val perform : 'a f -> 'a t
   (** Create a new ['a t] from a ['a f]. *)
 
   val run : ('a f -> 'a) -> 'a t -> 'a
