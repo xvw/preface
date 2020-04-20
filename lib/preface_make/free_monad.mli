@@ -70,12 +70,12 @@
     Now we propose two operations i.e. [set] and [get]. This operations are
     reified thanks to the ADT definition. Reification here means a [set] (resp.
     [get]) operation is denoted by the constructor [Set] (resp. [Get]) using to
-    the [liftF] function which creates a data of the [Free_monad] from a data of
-    the [Functor].
+    the [perform] function which creates a data of the [Free_monad] from a data
+    of the [Functor].
 
     {[
-      let get k = Store_free.liftF (Store.Get (k, id))
-      let set k v = Store_free.liftF (Store.Set (k, v, id)))
+      let get k = Store_free.perform (Store.Get (k, id))
+      let set k v = Store_free.perform (Store.Set (k, v, id)))
     ]}
 
     {3 Using the [Free_monad]}
@@ -106,7 +106,7 @@
     {2 Conclusion}
 
     [Preface] makes it possible to construct free monads in several different
-    ways. In addition, [liftF] and [run] capabilities are provided for the
+    ways. In addition, [perform] and [run] capabilities are provided for the
     interpretation layer. *)
 
 (** {1 Constructors} *)

@@ -18,9 +18,9 @@ end
 
 module IO = Preface_make.Free_monad.Over_functor (ConsoleIO.Functor)
 
-let tell x = IO.liftF (ConsoleIO.Tell (x, id))
+let tell x = IO.perform (ConsoleIO.Tell (x, id))
 
-let ask s = IO.liftF (ConsoleIO.Ask (s, id))
+let ask s = IO.perform (ConsoleIO.Ask (s, id))
 
 let runConsoleIO output = function
   | ConsoleIO.Tell (s, k) ->

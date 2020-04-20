@@ -18,11 +18,11 @@ module type CORE = sig
     | Return : 'a -> 'a t
     | Bind : 'b f * ('b -> 'a t) -> 'a t
 
-  val liftF : 'a f -> 'a t
-  (** Create a new ['a t] from a ['a f]. *)
-
   type interpreter = { interpreter : 'a. 'a f -> 'a }
-  (** Interpreter type *)
+  (** The interpreter type *)
+
+  val perform : 'a f -> 'a t
+  (** Create a new ['a t] from a ['a f]. *)
 
   val run : interpreter -> 'a t -> 'a
   (** Execute a given interpret for given data *)

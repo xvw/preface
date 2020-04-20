@@ -5,7 +5,7 @@ module Via_map (F : Preface_specs.Functor.CORE) = struct
     | Return of 'a
     | Bind of 'a t f
 
-  let liftF f = Bind (F.map (fun a -> Return a) f)
+  let perform f = Bind (F.map (fun a -> Return a) f)
 
   let run f =
     let rec loop_run = function
@@ -15,22 +15,19 @@ module Via_map (F : Preface_specs.Functor.CORE) = struct
     loop_run
   ;;
 
+  let rec map f = function
+    | Return v -> Return (f v)
+    | Bind f' -> Bind (F.map (map f) f')
+  ;;
+
   module Functor = Functor.Via_map (struct
     type nonrec 'a t = 'a t
 
-    let rec map f = function
-      | Return v -> Return (f v)
-      | Bind f' -> Bind (F.map (map f) f')
-    ;;
+    let map = map
   end)
 
   module Applicative = Applicative.Via_apply (struct
     type nonrec 'a t = 'a t
-
-    let rec map f = function
-      | Return v -> Return (f v)
-      | Bind f' -> Bind (F.map (map f) f')
-    ;;
 
     let pure a = Return a
 
