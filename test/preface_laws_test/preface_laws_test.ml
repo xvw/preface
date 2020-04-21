@@ -8,5 +8,6 @@ let () =
     @ List_test.cases
     @ Either_test.cases
     @ Continuation_test.cases
-    @ Stream_test.cases )
+    @ Stream_test.cases
+    @ State_test.cases )
 ;;

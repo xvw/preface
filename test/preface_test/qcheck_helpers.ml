@@ -92,6 +92,8 @@ module Gen = struct
   ;;
 
   let identity g = Obj.magic g
+
+  let state f state s = (f state, s)
 end
 
 module Arbitrary = struct
@@ -121,6 +123,11 @@ module Arbitrary = struct
 
   let stream l =
     let gen = Gen.stream (QCheck.gen l) in
+    QCheck.make gen
+  ;;
+
+  let state l =
+    let gen = Gen.state (QCheck.gen l) in
     QCheck.make gen
   ;;
 end
