@@ -60,6 +60,9 @@ module Gen : sig
   val stream : 'a t -> 'a Preface_stdlib.Stream.t t
   (** Generator for [Stream.t].*)
 
+  val state : ('a -> 'b) -> 'a -> ('c -> 'b * 'c)
+  (** Generator for [State.t].*)
+
   (** {2 Gen exception} *)
 
   exception A
@@ -94,6 +97,9 @@ module Arbitrary : sig
 
   val stream : 'a t -> 'a Preface_stdlib.Stream.t t
   (** Arbitrary for [Stream.t].*)
+
+  val state : 'a t -> ('b -> 'a * 'b) t
+  (** Arbitrary for [State.t].*)
 end
 
 (** {2 Helper as sample} *)
