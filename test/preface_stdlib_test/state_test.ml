@@ -14,8 +14,8 @@ let should_get_and_set_a_new_value () =
   let value = 42 in
   let program =
     let* v = get in
-    set @@ 1 + v
-    in
+    set @@ (1 + v)
+  in
   let expected = ((), value)
   and computed = program 41 in
   Alcotest.(check (pair unit int))
@@ -31,7 +31,7 @@ let should_modify_a_value () =
 ;;
 
 let should_set_and_modify_a_value () =
-  let open Monad.Syntax in
+  let open Monad in
   let value = 42 in
   let program =
     let* () = set 41 in
@@ -44,7 +44,7 @@ let should_set_and_modify_a_value () =
 ;;
 
 let should_get_set_and_modify_a_value () =
-  let open Monad.Syntax in
+  let open Monad in
   let value = 42 in
   let program =
     let* v = get in
@@ -58,7 +58,7 @@ let should_get_set_and_modify_a_value () =
 ;;
 
 let should_set_modify_and_get_a_value () =
-  let open Monad.Syntax in
+  let open Monad in
   let value = 42 in
   let program =
     let* () = set 41 in
@@ -72,7 +72,7 @@ let should_set_modify_and_get_a_value () =
 ;;
 
 let should_get_modify_and_get_a_value () =
-  let open Monad.Syntax in
+  let open Monad in
   let value = 42 in
   let program =
     let* v = get in
