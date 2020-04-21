@@ -48,9 +48,9 @@
     proposed for state vectors.
 
     {[
-      let add v2 = State.(modify @@ Vector_2D.add v2)
+      let add v2 = State.modify (Vector_2D.add v2)
 
-      let mult k = State.(modify @@ Vector_2D.mult k)
+      let mult k = State.modify (Vector_2D.mult k)
     ]}
 
     Finally we can build simple program using monad syntax. This program takes a
@@ -66,12 +66,12 @@
             get
       ;;
 
-      let v = fst @@ program (1,0) (* v is the vector (9, 3) *)
+      let v = fst (program (1,0)) (* v is the vector (9, 3) *)
     ]} *)
 
 (** {1 Implementation} *)
 
-module Via_type (T : sig
+module Over (T : sig
   type t
 end) : sig
   (** {2 Types} *)

@@ -1,6 +1,6 @@
 open Preface_test
 
-include Preface_stdlib.State.Via_type (struct
+include Preface_stdlib.State.Over (struct
   type t = int
 end)
 

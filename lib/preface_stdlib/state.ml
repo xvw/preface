@@ -1,4 +1,4 @@
-module Via_type (T : sig
+module Over (T : sig
   type t
 end) =
 struct

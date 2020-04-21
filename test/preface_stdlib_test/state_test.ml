@@ -1,4 +1,4 @@
-open Preface_stdlib.State.Via_type (struct
+open Preface_stdlib.State.Over (struct
   type t = int
 end)
 
@@ -14,7 +14,7 @@ let should_get_and_set_a_new_value () =
   let value = 42 in
   let program =
     let* v = get in
-    set @@ (1 + v)
+    set @@ 1 + v
   in
   let expected = ((), value)
   and computed = program 41 in
@@ -24,7 +24,7 @@ let should_get_and_set_a_new_value () =
 
 let should_modify_a_value () =
   let value = 42 in
-  let program = modify (( + ) 1) in
+  let program = modify @@ ( + ) 1 in
   let expected = ((), value)
   and computed = program 41 in
   Alcotest.(check (pair unit int)) "Should modify the value" expected computed
@@ -35,7 +35,7 @@ let should_set_and_modify_a_value () =
   let value = 42 in
   let program =
     let* () = set 41 in
-    modify (( + ) 1)
+    modify @@ ( + ) 1
   in
   let expected = ((), value)
   and computed = program 0 in
@@ -48,8 +48,8 @@ let should_get_set_and_modify_a_value () =
   let value = 42 in
   let program =
     let* v = get in
-    let* () = set (v + 1) in
-    modify (( + ) 1)
+    let* () = set @@ v + 1 in
+    modify @@ ( + ) 1
   in
   let expected = ((), value)
   and computed = program 40 in
@@ -62,7 +62,7 @@ let should_set_modify_and_get_a_value () =
   let value = 42 in
   let program =
     let* () = set 41 in
-    let* () = modify (( + ) 1) in
+    let* () = modify @@ ( + ) 1 in
     get
   in
   let expected = (value, value)
