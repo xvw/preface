@@ -93,7 +93,7 @@ module type INFIX = sig
   val ( <**> ) : 'a t -> ('a -> 'b) t -> 'b t
   (** Flipped applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 
-  val ( *> ) : unit t -> 'b t -> 'b t
+  val ( *> ) : unit t -> 'a t -> 'a t
   (** Discard the value of the first argument. *)
 
   val ( <* ) : 'a t -> unit t -> 'a t

@@ -19,6 +19,6 @@ module type EITHER = sig
   val map_right : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
   (** Mapping over the second value of the disjonction. *)
 
-  val case : ('a, 'b) t -> ('a -> 'c) -> ('b -> 'c) -> 'c
+  val case : ('a -> 'c) -> ('b -> 'c) -> ('a, 'b) t -> 'c
   (** Mapping over first or second value of the disjonction. *)
 end

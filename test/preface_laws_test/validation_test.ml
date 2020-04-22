@@ -24,11 +24,17 @@ module Validation_monad =
     (Qcheck_helpers.Sample.String)
     (Qcheck_helpers.Sample.Int)
     (Qcheck_helpers.Sample.String)
+module Validation_selective =
+  Selective_laws.Make_for_non_rigid (Selective) (Requirement)
+    (Qcheck_helpers.Sample.Int)
+    (Qcheck_helpers.Sample.String)
+    (Qcheck_helpers.Sample.Int)
 
 let cases =
   [
     Validation_functor.cases
   ; Validation_applicative.cases
   ; Validation_monad.cases
+  ; Validation_selective.cases
   ]
 ;;

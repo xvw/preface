@@ -64,31 +64,15 @@ let should_if_else_right () =
 let should_infix_select_left () =
   let open Either in
   let expected = pure 42
-  and computed = pure @@ left 40 <?* pure @@ ( + ) 2 in
+  and computed = pure @@ left 40 <*? pure @@ ( + ) 2 in
   Alcotest.(check (identity int)) "should_infix_select_left" expected computed
 ;;
 
 let should_infix_select_right () =
   let open Either in
   let expected = pure 42
-  and computed = pure @@ right 42 <?* pure @@ ( + ) 2 in
+  and computed = pure @@ right 42 <*? pure @@ ( + ) 2 in
   Alcotest.(check (identity int)) "should_infix_select_right" expected computed
-;;
-
-let should_swapped_infix_select_left () =
-  let open Either in
-  let expected = pure 42
-  and computed = (pure @@ ( + ) 2) *?> (pure @@ left 40) in
-  Alcotest.(check (identity int))
-    "should_swapped_infix_select_left" expected computed
-;;
-
-let should_swapped_infix_select_right () =
-  let open Either in
-  let expected = pure 42
-  and computed = (pure @@ ( + ) 2) *?> (pure @@ right 42) in
-  Alcotest.(check (identity int))
-    "should_swapped_infix_select_right" expected computed
 ;;
 
 let should_or_true_false () =
@@ -151,10 +135,6 @@ let selective_cases =
     ; test_case "If else right" `Quick should_if_else_right
     ; test_case "Infix select left" `Quick should_infix_select_left
     ; test_case "Infix select right" `Quick should_infix_select_right
-    ; test_case "Swapped infix select left" `Quick
-        should_swapped_infix_select_left
-    ; test_case "Swapped infix select right" `Quick
-        should_swapped_infix_select_right
     ; test_case "Or true false" `Quick should_or_true_false
     ; test_case "Or true true" `Quick should_or_true_true
     ; test_case "Or false false" `Quick should_or_false_false

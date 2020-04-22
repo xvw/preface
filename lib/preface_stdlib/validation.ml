@@ -39,7 +39,7 @@ module Selective =
 
       let select either f =
         match either with
-        | Ok (Left a) -> Applicative.map (( |> ) a) f
+        | Ok (Left a) -> Applicative.(( |> ) a <$> f)
         | Ok (Right b) -> Ok b
         | Error e -> Error e
       ;;

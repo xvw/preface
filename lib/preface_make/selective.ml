@@ -15,7 +15,7 @@ module Core_over_functor_and_either
   module Ap = struct
     type nonrec 'a t = 'a t
 
-    let pure = pure
+    let pure x = pure x
 
     let apply f x = select (map Either.left f) (map ( |> ) x)
   end
@@ -69,17 +69,23 @@ module Operation_over_either
 
   let and_ left right = if_ left right (Core.pure false)
 
-  let any predicate list =
-    List.fold_left
-      (fun acc elt -> or_ acc (predicate elt))
-      (Core.pure true) list
+  let exists predicate =
+    let rec aux_exists = function
+      | [] -> Core.pure false
+      | x :: xs -> if_ (predicate x) (Core.pure true) (aux_exists xs)
+    in
+    aux_exists
   ;;
 
-  let all predicate list =
-    List.fold_left
-      (fun acc elt -> and_ acc (predicate elt))
-      (Core.pure true) list
+  let for_all predicate =
+    let rec aux_for_all = function
+      | [] -> Core.pure true
+      | x :: xs -> if_ (predicate x) (aux_for_all xs) (Core.pure false)
+    in
+    aux_for_all
   ;;
+
+  let rec while_ action = when_ action (while_ action)
 end
 
 module Infix_over_either
@@ -96,13 +102,11 @@ module Infix_over_either
 
   type ('a, 'b) either = ('a, 'b) Either.t
 
-  let ( <?* ) = Core.select
+  let ( <*? ) e f = Core.select e f
 
-  let ( *?> ) f x = x <?* f
+  let ( <||> ) l r = Operation.or_ l r
 
-  let ( <||> ) = Operation.or_
-
-  let ( <&&> ) = Operation.and_
+  let ( <&&> ) l r = Operation.and_ l r
 end
 
 module Syntax_over_either
@@ -183,11 +187,10 @@ module Select_from_monad_and_either
 
   type ('a, 'b) either = ('a, 'b) Either.t
 
-  let pure = Monad.return
+  let pure x = Monad.return x
 
   let select xs fs =
-    let open Monad.Infix in
-    xs >>= (fun x -> Either.case x (fun a -> fs >|= (fun f -> f a)) pure)
+    Monad.Infix.(xs >>= Either.case (fun a -> fs >|= (fun f -> f a)) pure)
   ;;
 end
 

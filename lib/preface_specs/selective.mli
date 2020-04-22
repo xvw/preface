@@ -50,10 +50,10 @@ module type OPERATION = sig
   val when_ : bool t -> unit t -> unit t
   (** Conditionnally perform an effect. *)
 
-  val any : ('a -> bool t) -> 'a list -> bool t
+  val exists : ('a -> bool t) -> 'a list -> bool t
   (** Selective version of [List.exists]. *)
 
-  val all : ('a -> bool t) -> 'a list -> bool t
+  val for_all : ('a -> bool t) -> 'a list -> bool t
   (** Selective version of [List.for_all]. *)
 
   val or_ : bool t -> bool t -> bool t
@@ -61,6 +61,9 @@ module type OPERATION = sig
 
   val and_ : bool t -> bool t -> bool t
   (** And combinator. *)
+
+  val while_ : bool t -> unit t
+  (** Keep checking an effectful condition while it holds. *)
 end
 
 (** Syntax extensions. *)
@@ -79,11 +82,8 @@ module type INFIX = sig
   include Applicative.INFIX with type 'a t := 'a t
   (** Each [Selective] is also an [Applicative]. *)
 
-  val ( <?* ) : ('a, 'b) either t -> ('a -> 'b) t -> 'b t
+  val ( <*? ) : ('a, 'b) either t -> ('a -> 'b) t -> 'b t
   (** Infix version of {!val:CORE.select}. *)
-
-  val ( *?> ) : ('a -> 'b) t -> ('a, 'b) either t -> 'b t
-  (** Flipped infix version of {!val:CORE.select}. *)
 
   val ( <||> ) : bool t -> bool t -> bool t
   (** Infix version of {!val:CORE.or_}. *)
