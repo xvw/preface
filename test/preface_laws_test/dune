@@ -1,0 +1,3 @@
+(test
+ (name preface_laws_test)
+ (libraries alcotest preface.test preface.stdlib))

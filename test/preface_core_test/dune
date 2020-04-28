@@ -1,0 +1,3 @@
+(test
+ (name preface_core_test)
+ (libraries alcotest preface.core))

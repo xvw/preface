@@ -1,0 +1,4 @@
+(library
+ (name preface_core)
+ (public_name preface.core)
+ (modules_without_implementation requirements))
