@@ -1,6 +1,6 @@
 open Preface_core.Fun
 
-type ('a, 'b) t =
+type ('a, 'b) t = ('a, 'b) Preface_core.Either.t =
   | Left of 'a
   | Right of 'b
 
@@ -47,17 +47,9 @@ Preface_make.Monad.Via_bind (struct
   let bind f = function Right x -> f x | Left x -> Left x
 end)
 
-let left x = Left x
-
-let right = pure
-
-let map_left = Bifunctor.fst
-
-let map_right = Bifunctor.snd
-
-let map = Bifunctor.snd
-
-let map_both = Bifunctor.bimap
+include (
+  Preface_core.Either :
+    Preface_core.Requirements.EITHER with type ('a, 'b) t := ('a, 'b) t )
 
 let eq f g left right =
   match (left, right) with

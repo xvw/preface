@@ -24,5 +24,17 @@ module List_monad =
     (Qcheck_helpers.Sample.String)
     (Qcheck_helpers.Sample.Int)
     (Qcheck_helpers.Sample.String)
+module List_selective =
+  Selective_laws.Make_for_rigid (Selective) (Requirement)
+    (Qcheck_helpers.Sample.Int)
+    (Qcheck_helpers.Sample.String)
+    (Qcheck_helpers.Sample.Int)
 
-let cases = [ List_functor.cases; List_applicative.cases; List_monad.cases ]
+let cases =
+  [
+    List_functor.cases
+  ; List_applicative.cases
+  ; List_monad.cases
+  ; List_selective.cases
+  ]
+;;

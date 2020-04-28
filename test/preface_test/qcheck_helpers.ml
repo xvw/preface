@@ -108,12 +108,26 @@ module Arbitrary = struct
 
   let try_ l =
     let gen = Gen.try_ (QCheck.gen l) in
-    QCheck.make gen
+    let print =
+      l.QCheck.print
+      |> Option.map (fun ppl x ->
+             let open Preface_stdlib.Try in
+             let sub = Functor.(ppl <$> x) in
+             Format.asprintf "%a" (pp Format.pp_print_string) sub)
+    in
+    QCheck.make ?print gen
   ;;
 
   let validation l =
     let gen = Gen.validation (QCheck.gen l) in
-    QCheck.make gen
+    let print =
+      l.QCheck.print
+      |> Option.map (fun ppl x ->
+             let open Preface_stdlib.Validation in
+             let sub = Functor.(ppl <$> x) in
+             Format.asprintf "%a" (pp Format.pp_print_string) sub)
+    in
+    QCheck.make ?print gen
   ;;
 
   let continuation l =

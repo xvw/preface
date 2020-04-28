@@ -24,6 +24,11 @@ module Monad = Preface_make.Monad.Via_bind (struct
   let bind f = f
 end)
 
+module Selective =
+  Preface_make.Selective.Over_applicative
+    (Applicative)
+    (Preface_make.Selective.Select_from_monad (Monad))
+
 let eq f a b = f a b
 
 let pp pp' formater a = Format.fprintf formater "Identity (%a)" pp' a

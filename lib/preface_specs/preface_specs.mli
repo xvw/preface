@@ -42,7 +42,7 @@
 
 (** {1 Misc} *)
 
-module Requirements = Requirements
+module Requirements = Preface_core.Requirements
 
 (** {1 Full Interfaces}
 
@@ -100,5 +100,5 @@ module type FREER_MONAD = Freer_monad.API
 
 (** {1 Abstract data types} *)
 
-module type EITHER = Requirements.EITHER
+module type EITHER = Preface_core.Requirements.EITHER
 (** [EITHER] hold a types which represents values with two possibilites. *)

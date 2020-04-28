@@ -41,11 +41,11 @@ let to_validation = function Ok x -> Ok x | Error exn -> Error [ exn ]
 let eq f a b =
   match (a, b) with
   | (Ok x, Ok y) -> f x y
-  | (Error x, Error y) -> Printexc.(exn_slot_id x = exn_slot_id y)
+  | (Error x, Error y) -> Exn.eq x y
   | _ -> false
 ;;
 
 let pp pp' formater = function
-  | Error exn -> Format.fprintf formater "Error (%s)" (Printexc.to_string exn)
+  | Error exn -> Format.fprintf formater "Error (%a)" Exn.pp exn
   | Ok x -> Format.fprintf formater "Ok (%a)" pp' x
 ;;

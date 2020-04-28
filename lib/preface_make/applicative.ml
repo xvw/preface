@@ -49,11 +49,11 @@ module Infix
 
   let ( <*> ) = Core.apply
 
-  let ( <**> ) a f = f <*> a
+  let ( <**> ) a b = Operation.lift2 (fun x f -> f x) a b
 
-  let ( *> ) a b = Operation.lift2 const b a
+  let ( *> ) a b = Operation.lift2 (fun _x y -> y) a b
 
-  let ( <* ) a b = b *> a
+  let ( <* ) a b = Operation.lift2 const a b
 
   let ( <$ ) value x = Operation.replace value x
 
