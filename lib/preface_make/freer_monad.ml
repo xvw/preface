@@ -1,6 +1,6 @@
 open Preface_core.Fun.Infix
 
-module Over (Type : Preface_specs.Freer_monad.TYPE) = struct
+module Over (Type : Preface_specs.Types.T1) = struct
   type 'a f = 'a Type.t
 
   type _ t =

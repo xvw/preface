@@ -112,5 +112,5 @@
 
 (** {1 Constructors} *)
 
-module Over (T : Preface_specs.Freer_monad.TYPE) :
+module Over (T : Preface_specs.Types.T1) :
   Preface_specs.FREER_MONAD with type 'a f = 'a T.t
