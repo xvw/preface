@@ -1,4 +1,4 @@
-(** Basic types definition mainly used by [Freer_monad] and [Either] *)
+(** Signatures representing types. Mainly used as a functor parameter *)
 
 module type T0 = sig
   type t
