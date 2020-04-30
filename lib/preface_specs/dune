@@ -1,7 +1,6 @@
 (library
  (name preface_specs)
  (public_name preface.specs)
- (modules_without_implementation
-   preface_specs functor applicative selective monad comonad
-   traversable bifunctor free_monad freer_monad)
+ (modules_without_implementation preface_specs functor applicative selective
+   monad comonad traversable bifunctor free_monad freer_monad)
  (libraries preface.core))

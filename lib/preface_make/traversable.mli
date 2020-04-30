@@ -75,13 +75,13 @@
     Standard way to build a [Traversable]. *)
 
 (** Incarnation of [Traversable] using an [Applicative]. *)
-module Via_applicative
+module Over_applicative
     (A : Preface_specs.APPLICATIVE)
     (C : Preface_specs.Traversable.CORE with type 'a t = 'a A.t) :
   Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter
 
 (** Incarnation of [Traversable] using a [Monad]. *)
-module Via_monad
+module Over_monad
     (M : Preface_specs.MONAD)
     (C : Preface_specs.Traversable.CORE with type 'a t = 'a M.t) :
   Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter
@@ -101,7 +101,7 @@ module Via
   Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter
 
 (** Incarnation of [Traversable.Core] using an [Applicative]. *)
-module Core_via_applicative
+module Core_over_applicative
     (A : Preface_specs.APPLICATIVE)
     (C : Preface_specs.Traversable.CORE with type 'a t = 'a A.t) :
   Preface_specs.Traversable.CORE
@@ -109,7 +109,7 @@ module Core_via_applicative
      and type 'a iter = 'a C.iter
 
 (** Incarnation of [Traversable.Core] using a [Monad]. *)
-module Core_via_monad
+module Core_over_monad
     (M : Preface_specs.MONAD)
     (C : Preface_specs.Traversable.CORE with type 'a t = 'a M.t) :
   Preface_specs.Traversable.CORE

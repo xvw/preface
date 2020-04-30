@@ -78,7 +78,7 @@ module Infix
   let ( @> ) a b = b <@ a
 end
 
-module Make
+module Via
     (Core : Preface_specs.Comonad.CORE)
     (Operation : Preface_specs.Comonad.OPERATION with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Comonad.SYNTAX with type 'a t = 'a Core.t)

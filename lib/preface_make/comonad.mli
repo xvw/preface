@@ -115,7 +115,7 @@ module Via_cokleisli_composition
     (Core : Preface_specs.Comonad.CORE_WITH_COKLEISLI_COMPOSITION) :
   Preface_specs.COMONAD with type 'a t = 'a Core.t
 
-module Make
+module Via
     (Core : Preface_specs.Comonad.CORE)
     (Operation : Preface_specs.Comonad.OPERATION with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Comonad.SYNTAX with type 'a t = 'a Core.t)

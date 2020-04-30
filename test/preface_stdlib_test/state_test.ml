@@ -14,7 +14,7 @@ let should_get_and_set_a_new_value () =
   let value = 42 in
   let program =
     let* v = get in
-    set @@ 1 + v
+    set @@ (1 + v)
   in
   let expected = ((), value)
   and computed = program 41 in
@@ -48,7 +48,7 @@ let should_get_set_and_modify_a_value () =
   let value = 42 in
   let program =
     let* v = get in
-    let* () = set @@ v + 1 in
+    let* () = set @@ (v + 1) in
     modify @@ ( + ) 1
   in
   let expected = ((), value)

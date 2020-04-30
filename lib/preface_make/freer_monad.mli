@@ -36,7 +36,7 @@
     Thanks to the [Preface] library the corresponding [Free_monad] you be simply
     created using the parametric module `Over_functor`.
 
-    {[ module Store_free = Preface_make.Freer_monad.Via_type (Store) ]}
+    {[ module Store_free = Preface_make.Freer_monad.Over (Store) ]}
 
     {3 Defining an interpeter}
 
@@ -56,8 +56,8 @@
     Now we propose two operations i.e. [set] and [get]. This operations are
     reified thanks to the ADT definition. Reification here means a [set] (resp.
     [get]) operation is denoted by the constructor [Set] (resp. [Get]) using to
-    the [perform] function which creates a data of the [Free_monad] from a data of
-    the [Functor].
+    the [perform] function which creates a data of the [Free_monad] from a data
+    of the [Functor].
 
     {[
       let get k = Store_free.perform (Store.Get (k, id))
@@ -107,10 +107,10 @@
 
     {2 Conclusion}
 
-    [Preface] makes it possible to construct freer monads. In addition, [perform]
-    and [run] capabilities are provided for the interpretation layer. *)
+    [Preface] makes it possible to construct freer monads. In addition,
+    [perform] and [run] capabilities are provided for the interpretation layer. *)
 
 (** {1 Constructors} *)
 
-module Via_type (T : Preface_specs.Freer_monad.TYPE) :
+module Over (T : Preface_specs.Freer_monad.TYPE) :
   Preface_specs.FREER_MONAD with type 'a f = 'a T.t
