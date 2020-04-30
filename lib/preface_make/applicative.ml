@@ -101,7 +101,7 @@ module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) :
   include Infix
 end
 
-module Via_monad (Monad : Preface_specs.MONAD) :
+module Over_monad (Monad : Preface_specs.MONAD) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Monad.t = struct
   include Via_apply (struct
     type 'a t = 'a Monad.t

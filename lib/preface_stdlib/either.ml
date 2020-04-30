@@ -12,18 +12,14 @@ module Bifunctor = Preface_make.Bifunctor.Via_bimap (struct
   let bimap f g = function Left x -> Left (f x) | Right x -> Right (g x)
 end)
 
-module Functor (T : sig
-  type t
-end) =
+module Functor (T : Preface_specs.Types.T0) =
 Preface_make.Functor.Via_map (struct
   type nonrec 'a t = (T.t, 'a) t
 
   let map f x = Bifunctor.bimap id f x
 end)
 
-module Applicative (T : sig
-  type t
-end) =
+module Applicative (T : Preface_specs.Types.T0) =
 Preface_make.Applicative.Via_apply (struct
   module F = Functor (T)
 
@@ -36,10 +32,7 @@ Preface_make.Applicative.Via_apply (struct
   ;;
 end)
 
-module Monad (T : sig
-  type t
-end) =
-Preface_make.Monad.Via_bind (struct
+module Monad (T : Preface_specs.Types.T0) = Preface_make.Monad.Via_bind (struct
   type nonrec 'a t = (T.t, 'a) t
 
   let return = pure

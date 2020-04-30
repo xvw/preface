@@ -1,10 +1,7 @@
 open Preface_test
 include Preface_stdlib.Either
 
-module Requirement (T : sig
-  type t
-end) =
-struct
+module Requirement (T : Preface_specs.Types.T0) = struct
   type nonrec 'a t = (T.t, 'a) t
 
   let suite_name = "Either (with int as Left)"

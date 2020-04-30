@@ -1,7 +1,4 @@
-module Over (T : sig
-  type t
-end) =
-struct
+module Over (T : Preface_specs.Types.T0) = struct
   type state = T.t
 
   type 'a t = state -> 'a * state

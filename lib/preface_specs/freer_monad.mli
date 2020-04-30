@@ -5,10 +5,6 @@
 (** {1 Structure anatomy} *)
 
 (** Standard requirement. *)
-module type TYPE = sig
-  type 'a t
-end
-
 module type CORE = sig
   type 'a f
   (** The parametric type. *)

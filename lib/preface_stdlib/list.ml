@@ -37,7 +37,7 @@ module Applicative = struct
       ;;
     end
 
-    include Preface_make.Traversable.Via_applicative (A) (T)
+    include Preface_make.Traversable.Over_applicative (A) (T)
   end
 
   include A
@@ -82,7 +82,7 @@ module Monad = struct
       ;;
     end
 
-    include Preface_make.Traversable.Via_monad (M) (T)
+    include Preface_make.Traversable.Over_monad (M) (T)
   end
 
   include M

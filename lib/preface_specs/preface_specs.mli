@@ -43,6 +43,7 @@
 (** {1 Misc} *)
 
 module Requirements = Preface_core.Requirements
+module Types = Types
 
 (** {1 Full Interfaces}
 

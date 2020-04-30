@@ -6,7 +6,7 @@ module ConsoleIO = struct
     | Ask of (string * (string -> 'a))
 end
 
-module IO = Preface_make.Freer_monad.Via_type (ConsoleIO)
+module IO = Preface_make.Freer_monad.Over (ConsoleIO)
 
 let tell x = IO.perform (ConsoleIO.Tell (x, id))
 

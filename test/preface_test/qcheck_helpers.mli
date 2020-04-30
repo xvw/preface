@@ -60,7 +60,7 @@ module Gen : sig
   val stream : 'a t -> 'a Preface_stdlib.Stream.t t
   (** Generator for [Stream.t].*)
 
-  val state : ('a -> 'b) -> 'a -> ('c -> 'b * 'c)
+  val state : ('a -> 'b) -> 'a -> 'c -> 'b * 'c
   (** Generator for [State.t].*)
 
   (** {2 Gen exception} *)
