@@ -49,6 +49,8 @@ let fold_left f acc (x, xs) =
   List.fold_left f first xs
 ;;
 
+let reduce f (x, xs) = List.fold_left f x xs
+
 let fold_right f (x, xs) acc =
   let first = List.fold_right f xs acc in
   f x first

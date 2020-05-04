@@ -48,6 +48,9 @@ val map : ('a -> 'b) -> 'a t -> 'b t
 val mapi : (int -> 'a -> 'b) -> 'a t -> 'b t
 (** {!val:List.mapi} for non-empty list. *)
 
+val reduce : ('a -> 'a -> 'a) -> 'a t -> 'a
+(** [reduce f xs] reduce all value of [xs] into one. *)
+
 val fold_left : ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a
 (** {!val:List.fold_left} for non-empty list. *)
 
