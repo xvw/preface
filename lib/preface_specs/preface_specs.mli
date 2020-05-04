@@ -52,6 +52,9 @@ module Types = Types
 module Semigroup = Semigroup
 (** Describes an object than can be combined. *)
 
+module Monoid = Monoid
+(** Describes an object that can be combined and with a neutral element. *)
+
 module Functor = Functor
 (** Describes an object that can be mapped. *)
 
@@ -85,6 +88,8 @@ module Freer_monad = Freer_monad
     in uppercase). *)
 
 module type SEMIGROUP = Semigroup.API
+
+module type MONOID = Monoid.API
 
 module type FUNCTOR = Functor.API
 

@@ -21,7 +21,7 @@ module type OPERATION = sig
   (** [times n x] apply [concat] on [x] [n] times. If [n] is lower than [1] the
       function will returns [None]. *)
 
-  val reduce : t Preface_core.Nonempty_list.t -> t
+  val reduce_nel : t Preface_core.Nonempty_list.t -> t
   (** Reduce a [Nonempty_list.t] using [concat]. *)
 end
 

@@ -13,5 +13,6 @@ let () =
     @ Continuation_test.test_cases
     @ Free_monad_test.test_cases
     @ Freer_monad_test.test_cases
-    @ Semigroup_test.test_cases )
+    @ Semigroup_test.test_cases
+    @ Monoid_test.test_cases )
 ;;

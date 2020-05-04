@@ -10,7 +10,7 @@ module Operation (Core : Preface_specs.Semigroup.CORE) :
     else None
   ;;
 
-  let reduce list = Preface_core.Nonempty_list.reduce Core.concat list
+  let reduce_nel list = Preface_core.Nonempty_list.reduce Core.concat list
 end
 
 module Infix (Core : Preface_specs.Semigroup.CORE) :
