@@ -6,6 +6,7 @@ let () =
     @ Try_test.cases
     @ Validation_test.cases
     @ List_test.cases
+    @ Nonempty_list_test.cases
     @ Either_test.cases
     @ Continuation_test.cases
     @ Stream_test.cases

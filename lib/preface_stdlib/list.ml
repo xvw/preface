@@ -93,6 +93,15 @@ module Selective =
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
 
+module Monoid (T : Preface_specs.Types.T0) =
+Preface_make.Monoid.Via_concat_and_zero (struct
+  type nonrec t = T.t t
+
+  let combine l r = l @ r
+
+  let neutral = []
+end)
+
 let eq f a b =
   let rec eq = function
     | ([], []) -> true

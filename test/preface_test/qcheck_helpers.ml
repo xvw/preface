@@ -24,6 +24,10 @@ module type ALCOTEST_SUITE = sig
   val cases : string * unit Alcotest.test_case list
 end
 
+let rec fold f acc i = if i = 0 then acc else fold f (f acc i) (i - 1)
+
+module Nel = Preface_core.Nonempty_list
+
 module Gen = struct
   type 'a t = 'a QCheck.Gen.t
 
@@ -37,6 +41,15 @@ module Gen = struct
     let open Preface_stdlib.Either in
     if prob < distribution then Left (f_left state) else Right (f_right state)
   ;;
+
+  let nonempty_list_size size gen st =
+    let init = Nel.Last (gen st) in
+    fold (fun acc _ -> Nel.(gen st :: acc)) init (size st)
+  ;;
+
+  let nonempty_list g s = nonempty_list_size QCheck.Gen.nat g s
+
+  let small_nonempty_list g s = nonempty_list_size QCheck.Gen.small_nat g s
 
   let continuation f state = Preface_stdlib.Continuation.pure (f state)
 
@@ -132,6 +145,11 @@ module Arbitrary = struct
 
   let continuation l =
     let gen = Gen.continuation (QCheck.gen l) in
+    QCheck.make gen
+  ;;
+
+  let nonempty_list l =
+    let gen = Gen.small_nonempty_list (QCheck.gen l) in
     QCheck.make gen
   ;;
 

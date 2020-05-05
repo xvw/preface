@@ -19,19 +19,16 @@ module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
 (** {2 Bifunctor API} *)
 
 (** {2 Functor API} *)
-module Functor (T : sig
-  type t
-end) : Preface_specs.FUNCTOR with type 'a t = (T.t, 'a) Bifunctor.t
+module Functor (T : Preface_specs.Types.T0) :
+  Preface_specs.FUNCTOR with type 'a t = (T.t, 'a) Bifunctor.t
 
 (** {2 Applicative API} *)
-module Applicative (T : sig
-  type t
-end) : Preface_specs.APPLICATIVE with type 'a t = (T.t, 'a) Bifunctor.t
+module Applicative (T : Preface_specs.Types.T0) :
+  Preface_specs.APPLICATIVE with type 'a t = (T.t, 'a) Bifunctor.t
 
 (** {2 Monad API} *)
-module Monad (T : sig
-  type t
-end) : Preface_specs.MONAD with type 'a t = (T.t, 'a) Bifunctor.t
+module Monad (T : Preface_specs.Types.T0) :
+  Preface_specs.MONAD with type 'a t = (T.t, 'a) Bifunctor.t
 
 (** {1 Helpers} *)
 

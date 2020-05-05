@@ -49,6 +49,12 @@ module Types = Types
 
     Each objects, packed with requirements and API. *)
 
+module Semigroup = Semigroup
+(** Describes an object than can be combined. *)
+
+module Monoid = Monoid
+(** Describes an object that can be combined and with a neutral element. *)
+
 module Functor = Functor
 (** Describes an object that can be mapped. *)
 
@@ -80,6 +86,10 @@ module Freer_monad = Freer_monad
 
     Shortcuts for the API of each objects (by convention, OCaml module types are
     in uppercase). *)
+
+module type SEMIGROUP = Semigroup.API
+
+module type MONOID = Monoid.API
 
 module type FUNCTOR = Functor.API
 

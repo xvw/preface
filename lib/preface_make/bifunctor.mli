@@ -2,7 +2,7 @@
 
 (** {2 Construction}
 
-    Standard way to build a [Bifunctor Functor]. *)
+    Standard way to build a [Bifunctor]. *)
 
 (** Incarnation of a [Bifunctor] with [bimap]. *)
 module Via_bimap (Core : Preface_specs.Bifunctor.CORE_WITH_BIMAP) :
