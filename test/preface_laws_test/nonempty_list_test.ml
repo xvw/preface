@@ -6,7 +6,7 @@ module Requirement = struct
 
   let suite_name = "Nonempty_list"
 
-  let arbitrary x = QCheck.(pair x (small_list x))
+  let arbitrary x = Qcheck_helpers.Arbitrary.nonempty_list x
 end
 
 module Nonempty_list_functor =
@@ -31,6 +31,7 @@ module Nonempty_list_selective =
     (Qcheck_helpers.Sample.Int)
 
 let cases =
+  let open List in
   [
     Nonempty_list_functor.cases
   ; Nonempty_list_applicative.cases

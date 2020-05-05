@@ -1,3 +1,5 @@
+module N = Preface_core.Nonempty_list
+
 module S = Preface_make.Semigroup.Via_concat (struct
   type t = string
 
@@ -48,25 +50,25 @@ let int_times_2 () =
 
 let string_reduce_nel_1 () =
   let expected = "FooBarOCamlPreface"
-  and computed = S.reduce_nel ("Foo", [ "Bar"; "OCaml"; "Preface" ]) in
+  and computed = S.reduce_nel N.("Foo" :: "Bar" :: "OCaml" :: Last "Preface") in
   Alcotest.(check string) "string_reduce_nel_1" expected computed
 ;;
 
 let string_reduce_nel_2 () =
   let expected = "Foo"
-  and computed = S.reduce_nel ("Foo", []) in
+  and computed = S.reduce_nel N.(Last "Foo") in
   Alcotest.(check string) "string_reduce_nel_2" expected computed
 ;;
 
 let int_reduce_nel_1 () =
   let expected = 10
-  and computed = I.reduce_nel (0, [ 1; 2; 3; 4 ]) in
+  and computed = I.reduce_nel N.(0 :: 1 :: 2 :: 3 :: Last 4) in
   Alcotest.(check int) "int_reduce_nel_1" expected computed
 ;;
 
 let int_reduce_nel_2 () =
   let expected = 10
-  and computed = I.reduce_nel (10, []) in
+  and computed = I.reduce_nel N.(Last 10) in
   Alcotest.(check int) "int_reduce_nel_2" expected computed
 ;;
 

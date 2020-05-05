@@ -3,7 +3,9 @@
 
 (** {1 Types} *)
 
-type 'a t = 'a * 'a list
+type 'a t =
+  | Last of 'a
+  | ( :: ) of ('a * 'a t)
 
 (** {1 API} *)
 
@@ -19,7 +21,7 @@ val to_list : 'a t -> 'a list
 val hd : 'a t -> 'a
 (** Returns the head of a non-empty list. *)
 
-val tl : 'a t -> 'a list
+val tl : 'a t -> 'a t option
 (** Returns the tail of a non-empty list. *)
 
 val length : 'a t -> int
@@ -28,8 +30,14 @@ val length : 'a t -> int
 val cons : 'a -> 'a t -> 'a t
 (** [cons x xs] is add [x] as head of [xs]. *)
 
+val append : 'a t -> 'a t -> 'a t
+(** [append a b] concat [a] and [b]. *)
+
 val rev : 'a t -> 'a t
 (** [rev xs] reverse [xs]. *)
+
+val rev_append : 'a t -> 'a t -> 'a t
+(** [rev_append a b] is a tail-recursive version of [append (rev a) b]. *)
 
 val flatten : 'a t t -> 'a t
 (** Concat a non-empty list of non-empty list *)

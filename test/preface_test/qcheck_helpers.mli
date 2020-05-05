@@ -41,6 +41,15 @@ module Gen : sig
     ?distribution:float -> 'a t -> 'b t -> ('a, 'b) Preface_stdlib.Either.t t
   (** Generator for [Either.t]. *)
 
+  val nonempty_list_size : int t -> 'a t -> 'a Preface_core.Nonempty_list.t t
+  (** Generator of [Nonempty_list.t]. *)
+
+  val nonempty_list : 'a t -> 'a Preface_core.Nonempty_list.t t
+  (** Generator of [Nonempty_list.t] with natural size. *)
+
+  val small_nonempty_list : 'a t -> 'a Preface_core.Nonempty_list.t t
+  (** Generator of [Nonempty_list.t] with small natural size. *)
+
   val try_ : ?distribution:float -> 'a t -> 'a Preface_stdlib.Try.t t
   (** Generator for [Try.t]. *)
 
@@ -85,6 +94,9 @@ module Arbitrary : sig
 
   val either : 'a t -> 'b t -> ('a, 'b) Preface_stdlib.Either.t t
   (** Arbitrary for [Either.t]. *)
+
+  val nonempty_list : 'a t -> 'a Preface_core.Nonempty_list.t t
+  (** Arbitrary for [Nonempty_list.t]. *)
 
   val try_ : 'a t -> 'a Preface_stdlib.Try.t t
   (** Arbitrary for [Try.t]. *)
