@@ -30,12 +30,12 @@ module Monoid (M : Preface_specs.MONOID) =
 Preface_make.Monoid.Via_concat_and_zero (struct
   type nonrec t = M.t t
 
-  let zero = None
+  let neutral = None
 
-  let concat x y =
+  let combine x y =
     match (x, y) with
     | (None, result) | (result, None) -> result
-    | (Some a, Some b) -> Some (M.concat a b)
+    | (Some a, Some b) -> Some (M.combine a b)
   ;;
 end)
 

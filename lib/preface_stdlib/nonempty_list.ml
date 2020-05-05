@@ -97,5 +97,5 @@ module Semigroup (T : Preface_specs.Types.T0) :
 Preface_make.Semigroup.Via_concat (struct
   type nonrec t = T.t t
 
-  let concat = append
+  let combine = append
 end)

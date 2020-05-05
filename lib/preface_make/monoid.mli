@@ -7,7 +7,7 @@
 (** Incarnation of a [Monoid] over a [Semigroup] with [zero]. *)
 module Over_semigroup
     (S : Preface_specs.SEMIGROUP)
-    (M : Preface_specs.Monoid.ZERO with type t = S.t) :
+    (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
   Preface_specs.MONOID with type t = S.t
 
 (** Incarnation of a [Monoid] with [concat] and [zero]. *)
@@ -30,7 +30,7 @@ module Via
 (** Incarnation of a [Monoid.Core] over a [Semigroup] with [zero]. *)
 module Core_over_semigroup
     (S : Preface_specs.SEMIGROUP)
-    (M : Preface_specs.Monoid.ZERO with type t = S.t) :
+    (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
   Preface_specs.Monoid.CORE with type t = M.t
 
 (** Incarnation of a [Monoid.Operation] using [Monoid.Core]. *)

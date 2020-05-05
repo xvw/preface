@@ -3,17 +3,17 @@ module N = Preface_core.Nonempty_list
 module S = Preface_make.Monoid.Via_concat_and_zero (struct
   type t = string
 
-  let concat = ( ^ )
+  let combine = ( ^ )
 
-  let zero = ""
+  let neutral = ""
 end)
 
 module I = Preface_make.Monoid.Via_concat_and_zero (struct
   type t = int
 
-  let concat = ( + )
+  let combine = ( + )
 
-  let zero = 0
+  let neutral = 0
 end)
 
 let string_concat () =

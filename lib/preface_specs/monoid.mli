@@ -4,11 +4,11 @@
     {1 Structure anatomy} *)
 
 (** A type [t] with a neutral element. *)
-module type ZERO = sig
+module type NEUTRAL = sig
   type t
   (** A type [t] which is a [Monoid]. *)
 
-  val zero : t
+  val neutral : t
   (** The neutral element of the [monoid]. *)
 end
 
@@ -16,7 +16,7 @@ end
 module type CORE = sig
   include Semigroup.CORE
 
-  include ZERO with type t := t
+  include NEUTRAL with type t := t
 end
 
 (** Operations *)

@@ -5,19 +5,19 @@ module Operation (Core : Preface_specs.Semigroup.CORE) :
   let times n x =
     if n > 0
     then
-      let result = Array.make (pred n) x |> Array.fold_left Core.concat x in
+      let result = Array.make (pred n) x |> Array.fold_left Core.combine x in
       Some result
     else None
   ;;
 
-  let reduce_nel list = Preface_core.Nonempty_list.reduce Core.concat list
+  let reduce_nel list = Preface_core.Nonempty_list.reduce Core.combine list
 end
 
 module Infix (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.Semigroup.INFIX with type t = Core.t = struct
   type t = Core.t
 
-  let ( ++ ) = Core.concat
+  let ( ++ ) = Core.combine
 end
 
 module Via

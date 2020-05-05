@@ -8,7 +8,7 @@ module type CORE = sig
   type t
   (** A type [t] which is a [Semigroup]. *)
 
-  val concat : t -> t -> t
+  val combine : t -> t -> t
   (** Combine two values of [t] into one. *)
 end
 

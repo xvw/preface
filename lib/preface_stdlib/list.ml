@@ -97,9 +97,9 @@ module Monoid (T : Preface_specs.Types.T0) =
 Preface_make.Monoid.Via_concat_and_zero (struct
   type nonrec t = T.t t
 
-  let concat l r = l @ r
+  let combine l r = l @ r
 
-  let zero = []
+  let neutral = []
 end)
 
 let eq f a b =

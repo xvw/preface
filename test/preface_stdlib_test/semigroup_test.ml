@@ -3,13 +3,13 @@ module N = Preface_core.Nonempty_list
 module S = Preface_make.Semigroup.Via_concat (struct
   type t = string
 
-  let concat = ( ^ )
+  let combine = ( ^ )
 end)
 
 module I = Preface_make.Semigroup.Via_concat (struct
   type t = int
 
-  let concat = ( + )
+  let combine = ( + )
 end)
 
 let string_concat () =
