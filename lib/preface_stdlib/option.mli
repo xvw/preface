@@ -5,6 +5,7 @@
     - {!val:Functor}
     - {!val:Applicative}
     - {!val:Monad}
+    - {!val:Monoid}
 
     {1 Use cases}
 
@@ -73,6 +74,10 @@ module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
+
+(** {2 Monoid API} *)
+module Monoid (M : Preface_specs.MONOID) :
+  Preface_specs.MONOID with type t = M.t t
 
 (** {1 Helpers} *)
 

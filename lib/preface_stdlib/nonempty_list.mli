@@ -5,7 +5,8 @@
     - {!val:Functor}
     - {!val:Applicative}
     - {!val:Selective}
-    - {!val:Monad} *)
+    - {!val:Monad}
+    - {!val:Semigroup} *)
 
 (** {1 Type} *)
 
@@ -45,6 +46,10 @@ module Monad : sig
 
   include Preface_specs.MONAD with type 'a t = 'a t
 end
+
+(** {2 Semigroup API} *)
+module Semigroup (T : Preface_specs.Types.T0) :
+  Preface_specs.SEMIGROUP with type t = T.t t
 
 (** {1 Helpers} *)
 

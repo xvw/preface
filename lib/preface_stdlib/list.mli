@@ -6,7 +6,8 @@
     - {!val:Applicative}
     - {!val:Selective}
     - {!val:Monad}
-    - [Traversable] for {!val:Applicative} and {!val:Monad} *)
+    - [Traversable] for {!val:Applicative} and {!val:Monad}
+    - {!val:Monoid} *)
 
 (** {1 Type} *)
 
@@ -47,6 +48,10 @@ module Monad : sig
   include Preface_specs.MONAD with type 'a t = 'a t
   (** {2 Monad API} *)
 end
+
+(** {2 Monoid API} *)
+module Monoid (T : Preface_specs.Types.T0) :
+  Preface_specs.MONOID with type t = T.t t
 
 (** {1 Helpers} *)
 

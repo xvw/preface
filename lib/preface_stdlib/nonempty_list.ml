@@ -91,3 +91,11 @@ module Selective =
   Preface_make.Selective.Over_applicative
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
+
+module Semigroup (T : Preface_specs.Types.T0) :
+  Preface_specs.SEMIGROUP with type t = T.t t =
+Preface_make.Semigroup.Via_concat (struct
+  type nonrec t = T.t t
+
+  let concat = append
+end)

@@ -3,7 +3,7 @@
 
     {1 Structure anatomy} *)
 
-(** An type [t] with a neutral element. *)
+(** A type [t] with a neutral element. *)
 module type ZERO = sig
   type t
   (** A type [t] which is a [Monoid]. *)

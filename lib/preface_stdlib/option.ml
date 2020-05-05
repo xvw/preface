@@ -26,6 +26,19 @@ module Monad = Preface_make.Monad.Via_bind (struct
   let bind f = function Some x -> f x | None -> None
 end)
 
+module Monoid (M : Preface_specs.MONOID) =
+Preface_make.Monoid.Via_concat_and_zero (struct
+  type nonrec t = M.t t
+
+  let zero = None
+
+  let concat x y =
+    match (x, y) with
+    | (None, result) | (result, None) -> result
+    | (Some a, Some b) -> Some (M.concat a b)
+  ;;
+end)
+
 let eq f left right =
   match (left, right) with
   | (None, None) -> true
