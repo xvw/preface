@@ -76,7 +76,7 @@ module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
 
 (** {2 Monoid API} *)
-module Monoid (M : Preface_specs.MONOID) :
+module Monoid (M : Preface_specs.SEMIGROUP) :
   Preface_specs.MONOID with type t = M.t t
 
 (** {1 Helpers} *)
