@@ -94,7 +94,7 @@ module Selective =
     (Preface_make.Selective.Select_from_monad (Monad))
 
 module Monoid (T : Preface_specs.Types.T0) =
-Preface_make.Monoid.Via_concat_and_zero (struct
+Preface_make.Monoid.Via_combine_and_zero (struct
   type nonrec t = T.t t
 
   let combine l r = l @ r

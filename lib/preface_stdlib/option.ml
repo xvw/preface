@@ -27,7 +27,7 @@ module Monad = Preface_make.Monad.Via_bind (struct
 end)
 
 module Monoid (M : Preface_specs.SEMIGROUP) =
-Preface_make.Monoid.Via_concat_and_zero (struct
+Preface_make.Monoid.Via_combine_and_zero (struct
   type nonrec t = M.t t
 
   let neutral = None

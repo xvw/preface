@@ -4,8 +4,8 @@
 
     Standard way to build a [Semigroup]. *)
 
-(** Incarnation of a [Semigroup] with [concat]. *)
-module Via_concat (Core : Preface_specs.Semigroup.CORE) :
+(** Incarnation of a [Semigroup] with [combine]. *)
+module Via_combine (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.SEMIGROUP with type t = Core.t
 
 (** {2 Manual construction}

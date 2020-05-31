@@ -94,7 +94,7 @@ module Selective =
 
 module Semigroup (T : Preface_specs.Types.T0) :
   Preface_specs.SEMIGROUP with type t = T.t t =
-Preface_make.Semigroup.Via_concat (struct
+Preface_make.Semigroup.Via_combine (struct
   type nonrec t = T.t t
 
   let combine = append

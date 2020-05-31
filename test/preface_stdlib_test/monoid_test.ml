@@ -1,6 +1,6 @@
 module N = Preface_core.Nonempty_list
 
-module S = Preface_make.Monoid.Via_concat_and_zero (struct
+module S = Preface_make.Monoid.Via_combine_and_zero (struct
   type t = string
 
   let combine = ( ^ )
@@ -8,7 +8,7 @@ module S = Preface_make.Monoid.Via_concat_and_zero (struct
   let neutral = ""
 end)
 
-module I = Preface_make.Monoid.Via_concat_and_zero (struct
+module I = Preface_make.Monoid.Via_combine_and_zero (struct
   type t = int
 
   let combine = ( + )
@@ -16,16 +16,16 @@ module I = Preface_make.Monoid.Via_concat_and_zero (struct
   let neutral = 0
 end)
 
-let string_concat () =
+let string_combine () =
   let expected = "FooBar"
   and computed = S.("Foo" ++ "Bar") in
-  Alcotest.(check string) "string_concat" expected computed
+  Alcotest.(check string) "string_combine" expected computed
 ;;
 
-let int_concat () =
+let int_combine () =
   let expected = 16
   and computed = I.(6 ++ 10) in
-  Alcotest.(check int) "int_concat" expected computed
+  Alcotest.(check int) "int_combine" expected computed
 ;;
 
 let string_times_1 () =
@@ -105,8 +105,8 @@ let test_cases =
   [
     ( "Monoid"
     , [
-        test_case "String concat" `Quick string_concat
-      ; test_case "Int concat" `Quick int_concat
+        test_case "String combine" `Quick string_combine
+      ; test_case "Int combine" `Quick int_combine
       ; test_case "String times 1" `Quick string_times_1
       ; test_case "String times 2" `Quick string_times_2
       ; test_case "Int times 1" `Quick int_times_1
