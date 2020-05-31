@@ -10,8 +10,8 @@ module Over_semigroup
     (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
   Preface_specs.MONOID with type t = S.t
 
-(** Incarnation of a [Monoid] with [concat] and [zero]. *)
-module Via_concat_and_zero (Core : Preface_specs.Monoid.CORE) :
+(** Incarnation of a [Monoid] with [combine] and [zero]. *)
+module Via_combine_and_zero (Core : Preface_specs.Monoid.CORE) :
   Preface_specs.MONOID with type t = Core.t
 
 (** {2 Manual construction}

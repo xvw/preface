@@ -31,7 +31,7 @@ module Via
   include Infix
 end
 
-module Via_concat (Core : Preface_specs.Semigroup.CORE) :
+module Via_combine (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.SEMIGROUP with type t = Core.t = struct
   include Core
   module Operation = Operation (Core)
