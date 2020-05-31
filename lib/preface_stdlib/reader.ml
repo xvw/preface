@@ -1,11 +1,15 @@
 module Over (T : Preface_specs.Types.T0) = struct
+  open Preface_core.Fun
+
   type env = T.t
 
   type 'a t = env -> 'a
 
-  let pure a _ = a
+  let run = id
 
-  let map f ma s = f (ma s)
+  let pure = constant
+
+  let map = ( <% )
 
   module Functor = Preface_make.Functor.Via_map (struct
     type nonrec 'a t = 'a t
@@ -18,7 +22,8 @@ module Over (T : Preface_specs.Types.T0) = struct
 
     let pure = pure
 
-    let apply mf ma s = mf s (ma s)
+    let apply mf ma s = map (mf s) ma s
+    (* This is the combinator S *)
   end)
 
   module Monad = Preface_make.Monad.Via_bind (struct
@@ -26,6 +31,6 @@ module Over (T : Preface_specs.Types.T0) = struct
 
     let return = pure
 
-    let bind f ma s = f (ma s) s
+    let bind f ma s = map f ma s s
   end)
 end

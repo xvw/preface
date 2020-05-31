@@ -1,4 +1,19 @@
-(** TODO *)
+(** {1 Capabilities}
+
+    - {!val:Functor}
+    - {!val:Applicative}
+    - {!val:Monad}
+
+    {1 Use cases}
+
+    The Reader module allows you to deal with the capability to read from an
+    environment. This is done thanks to the `run` function that takes an
+    environment and returns a value. Such environment type is given by applying
+    the `Over` functor module on a module providing the required type.
+
+    {1 Example}
+
+    TODO *)
 
 (** {1 Implementation} *)
 module Over (T : Preface_specs.Types.T0) : sig
