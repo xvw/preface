@@ -5,8 +5,6 @@ module Over (T : Preface_specs.Types.T0) = struct
 
   type 'a t = env -> 'a
 
-  let run = id
-
   let pure = constant
 
   let map = ( <% )
@@ -23,7 +21,6 @@ module Over (T : Preface_specs.Types.T0) = struct
     let pure = pure
 
     let apply mf ma s = map (mf s) ma s
-    (* This is the combinator S *)
   end)
 
   module Monad = Preface_make.Monad.Via_bind (struct
@@ -33,4 +30,14 @@ module Over (T : Preface_specs.Types.T0) = struct
 
     let bind f ma s = map f ma s s
   end)
+
+  (** {2 Helpers} *)
+
+  let run = id
+
+  let ask = id
+
+  let local = ( %> )
+
+  let reader = id
 end
