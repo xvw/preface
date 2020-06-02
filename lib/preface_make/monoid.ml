@@ -30,7 +30,7 @@ module Via
   include Infix
 end
 
-module Via_combine_and_zero (Core : Preface_specs.Monoid.CORE) :
+module Via_combine_and_neutral (Core : Preface_specs.Monoid.CORE) :
   Preface_specs.MONOID with type t = Core.t = struct
   include Core
   module Operation = Operation (Core)

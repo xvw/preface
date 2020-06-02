@@ -1,6 +1,6 @@
 module N = Preface_core.Nonempty_list
 
-module S = Preface_make.Monoid.Via_combine_and_zero (struct
+module S = Preface_make.Monoid.Via_combine_and_neutral (struct
   type t = string
 
   let combine = ( ^ )
@@ -8,7 +8,7 @@ module S = Preface_make.Monoid.Via_combine_and_zero (struct
   let neutral = ""
 end)
 
-module I = Preface_make.Monoid.Via_combine_and_zero (struct
+module I = Preface_make.Monoid.Via_combine_and_neutral (struct
   type t = int
 
   let combine = ( + )
