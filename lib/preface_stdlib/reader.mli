@@ -126,7 +126,7 @@ module Over (T : Preface_specs.Types.T0) : sig
   type env = T.t
   (** The encapsulated state *)
 
-  type 'a t = env -> 'a
+  type 'a t
   (** The type *)
 
   module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
@@ -150,5 +150,5 @@ module Over (T : Preface_specs.Types.T0) : sig
   (** Modify the environement and execute the reader *)
 
   val reader : (env -> 'a) -> 'a t
-  (**  *)
+  (** Build a reader from a function *)
 end
