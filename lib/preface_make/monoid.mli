@@ -4,14 +4,14 @@
 
     Standard way to build a [Monad]. *)
 
-(** Incarnation of a [Monoid] over a [Semigroup] with [zero]. *)
+(** Incarnation of a [Monoid] over a [Semigroup] with [neutral]. *)
 module Over_semigroup
     (S : Preface_specs.SEMIGROUP)
     (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
   Preface_specs.MONOID with type t = S.t
 
-(** Incarnation of a [Monoid] with [combine] and [zero]. *)
-module Via_combine_and_zero (Core : Preface_specs.Monoid.CORE) :
+(** Incarnation of a [Monoid] with [combine] and [neutral]. *)
+module Via_combine_and_neutral (Core : Preface_specs.Monoid.CORE) :
   Preface_specs.MONOID with type t = Core.t
 
 (** {2 Manual construction}
@@ -27,7 +27,7 @@ module Via
     (Infix : Preface_specs.Monoid.INFIX with type t = Operation.t) :
   Preface_specs.MONOID with type t = Infix.t
 
-(** Incarnation of a [Monoid.Core] over a [Semigroup] with [zero]. *)
+(** Incarnation of a [Monoid.Core] over a [Semigroup] with [neutral]. *)
 module Core_over_semigroup
     (S : Preface_specs.SEMIGROUP)
     (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
