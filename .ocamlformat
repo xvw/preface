@@ -1,4 +1,4 @@
-version = 0.14.1
+version = 0.14.2
 margin = 80
 max-indent = 68
 
@@ -24,7 +24,7 @@ cases-matching-exp-indent = normal
 
 disambiguate-non-breaking-match = true
 
-doc-comments = after
+doc-comments = after-when-possible
 doc-comments-padding = 2
 doc-comments-tag-only = default
 dock-collection-brackets = true

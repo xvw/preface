@@ -1,8 +1,7 @@
 (library
  (name preface_specs)
  (public_name preface.specs)
- (modules_without_implementation
-   preface_specs types functor applicative
-   selective monad comonad traversable bifunctor free_monad freer_monad semigroup
-   monoid)
+ (modules_without_implementation preface_specs types functor applicative
+   selective monad comonad traversable bifunctor free_monad freer_monad
+   semigroup monoid)
  (libraries preface.core))

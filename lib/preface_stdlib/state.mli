@@ -62,11 +62,11 @@
         let open State in
         let open State.Monad in
         let* () = add (2, 1) in
-        let* () = mult 3
-            get
+        let* () = mult 3 in
+        get
       ;;
 
-      let v = fst (program (1,0)) (* v is the vector (9, 3) *)
+      let v = fst (program (1, 0)) (* v is the vector (9, 3) *)
     ]} *)
 
 (** {1 Implementation} *)
