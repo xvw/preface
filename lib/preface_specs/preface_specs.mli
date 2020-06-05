@@ -73,6 +73,9 @@ module Monad = Monad
 module Comonad = Comonad
 (** Describes a comonad. *)
 
+module Foldable = Foldable
+(** Describes a foldable. *)
+
 module Traversable = Traversable
 (** Describes a traversable. *)
 
@@ -102,6 +105,8 @@ module type SELECTIVE = Selective.API
 module type MONAD = Monad.API
 
 module type COMONAD = Comonad.API
+
+module type FOLDABLE = Foldable.API
 
 module type TRAVERSABLE = Traversable.API
 
