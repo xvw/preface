@@ -7,11 +7,128 @@
     {1 Use cases}
 
     The Reader module gives you the ability to read from an environment. This is
-    done thanks to the `run` function which takes the environment and returns a
+    done thanks to the [run] function which takes the environment and returns a
     value. Finally, this type of environment is given by applying the "Over"
     functor module on a module providing the required type.
 
     {1 Example}
+
+    In order to illustrate the [Reader] module we design a naive template model.
+
+    {2 Template Representation}
+
+    A template is denoted by a list of template item which can either be a
+    string or a variable.
+
+    {[
+      type template_item =
+        | Const of string
+        | Var of string
+
+      type template = template_item list
+    ]}
+
+    {2 Reader Construction}
+
+    For the interpration of such naive template data we need an environment used
+    to solve variable items.
+
+    {[ module Bindings = Map.Make (String) ]}
+
+    Then building a [Reader] can be done applying the [Over] function on the
+    previous [Bindings] module.
+
+    {[
+      module Reader = Preface_stdlib.Reader.Over (struct
+        type t = string Bindings.t
+      end)
+    ]}
+
+    {2 Template interpretation}
+
+    Since [Bindings] and [Reader] are available, now we can easily design the
+    transformation functions for an item and for a list of items.
+
+    {[
+      let transform_item =
+        let open Reader in
+        let open Reader.Monad in
+        let open Bindings in
+        function
+        | Const s -> return s
+        | Var s ->
+          let* env = ask in
+          return (if mem s env then find s env else "?")
+      ;;
+    ]}
+
+    In this function, the environment in retrieved thanks to the syntaxic
+    extension of monads [let*] and the [ask] method provided by [Reader].
+
+    Here, it's important to notice that such environment is hold by the [Reader]
+    element and can be seen as an implicit value i.e. a kind of dependency
+    injection.
+
+    Finally the transform of a list can be easily design using the syntaxic
+    extension of monads [let*].
+
+    {[
+      let rec transform =
+        let open Reader.Monad in
+        function
+        | [] -> return ""
+        | a :: l ->
+          let* ta = transform_item a in
+          let* tl = transform l in
+          return (ta ^ tl)
+      ;;
+    ]}
+
+    {2 Performing the transformation}
+
+    The last piece of the jigsaw relies on the capability to perform such
+    transformation thanks to the [Reader] [run] function.
+
+    {[
+      let run t env = Reader.run (transform t) env
+    ]}
+     *)
+
+(** {1 Implementation} *)
+module Over (T : Preface_specs.Types.T0) : sig
+  (** {2 Types} *)
+
+  type env = T.t
+  (** The encapsulated state *)
+
+  type 'a t
+  (** The type *)
+
+  module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
+  (** {2 Functor API} *)
+
+  module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
+  (** {2 Applicative API} *)
+
+  module Monad : Preface_specs.MONAD with type 'a t = 'a t
+  (** {2 Monad API} *)
+
+  (** {2 Helpers} *)
+
+  val run : 'a t -> env -> 'a
+  (** Run the reader and extracting the value *)
+
+  val ask : env t
+  (** Provides the monad environment *)
+
+  val local : (env -> env) -> 'a t -> 'a t
+  (** Modify the environement and execute the reader *)
+
+  val reader : (env -> 'a) -> 'a t
+  (** Build a reader from a function *)
+end
+
+(** {1 Additional Example}
 
     In this example we propose the transformation of lambda expression to
     DeBruijn indexed lambda expressions.
@@ -118,37 +235,3 @@
     the modification of the environmenent pushing the variable on it. The
     [Lambda.Var] transformation is done using the [ask] mechanism used t
     retrieve the context. *)
-
-(** {1 Implementation} *)
-module Over (T : Preface_specs.Types.T0) : sig
-  (** {2 Types} *)
-
-  type env = T.t
-  (** The encapsulated state *)
-
-  type 'a t
-  (** The type *)
-
-  module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-  (** {2 Functor API} *)
-
-  module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
-  (** {2 Applicative API} *)
-
-  module Monad : Preface_specs.MONAD with type 'a t = 'a t
-  (** {2 Monad API} *)
-
-  (** {2 Helpers} *)
-
-  val run : 'a t -> env -> 'a
-  (** Run the reader and extracting the value *)
-
-  val ask : env t
-  (** Provides the monad environment *)
-
-  val local : (env -> env) -> 'a t -> 'a t
-  (** Modify the environement and execute the reader *)
-
-  val reader : (env -> 'a) -> 'a t
-  (** Build a reader from a function *)
-end
