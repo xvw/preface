@@ -6,6 +6,7 @@
     - {!val:Applicative}
     - {!val:Monad}
     - {!val:Monoid}
+    - {!val:Foldable}
 
     {1 Use cases}
 
@@ -65,6 +66,9 @@
 type 'a t = 'a option
 
 (** {1 Implementation} *)
+
+module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
+(** {2 Foldable API} *)
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 (** {2 Functor API} *)

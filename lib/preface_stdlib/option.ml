@@ -2,6 +2,12 @@ type 'a t = 'a option
 
 let pure x = Some x
 
+module Foldable = Preface_make.Foldable.Via_fold_right (struct
+  type nonrec 'a t = 'a t
+
+  let fold_right f x acc = (match x with None -> acc | Some v -> f v acc)
+end)
+
 module Functor = Preface_make.Functor.Via_map (struct
   type nonrec 'a t = 'a t
 

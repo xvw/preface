@@ -5,6 +5,7 @@
     - {!val:Functor}
     - {!val:Applicative}
     - {!val:Selective}
+    - {!val:Foldable}
     - {!val:Monad}
     - {!val:Semigroup} *)
 
@@ -15,6 +16,9 @@ type 'a t = 'a Preface_core.Nonempty_list.t =
   | ( :: ) of ('a * 'a t)
 
 (** {1 Implementation} *)
+
+module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
+(** {2 Foldable API} *)
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 (** {2 Functor API} *)

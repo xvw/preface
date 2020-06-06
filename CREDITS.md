@@ -14,6 +14,7 @@ The library is mainly maintained by:
   technical help about specific subject
 - [Andrey Mokhov](https://github.com/snowleopard) for his help in understanding
   Selectives
+- [Florian Angeletti](https://github.com/Octachron) for advices and help
 
 ## Used libraries
 
