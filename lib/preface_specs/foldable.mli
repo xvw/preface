@@ -40,7 +40,7 @@ module type OPERATION = sig
 
   val fold_map :
     (module Monoid.CORE with type t = 'm) -> ('a -> 'm) -> 'a t -> 'm
-  (** SAme of {!val:CORE.fold_map'} but using a [monoid] module instead of
+  (** Same of {!val:CORE.fold_map'} but using a [monoid] module instead of
       giving explicitely [neutral] and [combine].*)
 
   val fold_left : ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a

@@ -134,12 +134,43 @@ let sequential_computing_2 () =
   Alcotest.(check (option int)) "Sequential computing 1" expected computed
 ;;
 
+let fold_map_over_values () =
+  let module Prod = Preface_make.Monoid.Via_combine_and_neutral (struct
+    type t = int
+
+    let neutral = 1
+
+    let combine = ( * )
+  end) in
+  let expected = 120
+  and computed = Foldable.fold_map (module Prod) int_of_string (Some "120") in
+  Alcotest.(check int) "fold_map with success" expected computed
+;;
+
+let fold_map_over_empty () =
+  let module Prod = Preface_make.Monoid.Via_combine_and_neutral (struct
+    type t = int
+
+    let neutral = 1
+
+    let combine = ( * )
+  end) in
+  let expected = 1
+  and computed = Foldable.fold_map (module Prod) int_of_string None in
+  Alcotest.(check int) "fold_map with success" expected computed
+;;
+
 let test_cases =
   let open Alcotest in
   [
     ("Option Functor", Functor_test.cases)
   ; ("Option Applicative", Applicative_test.cases)
   ; ("Option Monad", Monad_test.cases)
+  ; ( "Option Foldable"
+    , [
+        test_case "Fold_map over values" `Quick fold_map_over_values
+      ; test_case "Fold_map over empty" `Quick fold_map_over_empty
+      ] )
   ; ( "Option Validation"
     , [
         test_case "Map scenario 1" `Quick map_scenario_1
