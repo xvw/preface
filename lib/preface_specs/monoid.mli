@@ -24,7 +24,7 @@ module type OPERATION = sig
   include Semigroup.OPERATION
 
   val reduce : t list -> t
-  (** Reduce a [List.t] using [concat]. *)
+  (** Reduce a [List.t] using [combine]. *)
 end
 
 module type INFIX = Semigroup.INFIX

@@ -6,6 +6,7 @@
     - {!val:Applicative}
     - {!val:Selective}
     - {!val:Monad}
+    - {!val:Foldable}
     - [Traversable] for {!val:Applicative} and {!val:Monad}
     - {!val:Monoid} *)
 
@@ -14,6 +15,9 @@
 type 'a t = 'a list
 
 (** {1 Implementation} *)
+
+module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
+(** {2 Foldable API} *)
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 (** {2 Functor API} *)
