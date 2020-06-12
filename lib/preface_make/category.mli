@@ -6,9 +6,13 @@
 
     Standard way to build a [Category]. *)
 
-(** Incarnation of a [Category] using [id] and [compose] *)
+(** Incarnation of a [Category] using [id] and [compose]. *)
 module Via_id_and_compose (Core : Preface_specs.Category.CORE) :
   Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Core.t
+
+(** Incarnation of a [Category] using a [monad] using the Kleisli composition. *)
+module From_monad (Monad : Preface_specs.Monad.CORE) :
+  Preface_specs.CATEGORY with type ('a, 'b) t = 'a -> 'b Monad.t
 
 (** {2 Manual construction}
 

@@ -43,3 +43,13 @@ module Via
   include Infix
   module Infix = Infix
 end
+
+module From_monad (Monad : Preface_specs.Monad.CORE) :
+  Preface_specs.CATEGORY with type ('a, 'b) t = 'a -> 'b Monad.t =
+Via_id_and_compose (struct
+  type ('a, 'b) t = 'a -> 'b Monad.t
+
+  let id = Monad.return
+
+  let compose f g = Monad.compose_left_to_right g f
+end)
