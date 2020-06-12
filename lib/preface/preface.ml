@@ -10,5 +10,4 @@ module Make = Preface_make
 
 (** {2 Standard Library} *)
 
-module Fun = Preface_core.Fun
 include Preface_stdlib
