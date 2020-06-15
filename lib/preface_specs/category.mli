@@ -16,6 +16,7 @@ module type CORE = sig
   (** Morphism composition (from right to left). *)
 end
 
+(** Operations. *)
 module type OPERATION = sig
   type ('a, 'b) t
   (** The type held by the [Category]. *)
@@ -27,6 +28,7 @@ module type OPERATION = sig
   (** An alias of {!val:CORE.compose} with flipped argument. *)
 end
 
+(** Infix operators. *)
 module type INFIX = sig
   type ('a, 'b) t
   (** The type held by the [Category]. *)
