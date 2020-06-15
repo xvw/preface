@@ -2,7 +2,8 @@
 
     {1 Capabilities}
 
-    - {!val:Category} *)
+    - {!val:Category}
+    - {!val:Arrow} *)
 
 (** {1 Type} *)
 
@@ -12,6 +13,9 @@ type ('a, 'b) t = 'a -> 'b
 
 module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t
 (** {2 Category API} *)
+
+module Arrow : Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) t
+(** {2 Arrow API} *)
 
 (** {1 API} *)
 
