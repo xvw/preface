@@ -16,5 +16,6 @@ let () =
     @ Freer_monad_test.test_cases
     @ Semigroup_test.test_cases
     @ Monoid_test.test_cases
+    @ Arrow_test.test_cases
     @ Reader_test.test_cases )
 ;;
