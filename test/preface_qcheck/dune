@@ -1,0 +1,7 @@
+(library
+ (name preface_qcheck)
+ (public_name preface.qcheck)
+ (synopsis "A QCheck's companion for Preface")
+ (modules_without_implementation requirement preface_qcheck)
+ (libraries qcheck-core qcheck-alcotest preface.core preface.specs
+   preface.make preface.stdlib))

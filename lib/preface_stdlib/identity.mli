@@ -7,7 +7,8 @@
     - {!val:Functor}
     - {!val:Applicative}
     - {!val:Selective}
-    - {!val:Monad} *)
+    - {!val:Monad}
+    - {!val:Comonad} *)
 
 type 'a t
 (** A wrapper around a value. *)
@@ -29,10 +30,16 @@ module Selective :
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
 
+module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
+(** {2 Comonad API} *)
+
 (** {1 Helpers} *)
 
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)
+
+val extract : 'a t -> 'a
+(** Create a value from ['a t] to ['a]. *)
 
 val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality.*)

@@ -2,6 +2,8 @@ type 'a t = 'a
 
 let pure x = x
 
+let extract x = x
+
 module Functor = Preface_make.Functor.Via_map (struct
   type nonrec 'a t = 'a t
 
@@ -28,6 +30,16 @@ module Selective =
   Preface_make.Selective.Over_applicative
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
+
+module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
+  type nonrec 'a t = 'a t
+
+  let extract = extract
+
+  let map f = f
+
+  let duplicate x = x
+end)
 
 let eq f a b = f a b
 
