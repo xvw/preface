@@ -85,6 +85,12 @@ module Free_monad = Free_monad
 module Freer_monad = Freer_monad
 (** Describes a freer monad. *)
 
+module Category = Category
+(** Describes a category. *)
+
+module Arrow = Arrow
+(** Describes an arrow. *)
+
 (** {1 API Shortcuts}
 
     Shortcuts for the API of each objects (by convention, OCaml module types are
@@ -113,6 +119,10 @@ module type TRAVERSABLE = Traversable.API
 module type FREE_MONAD = Free_monad.API
 
 module type FREER_MONAD = Freer_monad.API
+
+module type CATEGORY = Category.API
+
+module type ARROW = Arrow.API
 
 (** {1 Abstract data types} *)
 
