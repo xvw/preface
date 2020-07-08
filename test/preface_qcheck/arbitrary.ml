@@ -71,7 +71,17 @@ let continuation ?collect l =
 
 let stream ?collect l =
   let gen = Gen.stream (QCheck.gen l) in
-  QCheck.make ?collect gen
+  let print =
+    let open Opt in
+    l.QCheck.print
+    >|= fun printer x ->
+    match Preface_stdlib.Stream.take 3 x with
+    | Error _ -> "<Stream: Error>"
+    | Ok x ->
+      let fragment = String.concat "; " (List.map printer x) in
+      "<Stream [" ^ fragment ^ " ...]>"
+  in
+  QCheck.make ?collect ?print gen
 ;;
 
 let state l =

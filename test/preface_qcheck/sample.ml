@@ -35,7 +35,7 @@ end
 module String = struct
   type input = string
 
-  let arbitrary = QCheck.small_string
+  let arbitrary = QCheck.small_printable_string
 
   let observable = QCheck.Observable.string
 
