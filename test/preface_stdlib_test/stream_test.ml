@@ -114,13 +114,13 @@ let should_inverse_apply () =
 
 let should_discard_first () =
   let expected = 42
-  and computed = extract (numbers 41 @> numbers 42) in
+  and computed = extract (pure () @> numbers 42) in
   Alcotest.(check int) "should_discard_first" expected computed
 ;;
 
 let should_discard_second () =
   let expected = 42
-  and computed = extract (numbers 42 <@ numbers 41) in
+  and computed = extract (numbers 42 <@ pure ()) in
   Alcotest.(check int) "should_discard_second" expected computed
 ;;
 
