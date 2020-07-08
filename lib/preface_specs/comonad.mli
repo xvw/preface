@@ -94,6 +94,9 @@ module type SYNTAX = sig
   (** Syntaxic shortcuts for version of {!val:CORE.extend}:
 
       [let@ x = e in f] is equals to [extend f e]. *)
+
+  val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
+  (** Syntaxic shortcuts for version of {!val:CORE.map} *)
 end
 
 (** Infix notations. *)
@@ -119,10 +122,10 @@ module type INFIX = sig
   val ( <@> ) : ('a -> 'b) t -> 'a t -> 'b t
   (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 
-  val ( @> ) : 'a t -> 'b t -> 'b t
+  val ( @> ) : unit t -> 'b t -> 'b t
   (** Discard the value of the first argument. *)
 
-  val ( <@ ) : 'a t -> 'b t -> 'a t
+  val ( <@ ) : 'a t -> unit t -> 'a t
   (** Discard the value of the second argument. *)
 end
 

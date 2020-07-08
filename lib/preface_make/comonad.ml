@@ -40,6 +40,8 @@ module Syntax (Core : Preface_specs.Comonad.CORE) :
   type 'a t = 'a Core.t
 
   let ( let@ ) e f = Core.extend f e
+
+  let ( let+ ) e f = Core.map f e
 end
 
 module Operation (Core : Preface_specs.Comonad.CORE) :

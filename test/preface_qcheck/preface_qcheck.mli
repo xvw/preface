@@ -28,3 +28,4 @@ module Bifunctor = Bifunctor
 module Selective = Selective
 module Semigroup = Semigroup
 module Monoid = Monoid
+module Comonad = Comonad
