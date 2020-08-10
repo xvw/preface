@@ -64,6 +64,9 @@ module Bifunctor = Bifunctor
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
+module Alternative = Alternative
+(** Describes an Alternative. *)
+
 module Selective = Selective
 (** Describes a selective applicative functor. *)
 
@@ -106,6 +109,8 @@ module type BIFUNCTOR = Bifunctor.API
 
 module type APPLICATIVE = Applicative.API
 
+module type ALTERNATIVE = Alternative.API
+
 module type SELECTIVE = Selective.API
 
 module type MONAD = Monad.API
@@ -127,4 +132,4 @@ module type ARROW = Arrow.API
 (** {1 Abstract data types} *)
 
 module type EITHER = Preface_core.Requirements.EITHER
-(** [EITHER] hold a types which represents values with two possibilites. *)
+(** [EITHER] held a type which represents values with two possibilites. *)
