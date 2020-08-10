@@ -14,17 +14,21 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map = Stdlib.List.map
 end)
 
+module Alternative = Preface_make.Alternative.Via_apply (struct
+  type nonrec 'a t = 'a t
+
+  let pure = pure
+
+  let apply fs xs =
+    Stdlib.List.(concat @@ map (fun f -> map (fun x -> f x) xs) fs)
+  ;;
+
+  let neutral = []
+
+  let combine l r = l @ r
+end)
+
 module Applicative = struct
-  module A = Preface_make.Applicative.Via_apply (struct
-    type nonrec 'a t = 'a t
-
-    let pure = pure
-
-    let apply fs xs =
-      Stdlib.List.(concat @@ map (fun f -> map (fun x -> f x) xs) fs)
-    ;;
-  end)
-
   module Traversable (A : Preface_specs.APPLICATIVE) :
     Preface_specs.TRAVERSABLE with type 'a t = 'a A.t and type 'a iter = 'a t =
   struct
@@ -46,7 +50,7 @@ module Applicative = struct
     include Preface_make.Traversable.Over_applicative (A) (T)
   end
 
-  include A
+  include Preface_make.Applicative.From_alternative (Alternative)
 end
 
 module Monad = struct

@@ -116,3 +116,7 @@ module From_monad (Monad : Preface_specs.MONAD) :
     ;;
   end)
 end
+
+module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Alternative.t =
+  Alternative
