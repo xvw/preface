@@ -89,10 +89,7 @@
     The last piece of the jigsaw relies on the capability to perform such
     transformation thanks to the [Reader] [run] function.
 
-    {[
-      let run t env = Reader.run (transform t) env
-    ]}
-     *)
+    {[ let run t env = Reader.run (transform t) env ]} *)
 
 (** {1 Implementation} *)
 module Over (T : Preface_specs.Types.T0) : sig
