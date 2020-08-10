@@ -23,6 +23,7 @@ module Sample = Sample
 module Requirement = Requirement
 module Functor = Functor
 module Applicative = Applicative
+module Alternative = Alternative
 module Monad = Monad
 module Bifunctor = Bifunctor
 module Selective = Selective
