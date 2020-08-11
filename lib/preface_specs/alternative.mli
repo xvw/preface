@@ -66,3 +66,10 @@ module type API = sig
 
   include module type of Infix
 end
+
+(** {1 Bibliography}
+
+    - {{:https://hackage.haskell.org/package/base-4.14.0.0/docs/Control-Applicative.html#g:2}
+      Haskell's documentation of an Alternative}
+    - {{:https://en.wikibooks.org/wiki/Haskell/Alternative_and_MonadPlus}
+      Alternative and Monad plus on Haskell Wiki} *)
