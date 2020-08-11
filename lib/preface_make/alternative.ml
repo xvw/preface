@@ -79,11 +79,25 @@ module Over_applicative
     (Applicative : Preface_specs.APPLICATIVE)
     (Core : Preface_specs.Alternative.CORE_WITH_NEUTRAL_AND_COMBINE
               with type 'a t = 'a Applicative.t) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Core.t = struct
-  module Core = struct
-    include Applicative
-    include Core
-  end
+  Preface_specs.ALTERNATIVE with type 'a t = 'a Core.t =
+  Via
+    (struct
+      include Applicative
 
-  include Via_apply (Core)
-end
+      let combine = Core.combine
+
+      let neutral = Core.neutral
+    end)
+    (Applicative)
+    (struct
+      type 'a t = 'a Applicative.t
+
+      include Applicative.Infix
+
+      let ( <|> ) = Core.combine
+    end)
+    (struct
+      type 'a t = 'a Applicative.t
+
+      include Applicative.Syntax
+    end)
