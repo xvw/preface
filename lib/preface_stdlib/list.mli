@@ -4,6 +4,7 @@
 
     - {!val:Functor}
     - {!val:Applicative}
+    - {!val:Alternative}
     - {!val:Selective}
     - {!val:Monad}
     - {!val:Foldable}
@@ -33,6 +34,9 @@ module Applicative : sig
   include Preface_specs.APPLICATIVE with type 'a t = 'a t
   (** {2 Applicative API} *)
 end
+
+module Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a t
+(** {2 Alternative API} *)
 
 (** {2 Selective API} *)
 module Selective :

@@ -189,8 +189,12 @@ module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_apply.t
 
 (** Incarnation of an [Applicative] using a [Monad].*)
-module Over_monad (Monad : Preface_specs.MONAD) :
+module From_monad (Monad : Preface_specs.MONAD) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Monad.t
+
+(** Incarnation of an [Applicative] using an [Alternative].*)
+module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Alternative.t
 
 (** {2 Manual construction}
 

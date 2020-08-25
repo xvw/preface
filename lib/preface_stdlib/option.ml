@@ -14,7 +14,7 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map f = function Some x -> Some (f x) | None -> None
 end)
 
-module Applicative = Preface_make.Applicative.Via_apply (struct
+module Alternative = Preface_make.Alternative.Via_apply (struct
   type nonrec 'a t = 'a t
 
   let pure = pure
@@ -22,7 +22,13 @@ module Applicative = Preface_make.Applicative.Via_apply (struct
   let apply fa xa =
     (match (fa, xa) with (Some f, Some x) -> Some (f x) | _ -> None)
   ;;
+
+  let neutral = None
+
+  let combine l r = (match (l, r) with (None, x) -> x | (x, _) -> x)
 end)
+
+module Applicative = Preface_make.Applicative.From_alternative (Alternative)
 
 module Monad = Preface_make.Monad.Via_bind (struct
   type nonrec 'a t = 'a t

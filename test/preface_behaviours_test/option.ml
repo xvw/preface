@@ -16,6 +16,23 @@ module Functor_test =
 module Applicative_test =
   Preface_qcheck.Applicative.Make (Applicative) (Requirement)
     (Preface_qcheck.Sample.Pack)
+
+module Alternative_test =
+  Preface_qcheck.Alternative.Make_for_monoidal_behaviour
+    (Alternative)
+    (Requirement)
+    (Preface_qcheck.Sample.Pack)
+
+module Alternative_right_absorption_test =
+  Preface_qcheck.Alternative.Make_right_absorption (Alternative) (Requirement)
+    (Preface_qcheck.Sample.Pack)
+
+module Alternative_right_distributivity_of_apply_test =
+  Preface_qcheck.Alternative.Make_right_distributivity_of_apply
+    (Alternative)
+    (Requirement)
+    (Preface_qcheck.Sample.Pack)
+
 module Monad_test =
   Preface_qcheck.Monad.Make (Monad) (Requirement) (Preface_qcheck.Sample.Pack)
 
@@ -36,6 +53,9 @@ module Monoid_test =
 let cases =
   Functor_test.cases
   @ Applicative_test.cases
+  @ Alternative_test.cases
+  @ Alternative_right_absorption_test.cases
+  @ Alternative_right_distributivity_of_apply_test.cases
   @ Monad_test.cases
   @ Monoid_test.cases
 ;;

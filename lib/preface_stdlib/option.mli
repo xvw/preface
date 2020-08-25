@@ -4,6 +4,7 @@
 
     - {!val:Functor}
     - {!val:Applicative}
+    - {!val:Alternative}
     - {!val:Monad}
     - {!val:Monoid}
     - {!val:Foldable}
@@ -75,6 +76,9 @@ module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 
 module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 (** {2 Applicative API} *)
+
+module Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a t
+(** {2 Alternative API} *)
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
