@@ -1,3 +1,64 @@
+module Make_hooked_right_distributivity_of_apply
+    (A : Preface_specs.ALTERNATIVE)
+    (R : Requirement.INPUT_T1 with type 'a t = 'a A.t)
+    (Hook : Requirement.HOOK with type 'a t = 'a A.t)
+    (P : Sample.PACK) : Requirement.OUTPUT = struct
+  open QCheck
+
+  open Helper.Make_for_t1 (R) (P)
+
+  let right_distributivity_of_apply =
+    let test_name = "(f <|> g) <*> a = (f <*> a) <|> (g <*> a)"
+    and test_arbitrary =
+      triple (over (fun1 t1' t2)) (over (fun1 t1' t2)) (over t1)
+    and test (f', g', a) =
+      let open A in
+      let f = Fn.apply <$> f' in
+      let g = Fn.apply <$> g' in
+      let left = f <|> g <*> a
+      and right = f <*> a <|> (g <*> a) in
+      Hook.(apply left = apply right)
+    in
+    Test.make ~name:test_name ~count:R.size test_arbitrary test
+  ;;
+
+  let cases =
+    [
+      ( "Alternative " ^ R.name ^ " has right distributivity of apply law"
+      , [ right_distributivity_of_apply ]
+        |> List.map QCheck_alcotest.to_alcotest )
+    ]
+  ;;
+end
+
+module Make_hooked_right_absorption
+    (A : Preface_specs.ALTERNATIVE)
+    (R : Requirement.INPUT_T1 with type 'a t = 'a A.t)
+    (Hook : Requirement.HOOK with type 'a t = 'a A.t)
+    (P : Sample.PACK) : Requirement.OUTPUT = struct
+  open QCheck
+
+  open Helper.Make_for_t1 (R) (P)
+
+  let right_absorption =
+    let test_name = "neutral <*> a = neutral"
+    and test_arbitrary = over t1
+    and test x =
+      let left = A.(neutral <*> x)
+      and right = A.neutral in
+      Hook.(apply left = apply right)
+    in
+    Test.make ~name:test_name ~count:R.size test_arbitrary test
+  ;;
+
+  let cases =
+    [
+      ( "Alternative " ^ R.name ^ " has right absorption law"
+      , [ right_absorption ] |> List.map QCheck_alcotest.to_alcotest )
+    ]
+  ;;
+end
+
 module Make_hooked_behaviour
     (A : Preface_specs.ALTERNATIVE)
     (R : Requirement.INPUT_T1 with type 'a t = 'a A.t)
@@ -111,6 +172,26 @@ module Make_behaviour
     (A : Preface_specs.ALTERNATIVE)
     (R : Requirement.INPUT_T1 with type 'a t = 'a A.t) =
   Make_hooked_behaviour (A) (R)
+    (struct
+      type 'a t = 'a A.t
+
+      let apply x = Obj.magic x
+    end)
+
+module Make_right_absorption
+    (A : Preface_specs.ALTERNATIVE)
+    (R : Requirement.INPUT_T1 with type 'a t = 'a A.t) =
+  Make_hooked_right_absorption (A) (R)
+    (struct
+      type 'a t = 'a A.t
+
+      let apply x = Obj.magic x
+    end)
+
+module Make_right_distributivity_of_apply
+    (A : Preface_specs.ALTERNATIVE)
+    (R : Requirement.INPUT_T1 with type 'a t = 'a A.t) =
+  Make_hooked_right_distributivity_of_apply (A) (R)
     (struct
       type 'a t = 'a A.t
 
