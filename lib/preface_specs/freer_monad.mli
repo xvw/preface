@@ -9,7 +9,7 @@ module type CORE = sig
   type 'a f
   (** The parametric type. *)
 
-  (** The type holded by [Freer]. *)
+  (** The type held by [Freer]. *)
   type _ t =
     | Return : 'a -> 'a t
     | Bind : 'b f * ('b -> 'a t) -> 'a t
