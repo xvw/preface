@@ -73,6 +73,9 @@ module Selective = Selective
 module Monad = Monad
 (** Describes a monad. *)
 
+module Monad_plus = Monad_plus
+(** Describes a monad plus. *)
+
 module Comonad = Comonad
 (** Describes a comonad. *)
 
@@ -114,6 +117,8 @@ module type ALTERNATIVE = Alternative.API
 module type SELECTIVE = Selective.API
 
 module type MONAD = Monad.API
+
+module type MONAD_PLUS = Monad_plus.API
 
 module type COMONAD = Comonad.API
 
