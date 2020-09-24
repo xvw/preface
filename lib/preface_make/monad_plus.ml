@@ -143,3 +143,9 @@ module Over_monad
 
       include Monad.Syntax
     end)
+
+module Over_monad_and_alternative
+    (Monad : Preface_specs.MONAD)
+    (Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a Monad.t) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Alternative.t =
+  Over_monad (Monad) (Alternative)

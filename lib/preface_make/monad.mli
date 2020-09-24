@@ -93,6 +93,10 @@ module Via_kleisli_composition
                                      .CORE_WITH_KLEISLI_COMPOSITION) :
   Preface_specs.MONAD with type 'a t = 'a Core_with_kleisli_composition.t
 
+(** Incarnation of a [Monad] using a [Monad_plus].*)
+module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
+  Preface_specs.MONAD with type 'a t = 'a Monad_plus.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Monad], constructing and assembling a

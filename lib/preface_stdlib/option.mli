@@ -6,6 +6,7 @@
     - {!val:Applicative}
     - {!val:Alternative}
     - {!val:Monad}
+    - {!val:Monad_plus}
     - {!val:Monoid}
     - {!val:Foldable}
 
@@ -82,6 +83,9 @@ module Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a t
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
+
+module Monad_plus : Preface_specs.MONAD_PLUS with type 'a t = 'a t
+(** {2 Monad Plus API} *)
 
 (** {2 Monoid API} *)
 module Monoid (M : Preface_specs.SEMIGROUP) :

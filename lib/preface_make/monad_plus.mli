@@ -24,6 +24,12 @@ module Via_kleisli_composition
                                      .CORE_WITH_KLEISLI_COMPOSITION) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_kleisli_composition.t
 
+(** Incarnation of a [Monad_plus] over a [Monad] and an [Alternative].*)
+module Over_monad_and_alternative
+    (Monad : Preface_specs.MONAD)
+    (Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a Monad.t) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Alternative.t
+
 (** Incarnation of a [Monad_plus] over a [Monad].*)
 module Over_monad
     (Monad : Preface_specs.MONAD)

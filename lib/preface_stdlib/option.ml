@@ -38,6 +38,9 @@ module Monad = Preface_make.Monad.Via_bind (struct
   let bind f = function Some x -> f x | None -> None
 end)
 
+module Monad_plus =
+  Preface_make.Monad_plus.Over_monad_and_alternative (Monad) (Alternative)
+
 module Monoid (M : Preface_specs.SEMIGROUP) =
 Preface_make.Monoid.Via_combine_and_neutral (struct
   type nonrec t = M.t t
