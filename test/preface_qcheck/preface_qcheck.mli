@@ -25,6 +25,7 @@ module Functor = Functor
 module Applicative = Applicative
 module Alternative = Alternative
 module Monad = Monad
+module Monad_plus = Monad_plus
 module Bifunctor = Bifunctor
 module Selective = Selective
 module Semigroup = Semigroup
