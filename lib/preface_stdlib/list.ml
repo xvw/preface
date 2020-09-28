@@ -53,24 +53,28 @@ module Applicative = struct
   include Preface_make.Applicative.From_alternative (Alternative)
 end
 
+module Monad_plus = Preface_make.Monad_plus.Via_bind (struct
+  type nonrec 'a t = 'a t
+
+  let return = pure
+
+  (* Implementation from OCaml 4.10.0 *)
+  let bind f =
+    let rec aux_bind acc = function
+      | [] -> Stdlib.List.rev acc
+      | x :: tail ->
+        let xs = f x in
+        aux_bind (Stdlib.List.rev_append xs acc) tail
+    in
+    aux_bind []
+  ;;
+
+  let neutral = []
+
+  let combine l r = l @ r
+end)
+
 module Monad = struct
-  module M = Preface_make.Monad.Via_bind (struct
-    type nonrec 'a t = 'a t
-
-    let return = pure
-
-    (* Implementation from OCaml 4.10.0 *)
-    let bind f =
-      let rec aux_bind acc = function
-        | [] -> Stdlib.List.rev acc
-        | x :: tail ->
-          let xs = f x in
-          aux_bind (Stdlib.List.rev_append xs acc) tail
-      in
-      aux_bind []
-    ;;
-  end)
-
   module Traversable (M : Preface_specs.MONAD) :
     Preface_specs.TRAVERSABLE with type 'a t = 'a M.t and type 'a iter = 'a t =
   struct
@@ -95,7 +99,7 @@ module Monad = struct
     include Preface_make.Traversable.Over_monad (M) (T)
   end
 
-  include M
+  include Preface_make.Monad.From_monad_plus (Monad_plus)
 end
 
 module Selective =

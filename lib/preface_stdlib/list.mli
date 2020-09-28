@@ -7,6 +7,7 @@
     - {!val:Alternative}
     - {!val:Selective}
     - {!val:Monad}
+    - {!val:Monad_plus}
     - {!val:Foldable}
     - [Traversable] for {!val:Applicative} and {!val:Monad}
     - {!val:Monoid} *)
@@ -56,6 +57,9 @@ module Monad : sig
   include Preface_specs.MONAD with type 'a t = 'a t
   (** {2 Monad API} *)
 end
+
+module Monad_plus : Preface_specs.MONAD_PLUS with type 'a t = 'a t
+(** {2 Alternative API} *)
 
 (** {2 Monoid API} *)
 module Monoid (T : Preface_specs.Types.T0) :

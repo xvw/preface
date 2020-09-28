@@ -35,6 +35,20 @@ module Alternative_right_distributivity_of_apply_test =
 
 module Monad_test =
   Preface_qcheck.Monad.Make (Monad) (Requirement) (Preface_qcheck.Sample.Pack)
+module Monad_plus_test =
+  Preface_qcheck.Monad_plus.Make_behaviour (Monad_plus) (Requirement)
+    (Preface_qcheck.Sample.Pack)
+module Monad_plus_monoid_test =
+  Preface_qcheck.Monad_plus.Make_monoidal_laws (Monad_plus) (Requirement)
+    (Preface_qcheck.Sample.Pack)
+module Monad_plus_left_zero_test =
+  Preface_qcheck.Monad_plus.Make_left_zero_law (Monad_plus) (Requirement)
+    (Preface_qcheck.Sample.Pack)
+module Monad_plus_left_distribution_test =
+  Preface_qcheck.Monad_plus.Make_left_distribution_law
+    (Monad_plus)
+    (Requirement)
+    (Preface_qcheck.Sample.Pack)
 module Selective_test =
   Preface_qcheck.Selective.Make_rigid (Selective) (Requirement)
     (Preface_qcheck.Sample.Pack)
@@ -61,6 +75,10 @@ let cases =
   @ Alternative_right_absorption_test.cases
   @ Alternative_right_distributivity_of_apply_test.cases
   @ Monad_test.cases
+  @ Monad_plus_test.cases
+  @ Monad_plus_monoid_test.cases
+  @ Monad_plus_left_zero_test.cases
+  @ Monad_plus_left_distribution_test.cases
   @ Selective_test.cases
   @ Monoid_test.cases
 ;;
