@@ -1,8 +1,7 @@
 (** Exposes [Result.t]
 
-    [Result.t] is like [Either.t] (with flipped parameters) but it exist for
-    semantic reasons. (Left and Right are not very specific on what are the
-    valid and the invalid branch).
+    [Result.t] is like [Either.t] but it exist for semantic reasons. (Left and
+    Right are not very specific on what are the valid and the invalid branch).
 
     {1 Capabilities}
 

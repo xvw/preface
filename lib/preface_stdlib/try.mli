@@ -1,4 +1,5 @@
-(** Exposes [Try.t]
+(** Exposes [Try.t], a biased version of [Result.t] with the error fixed as an
+    exception.
 
     {1 Capabilities}
 
