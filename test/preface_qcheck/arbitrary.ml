@@ -28,6 +28,20 @@ let either ?collect left right =
   QCheck.make ?print ?collect gen
 ;;
 
+let result ?collect ok error =
+  let gen = Gen.result (QCheck.gen ok) (QCheck.gen error) in
+  let print =
+    let open Opt in
+    ok.QCheck.print
+    >>= fun okp ->
+    error.QCheck.print
+    >|= fun errorp -> function
+    | Preface_stdlib.Result.Ok x -> "Ok " ^ okp x
+    | Preface_stdlib.Result.Error x -> "Error " ^ errorp x
+  in
+  QCheck.make ?print ?collect gen
+;;
+
 let try_ ?collect arbitrary =
   let gen = Gen.try_ (QCheck.gen arbitrary) in
   let print =

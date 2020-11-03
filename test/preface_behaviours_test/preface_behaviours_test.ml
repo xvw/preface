@@ -4,6 +4,7 @@ let () =
     ( Identity.cases
     @ Option.cases
     @ Try.cases
+    @ Result.cases
     @ Validation.cases
     @ List.cases
     @ Nonempty_list.cases

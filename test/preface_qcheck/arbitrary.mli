@@ -22,6 +22,13 @@ val either :
   -> ('a, 'b) Preface_stdlib.Either.t t
 (** Arbitrary for [Either.t] *)
 
+val result :
+     ?collect:(('a, 'b) Preface_stdlib.Result.t -> string)
+  -> 'a t
+  -> 'b t
+  -> ('a, 'b) Preface_stdlib.Result.t t
+(** Arbitrary for [Result.t] *)
+
 val try_ :
      ?collect:('a Preface_stdlib.Try.t -> string)
   -> 'a t
