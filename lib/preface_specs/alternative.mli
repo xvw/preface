@@ -5,14 +5,10 @@
 
 (** Additional operations over [Applicative]. *)
 module type CORE_WITH_NEUTRAL_AND_COMBINE = sig
-  type 'a t
-  (** The type held by the [Alternative]. *)
+  include Alt.CORE
 
   val neutral : 'a t
   (** The neutral element of the [Alternative]. *)
-
-  val combine : 'a t -> 'a t -> 'a t
-  (** Combine two values of ['a t] into one. *)
 end
 
 (** Requirement via [map] and [product]. *)
@@ -36,15 +32,18 @@ module type CORE = sig
   include CORE_WITH_MAP_AND_PRODUCT with type 'a t := 'a t
 end
 
-module type OPERATION = Applicative.OPERATION
 (** Operations *)
+module type OPERATION = sig
+  include Applicative.OPERATION
+
+  include Alt.OPERATION with type 'a t := 'a t
+end
 
 (** Infix notations *)
 module type INFIX = sig
   include Applicative.INFIX
 
-  val ( <|> ) : 'a t -> 'a t -> 'a t
-  (** Infix version of {!val:CORE.combine}. *)
+  include Alt.INFIX with type 'a t := 'a t
 end
 
 module type SYNTAX = Applicative.SYNTAX
