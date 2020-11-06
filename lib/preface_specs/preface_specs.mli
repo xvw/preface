@@ -64,6 +64,9 @@ module Bifunctor = Bifunctor
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
+module Alt = Alt
+(** Describes an Alt. *)
+
 module Alternative = Alternative
 (** Describes an Alternative. *)
 
@@ -111,6 +114,8 @@ module type FUNCTOR = Functor.API
 module type BIFUNCTOR = Bifunctor.API
 
 module type APPLICATIVE = Applicative.API
+
+module type ALT = Alt.API
 
 module type ALTERNATIVE = Alternative.API
 
