@@ -30,7 +30,7 @@ module type INFIX = sig
   type t
   (** A type [t] which is a [Semigroup]. *)
 
-  val ( ++ ) : t -> t -> t
+  val ( <|> ) : t -> t -> t
   (** Infix version of {!val:CORE.combine} *)
 end
 

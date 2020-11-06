@@ -18,13 +18,13 @@ end)
 
 let string_combine () =
   let expected = "FooBar"
-  and computed = S.("Foo" ++ "Bar") in
+  and computed = S.("Foo" <|> "Bar") in
   Alcotest.(check string) "string_combine" expected computed
 ;;
 
 let int_combine () =
   let expected = 16
-  and computed = I.(6 ++ 10) in
+  and computed = I.(6 <|> 10) in
   Alcotest.(check int) "int_combine" expected computed
 ;;
 

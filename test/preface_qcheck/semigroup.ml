@@ -30,8 +30,8 @@ module Make
     let test_name = "++"
     and test_arbitrary = pair R.arbitrary R.arbitrary
     and test (a, b) =
-      let left = S.(a ++ b)
-      and right = Underlying.(a ++ b) in
+      let left = S.(a <|> b)
+      and right = Underlying.(a <|> b) in
       left = right
     in
     Test.make ~name:test_name ~count:R.size test_arbitrary test
