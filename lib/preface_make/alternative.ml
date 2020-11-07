@@ -18,8 +18,10 @@ module Core_via_apply (Core : Preface_specs.Alternative.CORE_WITH_APPLY) :
 end
 
 module Operation (Core : Preface_specs.Alternative.CORE) :
-  Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t =
-  Applicative.Operation (Core)
+  Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t = struct
+  include Applicative.Operation (Core)
+  include Alt.Operation (Core)
+end
 
 module Syntax (Core : Preface_specs.Alternative.CORE) :
   Preface_specs.Alternative.SYNTAX with type 'a t = 'a Core.t =
@@ -30,8 +32,7 @@ module Infix
     (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Alternative.INFIX with type 'a t = 'a Core.t = struct
   include Applicative.Infix (Core) (Operation)
-
-  let ( <|> ) a b = Core.combine a b
+  include Alt.Infix (Core)
 end
 
 module Via
@@ -88,7 +89,10 @@ module Over_applicative
 
       let neutral = Core.neutral
     end)
-    (Applicative)
+    (struct
+      include Alt.Operation (Core)
+      include Applicative
+    end)
     (struct
       type 'a t = 'a Applicative.t
 

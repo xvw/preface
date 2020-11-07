@@ -1,5 +1,5 @@
-(** A [Semigroup] is a type [t] which provides an associative operation [concat]
-    which lets you combine any two values of [t] into one. *)
+(** A [Semigroup] is a type [t] which provides an associative operation
+    [combine] which lets you combine any two values of [t] into one. *)
 
 (** {1 Structure anatomy} *)
 
@@ -18,11 +18,11 @@ module type OPERATION = sig
   (** A type [t] which is a [Semigroup]. *)
 
   val times : int -> t -> t option
-  (** [times n x] apply [concat] on [x] [n] times. If [n] is lower than [1] the
+  (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
       function will returns [None]. *)
 
   val reduce_nel : t Preface_core.Nonempty_list.t -> t
-  (** Reduce a [Nonempty_list.t] using [concat]. *)
+  (** Reduce a [Nonempty_list.t] using [combine]. *)
 end
 
 (** Infix notation *)
@@ -30,8 +30,8 @@ module type INFIX = sig
   type t
   (** A type [t] which is a [Semigroup]. *)
 
-  val ( ++ ) : t -> t -> t
-  (** Infix version of {!val:CORE.concat} *)
+  val ( <|> ) : t -> t -> t
+  (** Infix version of {!val:CORE.combine} *)
 end
 
 (** The complete interface of a [Semigroup]. *)

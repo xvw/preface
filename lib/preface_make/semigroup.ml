@@ -17,7 +17,7 @@ module Infix (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.Semigroup.INFIX with type t = Core.t = struct
   type t = Core.t
 
-  let ( ++ ) = Core.combine
+  let ( <|> ) = Core.combine
 end
 
 module Via

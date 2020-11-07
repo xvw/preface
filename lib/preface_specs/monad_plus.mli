@@ -39,6 +39,8 @@ end
 module type OPERATION = sig
   include Monad.OPERATION
 
+  include Alt.OPERATION with type 'a t := 'a t
+
   val filter : ('a -> bool) -> 'a t -> 'a t
   (** Filtering over [Monad_plus]. *)
 end
