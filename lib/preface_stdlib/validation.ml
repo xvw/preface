@@ -1,70 +1,85 @@
-type 'a t = ('a, exn list) result
+type ('a, 'errors) t =
+  | Valid of 'a
+  | Invalid of 'errors
 
-let pure x = Ok x
+let valid x = Valid x
 
-let ok = pure
+let invalid errors = Invalid errors
 
-let error exns = Error exns
+let pure = valid
 
-module Functor = Preface_make.Functor.Via_map (struct
-  type nonrec 'a t = 'a t
+let case f g = function Valid x -> f x | Invalid x -> g x
 
-  let map f = function Ok x -> Ok (f x) | Error x -> Error x
+module Bifunctor = Preface_make.Bifunctor.Via_bimap (struct
+  type nonrec ('a, 'errors) t = ('a, 'errors) t
+
+  let bimap f g = function Valid x -> Valid (f x) | Invalid x -> Invalid (g x)
 end)
 
-module Applicative = Preface_make.Applicative.Via_apply (struct
-  type nonrec 'a t = 'a t
+module Functor (T : Preface_specs.Types.T0) =
+Preface_make.Functor.Via_map (struct
+  type nonrec 'a t = ('a, T.t) t
 
-  let pure = pure
+  let map f = function Valid x -> Valid (f x) | Invalid err -> Invalid err
+end)
+
+module Applicative (Alt : Preface_specs.ALT) (Error : Preface_specs.Types.T0) =
+Preface_make.Applicative.Via_apply (struct
+  type nonrec 'a t = ('a, Error.t Alt.t) t
+
+  let pure = valid
 
   let apply fx xs =
     match (fx, xs) with
-    | (Ok f, Ok x) -> Ok (f x)
-    | (Error left, Error right) -> Error (left @ right)
-    | (Error x, _) | (_, Error x) -> Error x
+    | (Valid f, Valid x) -> Valid (f x)
+    | (Invalid left, Invalid right) -> Invalid (Alt.combine left right)
+    | (Invalid x, _) | (_, Invalid x) -> Invalid x
   ;;
 end)
 
-module Selective =
-  Preface_make.Selective.Over_applicative
-    (Applicative)
-    (struct
-      type nonrec 'a t = 'a t
+module Selective (Alt : Preface_specs.ALT) (Error : Preface_specs.Types.T0) =
+struct
+  module A = Applicative (Alt) (Error)
 
-      type ('a, 'b) either = ('a, 'b) Preface_core.Either.t =
-        | Left of 'a
-        | Right of 'b
+  module S =
+    Preface_make.Selective.Over_applicative
+      (A)
+      (struct
+        type nonrec 'a t = ('a, Error.t Alt.t) t
 
-      let pure = pure
+        let pure = valid
 
-      let select either f =
-        match either with
-        | Ok (Left a) -> Applicative.(( |> ) a <$> f)
-        | Ok (Right b) -> Ok b
-        | Error e -> Error e
-      ;;
-    end)
+        type ('a, 'b) either = ('a, 'b) Preface_core.Either.t =
+          | Left of 'a
+          | Right of 'b
 
-module Monad = Preface_make.Monad.Via_bind (struct
-  type nonrec 'a t = 'a t
+        let select either f =
+          match either with
+          | Valid (Left a) -> A.map (( |> ) a) f
+          | Valid (Right b) -> Valid b
+          | Invalid err -> Invalid err
+        ;;
+      end)
 
-  let return = pure
+  include S
+end
 
-  let bind f = function Ok x -> f x | Error x -> Error x
+module Monad (T : Preface_specs.Types.T0) = Preface_make.Monad.Via_bind (struct
+  type nonrec 'a t = ('a, T.t) t
+
+  let return = valid
+
+  let bind f = function Valid x -> f x | Invalid err -> Invalid err
 end)
 
-let capture f = (try ok (f ()) with exn -> error [ exn ])
-
-let case f g = function Ok x -> f x | Error exns -> g exns
-
-let eq f a b =
-  match (a, b) with
-  | (Ok x, Ok y) -> f x y
-  | (Error xs, Error ys) -> List.eq Exn.eq xs ys
+let eq f g left right =
+  match (left, right) with
+  | (Valid x, Valid y) -> f x y
+  | (Invalid x, Invalid y) -> g x y
   | _ -> false
 ;;
 
-let pp pp' formater = function
-  | Error exn -> Format.(fprintf formater "Error %a" (List.pp Exn.pp) exn)
-  | Ok x -> Format.fprintf formater "Ok (%a)" pp' x
+let pp f g formater = function
+  | Valid x -> Format.fprintf formater "Valid (%a)" f x
+  | Invalid x -> Format.fprintf formater "Invalid (%a)" g x
 ;;

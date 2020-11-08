@@ -1,21 +1,60 @@
-module Functor_test = Support.Functor (struct
-  include Preface_stdlib.Validation
-  include Functor
-end)
+module Validation = struct
+  module V = Preface_stdlib.Validation
+  module Alt = Preface_stdlib.List.Alternative
 
-module Applicative_test = Support.Applicative (struct
-  include Preface_stdlib.Validation
-  include Applicative
-end)
+  let valid = V.valid
 
-module Monad_test = Support.Monad (struct
-  include Preface_stdlib.Validation
-  include Monad
-end)
+  let invalid = V.invalid
 
-open Preface_stdlib.Validation
+  type error = exn Alt.t
 
-let subject a = Alcotest.testable (pp (Alcotest.pp a)) (eq ( = ))
+  type 'a t = ('a, error) V.t
+
+  module ErrorT = struct
+    type t = error
+  end
+
+  module Misc : sig
+    val pure : 'a -> 'a t
+
+    val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+
+    val pp :
+      (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
+  end = struct
+    let pure = V.valid
+
+    let eq f = V.eq f Preface_stdlib.(List.eq Exn.eq)
+
+    let pp f = V.pp f Preface_stdlib.(List.pp Exn.pp)
+  end
+
+  module Functor = struct
+    include V.Functor (ErrorT)
+    include Misc
+  end
+
+  module Applicative = struct
+    include V.Applicative (Alt) (Preface_stdlib.Exn)
+    include Misc
+  end
+
+  module Monad = struct
+    include V.Monad (ErrorT)
+    include Misc
+  end
+
+  module Selective = V.Selective (Alt) (Preface_stdlib.Exn)
+end
+
+module Functor_test = Support.Functor (Validation.Functor)
+module Applicative_test = Support.Applicative (Validation.Applicative)
+module Monad_test = Support.Monad (Validation.Monad)
+open Validation
+
+let subject a =
+  Validation.Misc.(Alcotest.testable (pp (Alcotest.pp a)) (eq ( = )))
+;;
 
 module Formlet = struct
   type t = {
@@ -35,16 +74,18 @@ module Formlet = struct
 
   exception Unchecked_rules
 
-  let validate_age age = if age > 7 then Ok age else Error [ Invalid_age age ]
+  let validate_age age =
+    if age > 7 then valid age else invalid [ Invalid_age age ]
+  ;;
 
   let validate_name which name =
     if String.length name > 1
-    then Ok name
-    else Error [ Invalid_name (which, name) ]
+    then valid name
+    else invalid [ Invalid_name (which, name) ]
   ;;
 
   let validate_rules checked =
-    if checked then Ok `Yes else Error [ Unchecked_rules ]
+    if checked then valid `Yes else invalid [ Unchecked_rules ]
   ;;
 
   let eq a b =
@@ -61,7 +102,7 @@ end
 
 let validation_formlet_valid () =
   let expected =
-    Ok
+    valid
       Formlet.
         {
           age = 30
@@ -83,7 +124,7 @@ let validation_formlet_valid () =
 ;;
 
 let validation_formlet_invalid1 () =
-  let expected = Error Formlet.[ Invalid_age (-5) ]
+  let expected = invalid Formlet.[ Invalid_age (-5) ]
   and computed =
     let open Applicative.Infix in
     let open Formlet in
@@ -99,7 +140,7 @@ let validation_formlet_invalid1 () =
 
 let validation_formlet_invalid2 () =
   let expected =
-    Error
+    invalid
       Formlet.[ Invalid_name ("firstname", ""); Invalid_name ("lastname", "-") ]
   and computed =
     let open Applicative.Infix in
@@ -115,7 +156,7 @@ let validation_formlet_invalid2 () =
 ;;
 
 let validation_formlet_invalid3 () =
-  let expected = Error Formlet.[ Unchecked_rules ]
+  let expected = invalid Formlet.[ Unchecked_rules ]
   and computed =
     let open Applicative.Infix in
     let open Formlet in
@@ -131,7 +172,7 @@ let validation_formlet_invalid3 () =
 
 let validation_formlet_invalid4 () =
   let expected =
-    Error
+    invalid
       Formlet.
         [
           Invalid_age (-5)
@@ -190,44 +231,46 @@ module Shape = struct
   ;;
 end
 
-let testable = Alcotest.testable (pp Shape.pp) (eq Shape.eq)
+let testable = Misc.(Alcotest.testable (pp Shape.pp) (eq Shape.eq))
 
 let validation_shape_1 () =
-  let expected = Ok (Shape.circle 1)
+  let expected = valid (Shape.circle 1)
   and computed =
-    Shape.make (Ok true) (Ok 1)
-      (Error [ Shape.Fail "width" ])
-      (Error [ Shape.Fail "height" ])
+    Shape.make (valid true) (valid 1)
+      (invalid [ Shape.Fail "width" ])
+      (invalid [ Shape.Fail "height" ])
   in
   Alcotest.check testable "Should be a valid circle" expected computed
 ;;
 
 let validation_shape_2 () =
-  let expected = Ok (Shape.rectangle 2 3)
+  let expected = valid (Shape.rectangle 2 3)
   and computed =
-    Shape.make (Ok false) (Error [ Shape.Fail "radius" ]) (Ok 2) (Ok 3)
+    Shape.make (valid false)
+      (invalid [ Shape.Fail "radius" ])
+      (valid 2) (valid 3)
   in
   Alcotest.check testable "Should be a valid rectangle" expected computed
 ;;
 
 let validation_shape_3 () =
-  let expected = Error [ Shape.Fail "height" ]
+  let expected = invalid [ Shape.Fail "height" ]
   and computed =
-    Shape.make (Ok false)
-      (Error [ Shape.Fail "radius" ])
-      (Ok 2)
-      (Error [ Shape.Fail "height" ])
+    Shape.make (valid false)
+      (invalid [ Shape.Fail "radius" ])
+      (valid 2)
+      (invalid [ Shape.Fail "height" ])
   in
   Alcotest.check testable "Should be a invalid with height" expected computed
 ;;
 
 let validation_shape_4 () =
-  let expected = Error [ Shape.Fail "width"; Shape.Fail "height" ]
+  let expected = invalid [ Shape.Fail "width"; Shape.Fail "height" ]
   and computed =
-    Shape.make (Ok false)
-      (Error [ Shape.Fail "radius" ])
-      (Error [ Shape.Fail "width" ])
-      (Error [ Shape.Fail "height" ])
+    Shape.make (valid false)
+      (invalid [ Shape.Fail "radius" ])
+      (invalid [ Shape.Fail "width" ])
+      (invalid [ Shape.Fail "height" ])
   in
   Alcotest.check testable "Should be invalid with width and height" expected
     computed

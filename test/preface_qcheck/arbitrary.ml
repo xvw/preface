@@ -2,6 +2,11 @@ module Opt = Preface_stdlib.Option.Monad
 
 type 'a t = 'a QCheck.arbitrary
 
+let exn ?collect () =
+  let print = Some (fun x -> Format.asprintf "%a" Preface_stdlib.Exn.pp x) in
+  QCheck.make ?print ?collect Gen.exn
+;;
+
 let identity ?collect arbitrary =
   let gen = Gen.identity (QCheck.gen arbitrary) in
   let print = Opt.(arbitrary.QCheck.print >|= Print.identity) in
@@ -66,14 +71,16 @@ let nonempty_list ?collect arbitrary =
   QCheck.make ?print ?collect gen
 ;;
 
-let validation ?collect arbitrary =
-  let gen = Gen.validation (QCheck.gen arbitrary) in
+let validation ?collect valid invalid =
+  let gen = Gen.validation (QCheck.gen valid) (QCheck.gen invalid) in
   let print =
     let open Opt in
-    arbitrary.QCheck.print
-    >|= fun printer x ->
-    let pp_hook ppf x = Format.fprintf ppf "%s" (printer x) in
-    Format.asprintf "%a" (Preface_stdlib.Validation.pp pp_hook) x
+    valid.QCheck.print
+    >>= fun vprinter ->
+    invalid.QCheck.print
+    >|= fun iprinter -> function
+    | Preface_stdlib.Validation.Valid x -> "Valid " ^ vprinter x
+    | Preface_stdlib.Validation.Invalid x -> "Invalid " ^ iprinter x
   in
   QCheck.make ?print ?collect gen
 ;;
