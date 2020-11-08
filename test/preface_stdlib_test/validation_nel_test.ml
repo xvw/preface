@@ -1,74 +1,6 @@
 module Nel = Preface_stdlib.Nonempty_list
-module Exn = Preface_stdlib.Exn
 module Option = Preface_stdlib.Option
-module Make = Preface_make
-
-module Validation = struct
-  type 'a t = ('a, exn Nel.t) result
-
-  let pure x = Ok x
-
-  let error exns = Error exns
-
-  module Functor = Make.Functor.Via_map (struct
-    type nonrec 'a t = 'a t
-
-    let map f = function Ok x -> Ok (f x) | Error xs -> Error xs
-  end)
-
-  module Applicative = Make.Applicative.Via_apply (struct
-    type nonrec 'a t = 'a t
-
-    let pure = pure
-
-    let apply fx xs =
-      match (fx, xs) with
-      | (Ok f, Ok x) -> Ok (f x)
-      | (Error l, Error r) -> Error (Nel.append l r)
-      | (Error x, _) | (_, Error x) -> Error x
-    ;;
-  end)
-
-  module Selective =
-    Make.Selective.Over_applicative
-      (Applicative)
-      (struct
-        type nonrec 'a t = 'a t
-
-        type ('a, 'b) either = ('a, 'b) Preface_core.Either.t =
-          | Left of 'a
-          | Right of 'b
-
-        let pure = pure
-
-        let select either f =
-          match either with
-          | Ok (Left a) -> Applicative.(( |> ) a <$> f)
-          | Ok (Right b) -> Ok b
-          | Error e -> Error e
-        ;;
-      end)
-
-  module Monad = Make.Monad.Via_bind (struct
-    type nonrec 'a t = 'a t
-
-    let return = pure
-
-    let bind f = function Ok x -> f x | Error x -> Error x
-  end)
-
-  let eq f a b =
-    match (a, b) with
-    | (Ok x, Ok y) -> f x y
-    | (Error xs, Error ys) -> Nel.eq Exn.eq xs ys
-    | _ -> false
-  ;;
-
-  let pp pp' formater = function
-    | Error exn -> Format.(fprintf formater "Error %a" (Nel.pp Exn.pp) exn)
-    | Ok x -> Format.fprintf formater "Ok (%a)" pp' x
-  ;;
-end
+module Validation = Preface_stdlib.Validate
 
 let subject a =
   Alcotest.testable (Validation.pp (Alcotest.pp a)) (Validation.eq ( = ))
@@ -93,17 +25,20 @@ module Formlet = struct
   exception Unchecked_rules
 
   let validate_age age =
-    if age > 7 then Ok age else Error (Nel.create (Invalid_age age))
+    let open Validation in
+    if age > 7 then valid age else invalid (Nel.create (Invalid_age age))
   ;;
 
   let validate_name which name =
+    let open Validation in
     if String.length name > 1
-    then Ok name
-    else Error (Nel.create (Invalid_name (which, name)))
+    then valid name
+    else invalid (Nel.create (Invalid_name (which, name)))
   ;;
 
   let validate_rules checked =
-    if checked then Ok `Yes else Error (Nel.create Unchecked_rules)
+    let open Validation in
+    if checked then valid `Yes else invalid (Nel.create Unchecked_rules)
   ;;
 
   let eq a b =
@@ -122,7 +57,7 @@ open Validation
 
 let validation_formlet_valid () =
   let expected =
-    Ok
+    valid
       Formlet.
         {
           age = 30
@@ -144,7 +79,7 @@ let validation_formlet_valid () =
 ;;
 
 let validation_formlet_invalid1 () =
-  let expected = Error Formlet.(Nel.create (Invalid_age (-5)))
+  let expected = invalid Formlet.(Nel.create (Invalid_age (-5)))
   and computed =
     let open Applicative.Infix in
     let open Formlet in
@@ -160,7 +95,7 @@ let validation_formlet_invalid1 () =
 
 let validation_formlet_invalid2 () =
   let expected =
-    Error
+    invalid
       (let open Formlet in
       let open Nel in
       Invalid_name ("firstname", "") :: create (Invalid_name ("lastname", "-")))
@@ -178,7 +113,7 @@ let validation_formlet_invalid2 () =
 ;;
 
 let validation_formlet_invalid3 () =
-  let expected = Error Formlet.(Nel.create Unchecked_rules)
+  let expected = invalid Formlet.(Nel.create Unchecked_rules)
   and computed =
     let open Applicative.Infix in
     let open Formlet in
@@ -194,7 +129,7 @@ let validation_formlet_invalid3 () =
 
 let validation_formlet_invalid4 () =
   let expected =
-    Error
+    invalid
       (let open Formlet in
       let open Nel in
       Invalid_age (-5)
@@ -257,42 +192,44 @@ end
 let fail s = Shape.Fail s
 
 let validation_shape_1 () =
-  let expected = Ok (Shape.circle 1)
+  let expected = valid (Shape.circle 1)
   and computed =
-    Shape.make (Ok true) (Ok 1)
-      (Error (Nel.create (fail "width")))
-      (Error (Nel.create (fail "width")))
+    Shape.make (valid true) (valid 1)
+      (invalid (Nel.create (fail "width")))
+      (invalid (Nel.create (fail "width")))
   in
   Alcotest.check Shape.testable "Should be a valid circle" expected computed
 ;;
 
 let validation_shape_2 () =
-  let expected = Ok (Shape.rectangle 2 3)
+  let expected = valid (Shape.rectangle 2 3)
   and computed =
-    Shape.make (Ok false) (Error (Nel.create (fail "radius"))) (Ok 2) (Ok 3)
+    Shape.make (valid false)
+      (invalid (Nel.create (fail "radius")))
+      (valid 2) (valid 3)
   in
   Alcotest.check Shape.testable "Should be a valid rectangle" expected computed
 ;;
 
 let validation_shape_3 () =
-  let expected = Error (Nel.create (fail "height"))
+  let expected = invalid (Nel.create (fail "height"))
   and computed =
-    Shape.make (Ok false)
-      (Error (Nel.create (fail "radius")))
-      (Ok 2)
-      (Error (Nel.create (fail "height")))
+    Shape.make (valid false)
+      (invalid (Nel.create (fail "radius")))
+      (valid 2)
+      (invalid (Nel.create (fail "height")))
   in
   Alcotest.check Shape.testable "Should be a invalid with height" expected
     computed
 ;;
 
 let validation_shape_4 () =
-  let expected = Error Nel.(fail "width" :: create (fail "height"))
+  let expected = invalid Nel.(fail "width" :: create (fail "height"))
   and computed =
-    Shape.make (Ok false)
-      (Error (Nel.create (fail "radius")))
-      (Error (Nel.create (fail "width")))
-      (Error (Nel.create (fail "height")))
+    Shape.make (valid false)
+      (invalid (Nel.create (fail "radius")))
+      (invalid (Nel.create (fail "width")))
+      (invalid (Nel.create (fail "height")))
   in
 
   Alcotest.check Shape.testable "Should be invalid with width and height"
