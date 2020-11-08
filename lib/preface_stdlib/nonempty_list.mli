@@ -17,6 +17,9 @@ type 'a t = 'a Preface_core.Nonempty_list.t =
 
 (** {1 Implementation} *)
 
+module Alt : Preface_specs.ALT with type 'a t = 'a t
+(** {2 Alt API} *)
+
 module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 (** {2 Foldable API} *)
 

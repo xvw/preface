@@ -8,6 +8,12 @@ include (
 
 let pure x = create x
 
+module Alt = Preface_make.Alt.Via_combine (struct
+  type nonrec 'a t = 'a t
+
+  let combine = append
+end)
+
 module Foldable = Preface_make.Foldable.Via_fold_right (struct
   type nonrec 'a t = 'a t
 
