@@ -66,17 +66,21 @@
         exception Unchecked_rules
 
         let validate_age age =
-          if age >= 0 then Valid age else Invalid [ Invalid_age age ]
+          if age >= 0
+          then Validate.valid age
+          else Validate.error (Invalid_age age)
         ;;
 
         let validate_name subject name =
           if String.length name > 1
-          then Valid name
-          else Invalid [ Invalid_name (subject, name) ]
+          then Validate.valid name
+          else Validate.error (Invalid_name (subject, name))
         ;;
 
         let validate_rules checked =
-          if checked then Valid checked else Invalid [ Unchecked_rules ]
+          if checked
+          then Validate.valid checked
+          else Validate.error Unchecked_rules
         ;;
       end
     ]}
@@ -152,7 +156,10 @@ val valid : 'a -> 'a t
 (** Wrap a value into [Valid].*)
 
 val invalid : exn Nonempty_list.t -> 'a t
-(** Wrap an exception into [Invalid]. *)
+(** Wrap an exception list into [Invalid]. *)
+
+val error : exn -> 'a t
+(** Wrap an exception into a list and wrap the list into [Invalid]. *)
 
 val case : ('a -> 'b) -> (exn Nonempty_list.t -> 'b) -> 'a t -> 'b
 (** [case f g x] apply [f] if [x] is [Valid], [g] if [x] is [Invalid].*)

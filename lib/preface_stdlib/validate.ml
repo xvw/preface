@@ -6,6 +6,8 @@ let valid = Validation.valid
 
 let invalid = Validation.invalid
 
+let error err = invalid (Nonempty_list.create err)
+
 module Functor = Validation.Functor (struct
   type t = exn Nonempty_list.t
 end)
