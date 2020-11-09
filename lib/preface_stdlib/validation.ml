@@ -23,29 +23,28 @@ Preface_make.Functor.Via_map (struct
   let map f = function Valid x -> Valid (f x) | Invalid err -> Invalid err
 end)
 
-module Applicative (Alt : Preface_specs.ALT) (Error : Preface_specs.Types.T0) =
+module Applicative (Errors : Preface_specs.SEMIGROUP) =
 Preface_make.Applicative.Via_apply (struct
-  type nonrec 'a t = ('a, Error.t Alt.t) t
+  type nonrec 'a t = ('a, Errors.t) t
 
   let pure = valid
 
   let apply fx xs =
     match (fx, xs) with
     | (Valid f, Valid x) -> Valid (f x)
-    | (Invalid left, Invalid right) -> Invalid (Alt.combine left right)
+    | (Invalid left, Invalid right) -> Invalid (Errors.combine left right)
     | (Invalid x, _) | (_, Invalid x) -> Invalid x
   ;;
 end)
 
-module Selective (Alt : Preface_specs.ALT) (Error : Preface_specs.Types.T0) =
-struct
-  module A = Applicative (Alt) (Error)
+module Selective (Errors : Preface_specs.SEMIGROUP) = struct
+  module A = Applicative (Errors)
 
   module S =
     Preface_make.Selective.Over_applicative
       (A)
       (struct
-        type nonrec 'a t = ('a, Error.t Alt.t) t
+        type nonrec 'a t = ('a, Errors.t) t
 
         let pure = valid
 

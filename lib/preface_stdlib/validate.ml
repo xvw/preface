@@ -10,19 +10,9 @@ module Functor = Validation.Functor (struct
   type t = exn Nonempty_list.t
 end)
 
-module Applicative =
-  Validation.Applicative
-    (Nonempty_list.Alt)
-    (struct
-      type t = exn
-    end)
-
-module Selective =
-  Validation.Selective
-    (Nonempty_list.Alt)
-    (struct
-      type t = exn
-    end)
+module Exn_list = Preface_make.Semigroup.From_alt (Nonempty_list.Alt) (Exn)
+module Applicative = Validation.Applicative (Exn_list)
+module Selective = Validation.Selective (Exn_list)
 
 module Monad = Validation.Monad (struct
   type t = exn Nonempty_list.t

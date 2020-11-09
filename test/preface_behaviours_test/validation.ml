@@ -20,13 +20,14 @@ module ErrorT = struct
   type t = Error.t Alt.t
 end
 
+module Exn_list = Preface_make.Semigroup.From_alt (Alt) (Error)
 module Functor_test =
   Preface_qcheck.Functor.Make
     (Functor (ErrorT)) (Requirement)
     (Preface_qcheck.Sample.Pack)
 module Applicative_test =
   Preface_qcheck.Applicative.Make
-    (Applicative (Alt) (Error)) (Requirement)
+    (Applicative (Exn_list)) (Requirement)
     (Preface_qcheck.Sample.Pack)
 module Monad_test =
   Preface_qcheck.Monad.Make
@@ -34,7 +35,7 @@ module Monad_test =
     (Preface_qcheck.Sample.Pack)
 module Selective_test =
   Preface_qcheck.Selective.Make
-    (Selective (Alt) (Error)) (Requirement)
+    (Selective (Exn_list)) (Requirement)
     (Preface_qcheck.Sample.Pack)
 
 let cases =

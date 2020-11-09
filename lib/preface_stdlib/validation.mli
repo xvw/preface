@@ -147,13 +147,13 @@ module Functor (T : Preface_specs.Types.T0) :
   Preface_specs.FUNCTOR with type 'a t = ('a, T.t) t
 
 (** {2 Applicative API} *)
-module Applicative (Alt : Preface_specs.ALT) (Error : Preface_specs.Types.T0) :
-  Preface_specs.APPLICATIVE with type 'a t = ('a, Error.t Alt.t) t
+module Applicative (Errors : Preface_specs.SEMIGROUP) :
+  Preface_specs.APPLICATIVE with type 'a t = ('a, Errors.t) t
 
 (** {2 Selective API} *)
-module Selective (Alt : Preface_specs.ALT) (Error : Preface_specs.Types.T0) :
+module Selective (Errors : Preface_specs.SEMIGROUP) :
   Preface_specs.SELECTIVE
-    with type 'a t = ('a, Error.t Alt.t) t
+    with type 'a t = ('a, Errors.t) t
      and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 (** {2 Monad API} *)

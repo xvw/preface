@@ -14,6 +14,8 @@ module Validation = struct
     type t = error
   end
 
+  module Semigroup = Preface_make.Semigroup.From_alt (Alt) (Preface_stdlib.Exn)
+
   module Misc : sig
     val pure : 'a -> 'a t
 
@@ -35,7 +37,7 @@ module Validation = struct
   end
 
   module Applicative = struct
-    include V.Applicative (Alt) (Preface_stdlib.Exn)
+    include V.Applicative (Semigroup)
     include Misc
   end
 
@@ -44,7 +46,7 @@ module Validation = struct
     include Misc
   end
 
-  module Selective = V.Selective (Alt) (Preface_stdlib.Exn)
+  module Selective = V.Selective (Semigroup)
 end
 
 module Functor_test = Support.Functor (Validation.Functor)
