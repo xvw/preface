@@ -50,3 +50,27 @@ module Over_semigroup
   include Operation
   include Infix
 end
+
+module From_alternative
+    (Alternative : Preface_specs.ALTERNATIVE)
+    (T : Preface_specs.Types.T0) :
+  Preface_specs.MONOID with type t = T.t Alternative.t =
+Via_combine_and_neutral (struct
+  type t = T.t Alternative.t
+
+  let combine = Alternative.combine
+
+  let neutral = Alternative.neutral
+end)
+
+module From_monad_plus
+    (Monad_plus : Preface_specs.MONAD_PLUS)
+    (T : Preface_specs.Types.T0) :
+  Preface_specs.MONOID with type t = T.t Monad_plus.t =
+Via_combine_and_neutral (struct
+  type t = T.t Monad_plus.t
+
+  let combine = Monad_plus.combine
+
+  let neutral = Monad_plus.neutral
+end)
