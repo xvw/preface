@@ -22,7 +22,10 @@ let capture f = (try ok (f ()) with exn -> error exn)
 
 let case f g = function Ok x -> f x | Error exn -> g exn
 
-let to_validation = function Ok x -> Ok x | Error exn -> Error [ exn ]
+let to_validation = function
+  | Ok x -> Validation.valid x
+  | Error exn -> Validation.invalid (Nonempty_list.create exn)
+;;
 
 let eq f = Result.eq f Exn.eq
 

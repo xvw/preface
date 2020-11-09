@@ -15,6 +15,10 @@ val identity :
   -> 'a Preface_stdlib.Identity.t t
 (** Arbitrary for [Identity.t] *)
 
+val exn :
+  ?collect:(Preface_stdlib.Exn.t -> string) -> unit -> Preface_stdlib.Exn.t t
+(** Arbitrary for [Exn.t] *)
+
 val either :
      ?collect:(('a, 'b) Preface_stdlib.Either.t -> string)
   -> 'a t
@@ -36,9 +40,10 @@ val try_ :
 (** Arbitrary for [Try.t] *)
 
 val validation :
-     ?collect:('a Preface_stdlib.Validation.t -> string)
+     ?collect:(('a, 'b) Preface_stdlib.Validation.t -> string)
   -> 'a t
-  -> 'a Preface_stdlib.Validation.t t
+  -> 'b t
+  -> ('a, 'b) Preface_stdlib.Validation.t t
 (** Arbitrary for [Validation.t] *)
 
 val nonempty_list :

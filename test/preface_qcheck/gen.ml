@@ -62,8 +62,10 @@ let result ?(distribution = 0.15) f_ok f_error state =
   if proba < distribution then Error (f_error state) else Ok (f_ok state)
 ;;
 
-let validation ?(distribution = 0.15) f_ok state =
-  result ~distribution f_ok (small_list exn) state
+let validation ?(distribution = 0.15) f_ok f_error state =
+  let proba = Random.State.float state 1.0 in
+  let open Preface_stdlib.Validation in
+  if proba < distribution then Invalid (f_error state) else Valid (f_ok state)
 ;;
 
 let try_ ?(distribution = 0.15) f_ok state = result ~distribution f_ok exn state

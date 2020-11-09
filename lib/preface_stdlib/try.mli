@@ -89,7 +89,7 @@ val case : ('a -> 'b) -> (exn -> 'b) -> 'a t -> 'b
 (** [case f g x] apply [f] if [x] is [Ok], [g] if [x] is [Error].*)
 
 (* I do not use ['a Validation.t] as type to not have circular deps *)
-val to_validation : 'a t -> ('a, exn list) result
+val to_validation : 'a t -> ('a, exn Nonempty_list.t) Validation.t
 (** Project a [Try] into a [Validation]. *)
 
 val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool

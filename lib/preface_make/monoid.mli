@@ -14,6 +14,18 @@ module Over_semigroup
 module Via_combine_and_neutral (Core : Preface_specs.Monoid.CORE) :
   Preface_specs.MONOID with type t = Core.t
 
+(** Incarnation of a [Monoid] from an [Alternative]. *)
+module From_alternative
+    (Alternative : Preface_specs.ALTERNATIVE)
+    (T : Preface_specs.Types.T0) :
+  Preface_specs.MONOID with type t = T.t Alternative.t
+
+(** Incarnation of a [Monoid] from a [Monad_plus]. *)
+module From_monad_plus
+    (Monad_plus : Preface_specs.MONAD_PLUS)
+    (T : Preface_specs.Types.T0) :
+  Preface_specs.MONOID with type t = T.t Monad_plus.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Monoid], constructing and assembling a

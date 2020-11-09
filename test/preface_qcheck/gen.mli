@@ -33,7 +33,8 @@ val exn : exn t
 val result : ?distribution:float -> 'a t -> 'b t -> ('a, 'b) result t
 (** Generator for [result]. *)
 
-val validation : ?distribution:float -> 'a t -> 'a Preface_stdlib.Validation.t t
+val validation :
+  ?distribution:float -> 'a t -> 'b t -> ('a, 'b) Preface_stdlib.Validation.t t
 (** Generator for [Validation.t]. *)
 
 val try_ : ?distribution:float -> 'a t -> 'a Preface_stdlib.Try.t t

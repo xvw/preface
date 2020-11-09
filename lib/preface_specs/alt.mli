@@ -39,7 +39,7 @@ module type API = sig
 
   include OPERATION with type 'a t := 'a t
 
-  module Infix : INFIX with type 'a t = 'a t
+  module Infix : INFIX with type 'a t := 'a t
 
   include INFIX with type 'a t := 'a t
 end

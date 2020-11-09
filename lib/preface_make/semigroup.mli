@@ -8,6 +8,22 @@
 module Via_combine (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.SEMIGROUP with type t = Core.t
 
+(** Incarnation of a [Semigroup] from an [Alt]. *)
+module From_alt (Alt : Preface_specs.ALT) (T : Preface_specs.Types.T0) :
+  Preface_specs.SEMIGROUP with type t = T.t Alt.t
+
+(** Incarnation of a [Semigroup] from an [Alternative]. *)
+module From_alternative
+    (Alternative : Preface_specs.ALTERNATIVE)
+    (T : Preface_specs.Types.T0) :
+  Preface_specs.SEMIGROUP with type t = T.t Alternative.t
+
+(** Incarnation of a [Semigroup] from a [Monad_plus]. *)
+module From_monad_plus
+    (Monad_plus : Preface_specs.MONAD_PLUS)
+    (T : Preface_specs.Types.T0) :
+  Preface_specs.SEMIGROUP with type t = T.t Monad_plus.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Semigroup], constructing and assembling a

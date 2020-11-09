@@ -39,3 +39,13 @@ module Via_combine (Core : Preface_specs.Semigroup.CORE) :
   include Operation
   include Infix
 end
+
+module From_alt (Alt : Preface_specs.ALT) (T : Preface_specs.Types.T0) :
+  Preface_specs.SEMIGROUP with type t = T.t Alt.t = Via_combine (struct
+  type t = T.t Alt.t
+
+  let combine = Alt.combine
+end)
+
+module From_alternative = From_alt
+module From_monad_plus = From_alt
