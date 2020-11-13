@@ -5,7 +5,7 @@
 
 module type CORE_WITH_NEUTRAL_AND_COMBINE =
   Alternative.CORE_WITH_NEUTRAL_AND_COMBINE
-(** Additional operations over [Monad]. *)
+(** Additional operations over [Applicative]. *)
 
 (** Requirement via [map] and [join]. *)
 module type CORE_WITH_MAP_AND_JOIN = sig
@@ -39,7 +39,7 @@ end
 module type OPERATION = sig
   include Monad.OPERATION
 
-  include Alt.OPERATION with type 'a t := 'a t
+  include Alternative.ALTERNATIVE_OPERATION with type 'a t := 'a t
 
   val filter : ('a -> bool) -> 'a t -> 'a t
   (** Filtering over [Monad_plus]. *)
