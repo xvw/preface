@@ -100,6 +100,15 @@ module Category = Category
 module Arrow = Arrow
 (** Describes an arrow. *)
 
+module Arrow_zero = Arrow_zero
+(** Describes an arrow zero. *)
+
+module Arrow_alt = Arrow_alt
+(** Describes an arrow alt. *)
+
+module Arrow_plus = Arrow_plus
+(** Describes an arrow plus. *)
+
 (** {1 API Shortcuts}
 
     Shortcuts for the API of each objects (by convention, OCaml module types are
@@ -138,6 +147,12 @@ module type FREER_MONAD = Freer_monad.API
 module type CATEGORY = Category.API
 
 module type ARROW = Arrow.API
+
+module type ARROW_ZERO = Arrow_zero.API
+
+module type ARROW_ALT = Arrow_alt.API
+
+module type ARROW_PLUS = Arrow_plus.API
 
 (** {1 Abstract data types} *)
 
