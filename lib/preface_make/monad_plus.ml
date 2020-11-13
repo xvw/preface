@@ -31,14 +31,12 @@ let filter' bind return neutral predicate m =
   bind (fun x -> if predicate x then return x else neutral) m
 ;;
 
-let reduce' combine neutral list = List.fold_left combine neutral list
-
 module Operation (Core : Preface_specs.Monad_plus.CORE) :
   Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t = struct
   include Monad.Operation (Core)
   include Alt.Operation (Core)
 
-  let reduce list = reduce' Core.combine Core.neutral list
+  let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 
   let filter predicate m =
     filter' Core.bind Core.return Core.neutral predicate m
@@ -53,7 +51,7 @@ module Operation_over_monad
   include Monad
   include Alt.Operation (Core)
 
-  let reduce list = reduce' Core.combine Core.neutral list
+  let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 
   let filter predicate m =
     filter' Monad.bind Monad.return Core.neutral predicate m

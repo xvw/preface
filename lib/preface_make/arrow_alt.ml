@@ -18,16 +18,6 @@ module Core_over_category_and_via_arrow_and_split
   let combine = Core.combine
 end
 
-let times' combine n x =
-  if n > 0
-  then
-    let result = Array.make (pred n) x |> Array.fold_left combine x in
-    Some result
-  else None
-;;
-
-let reduce_nel' combine list = Preface_core.Nonempty_list.reduce combine list
-
 module Operation_over_category
     (Category : Preface_specs.CATEGORY)
     (Core : Preface_specs.Arrow_alt.CORE
@@ -36,9 +26,9 @@ module Operation_over_category
 struct
   include Arrow.Operation_over_category (Category) (Core)
 
-  let times n x = times' Core.combine n x
+  let times n x = Preface_core.Monoid.times Core.combine n x
 
-  let reduce_nel list = reduce_nel' Core.combine list
+  let reduce_nel list = Preface_core.Monoid.reduce_nel Core.combine list
 end
 
 module Alias = Arrow.Alias
@@ -129,9 +119,9 @@ module Over_arrow
   include (
     Combine : Preface_specs.Arrow_alt.COMBINE with type ('a, 'b) t := ('a, 'b) t )
 
-  let times n x = times' Combine.combine n x
+  let times n x = Preface_core.Monoid.times Combine.combine n x
 
-  let reduce_nel list = reduce_nel' Combine.combine list
+  let reduce_nel list = Preface_core.Monoid.reduce_nel Combine.combine list
 
   module Infix = struct
     include Arrow.Infix
