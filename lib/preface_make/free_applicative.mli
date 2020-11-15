@@ -10,7 +10,7 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
 
 (** {1 Building a free applicative over an applicative}
 
-    Given a functor, it produce an applicative module with a natural
+    Given an applicative, it produce an applicative module with a natural
     transformation in order to extract the underlying value and a [run] function
     wich is the natural transformation from the underlying applicative using the
     identity. *)

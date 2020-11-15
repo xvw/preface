@@ -1,7 +1,7 @@
 (** A [Free_applicative] allows you to build an applicative from a given
     functor. Such applicative is equiped with and additional function for
-    promotinmg values from the underlying functor into the free applicative and
-    a natural transformation in order to unwrapping the value from the free
+    promoting values from the underlying functor into the free applicative and a
+    natural transformation in order to unwrapping the value from the free
     applicative. *)
 
 (** {1 Structure anatomy} *)

@@ -2,7 +2,7 @@ open Preface_core.Fun
 
 module Core_over_functor_and_either
     (Either : Preface_core.Requirements.EITHER)
-    (Functor : Preface_specs.FUNCTOR)
+    (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t
                  and type ('a, 'b) either = ('a, 'b) Either.t) :
@@ -141,7 +141,7 @@ end
 
 module Over_functor_and_either
     (Either : Preface_core.Requirements.EITHER)
-    (Functor : Preface_specs.FUNCTOR)
+    (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t
                  and type ('a, 'b) either = ('a, 'b) Either.t) :
