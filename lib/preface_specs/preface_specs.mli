@@ -91,6 +91,9 @@ module Traversable = Traversable
 module Free_applicative = Free_applicative
 (** Describes a free applicative. *)
 
+module Free_selective = Free_selective
+(** Describes a free selective. *)
+
 module Free_monad = Free_monad
 (** Describes a free monad. *)
 
@@ -144,6 +147,8 @@ module type FOLDABLE = Foldable.API
 module type TRAVERSABLE = Traversable.API
 
 module type FREE_APPLICATIVE = Free_applicative.API
+
+module type FREE_SELECTIVE = Free_selective.API
 
 module type FREE_MONAD = Free_monad.API
 
