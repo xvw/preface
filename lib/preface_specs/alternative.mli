@@ -32,11 +32,19 @@ module type CORE = sig
   include CORE_WITH_MAP_AND_PRODUCT with type 'a t := 'a t
 end
 
+(** Operation without Applicative *)
+module type ALTERNATIVE_OPERATION = sig
+  include Alt.OPERATION
+
+  val reduce : 'a t list -> 'a t
+  (** Reduce a [List.t] using [combine]. *)
+end
+
 (** Operations *)
 module type OPERATION = sig
   include Applicative.OPERATION
 
-  include Alt.OPERATION with type 'a t := 'a t
+  include ALTERNATIVE_OPERATION with type 'a t := 'a t
 end
 
 (** Infix notations *)

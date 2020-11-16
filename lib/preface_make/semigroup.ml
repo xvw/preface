@@ -2,15 +2,9 @@ module Operation (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.Semigroup.OPERATION with type t = Core.t = struct
   type t = Core.t
 
-  let times n x =
-    if n > 0
-    then
-      let result = Array.make (pred n) x |> Array.fold_left Core.combine x in
-      Some result
-    else None
-  ;;
+  let times n x = Preface_core.Monoid.times Core.combine n x
 
-  let reduce_nel list = Preface_core.Nonempty_list.reduce Core.combine list
+  let reduce_nel list = Preface_core.Monoid.reduce_nel Core.combine list
 end
 
 module Infix (Core : Preface_specs.Semigroup.CORE) :

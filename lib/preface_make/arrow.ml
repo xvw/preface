@@ -136,3 +136,15 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
 
   include Over_category_and_via_arrow_and_fst (Cat) (Arr)
 end
+
+module From_arrow_plus (Plus : Preface_specs.ARROW_PLUS) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Plus.t =
+  Plus
+
+module From_arrow_alt (Alt : Preface_specs.ARROW_ALT) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Alt.t =
+  Alt
+
+module From_arrow_zero (Zero : Preface_specs.ARROW_ZERO) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Zero.t =
+  Zero

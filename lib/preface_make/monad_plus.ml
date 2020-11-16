@@ -36,6 +36,8 @@ module Operation (Core : Preface_specs.Monad_plus.CORE) :
   include Monad.Operation (Core)
   include Alt.Operation (Core)
 
+  let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
+
   let filter predicate m =
     filter' Core.bind Core.return Core.neutral predicate m
   ;;
@@ -48,6 +50,8 @@ module Operation_over_monad
   Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t = struct
   include Monad
   include Alt.Operation (Core)
+
+  let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 
   let filter predicate m =
     filter' Monad.bind Monad.return Core.neutral predicate m

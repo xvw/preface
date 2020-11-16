@@ -17,10 +17,14 @@ module Core_via_apply (Core : Preface_specs.Alternative.CORE_WITH_APPLY) :
   let neutral = Core.neutral
 end
 
+let reduce' combine neutral list = List.fold_left combine neutral list
+
 module Operation (Core : Preface_specs.Alternative.CORE) :
   Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t = struct
   include Applicative.Operation (Core)
   include Alt.Operation (Core)
+
+  let reduce list = reduce' Core.combine Core.neutral list
 end
 
 module Syntax (Core : Preface_specs.Alternative.CORE) :
@@ -92,6 +96,8 @@ module Over_applicative
     (struct
       include Alt.Operation (Core)
       include Applicative
+
+      let reduce list = reduce' Core.combine Core.neutral list
     end)
     (struct
       type 'a t = 'a Applicative.t

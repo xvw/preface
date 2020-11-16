@@ -3,5 +3,6 @@
  (public_name preface.specs)
  (modules_without_implementation preface_specs types functor applicative
    selective monad comonad traversable bifunctor free_monad freer_monad
-   semigroup monoid foldable alt alternative monad_plus category arrow)
+   semigroup monoid foldable alt alternative monad_plus category arrow
+   arrow_zero arrow_alt arrow_plus)
  (libraries preface.core))

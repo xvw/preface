@@ -11,7 +11,7 @@ module Operation (Core : Preface_specs.Monoid.CORE) :
   Preface_specs.Monoid.OPERATION with type t = Core.t = struct
   include Semigroup.Operation (Core)
 
-  let reduce list = List.fold_left Core.combine Core.neutral list
+  let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 end
 
 module Infix (Core : Preface_specs.Monoid.CORE) :
