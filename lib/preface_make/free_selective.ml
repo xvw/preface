@@ -10,7 +10,7 @@ struct
 
   type _ t =
     | Pure : 'a -> 'a t
-    | Select : ('a -> 'b) f * ('a, 'b) either t -> 'b t
+    | Select : ('a, 'b) either t * ('a -> 'b) f -> 'b t
 
   module Functor = struct
     type nonrec 'a t = 'a t
@@ -18,8 +18,8 @@ struct
     let rec map : type a b. (a -> b) -> a t -> b t =
      fun f -> function
       | Pure x -> Pure (f x)
-      | Select (fs, either) ->
-        Select (F.map (fun g x -> f (g x)) fs, map (Either.map_right f) either)
+      | Select (either, fs) ->
+        Select (map (Either.map_right f) either, F.map (fun g x -> f (g x)) fs)
    ;;
   end
 
@@ -35,11 +35,11 @@ struct
     let rec select : type a b. (a, b) either t -> (a -> b) t -> b t =
      fun x -> function
       | Pure y -> Functor.map (Either.case y id) x
-      | Select (fs, either) ->
+      | Select (either, fs) ->
         let f u = Either.(map_right right) u
         and g x a = bimap (fun b -> (b, a)) (fun k -> k a) x
         and h f (x, y) = f x y in
-        Select (F.map h fs, select (Functor.map f x) (Functor.map g either))
+        Select (select (Functor.map f x) (Functor.map g either), F.map h fs)
    ;;
   end
 
@@ -54,7 +54,7 @@ struct
     let rec run : type a. natural_transformation -> a t -> a Selective.t =
      fun transformation -> function
       | Pure x -> Selective.pure x
-      | Select (fs, either) ->
+      | Select (either, fs) ->
         Selective.select
           (run transformation either)
           (transformation.transform fs)
@@ -67,7 +67,7 @@ struct
         with type 'a t := 'a t
          and type ('a, 'b) either := ('a, 'b) Either.t )
 
-  let promote x = Select (F.map const x, Pure (Either.left ()))
+  let promote x = Select (Pure (Either.left ()), F.map const x)
 end
 
 module Over_applicative_and_either = Over_functor_and_either

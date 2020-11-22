@@ -1,6 +1,6 @@
 (** Modules for building [Free_selective] modules. *)
 
-(** {2 Building a free selective over a functor With [Either] from
+(** {2 Building a free rigid selective over a functor With [Either] from
     [Preface_core]}
 
     Given a functor, it produce a selective module with a natural transformation

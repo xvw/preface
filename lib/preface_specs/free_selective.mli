@@ -18,7 +18,7 @@ module type CORE = sig
 
   type _ t =
     | Pure : 'a -> 'a t
-    | Select : ('a -> 'b) f * ('a, 'b) either t -> 'b t
+    | Select : ('a, 'b) either t * ('a -> 'b) f -> 'b t
 
   val promote : 'a f -> 'a t
   (** Promote a value from the functor into the free selective. *)
