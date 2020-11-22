@@ -14,7 +14,7 @@ module type CORE = sig
   (** The type held by the [Free_applicative]. *)
   type _ t =
     | Pure : 'a -> 'a t
-    | Apply : 'a f * ('a -> 'b) t -> 'b t
+    | Apply : ('a -> 'b) t * 'a f -> 'b t
 
   val promote : 'a f -> 'a t
   (** Promote a value from the functor into the free applicative. *)

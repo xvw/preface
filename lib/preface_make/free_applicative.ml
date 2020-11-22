@@ -6,9 +6,9 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
 
   type _ t =
     | Pure : 'a -> 'a t
-    | Apply : 'a f * ('a -> 'b) t -> 'b t
+    | Apply : ('a -> 'b) t * 'a f -> 'b t
 
-  let promote x = Apply (x, Pure id)
+  let promote x = Apply (Pure id, x)
 
   module Core = struct
     type nonrec 'a t = 'a t
@@ -18,21 +18,21 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
     let rec map : type a b. (a -> b) -> a t -> b t =
      fun f -> function
       | Pure x -> Pure (f x)
-      | Apply (x, y) ->
-        let fs = map (fun g x -> f (g x)) y in
-        Apply (x, fs)
+      | Apply (fa, x) ->
+        let fs = map (fun g x -> f (g x)) fa in
+        Apply (fs, x)
    ;;
 
     let rec apply : type a b. (a -> b) t -> a t -> b t =
      fun fs xs ->
       match fs with
       | Pure f -> map f xs
-      | Apply (x, y) ->
+      | Apply (fa, x) ->
         let gs =
-          let left = map flip y in
+          let left = map flip fa in
           apply left xs
         in
-        Apply (x, gs)
+        Apply (gs, x)
    ;;
 
     let product a b = apply (apply (Pure (fun x y -> (x, y))) a) b
@@ -50,7 +50,7 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
     let rec run : type a. natural_transformation -> a t -> a Applicative.t =
      fun transformation -> function
       | Pure x -> Applicative.pure x
-      | Apply (x, fs) ->
+      | Apply (fs, x) ->
         Applicative.apply (run transformation fs) (transformation.transform x)
    ;;
   end
