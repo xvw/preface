@@ -4,6 +4,7 @@
 
 (** {1 Structure anatomy} *)
 
+(** Standard requirement. *)
 module type CORE = sig
   type 'a f
   (** The type held by the [Functor]. *)
@@ -22,6 +23,7 @@ end
 
 (** {1 API} *)
 
+(** The complete interface of a [Free_monad]. *)
 module type API = sig
   include CORE
 
@@ -33,5 +35,3 @@ module type API = sig
 
   include module type of Monad with type 'a t := 'a t
 end
-
-(** The complete interface of a [Free_monad]. *)

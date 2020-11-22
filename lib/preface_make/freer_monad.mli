@@ -33,8 +33,8 @@
 
     {3 Creating the [Freer_monad]}
 
-    Thanks to the [Preface] library the corresponding [Free_monad] you be simply
-    created using the parametric module `Over_functor`.
+    Thanks to the [Preface] library the corresponding [Freer_monad] you be
+    simply created using the parametric module `Over`.
 
     {[ module Store_free = Preface_make.Freer_monad.Over (Store) ]}
 
@@ -56,7 +56,7 @@
     Now we propose two operations i.e. [set] and [get]. This operations are
     reified thanks to the ADT definition. Reification here means a [set] (resp.
     [get]) operation is denoted by the constructor [Set] (resp. [Get]) using to
-    the [perform] function which creates a data of the [Free_monad] from a data
+    the [perform] function which creates a data of the [Freer_monad] from a data
     of the [Functor].
 
     {[
@@ -83,7 +83,7 @@
     {3 Using the [Freer_monad]}
 
     Now we are able to define programs and run these programs. For the program
-    creation since a [Free_monad] is a Preface [Monad], we can use langage
+    creation since a [Freer_monad] is a Preface [Monad], we can use langage
     extensions like [let*] for a syntetic and expressive program definition. For
     this purpose, the corresponding module should be opened.
 
@@ -96,7 +96,7 @@
     ]}
 
     Finally the interpreter can be executed with the [run] functions defined in
-    the generated [Free_monad] module.
+    the generated [Freer_monad] module.
 
     {[
       let main =

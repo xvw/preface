@@ -12,7 +12,7 @@ module Over_applicative
      and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 module Over_functor
-    (Functor : Preface_specs.FUNCTOR)
+    (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t
                  and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
@@ -34,7 +34,7 @@ module Over_applicative_and_either
 
 module Over_functor_and_either
     (Either : Preface_core.Requirements.EITHER)
-    (Functor : Preface_specs.FUNCTOR)
+    (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t
                  and type ('a, 'b) either = ('a, 'b) Either.t) :
@@ -71,7 +71,7 @@ module Core_over_applicative
      and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 module Core_over_functor
-    (Functor : Preface_specs.FUNCTOR)
+    (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t
                  and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
@@ -110,7 +110,7 @@ module Select_from_monad (Monad : Preface_specs.MONAD) :
 
 module Core_over_functor_and_either
     (Either : Preface_core.Requirements.EITHER)
-    (Functor : Preface_specs.FUNCTOR)
+    (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Functor.t
                  and type ('a, 'b) either = ('a, 'b) Either.t) :
