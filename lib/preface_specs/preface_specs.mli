@@ -44,6 +44,7 @@
 
 module Requirements = Preface_core.Requirements
 module Types = Types
+module Package = Package
 
 (** {1 Full Interfaces}
 

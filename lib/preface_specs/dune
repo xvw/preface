@@ -2,7 +2,7 @@
  (name preface_specs)
  (public_name preface.specs)
  (modules_without_implementation
-   preface_specs types functor applicative
+   preface_specs package types functor applicative
    selective monad comonad traversable bifunctor
    free_applicative free_monad freer_monad free_selective
    semigroup monoid foldable alt alternative monad_plus
