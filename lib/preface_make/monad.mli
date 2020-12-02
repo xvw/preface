@@ -107,6 +107,7 @@ module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
 module Via
     (Core : Preface_specs.Monad.CORE)
     (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Monad.LIFT with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Monad.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.MONAD with type 'a t = 'a Core.t
@@ -130,6 +131,10 @@ module Core_via_kleisli_composition
 (** Incarnation of a [Monad.Operation] with [Monad.Core].*)
 module Operation (Core : Preface_specs.Monad.CORE) :
   Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t
+
+(** Incarnation of a [Monad.Lift] with [Monad.Core].*)
+module Lift (Core : Preface_specs.Monad.CORE) :
+  Preface_specs.Monad.LIFT with type 'a t = 'a Core.t
 
 (** Incarnation of a [Monad.Syntax] with [Monad.Core].*)
 module Syntax (Core : Preface_specs.Monad.CORE) :

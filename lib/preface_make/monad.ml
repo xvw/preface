@@ -39,6 +39,11 @@ module Operation (Core : Preface_specs.Monad.CORE) :
   let void _ = Core.return ()
 
   let compose_right_to_left f g x = Core.compose_left_to_right g f x
+end
+
+module Lift (Core : Preface_specs.Monad.CORE) :
+  Preface_specs.Monad.LIFT with type 'a t = 'a Core.t = struct
+  type 'a t = 'a Core.t
 
   let lift = Core.map
 
@@ -85,11 +90,13 @@ end
 module Via
     (Core : Preface_specs.Monad.CORE)
     (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Monad.LIFT with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Monad.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.MONAD with type 'a t = 'a Core.t = struct
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
   module Syntax = Syntax
@@ -100,10 +107,12 @@ module Via_bind (Core_with_bind : Preface_specs.Monad.CORE_WITH_BIND) :
   Preface_specs.MONAD with type 'a t = 'a Core_with_bind.t = struct
   module Core = Core_via_bind (Core_with_bind)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -113,10 +122,12 @@ module Via_map_and_join
   Preface_specs.MONAD with type 'a t = 'a Core_with_map_and_join.t = struct
   module Core = Core_via_map_and_join (Core_with_map_and_join)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -128,10 +139,12 @@ module Via_kleisli_composition
 struct
   module Core = Core_via_kleisli_composition (Core_with_kleisli_composition)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end

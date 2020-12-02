@@ -90,6 +90,11 @@ module type OPERATION = sig
 
   val compose_right_to_left : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
   (** Composing monadic functions using Kleisli Arrow (from right to left). *)
+end
+
+module type LIFT = sig
+  type 'a t
+  (** The type held by the [Monad]. *)
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -157,6 +162,8 @@ module type API = sig
   include CORE
 
   include OPERATION with type 'a t := 'a t
+
+  include LIFT with type 'a t := 'a t
 
   module Syntax : SYNTAX with type 'a t := 'a t
 

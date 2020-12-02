@@ -43,6 +43,10 @@ module Operation (Core : Preface_specs.Monad_plus.CORE) :
   ;;
 end
 
+module Lift (Core : Preface_specs.Monad_plus.CORE) :
+  Preface_specs.Monad_plus.LIFT with type 'a t = 'a Core.t =
+  Monad.Lift (Core)
+
 module Operation_over_monad
     (Monad : Preface_specs.MONAD)
     (Core : Preface_specs.Monad_plus.CORE_WITH_NEUTRAL_AND_COMBINE
@@ -72,11 +76,13 @@ end
 module Via
     (Core : Preface_specs.Monad_plus.CORE)
     (Operation : Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Monad_plus.LIFT with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Monad_plus.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Monad_plus.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Core.t = struct
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
   module Syntax = Syntax
@@ -87,10 +93,12 @@ module Via_bind (Core_with_bind : Preface_specs.Monad_plus.CORE_WITH_BIND) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_bind.t = struct
   module Core = Core_via_bind (Core_with_bind)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -100,10 +108,12 @@ module Via_map_and_join
   Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_map_and_join.t = struct
   module Core = Core_via_map_and_join (Core_with_map_and_join)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -115,10 +125,12 @@ module Via_kleisli_composition
 struct
   module Core = Core_via_kleisli_composition (Core_with_kleisli_composition)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -137,6 +149,7 @@ module Over_monad
       let neutral = Core.neutral
     end)
     (Operation_over_monad (Monad) (Core))
+    (Monad)
     (struct
       type 'a t = 'a Monad.t
 
