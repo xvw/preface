@@ -66,6 +66,9 @@ module type OPERATION = sig
   (** Keep checking an effectful condition while it holds. *)
 end
 
+module type LIFT = Applicative.LIFT
+(** Lift operation *)
+
 (** Syntax extensions. *)
 module type SYNTAX = sig
   include Applicative.SYNTAX
@@ -100,6 +103,8 @@ module type API = sig
 
   include
     OPERATION with type 'a t := 'a t and type ('a, 'b) either := ('a, 'b) either
+
+  include LIFT with type 'a t := 'a t
 
   module Syntax : SYNTAX with type 'a t := 'a t
 

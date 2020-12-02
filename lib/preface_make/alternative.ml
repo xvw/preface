@@ -27,26 +27,33 @@ module Operation (Core : Preface_specs.Alternative.CORE) :
   let reduce list = reduce' Core.combine Core.neutral list
 end
 
+module Lift (Core : Preface_specs.Alternative.CORE) :
+  Preface_specs.Alternative.LIFT with type 'a t = 'a Core.t =
+  Applicative.Lift (Core)
+
 module Syntax (Core : Preface_specs.Alternative.CORE) :
   Preface_specs.Alternative.SYNTAX with type 'a t = 'a Core.t =
   Applicative.Syntax (Core)
 
 module Infix
     (Core : Preface_specs.Alternative.CORE)
-    (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t) :
+    (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Alternative.LIFT with type 'a t = 'a Core.t) :
   Preface_specs.Alternative.INFIX with type 'a t = 'a Core.t = struct
-  include Applicative.Infix (Core) (Operation)
+  include Applicative.Infix (Core) (Operation) (Lift)
   include Alt.Infix (Core)
 end
 
 module Via
     (Core : Preface_specs.Alternative.CORE)
     (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Alternative.LIFT with type 'a t = 'a Operation.t)
     (Infix : Preface_specs.Alternative.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Alternative.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Core.t = struct
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
   module Infix = Infix
@@ -60,10 +67,12 @@ module Via_map_and_product
 struct
   module Core = Core_via_map_and_product (Core_with_map_and_product)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
+  module Infix = Infix (Core) (Operation) (Lift)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -72,10 +81,12 @@ module Via_apply (Core_with_apply : Preface_specs.Alternative.CORE_WITH_APPLY) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Core_with_apply.t = struct
   module Core = Core_via_apply (Core_with_apply)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
+  module Infix = Infix (Core) (Operation) (Lift)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -99,6 +110,7 @@ module Over_applicative
 
       let reduce list = reduce' Core.combine Core.neutral list
     end)
+    (Applicative)
     (struct
       type 'a t = 'a Applicative.t
 

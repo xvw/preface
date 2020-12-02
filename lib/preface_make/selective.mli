@@ -49,6 +49,7 @@ module Over_either
     (Operation : Preface_specs.Selective.OPERATION
                    with type 'a t = 'a Core.t
                     and type ('a, 'b) either = ('a, 'b) Either.t)
+    (Lift : Preface_specs.Selective.LIFT with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Selective.INFIX
                with type 'a t = 'a Core.t
                 and type ('a, 'b) either = ('a, 'b) Either.t)
@@ -91,7 +92,8 @@ module Infix_over
               with type ('a, 'b) either = ('a, 'b) Preface_core.Either.t)
     (Operation : Preface_specs.Selective.OPERATION
                    with type 'a t = 'a Core.t
-                    and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
+                    and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t)
+    (Lift : Preface_specs.Selective.LIFT with type 'a t = 'a Core.t) :
   Preface_specs.Selective.INFIX
     with type 'a t = 'a Core.t
      and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
@@ -136,13 +138,17 @@ module Operation_over_either
     with type 'a t = 'a Core.t
      and type ('a, 'b) either = ('a, 'b) Either.t
 
+module Lift (Core : Preface_specs.Selective.CORE) :
+  Preface_specs.Selective.LIFT with type 'a t = 'a Core.t
+
 module Infix_over_either
     (Either : Preface_core.Requirements.EITHER)
     (Core : Preface_specs.Selective.CORE
               with type ('a, 'b) either = ('a, 'b) Either.t)
     (Operation : Preface_specs.Selective.OPERATION
                    with type 'a t = 'a Core.t
-                    and type ('a, 'b) either = ('a, 'b) Either.t) :
+                    and type ('a, 'b) either = ('a, 'b) Either.t)
+    (Lift : Preface_specs.Selective.LIFT with type 'a t = 'a Core.t) :
   Preface_specs.Selective.INFIX
     with type 'a t = 'a Core.t
      and type ('a, 'b) either = ('a, 'b) Either.t

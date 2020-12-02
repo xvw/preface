@@ -47,6 +47,9 @@ module type OPERATION = sig
   include ALTERNATIVE_OPERATION with type 'a t := 'a t
 end
 
+module type LIFT = Applicative.LIFT
+(** Lift *)
+
 (** Infix notations *)
 module type INFIX = sig
   include Applicative.INFIX
@@ -64,6 +67,8 @@ module type API = sig
   include CORE
 
   include OPERATION with type 'a t := 'a t
+
+  include LIFT with type 'a t := 'a t
 
   module Syntax : SYNTAX with type 'a t := 'a t
 

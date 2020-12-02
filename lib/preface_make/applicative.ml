@@ -18,7 +18,11 @@ module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) :
 end
 
 module Operation (Core : Preface_specs.Applicative.CORE) :
-  Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
+  Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t =
+  Functor.Operation (Core)
+
+module Lift (Core : Preface_specs.Applicative.CORE) :
+  Preface_specs.Applicative.LIFT with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
   let lift = Core.map
@@ -26,10 +30,6 @@ module Operation (Core : Preface_specs.Applicative.CORE) :
   let lift2 f a = Core.(apply @@ apply (pure f) a)
 
   let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
-
-  let replace value x = (Core.map <% const) value x
-
-  let void x = replace () x
 end
 
 module Syntax (Core : Preface_specs.Applicative.CORE) :
@@ -43,7 +43,8 @@ end
 
 module Infix
     (Core : Preface_specs.Applicative.CORE)
-    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
+    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Applicative.LIFT with type 'a t = 'a Core.t) :
   Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
@@ -53,11 +54,11 @@ module Infix
 
   let ( <*> ) = Core.apply
 
-  let ( <**> ) a b = Operation.lift2 (fun x f -> f x) a b
+  let ( <**> ) a b = Lift.lift2 (fun x f -> f x) a b
 
-  let ( *> ) a b = Operation.lift2 (fun _x y -> y) a b
+  let ( *> ) a b = Lift.lift2 (fun _x y -> y) a b
 
-  let ( <* ) a b = Operation.lift2 const a b
+  let ( <* ) a b = Lift.lift2 const a b
 
   let ( <$ ) value x = Operation.replace value x
 
@@ -67,11 +68,13 @@ end
 module Via
     (Core : Preface_specs.Applicative.CORE)
     (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Applicative.LIFT with type 'a t = 'a Operation.t)
     (Infix : Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Core.t = struct
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
   module Infix = Infix
@@ -85,10 +88,12 @@ module Via_map_and_product
 struct
   module Core = Core_via_map_and_product (Core_with_map_and_product)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
+  module Infix = Infix (Core) (Operation) (Lift)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end
@@ -97,10 +102,12 @@ module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_apply.t = struct
   module Core = Core_via_apply (Core_with_apply)
   module Operation = Operation (Core)
+  module Lift = Lift (Core)
   module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
+  module Infix = Infix (Core) (Operation) (Lift)
   include Core
   include Operation
+  include Lift
   include Syntax
   include Infix
 end

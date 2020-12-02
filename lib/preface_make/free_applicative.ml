@@ -39,9 +39,10 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
   end
 
   module Operation = Applicative.Operation (Core)
+  module Lift = Applicative.Lift (Core)
   module A =
-    Applicative.Via (Core) (Operation)
-      (Applicative.Infix (Core) (Operation))
+    Applicative.Via (Core) (Operation) (Lift)
+      (Applicative.Infix (Core) (Operation) (Lift))
       (Applicative.Syntax (Core))
 
   module Transformation (Applicative : Preface_specs.Applicative.CORE) = struct

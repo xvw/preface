@@ -43,9 +43,13 @@ module type CORE = sig
   include CORE_WITH_MAP_AND_PRODUCT with type 'a t := 'a t
 end
 
+module type OPERATION = Functor.OPERATION
 (** Operations *)
-module type OPERATION = sig
-  include Functor.OPERATION
+
+(** Lifting functions *)
+module type LIFT = sig
+  type 'a t
+  (** The type held by the [Applicative]. *)
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -56,10 +60,6 @@ module type OPERATION = sig
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
   (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
       and ['c t] to ['d t]. *)
-
-  val replace : 'a -> 'b t -> 'a t
-  (** Create a new ['a t], replacing all values in the ['b t] by given a value
-      of ['a]. *)
 end
 
 (** Syntax extensions *)
@@ -98,6 +98,8 @@ module type API = sig
   include CORE
 
   include OPERATION with type 'a t := 'a t
+
+  include LIFT with type 'a t := 'a t
 
   module Syntax : SYNTAX with type 'a t := 'a t
 

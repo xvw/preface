@@ -206,6 +206,7 @@ module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
 module Via
     (Core : Preface_specs.Applicative.CORE)
     (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Applicative.LIFT with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Core.t
@@ -226,6 +227,11 @@ module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) :
 module Operation (Core : Preface_specs.Applicative.CORE) :
   Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t
 
+(** Incarnation of an [Applicative.Lift] with standard requirements ([pure],
+    [map], [apply] and [product]). *)
+module Lift (Core : Preface_specs.Applicative.CORE) :
+  Preface_specs.Applicative.LIFT with type 'a t = 'a Core.t
+
 (** Incarnation of an [Applicative.Syntax] with standard requirements ([pure],
     [map], [apply] and [product]). *)
 module Syntax (Core : Preface_specs.Applicative.CORE) :
@@ -235,5 +241,6 @@ module Syntax (Core : Preface_specs.Applicative.CORE) :
     [map], [apply] and [product]). *)
 module Infix
     (Core : Preface_specs.Applicative.CORE)
-    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
+    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Lift : Preface_specs.Applicative.LIFT with type 'a t = 'a Core.t) :
   Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t
