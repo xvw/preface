@@ -46,11 +46,11 @@
       ;;
     ]} *)
 
-type 'a t = { run : 'r. ('a -> 'r) -> 'r }
 (** {1 Type} *)
 
-val pure : 'a -> 'a t
-(** {2 Promotion} *)
+type 'a t = { run : 'r. ('a -> 'r) -> 'r }
+
+(** {1 Implementations} *)
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 (** {2 Functor API} *)
@@ -60,3 +60,7 @@ module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
+
+(** {1 Imported function} *)
+
+include Preface_specs.Package.APPLICATIVE_AND_MONAD with type 'a t := 'a t

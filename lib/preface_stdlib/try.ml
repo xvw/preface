@@ -1,8 +1,6 @@
 type 'a t = ('a, exn) Result.t
 
-let pure x = Ok x
-
-let ok = pure
+let ok x = Ok x
 
 let error exn = Error exn
 
@@ -30,3 +28,7 @@ let to_validation = function
 let eq f = Result.eq f Exn.eq
 
 let pp pp' = Result.pp pp' Exn.pp
+
+include (
+  Preface_make.Package.From_applicative_and_monad (Applicative) (Monad) :
+      Preface_specs.Package.APPLICATIVE_AND_MONAD with type 'a t := 'a t )

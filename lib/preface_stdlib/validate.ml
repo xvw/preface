@@ -1,7 +1,5 @@
 type 'a t = ('a, exn Nonempty_list.t) Validation.t
 
-let pure = Validation.pure
-
 let valid = Validation.valid
 
 let invalid = Validation.invalid
@@ -30,3 +28,7 @@ let to_result = function
 let eq f = Validation.eq f (Nonempty_list.eq Exn.eq)
 
 let pp f = Validation.pp f (Nonempty_list.pp Exn.pp)
+
+include (
+  Preface_make.Package.From_applicative_and_monad (Applicative) (Monad) :
+      Preface_specs.Package.APPLICATIVE_AND_MONAD with type 'a t := 'a t )

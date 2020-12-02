@@ -69,10 +69,11 @@ module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
 
-(** {1 Helpers} *)
+(** {1 Imported function} *)
 
-val pure : 'a -> 'a t
-(** Create a value from ['a] to ['a t]. *)
+include Preface_specs.Package.APPLICATIVE_AND_MONAD with type 'a t := 'a t
+
+(** {1 Helpers} *)
 
 val ok : 'a -> 'a t
 (** Wrap a value into [Ok].*)

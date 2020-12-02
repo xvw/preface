@@ -33,3 +33,7 @@ module Monad = Preface_make.Monad.Via_map_and_join (struct
 
   let join c = { run = (fun k -> c.run (fun c' -> c'.run k)) }
 end)
+
+include (
+  Preface_make.Package.From_applicative_and_monad (Applicative) (Monad) :
+      Preface_specs.Package.APPLICATIVE_AND_MONAD with type 'a t := 'a t )
