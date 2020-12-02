@@ -15,14 +15,10 @@
 
 (** Requirement via [map] and [product]. *)
 module type CORE_WITH_MAP_AND_PRODUCT = sig
-  type 'a t
-  (** The type held by the [Applicative]. *)
+  include Functor.CORE
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
-
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val product : 'a t -> 'b t -> ('a * 'b) t
   (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
@@ -49,8 +45,7 @@ end
 
 (** Operations *)
 module type OPERATION = sig
-  type 'a t
-  (** The type held by the [Applicative]. *)
+  include Functor.OPERATION
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
@@ -81,11 +76,7 @@ end
 
 (** Infix notations *)
 module type INFIX = sig
-  type 'a t
-  (** The type held by the [Applicative]. *)
-
-  val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
-  (** Infix version of {!val:CORE.map}. *)
+  include Functor.INFIX
 
   val ( <*> ) : ('a -> 'b) t -> 'a t -> 'b t
   (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
@@ -98,12 +89,6 @@ module type INFIX = sig
 
   val ( <* ) : 'a t -> unit t -> 'a t
   (** Discard the value of the second argument. *)
-
-  val ( <$ ) : 'a -> 'b t -> 'a t
-  (** Infix version of {!val:OPERATION.replace}. *)
-
-  val ( $> ) : 'a t -> 'b -> 'b t
-  (** Flipped and infix version of {!val:OPERATION.replace}. *)
 end
 
 (** {1 API} *)

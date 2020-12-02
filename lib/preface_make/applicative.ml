@@ -28,6 +28,8 @@ module Operation (Core : Preface_specs.Applicative.CORE) :
   let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
 
   let replace value x = (Core.map <% const) value x
+
+  let void x = replace () x
 end
 
 module Syntax (Core : Preface_specs.Applicative.CORE) :
@@ -46,6 +48,8 @@ module Infix
   type 'a t = 'a Core.t
 
   let ( <$> ) = Core.map
+
+  let ( <&> ) x f = Core.map f x
 
   let ( <*> ) = Core.apply
 
