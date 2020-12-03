@@ -27,6 +27,6 @@ let to_validation = function
   | Error exn -> Validation.invalid (Nonempty_list.create exn)
 ;;
 
-let eq f = Result.eq f Exn.eq
+let equal f = Result.equal f Exn.equal
 
 let pp pp' = Result.pp pp' Exn.pp

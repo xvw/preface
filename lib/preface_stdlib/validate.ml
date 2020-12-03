@@ -27,6 +27,6 @@ let to_result = function
   | Validation.Invalid x -> Error x
 ;;
 
-let eq f = Validation.eq f (Nonempty_list.eq Exn.eq)
+let equal f = Validation.equal f (Nonempty_list.equal Exn.equal)
 
 let pp f = Validation.pp f (Nonempty_list.pp Exn.pp)

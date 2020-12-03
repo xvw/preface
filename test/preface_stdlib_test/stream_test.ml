@@ -2,7 +2,7 @@ open Preface_stdlib.Stream
 open Preface_stdlib.Stream.Comonad
 module Try = Preface_stdlib.Try
 
-let subject_try a = Alcotest.testable (Try.pp (Alcotest.pp a)) (Try.eq ( = ))
+let subject_try a = Alcotest.testable (Try.pp (Alcotest.pp a)) (Try.equal ( = ))
 
 let rec numbers n = stream n (lazy (numbers (n + 1)))
 

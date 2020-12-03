@@ -15,9 +15,8 @@ end)
 
 open Preface.Identity
 open Selective
-module Either = Preface_core.Either
 
-let identity a = Alcotest.testable (pp (Alcotest.pp a)) (eq ( = ))
+let identity a = Alcotest.testable (pp (Alcotest.pp a)) (equal ( = ))
 
 let should_select_left () =
   let open Either in

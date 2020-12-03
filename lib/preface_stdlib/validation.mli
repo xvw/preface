@@ -28,9 +28,7 @@ module Applicative (Errors : Preface_specs.SEMIGROUP) :
 
 (** {2 Selective API} *)
 module Selective (Errors : Preface_specs.SEMIGROUP) :
-  Preface_specs.SELECTIVE
-    with type 'a t = ('a, Errors.t) t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
+  Preface_specs.SELECTIVE with type 'a t = ('a, Errors.t) t
 
 (** {2 Monad API} *)
 module Monad (T : Preface_specs.Types.T0) :
@@ -50,7 +48,7 @@ val pure : 'a -> ('a, 'b) t
 val case : ('a -> 'c) -> ('b -> 'c) -> ('a, 'b) t -> 'c
 (** [case f g x] apply [f] if [x] is [Valid], [g] if [x] is [Invalid].*)
 
-val eq :
+val equal :
   ('a -> 'a -> bool) -> ('b -> 'b -> bool) -> ('a, 'b) t -> ('a, 'b) t -> bool
 (** Equality. *)
 

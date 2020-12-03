@@ -48,11 +48,8 @@ module Selective (Errors : Preface_specs.SEMIGROUP) = struct
 
         let pure = valid
 
-        type ('a, 'b) either = ('a, 'b) Preface_core.Either.t =
-          | Left of 'a
-          | Right of 'b
-
         let select either f =
+          let open Either in
           match either with
           | Valid (Left a) -> A.map (( |> ) a) f
           | Valid (Right b) -> Valid b
@@ -71,7 +68,7 @@ module Monad (T : Preface_specs.Types.T0) = Preface_make.Monad.Via_bind (struct
   let bind f = function Valid x -> f x | Invalid err -> Invalid err
 end)
 
-let eq f g left right =
+let equal f g left right =
   match (left, right) with
   | (Valid x, Valid y) -> f x y
   | (Invalid x, Invalid y) -> g x y

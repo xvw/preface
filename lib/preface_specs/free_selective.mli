@@ -11,21 +11,17 @@ module type CORE = sig
   type 'a f
   (** The type held by the [Functor]. *)
 
-  type ('a, 'b) either
-  (** Representing the selective disjunction. *)
-
   (** The type held by the [Free_selective]. *)
 
   type _ t =
     | Pure : 'a -> 'a t
-    | Select : ('a, 'b) either t * ('a -> 'b) f -> 'b t
+    | Select : ('a, 'b) Either.t t * ('a -> 'b) f -> 'b t
 
   val promote : 'a f -> 'a t
   (** Promote a value from the functor into the free selective. *)
 
   (** The natural transformation from a free selective to an other selective. *)
-  module Transformation
-      (Selective : Selective.CORE with type ('a, 'b) either = ('a, 'b) either) : sig
+  module Transformation (Selective : Selective.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> 'a Selective.t }
 
     val run : natural_transformation -> 'a t -> 'a Selective.t
@@ -39,10 +35,7 @@ end
 module type API = sig
   include CORE
 
-  include
-    Selective.API
-      with type 'a t := 'a t
-       and type ('a, 'b) either := ('a, 'b) either
+  include Selective.API with type 'a t := 'a t
 end
 
 (** {1 Bibliography}

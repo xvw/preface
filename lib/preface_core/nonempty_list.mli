@@ -67,7 +67,7 @@ val fold_right : ('a -> 'b -> 'b) -> 'a t -> 'b -> 'b
 
 (** {2 Helpers} *)
 
-val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality. *)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit

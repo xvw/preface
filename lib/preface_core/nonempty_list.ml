@@ -122,7 +122,7 @@ let flatten = function
     flatten_aux xs
 ;;
 
-let eq f a b =
+let equal f a b =
   let rec eq_aux = function
     | (Last x, Last y) -> f x y
     | (x :: xs, y :: ys) -> f x y && eq_aux (xs, ys)

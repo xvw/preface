@@ -42,7 +42,6 @@
 
 (** {1 Misc} *)
 
-module Requirements = Preface_core.Requirements
 module Types = Types
 
 (** {1 Full Interfaces}
@@ -163,8 +162,3 @@ module type ARROW_ZERO = Arrow_zero.API
 module type ARROW_ALT = Arrow_alt.API
 
 module type ARROW_PLUS = Arrow_plus.API
-
-(** {1 Abstract data types} *)
-
-module type EITHER = Preface_core.Requirements.EITHER
-(** [EITHER] held a type which represents values with two possibilites. *)

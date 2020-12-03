@@ -21,11 +21,8 @@ module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 (** {2 Applicative API} *)
 
+module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 (** {2 Selective API} *)
-module Selective :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
@@ -41,7 +38,7 @@ val pure : 'a -> 'a t
 val extract : 'a t -> 'a
 (** Create a value from ['a t] to ['a]. *)
 
-val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality.*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit

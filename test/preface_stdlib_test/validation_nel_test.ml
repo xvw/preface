@@ -1,9 +1,9 @@
-module Nel = Preface_stdlib.Nonempty_list
-module Option = Preface_stdlib.Option
-module Validation = Preface_stdlib.Validate
+module Nel = Preface.Nonempty_list
+module Option = Preface.Option
+module Validation = Preface.Validate
 
 let subject a =
-  Alcotest.testable (Validation.pp (Alcotest.pp a)) (Validation.eq ( = ))
+  Alcotest.testable (Validation.pp (Alcotest.pp a)) (Validation.equal ( = ))
 ;;
 
 module Formlet = struct
@@ -186,7 +186,7 @@ module Shape = struct
     Selective.(if_ choice (circle <$> r) (rectangle <$> w <*> h))
   ;;
 
-  let testable = Alcotest.testable (Validation.pp pp) (Validation.eq eq)
+  let testable = Alcotest.testable (Validation.pp pp) (Validation.equal eq)
 end
 
 let fail s = Shape.Fail s
@@ -238,7 +238,7 @@ let validation_shape_4 () =
 
 open Nel.Applicative.Traversable (Option.Applicative)
 
-let nel_subject a = Alcotest.(testable (Nel.pp (pp a)) (Nel.eq ( = )))
+let nel_subject a = Alcotest.(testable (Nel.pp (pp a)) (Nel.equal ( = )))
 
 let should_traverse_without_failure_app () =
   let expected = Some Nel.(1 :: 2 :: create 3)

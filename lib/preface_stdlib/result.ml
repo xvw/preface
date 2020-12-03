@@ -40,7 +40,7 @@ module Monad (T : Preface_specs.Types.T0) = Preface_make.Monad.Via_bind (struct
   let bind f = function Ok x -> f x | Error x -> Error x
 end)
 
-let eq f g left right =
+let equal f g left right =
   match (left, right) with
   | (Ok x, Ok y) -> f x y
   | (Error x, Error y) -> g x y

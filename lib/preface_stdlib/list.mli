@@ -39,11 +39,8 @@ end
 module Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a t
 (** {2 Alternative API} *)
 
+module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 (** {2 Selective API} *)
-module Selective :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 (** {2 Monad API}
 
@@ -70,7 +67,7 @@ module Monoid (T : Preface_specs.Types.T0) :
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)
 
-val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality.*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit

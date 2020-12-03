@@ -3,7 +3,7 @@ module Functor (F : sig
 
   val pure : 'a -> 'a t
 
-  val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+  val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 
   val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
 
@@ -11,7 +11,7 @@ module Functor (F : sig
 end) : sig
   val cases : unit Alcotest.test_case list
 end = struct
-  let subject a = Alcotest.(testable (F.pp (pp a)) (F.eq ( = )))
+  let subject a = Alcotest.(testable (F.pp (pp a)) (F.equal ( = )))
 
   open F
 
@@ -83,7 +83,7 @@ end
 module Applicative (A : sig
   type 'a t
 
-  val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+  val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 
   val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
 
@@ -93,7 +93,7 @@ end) : sig
 end = struct
   open A
 
-  let subject a = Alcotest.(testable (A.pp (pp a)) (A.eq ( = )))
+  let subject a = Alcotest.(testable (A.pp (pp a)) (A.equal ( = )))
 
   let should_map () =
     let expected = pure 42
@@ -212,7 +212,7 @@ end
 module Monad (M : sig
   type 'a t
 
-  val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+  val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 
   val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
 
@@ -222,7 +222,7 @@ end) : sig
 end = struct
   open M
 
-  let subject a = Alcotest.(testable (M.pp (pp a)) (M.eq ( = )))
+  let subject a = Alcotest.(testable (M.pp (pp a)) (M.equal ( = )))
 
   let should_bind () =
     let expected = return 42

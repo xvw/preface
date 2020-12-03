@@ -37,11 +37,8 @@ module Applicative : sig
   include Preface_specs.APPLICATIVE with type 'a t = 'a t
 end
 
+module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 (** {2 Selective API} *)
-module Selective :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 (** {2 Monad API}
 

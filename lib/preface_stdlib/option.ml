@@ -54,7 +54,7 @@ Preface_make.Monoid.Via_combine_and_neutral (struct
   ;;
 end)
 
-let eq f left right =
+let equal f left right =
   match (left, right) with
   | (None, None) -> true
   | (Some x, Some y) -> f x y

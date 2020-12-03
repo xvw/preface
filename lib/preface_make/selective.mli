@@ -1,161 +1,68 @@
 (** Modules for building [Selective] modules. *)
 
-(** {1 Construction of a [Selective] module with [Either] from [Preface_core]} *)
+(** {1 Documentation} *)
 
+(** {2 Construction}
+
+    Standard way to build [Selective Functor]. *)
+
+(** Incarnation of a [Selective] over an [Applicative]. *)
 module Over_applicative
     (Applicative : Preface_specs.APPLICATIVE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Applicative.t
-                 and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a Select.t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
+                with type 'a t = 'a Applicative.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Select.t
 
+(** Incarnation of a [Selective] over a [Functor]. *)
 module Over_functor
     (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Functor.t
-                 and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a Select.t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
+                with type 'a t = 'a Functor.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Select.t
 
-(** {1 Construction of a [Selective] module giving [Eihter]} *)
+(** {2 Manual construction}
 
-module Over_applicative_and_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Applicative : Preface_specs.APPLICATIVE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Applicative.t
-                 and type ('a, 'b) either = ('a, 'b) Either.t) :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a Select.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
+    Advanced way to build an [Selective Functor], constructing and assembling a
+    component-by-component a selective functor. (In order to provide your own
+    implementation for some features.) *)
 
-module Over_functor_and_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Functor : Preface_specs.Functor.CORE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Functor.t
-                 and type ('a, 'b) either = ('a, 'b) Either.t) :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a Select.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
-
-module Over_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Core : Preface_specs.Selective.CORE
-              with type ('a, 'b) either = ('a, 'b) Either.t)
-    (Operation : Preface_specs.Selective.OPERATION
-                   with type 'a t = 'a Core.t
-                    and type ('a, 'b) either = ('a, 'b) Either.t)
-    (Infix : Preface_specs.Selective.INFIX
-               with type 'a t = 'a Core.t
-                and type ('a, 'b) either = ('a, 'b) Either.t)
+(** Incarnation of a [Selective] using each components of a [Selective]. *)
+module Via
+    (Core : Preface_specs.Selective.CORE)
+    (Operation : Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Selective.INFIX with type 'a t = 'a Core.t)
     (Syntax : Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t) :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a Core.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
+  Preface_specs.SELECTIVE with type 'a t = 'a Core.t
 
-(** {1 Internal construction of a [Selective] module} *)
-
-(** {2 With [Either] from [Preface_core]} *)
-
-module Core_over_applicative
-    (Applicative : Preface_specs.APPLICATIVE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Applicative.t
-                 and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
-  Preface_specs.Selective.CORE
-    with type 'a t = 'a Applicative.t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
-
+(** Incarnation of a [Selective.Core] over a [Functor]. *)
 module Core_over_functor
     (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Functor.t
-                 and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
-  Preface_specs.Selective.CORE
-    with type 'a t = 'a Functor.t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
+                with type 'a t = 'a Functor.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Functor.t
 
-module Operation_over
-    (Core : Preface_specs.Selective.CORE
-              with type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
-  Preface_specs.Selective.OPERATION
-    with type 'a t = 'a Core.t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
-
-module Infix_over
-    (Core : Preface_specs.Selective.CORE
-              with type ('a, 'b) either = ('a, 'b) Preface_core.Either.t)
-    (Operation : Preface_specs.Selective.OPERATION
-                   with type 'a t = 'a Core.t
-                    and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
-  Preface_specs.Selective.INFIX
-    with type 'a t = 'a Core.t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
-
-module Syntax_over
-    (Core : Preface_specs.Selective.CORE
-              with type ('a, 'b) either = ('a, 'b) Preface_core.Either.t) :
-  Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t
-
-module Select_from_monad (Monad : Preface_specs.MONAD) :
-  Preface_specs.Selective.CORE_WITH_SELECT
-    with type 'a t = 'a Monad.t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
-
-(** {2 Giving [Either]} *)
-
-module Core_over_functor_and_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Functor : Preface_specs.Functor.CORE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Functor.t
-                 and type ('a, 'b) either = ('a, 'b) Either.t) :
-  Preface_specs.Selective.CORE
-    with type 'a t = 'a Functor.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
-
-module Core_over_applicative_and_either
-    (Either : Preface_core.Requirements.EITHER)
+(** Incarnation of a [Selective.Core] over an [Applicative]. *)
+module Core_over_applicative
     (Applicative : Preface_specs.APPLICATIVE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Applicative.t
-                 and type ('a, 'b) either = ('a, 'b) Either.t) :
-  Preface_specs.Selective.CORE
-    with type 'a t = 'a Applicative.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
+                with type 'a t = 'a Applicative.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Applicative.t
 
-module Operation_over_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Core : Preface_specs.Selective.CORE
-              with type ('a, 'b) either = ('a, 'b) Either.t) :
-  Preface_specs.Selective.OPERATION
-    with type 'a t = 'a Core.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
+(** Incarnation of [Selective.Operation] using [Selective.Core]. *)
+module Operation (Core : Preface_specs.Selective.CORE) :
+  Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t
 
-module Infix_over_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Core : Preface_specs.Selective.CORE
-              with type ('a, 'b) either = ('a, 'b) Either.t)
-    (Operation : Preface_specs.Selective.OPERATION
-                   with type 'a t = 'a Core.t
-                    and type ('a, 'b) either = ('a, 'b) Either.t) :
-  Preface_specs.Selective.INFIX
-    with type 'a t = 'a Core.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
+(** Incarnation of [Selective.Infix] using [Selective.Core] and
+    [Selective.Operation]. *)
+module Infix
+    (Core : Preface_specs.Selective.CORE)
+    (Operation : Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t) :
+  Preface_specs.Selective.INFIX with type 'a t = 'a Core.t
 
-module Syntax_over_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Core : Preface_specs.Selective.CORE
-              with type ('a, 'b) either = ('a, 'b) Either.t) :
+(** Incarnation of [Selective.Syntax] using [Selective.Core]. *)
+module Syntax (Core : Preface_specs.Selective.CORE) :
   Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t
 
-module Select_from_monad_and_either
-    (Either : Preface_core.Requirements.EITHER)
-    (Monad : Preface_specs.MONAD) :
-  Preface_specs.Selective.CORE_WITH_SELECT
-    with type 'a t = 'a Monad.t
-     and type ('a, 'b) either = ('a, 'b) Either.t
+(** Incarnation of [Select] using a [Monad]. *)
+module Select_from_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.Selective.CORE_WITH_SELECT with type 'a t = 'a Monad.t

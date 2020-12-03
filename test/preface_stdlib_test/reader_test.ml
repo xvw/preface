@@ -83,10 +83,10 @@ module DeBruijn = struct
       | Var i -> Format.fprintf ppf "%i" i
     ;;
 
-    let rec eq f d1 d2 =
+    let rec equal f d1 d2 =
       match (d1, d2) with
-      | (App (d11, d12), App (d21, d22)) -> eq f d11 d21 && eq f d12 d22
-      | (Abs d11, Abs d22) -> eq f d11 d22
+      | (App (d11, d12), App (d21, d22)) -> equal f d11 d21 && equal f d12 d22
+      | (Abs d11, Abs d22) -> equal f d11 d22
       | (Var i1, Var i2) -> f i1 i2
       | _ -> false
     ;;
@@ -127,9 +127,9 @@ module DeBruijn = struct
       | Some i -> return (Ok (DeBruijn.Var i)) )
   ;;
 
-  let debruijn = Alcotest.testable DeBruijn.pp (DeBruijn.eq ( = ))
+  let debruijn = Alcotest.testable DeBruijn.pp (DeBruijn.equal ( = ))
 
-  let subject a = Alcotest.testable (Try.pp (Alcotest.pp a)) (Try.eq ( = ))
+  let subject a = Alcotest.testable (Try.pp (Alcotest.pp a)) (Try.equal ( = ))
 
   let should_transform_bound_variable () =
     let expected = Ok DeBruijn.(Var 1)

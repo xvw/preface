@@ -1,8 +1,5 @@
 open Preface_core.Fun
-
-type ('a, 'b) t = ('a, 'b) Preface_core.Either.t =
-  | Left of 'a
-  | Right of 'b
+include Preface_core.Shims.Either
 
 let pure x = Right x
 
@@ -40,11 +37,7 @@ module Monad (T : Preface_specs.Types.T0) = Preface_make.Monad.Via_bind (struct
   let bind f = function Right x -> f x | Left x -> Left x
 end)
 
-include (
-  Preface_core.Either :
-    Preface_core.Requirements.EITHER with type ('a, 'b) t := ('a, 'b) t )
-
-let eq f g left right =
+let equal f g left right =
   match (left, right) with
   | (Left x, Left y) -> f x y
   | (Right x, Right y) -> g x y

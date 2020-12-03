@@ -41,6 +41,6 @@ module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
   let duplicate x = x
 end)
 
-let eq f a b = f a b
+let equal f a b = f a b
 
 let pp pp' formater a = Format.fprintf formater "Identity (%a)" pp' a
