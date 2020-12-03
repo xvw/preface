@@ -1,16 +1,12 @@
 open Preface_core.Fun
+module Either = Preface_core.Shims.Either
 
-module Over_functor_and_either
-    (Either : Preface_core.Requirements.EITHER)
-    (F : Preface_specs.Functor.CORE) =
-struct
+module Over_functor (F : Preface_specs.Functor.CORE) = struct
   type 'a f = 'a F.t
-
-  type ('a, 'b) either = ('a, 'b) Either.t
 
   type _ t =
     | Pure : 'a -> 'a t
-    | Select : ('a, 'b) either t * ('a -> 'b) f -> 'b t
+    | Select : ('a, 'b) Either.t t * ('a -> 'b) f -> 'b t
 
   module Functor = struct
     type nonrec 'a t = 'a t
@@ -26,13 +22,11 @@ struct
   module Core = struct
     type nonrec 'a t = 'a t
 
-    type nonrec ('a, 'b) either = ('a, 'b) either
-
     let bimap f g = Either.case (Either.left % f) (Either.right % g)
 
     let pure x = Pure x
 
-    let rec select : type a b. (a, b) either t -> (a -> b) t -> b t =
+    let rec select : type a b. (a, b) Either.t t -> (a -> b) t -> b t =
      fun x -> function
       | Pure y -> Functor.map (Either.case y id) x
       | Select (either, fs) ->
@@ -43,12 +37,9 @@ struct
    ;;
   end
 
-  module S = Selective.Over_functor_and_either (Either) (Functor) (Core)
+  module S = Selective.Over_functor (Functor) (Core)
 
-  module Transformation
-      (Selective : Preface_specs.Selective.CORE
-                     with type ('a, 'b) either = ('a, 'b) either) =
-  struct
+  module Transformation (Selective : Preface_specs.Selective.CORE) = struct
     type natural_transformation = { transform : 'a. 'a f -> 'a Selective.t }
 
     let rec run : type a. natural_transformation -> a t -> a Selective.t =
@@ -61,25 +52,15 @@ struct
    ;;
   end
 
-  include (
-    S :
-      Preface_specs.SELECTIVE
-        with type 'a t := 'a t
-         and type ('a, 'b) either := ('a, 'b) Either.t )
+  include (S : Preface_specs.SELECTIVE with type 'a t := 'a t)
 
   let promote x = Select (Pure (Either.left ()), F.map const x)
 end
 
-module Over_applicative_and_either = Over_functor_and_either
-module Over_functor = Over_functor_and_either (Preface_core.Either)
 module Over_applicative = Over_functor
 
-module Over_selective_and_either
-    (Either : Preface_core.Requirements.EITHER)
-    (F : Preface_specs.Selective.CORE
-           with type ('a, 'b) either = ('a, 'b) Either.t) =
-struct
-  include Over_functor_and_either (Either) (F)
+module Over_selective (F : Preface_specs.Selective.CORE) = struct
+  include Over_functor (F)
   module R = Transformation (F)
 
   let run x =
@@ -87,5 +68,3 @@ struct
     R.run t x
   ;;
 end
-
-module Over_selective = Over_selective_and_either (Preface_core.Either)

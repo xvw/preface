@@ -8,13 +8,10 @@ module type CORE_WITH_SELECT = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
-  type ('a, 'b) either
-  (** Representing the selective disjunction. *)
-
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
 
-  val select : ('a, 'b) either t -> ('a -> 'b) t -> 'b t
+  val select : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
   (** [select e f] apply [f] if [e] is [Left]. It allow to skip effect using
       [Right]. *)
 end
@@ -32,13 +29,10 @@ module type OPERATION = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
-  type ('a, 'b) either
-  (** Representing the selective disjunction. *)
-
   include Applicative.OPERATION with type 'a t := 'a t
   (** Each [Selective] is also an [Applicative]. *)
 
-  val branch : ('a, 'b) either t -> ('a -> 'c) t -> ('b -> 'c) t -> 'c t
+  val branch : ('a, 'b) Either.t t -> ('a -> 'c) t -> ('b -> 'c) t -> 'c t
   (** [branch] is like [select]. It chooses between two effects. *)
 
   val if_ : bool t -> 'a t -> 'a t -> 'a t
@@ -76,13 +70,10 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
-  type ('a, 'b) either
-  (** Representing the selective disjunction. *)
-
   include Applicative.INFIX with type 'a t := 'a t
   (** Each [Selective] is also an [Applicative]. *)
 
-  val ( <*? ) : ('a, 'b) either t -> ('a -> 'b) t -> 'b t
+  val ( <*? ) : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
   (** Infix version of {!val:CORE.select}. *)
 
   val ( <||> ) : bool t -> bool t -> bool t
@@ -98,8 +89,7 @@ end
 module type API = sig
   include CORE
 
-  include
-    OPERATION with type 'a t := 'a t and type ('a, 'b) either := ('a, 'b) either
+  include OPERATION with type 'a t := 'a t
 
   module Syntax : SYNTAX with type 'a t := 'a t
 
@@ -107,7 +97,7 @@ module type API = sig
 
   module Infix : INFIX with type 'a t := 'a t
 
-  include module type of Infix with type ('a, 'b) either := ('a, 'b) either
+  include module type of Infix
 end
 
 (** {1 Bibliography}

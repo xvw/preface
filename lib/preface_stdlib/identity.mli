@@ -21,11 +21,8 @@ module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 (** {2 Applicative API} *)
 
+module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 (** {2 Selective API} *)
-module Selective :
-  Preface_specs.SELECTIVE
-    with type 'a t = 'a t
-     and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
 (** {2 Monad API} *)

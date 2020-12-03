@@ -1,6 +1,6 @@
 module N = Preface_core.Nonempty_list
 
-let subject a = Alcotest.(testable (N.pp (pp a)) (N.equal ( = )))
+let subject a = Alcotest.testable (N.pp (Alcotest.pp a)) (N.equal ( = ))
 
 open N
 

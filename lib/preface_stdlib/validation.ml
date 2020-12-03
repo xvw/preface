@@ -48,11 +48,8 @@ module Selective (Errors : Preface_specs.SEMIGROUP) = struct
 
         let pure = valid
 
-        type ('a, 'b) either = ('a, 'b) Preface_core.Either.t =
-          | Left of 'a
-          | Right of 'b
-
         let select either f =
+          let open Either in
           match either with
           | Valid (Left a) -> A.map (( |> ) a) f
           | Valid (Right b) -> Valid b

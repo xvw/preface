@@ -1,6 +1,6 @@
-module Nel = Preface_stdlib.Nonempty_list
-module Option = Preface_stdlib.Option
-module Validation = Preface_stdlib.Validate
+module Nel = Preface.Nonempty_list
+module Option = Preface.Option
+module Validation = Preface.Validate
 
 let subject a =
   Alcotest.testable (Validation.pp (Alcotest.pp a)) (Validation.equal ( = ))

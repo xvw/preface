@@ -1,6 +1,5 @@
 module Make
-    (S : Preface_specs.SELECTIVE
-           with type ('a, 'b) either = ('a, 'b) Preface_core.Either.t)
+    (S : Preface_specs.SELECTIVE)
     (R : Requirement.INPUT_T1 with type 'a t = 'a S.t)
     (P : Sample.PACK) : Requirement.OUTPUT = struct
   open QCheck
@@ -11,10 +10,7 @@ module Make
 
   module Select :
     Preface_specs.Selective.CORE_WITH_SELECT
-      with type 'a t = 'a Underlying_functor.t
-       and type ('a, 'b) either = ('a, 'b) Preface_core.Either.t = struct
-    type ('a, 'b) either = ('a, 'b) Preface_core.Either.t
-
+      with type 'a t = 'a Underlying_functor.t = struct
     type 'a t = 'a Underlying_functor.t
 
     let pure = S.pure
@@ -22,7 +18,6 @@ module Make
     let select = S.select
   end
 
-  module Either = Preface_stdlib.Either
   module Underlying =
     Preface_make.Selective.Over_functor (Underlying_functor) (Select)
 
@@ -35,7 +30,7 @@ module Make
       let open Preface_core.Fun in
       let open S in
       let left = x <*? pure id in
-      let right = Either.case id id <$> x in
+      let right = Preface_core.Shims.Either.case id id <$> x in
       left = right
     in
     Test.make ~count:R.size ~name:test_name test_arbitrary test
@@ -65,8 +60,9 @@ module Make
         (over (fun2 t1' t2' t3))
     and test (x, y', z') =
       let open S in
-      let f a = Either.map_right (fun x -> Either.Right x) a
-      and g x a = Either.Bifunctor.bimap (fun x -> (x, a)) (fun f -> f a) x
+      let f a = Preface_stdlib.Either.map_right (fun x -> Either.Right x) a
+      and g x a =
+        Preface_stdlib.Either.Bifunctor.bimap (fun x -> (x, a)) (fun f -> f a) x
       and h x (a, b) = x a b in
       let y = Either.map_right Fn.apply <$> y' in
       let z = Fn.apply <$> z' in
@@ -88,7 +84,9 @@ module Make
       let f = Fn.apply f'
       and y = Fn.apply <$> y' in
       let left = f <$> select x y
-      and right = select (Either.Bifunctor.snd f <$> x) (( % ) f <$> y) in
+      and right =
+        select (Preface_stdlib.Either.Bifunctor.snd f <$> x) (( % ) f <$> y)
+      in
       left = right
     in
     Test.make ~count:R.size ~name:test_name test_arbitrary test
@@ -104,7 +102,7 @@ module Make
       let open S in
       let f = Fn.apply f' in
       let y = Fn.apply <$> y' in
-      let left = select (Either.Bifunctor.fst f <$> x) y
+      let left = select (Preface_stdlib.Either.Bifunctor.fst f <$> x) y
       and right = select x (( %> ) f <$> y) in
       left = right
     in
@@ -122,7 +120,11 @@ module Make
       let open S in
       let f = Fn.apply f' in
       let left = select x (f <$> y)
-      and right = select (Either.Bifunctor.fst (flip f) <$> x) (( |> ) <$> y) in
+      and right =
+        select
+          (Preface_stdlib.Either.Bifunctor.fst (flip f) <$> x)
+          (( |> ) <$> y)
+      in
       left = right
     in
     Test.make ~count:R.size ~name:test_name test_arbitrary test
@@ -135,7 +137,7 @@ module Make
       let open S in
       let y = Fn.apply y' in
       let left = x <*? pure y
-      and right = Either.case y Preface_core.Fun.id <$> x in
+      and right = Preface_core.Shims.Either.case y Preface_core.Fun.id <$> x in
       left = right
     in
     Test.make ~count:R.size ~name:test_name test_arbitrary test
@@ -333,8 +335,7 @@ module Make
 end
 
 module Make_rigid
-    (S : Preface_specs.SELECTIVE
-           with type ('a, 'b) either = ('a, 'b) Preface_core.Either.t)
+    (S : Preface_specs.SELECTIVE)
     (R : Requirement.INPUT_T1 with type 'a t = 'a S.t)
     (P : Sample.PACK) : Requirement.OUTPUT = struct
   open QCheck
