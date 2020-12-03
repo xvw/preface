@@ -167,7 +167,7 @@ val case : ('a -> 'b) -> (exn Nonempty_list.t -> 'b) -> 'a t -> 'b
 val to_result : 'a t -> ('a, exn Nonempty_list.t) result
 (** Project a [Validate] into a [Result]. *)
 
-val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality.*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit

@@ -19,14 +19,14 @@ module Validation = struct
   module Misc : sig
     val pure : 'a -> 'a t
 
-    val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+    val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 
     val pp :
       (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
   end = struct
     let pure = V.valid
 
-    let eq f = V.eq f Preface_stdlib.(List.eq Exn.eq)
+    let equal f = V.equal f Preface_stdlib.(List.equal Exn.equal)
 
     let pp f = V.pp f Preface_stdlib.(List.pp Exn.pp)
   end
@@ -55,7 +55,7 @@ module Monad_test = Support.Monad (Validation.Monad)
 open Validation
 
 let subject a =
-  Validation.Misc.(Alcotest.testable (pp (Alcotest.pp a)) (eq ( = )))
+  Validation.Misc.(Alcotest.testable (pp (Alcotest.pp a)) (equal ( = )))
 ;;
 
 module Formlet = struct
@@ -90,7 +90,7 @@ module Formlet = struct
     if checked then valid `Yes else invalid [ Unchecked_rules ]
   ;;
 
-  let eq a b =
+  let equal a b =
     a.age = b.age && a.firstname = b.firstname && a.lastname = a.lastname
   ;;
 
@@ -99,7 +99,7 @@ module Formlet = struct
       form.lastname
   ;;
 
-  let testable = Alcotest.testable pp eq
+  let testable = Alcotest.testable pp equal
 end
 
 let validation_formlet_valid () =
@@ -210,7 +210,7 @@ module Shape = struct
     | Circle of radius
     | Rectangle of (width * height)
 
-  let eq l r =
+  let equal l r =
     match (l, r) with
     | (Circle x, Circle y) -> x = y
     | (Rectangle (w, h), Rectangle (w2, h2)) -> w = w2 && h = h2
@@ -233,7 +233,7 @@ module Shape = struct
   ;;
 end
 
-let testable = Misc.(Alcotest.testable (pp Shape.pp) (eq Shape.eq))
+let testable = Misc.(Alcotest.testable (pp Shape.pp) (equal Shape.equal))
 
 let validation_shape_1 () =
   let expected = valid (Shape.circle 1)

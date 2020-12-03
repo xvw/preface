@@ -44,7 +44,7 @@ include (
   Preface_core.Either :
     Preface_core.Requirements.EITHER with type ('a, 'b) t := ('a, 'b) t )
 
-let eq f g left right =
+let equal f g left right =
   match (left, right) with
   | (Left x, Left y) -> f x y
   | (Right x, Right y) -> g x y

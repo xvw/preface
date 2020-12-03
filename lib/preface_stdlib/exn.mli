@@ -17,7 +17,7 @@ exception Negative_position of int
 val check_position : int -> int Try.t
 (** Check if a position is positive. *)
 
-val eq : t -> t -> bool
+val equal : t -> t -> bool
 (** Equality.*)
 
 val pp : Format.formatter -> t -> unit

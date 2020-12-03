@@ -15,7 +15,7 @@ end)
 
 open Preface_stdlib.Try
 
-let subject a = Alcotest.testable (pp (Alcotest.pp a)) (eq ( = ))
+let subject a = Alcotest.testable (pp (Alcotest.pp a)) (equal ( = ))
 
 exception Invalid_name of string
 

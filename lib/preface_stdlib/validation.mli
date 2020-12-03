@@ -50,7 +50,7 @@ val pure : 'a -> ('a, 'b) t
 val case : ('a -> 'c) -> ('b -> 'c) -> ('a, 'b) t -> 'c
 (** [case f g x] apply [f] if [x] is [Valid], [g] if [x] is [Invalid].*)
 
-val eq :
+val equal :
   ('a -> 'a -> bool) -> ('b -> 'b -> bool) -> ('a, 'b) t -> ('a, 'b) t -> bool
 (** Equality. *)
 

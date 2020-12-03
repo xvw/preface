@@ -37,7 +37,7 @@ val pure : 'b -> ('a, 'b) t
 
 include Preface_specs.Requirements.EITHER with type ('a, 'b) t := ('a, 'b) t
 
-val eq :
+val equal :
   ('a -> 'a -> bool) -> ('b -> 'b -> bool) -> ('a, 'b) t -> ('a, 'b) t -> bool
 (** Equality. *)
 

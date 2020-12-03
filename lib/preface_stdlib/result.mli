@@ -38,7 +38,7 @@ module Monad (T : Preface_specs.Types.T0) :
 val pure : 'a -> ('a, 'b) t
 (** Create a value from ['b] to [('a, 'b) t]. *)
 
-val eq :
+val equal :
   ('a -> 'a -> bool) -> ('b -> 'b -> bool) -> ('a, 'b) t -> ('a, 'b) t -> bool
 (** Equality. *)
 

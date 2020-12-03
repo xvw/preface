@@ -116,7 +116,7 @@ Preface_make.Monoid.Via_combine_and_neutral (struct
   let neutral = []
 end)
 
-let eq f a b =
+let equal f a b =
   let rec eq = function
     | ([], []) -> true
     | (x :: xs, y :: ys) -> f x y && eq (xs, ys)

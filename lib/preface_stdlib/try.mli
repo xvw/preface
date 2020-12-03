@@ -92,7 +92,7 @@ val case : ('a -> 'b) -> (exn -> 'b) -> 'a t -> 'b
 val to_validation : 'a t -> ('a, exn Nonempty_list.t) Validation.t
 (** Project a [Try] into a [Validation]. *)
 
-val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality.*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit

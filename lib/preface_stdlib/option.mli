@@ -96,7 +96,7 @@ module Monoid (M : Preface_specs.SEMIGROUP) :
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)
 
-val eq : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
+val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality.*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
