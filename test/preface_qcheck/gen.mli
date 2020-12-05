@@ -5,8 +5,6 @@
 type 'a t = Random.State.t -> 'a
 (** A Random generator for type ['a]. *)
 
-(** {2 Additional generators} *)
-
 val identity : 'a t -> 'a Preface_stdlib.Identity.t t
 (** Generator for [Identity]. *)
 
@@ -40,11 +38,14 @@ val validation :
 val try_ : ?distribution:float -> 'a t -> 'a Preface_stdlib.Try.t t
 (** Generator for [Try.t]. *)
 
+val validate : ?distribution:float -> 'a t -> 'a Preface_stdlib.Validate.t t
+(** Generator for [Validate.t]. *)
+
 val stream : 'a t -> 'a Preface_stdlib.Stream.t t
 (** Generator for [Stream.t]. *)
 
-val state : ('a -> 'b) -> 'a -> 'c -> 'b * 'c
-(** Generator for [State.t].*)
+(* val state : ('a -> 'b) -> 'a -> 'c -> 'b * 'c
+ * (\** Generator for [State.t].*\) *)
 
 (** {2 QCheck Gen API} *)
 

@@ -70,9 +70,11 @@ let validation ?(distribution = 0.15) f_ok f_error state =
 
 let try_ ?(distribution = 0.15) f_ok state = result ~distribution f_ok exn state
 
+let validate ?(distribution = 0.15) f_valid state =
+  validation ~distribution f_valid (small_nonempty_list exn) state
+;;
+
 let stream f state =
   let rec aux n = Preface_stdlib.Stream.stream n (lazy (aux (f state))) in
   aux (f state)
 ;;
-
-let state f state s = (f state, s)

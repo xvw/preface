@@ -1,0 +1,6 @@
+(library
+ (name preface_laws)
+ (public_name preface.laws)
+ (synopsis "Encoding laws as a set of tests")
+ (libraries qcheck-core preface.core
+   preface.specs preface.make preface.stdlib preface.qcheck))

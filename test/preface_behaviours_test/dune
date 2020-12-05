@@ -1,3 +1,0 @@
-(test
- (name preface_behaviours_test)
- (libraries preface.qcheck preface.stdlib alcotest fmt))

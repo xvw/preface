@@ -1,3 +1,0 @@
-(test
- (name preface_stdlib_test)
- (libraries alcotest fmt preface.core preface.stdlib preface))

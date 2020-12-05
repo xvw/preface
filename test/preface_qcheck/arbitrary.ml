@@ -2,15 +2,24 @@ module Opt = Preface_stdlib.Option.Monad
 
 type 'a t = 'a QCheck.arbitrary
 
+let p x = x.QCheck.print
+
+let shrink_identity shrink value =
+  value
+  |> Preface_stdlib.Identity.Functor.map (fun x ->
+         x |> shrink |> QCheck.Iter.map Preface_stdlib.Identity.pure)
+  |> Preface_stdlib.Identity.extract
+;;
+
 let exn ?collect () =
-  let print = Some (fun x -> Format.asprintf "%a" Preface_stdlib.Exn.pp x) in
+  let print = Some Printer.exn in
   QCheck.make ?print ?collect Gen.exn
 ;;
 
 let identity ?collect arbitrary =
   let gen = Gen.identity (QCheck.gen arbitrary) in
-  let print = Opt.(arbitrary.QCheck.print >|= Print.identity) in
-  let shrink = Opt.(arbitrary.QCheck.shrink >|= Shrink.identity) in
+  let print = Opt.(arbitrary.QCheck.print >|= Printer.identity) in
+  let shrink = Opt.(arbitrary.QCheck.shrink >|= shrink_identity) in
   let small =
     let open Opt in
     arbitrary.QCheck.small
@@ -21,43 +30,17 @@ let identity ?collect arbitrary =
 
 let either ?collect left right =
   let gen = Gen.either (QCheck.gen left) (QCheck.gen right) in
-  let print =
-    let open Opt in
-    left.QCheck.print
-    >>= fun leftp ->
-    right.QCheck.print
-    >|= fun rightp -> function
-    | Preface_stdlib.Either.Left x -> "Left " ^ leftp x
-    | Preface_stdlib.Either.Right x -> "Right " ^ rightp x
-  in
+  let print = Opt.lift2 Printer.either (p left) (p right) in
   QCheck.make ?print ?collect gen
 ;;
 
 let result ?collect ok error =
   let gen = Gen.result (QCheck.gen ok) (QCheck.gen error) in
-  let print =
-    let open Opt in
-    ok.QCheck.print
-    >>= fun okp ->
-    error.QCheck.print
-    >|= fun errorp -> function
-    | Preface_stdlib.Result.Ok x -> "Ok " ^ okp x
-    | Preface_stdlib.Result.Error x -> "Error " ^ errorp x
-  in
+  let print = Opt.lift2 Printer.result (p ok) (p error) in
   QCheck.make ?print ?collect gen
 ;;
 
-let try_ ?collect arbitrary =
-  let gen = Gen.try_ (QCheck.gen arbitrary) in
-  let print =
-    let open Opt in
-    arbitrary.QCheck.print
-    >|= fun printer x ->
-    let pp_hook ppf x = Format.fprintf ppf "%s" (printer x) in
-    Format.asprintf "%a" (Preface_stdlib.Try.pp pp_hook) x
-  in
-  QCheck.make ?print ?collect gen
-;;
+let try_ ?collect arbitrary = result ?collect arbitrary (exn ())
 
 let nonempty_list ?collect arbitrary =
   let gen = Gen.small_nonempty_list (QCheck.gen arbitrary) in
@@ -85,6 +68,8 @@ let validation ?collect valid invalid =
   QCheck.make ?print ?collect gen
 ;;
 
+let validate ?collect valid = validation ?collect valid (nonempty_list (exn ()))
+
 let continuation ?collect l =
   let gen = Gen.continuation (QCheck.gen l) in
   QCheck.make ?collect gen
@@ -103,11 +88,6 @@ let stream ?collect l =
       "<Stream [" ^ fragment ^ " ...]>"
   in
   QCheck.make ?collect ?print gen
-;;
-
-let state l =
-  let gen = Gen.state (QCheck.gen l) in
-  QCheck.make gen
 ;;
 
 include QCheck
