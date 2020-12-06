@@ -43,4 +43,9 @@ let stream pp x =
     "Stream(" ^ String.concat "; " sublist ^ "; ...)"
 ;;
 
+let continuation pp x =
+  let open Preface_stdlib.Continuation in
+  Format.asprintf "Continuation(%s)" (pp (x.run Fun.id))
+;;
+
 include (QCheck.Print : module type of QCheck.Print with type 'a t := 'a t)

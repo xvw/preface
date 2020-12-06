@@ -1,6 +1,7 @@
 (library
  (name preface_qcheck)
  (public_name preface.qcheck)
- (synopsis "A QCheck's companion for Preface")  
- (libraries qcheck-core preface.core
-   preface.specs preface.make preface.stdlib))
+ (synopsis "A QCheck's companion for Preface")
+ (modules_without_implementation model)
+ (libraries qcheck-core preface.core preface.specs preface.make
+   preface.stdlib))

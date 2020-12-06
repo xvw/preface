@@ -70,6 +70,9 @@ val stream :
   -> 'a Preface_stdlib.Stream.t t
 (** Arbitrary for [Stream.t] *)
 
+val state : 'a t -> ('b -> 'a * 'b) t
+(** Arbitrary for [State.t] *)
+
 (** {2 QCheck's arbitraries} *)
 
 val unit : unit t

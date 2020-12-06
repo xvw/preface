@@ -33,6 +33,9 @@ val nonempty_list : 'a t -> 'a Preface_stdlib.Nonempty_list.t t
 val stream : 'a t -> 'a Preface_stdlib.Stream.t t
 (** Printer for [Stream.t]. *)
 
+val continuation : 'a t -> 'a Preface_stdlib.Continuation.t t
+(** Printer for [Continuation.t]. *)
+
 (** {2 QCheck Print API} *)
 
 include module type of QCheck.Print with type 'a t := 'a t

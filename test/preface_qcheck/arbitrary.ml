@@ -90,4 +90,9 @@ let stream ?collect l =
   QCheck.make ?collect ?print gen
 ;;
 
+let state l =
+  let gen = Gen.state (QCheck.gen l) in
+  QCheck.make gen
+;;
+
 include QCheck

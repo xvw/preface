@@ -78,3 +78,8 @@ let stream f state =
   let rec aux n = Preface_stdlib.Stream.stream n (lazy (aux (f state))) in
   aux (f state)
 ;;
+
+let state f state =
+  let r = f state in
+  (fun s -> (r, s))
+;;
