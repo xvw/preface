@@ -3,10 +3,11 @@
     {1 Capabilities}
 
     - {!val:Functor}
-    - {!val:Applicative}
+    - {!val:Applicative} with Traversable module
     - {!val:Selective}
     - {!val:Foldable}
-    - {!val:Monad}
+    - {!val:Monad} with Traversable module
+    - [Traversable] for {!val:Applicative} and {!val:Monad}
     - {!val:Semigroup} *)
 
 (** {1 Type} *)
