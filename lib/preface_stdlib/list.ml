@@ -28,11 +28,10 @@ module Alternative = Preface_make.Alternative.Via_apply (struct
   let combine l r = l @ r
 end)
 
-module Applicative = struct
-  module Traversable (A : Preface_specs.APPLICATIVE) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a A.t and type 'a iter = 'a t =
-  struct
-    module T = struct
+module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
+  Preface_make.Traversable.Over_applicative
+    (A)
+    (struct
       type 'a t = 'a A.t
 
       type 'a iter = 'a list
@@ -45,13 +44,12 @@ module Applicative = struct
         in
         traverse
       ;;
-    end
+    end)
 
-    include Preface_make.Traversable.Over_applicative (A) (T)
-  end
-
-  include Preface_make.Applicative.From_alternative (Alternative)
-end
+module Applicative =
+  Preface_make.Traversable.Join_with_applicative
+    (Alternative)
+    (Applicative_traversable)
 
 module Monad_plus = Preface_make.Monad_plus.Via_bind (struct
   type nonrec 'a t = 'a t
@@ -74,11 +72,10 @@ module Monad_plus = Preface_make.Monad_plus.Via_bind (struct
   let combine l r = l @ r
 end)
 
-module Monad = struct
-  module Traversable (M : Preface_specs.MONAD) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a M.t and type 'a iter = 'a t =
-  struct
-    module T = struct
+module Monad_traversable (M : Preface_specs.MONAD) =
+  Preface_make.Traversable.Over_monad
+    (M)
+    (struct
       type 'a t = 'a M.t
 
       type 'a iter = 'a list
@@ -94,14 +91,10 @@ module Monad = struct
         in
         traverse
       ;;
-    end
+    end)
 
-    include Preface_make.Traversable.Over_monad (M) (T)
-  end
-
-  include Preface_make.Monad.From_monad_plus (Monad_plus)
-end
-
+module Monad =
+  Preface_make.Traversable.Join_with_monad (Monad_plus) (Monad_traversable)
 module Selective =
   Preface_make.Selective.Over_applicative
     (Applicative)

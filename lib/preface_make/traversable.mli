@@ -121,3 +121,29 @@ module Operation (C : Preface_specs.Traversable.CORE) :
   Preface_specs.Traversable.OPERATION
     with type 'a t = 'a C.t
      and type 'a iter = 'a C.iter
+
+(** {1 Join traversable}
+
+    Since [Traversable] can be define for traversing iterable structure being a
+    [Monad] or an [Applicative], there is some module (like [List] or
+    [Nonempty_list] which define in [Applicative] or [Monad] Modules a
+    [Traversable] module. *)
+
+(** Join [Monad] and [Traversable] *)
+module Join_with_monad
+    (I : Preface_specs.MONAD) (T : functor (M : Preface_specs.MONAD) ->
+      Preface_specs.TRAVERSABLE
+        with type 'a t = 'a M.t
+         and type 'a iter = 'a I.t) :
+  Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a I.t
+
+(** Join [Applicative] and [Traversable] *)
+module Join_with_applicative
+    (I : Preface_specs.APPLICATIVE)
+    (T : functor
+      (A : Preface_specs.APPLICATIVE)
+      ->
+      Preface_specs.TRAVERSABLE
+        with type 'a t = 'a A.t
+         and type 'a iter = 'a I.t) :
+  Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a I.t

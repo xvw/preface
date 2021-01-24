@@ -27,30 +27,19 @@ module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 (** {2 Functor API} *)
 
+module Applicative :
+  Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a t
 (** {2 Applicative API}
 
     Applicative and Traversable for [Nonempty_list.t]. *)
-module Applicative : sig
-  (** {2 Traversable using Applicative form} *)
-  module Traversable (A : Preface_specs.APPLICATIVE) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a A.t and type 'a iter = 'a t
-
-  include Preface_specs.APPLICATIVE with type 'a t = 'a t
-end
 
 module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 (** {2 Selective API} *)
 
+module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
 (** {2 Monad API}
 
     Monad and Traversable for [Nonempty_list.t].*)
-module Monad : sig
-  (** {2 Traversable using Monadic form} *)
-  module Traversable (M : Preface_specs.MONAD) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a M.t and type 'a iter = 'a t
-
-  include Preface_specs.MONAD with type 'a t = 'a t
-end
 
 (** {2 Semigroup API} *)
 module Semigroup (T : Preface_specs.Types.T0) :
