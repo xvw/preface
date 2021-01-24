@@ -55,3 +55,53 @@ end
 module Over_functor (A : Preface_specs.FUNCTOR) = Via_map (A)
 module Over_applicative (A : Preface_specs.APPLICATIVE) = Via_map (A)
 module Over_monad (A : Preface_specs.MONAD) = Via_map (A)
+
+module Traversable (Free : Preface_specs.FREE_MONAD) = struct
+  module Applicative
+      (A : Preface_specs.APPLICATIVE)
+      (T : functor
+        (Ap : Preface_specs.APPLICATIVE with type 'a t = 'a A.t)
+        ->
+        Preface_specs.TRAVERSABLE
+          with type 'a t = 'a A.t
+           and type 'a iter = 'a Free.f) =
+    Traversable.Over_applicative
+      (A)
+      (struct
+        module Tr = T (A)
+
+        type 'a t = 'a A.t
+
+        type 'a iter = 'a Free.t
+
+        let rec traverse f = function
+          | Free.Return a -> A.map (fun x -> Free.Return x) (f a)
+          | Free.Bind fa ->
+            A.map (fun x -> Free.Bind x) (Tr.traverse (traverse f) fa)
+        ;;
+      end)
+
+  module Monad
+      (M : Preface_specs.MONAD)
+      (T : functor
+        (Md : Preface_specs.MONAD with type 'a t = 'a M.t)
+        ->
+        Preface_specs.TRAVERSABLE
+          with type 'a t = 'a M.t
+           and type 'a iter = 'a Free.f) =
+    Traversable.Over_monad
+      (M)
+      (struct
+        module Tr = T (M)
+
+        type 'a t = 'a M.t
+
+        type 'a iter = 'a Free.t
+
+        let rec traverse f = function
+          | Free.Return a -> M.map (fun x -> Free.Return x) (f a)
+          | Free.Bind fa ->
+            M.map (fun x -> Free.Bind x) (Tr.traverse (traverse f) fa)
+        ;;
+      end)
+end
