@@ -23,19 +23,38 @@ Preface_make.Functor.Via_map (struct
   let map f = function Valid x -> Valid (f x) | Invalid err -> Invalid err
 end)
 
-module Applicative (Errors : Preface_specs.SEMIGROUP) =
-Preface_make.Applicative.Via_apply (struct
-  type nonrec 'a t = ('a, Errors.t) t
+let traverse_aux pure map f = function
+  | Invalid x -> pure (Invalid x)
+  | Valid x -> map (fun x -> Valid x) (f x)
+;;
 
-  let pure = valid
+module Applicative (Errors : Preface_specs.SEMIGROUP) = struct
+  module A = Preface_make.Applicative.Via_apply (struct
+    type nonrec 'a t = ('a, Errors.t) t
 
-  let apply fx xs =
-    match (fx, xs) with
-    | (Valid f, Valid x) -> Valid (f x)
-    | (Invalid left, Invalid right) -> Invalid (Errors.combine left right)
-    | (Invalid x, _) | (_, Invalid x) -> Invalid x
-  ;;
-end)
+    let pure = valid
+
+    let apply fx xs =
+      match (fx, xs) with
+      | (Valid f, Valid x) -> Valid (f x)
+      | (Invalid left, Invalid right) -> Invalid (Errors.combine left right)
+      | (Invalid x, _) | (_, Invalid x) -> Invalid x
+    ;;
+  end)
+
+  module T (A : Preface_specs.APPLICATIVE) =
+    Preface_make.Traversable.Over_applicative
+      (A)
+      (struct
+        type 'a t = 'a A.t
+
+        type 'a iter = ('a, Errors.t) Bifunctor.t
+
+        let traverse f x = traverse_aux A.pure A.map f x
+      end)
+
+  include Preface_make.Traversable.Join_with_applicative (A) (T)
+end
 
 module Selective (Errors : Preface_specs.SEMIGROUP) = struct
   module A = Applicative (Errors)
@@ -60,13 +79,28 @@ module Selective (Errors : Preface_specs.SEMIGROUP) = struct
   include S
 end
 
-module Monad (T : Preface_specs.Types.T0) = Preface_make.Monad.Via_bind (struct
-  type nonrec 'a t = ('a, T.t) t
+module Monad (T : Preface_specs.Types.T0) = struct
+  module M = Preface_make.Monad.Via_bind (struct
+    type nonrec 'a t = ('a, T.t) t
 
-  let return = valid
+    let return = valid
 
-  let bind f = function Valid x -> f x | Invalid err -> Invalid err
-end)
+    let bind f = function Valid x -> f x | Invalid err -> Invalid err
+  end)
+
+  module T (M : Preface_specs.MONAD) =
+    Preface_make.Traversable.Over_monad
+      (M)
+      (struct
+        type 'a t = 'a M.t
+
+        type 'a iter = ('a, T.t) Bifunctor.t
+
+        let traverse f x = traverse_aux M.return M.map f x
+      end)
+
+  include Preface_make.Traversable.Join_with_monad (M) (T)
+end
 
 let equal f g left right =
   match (left, right) with
