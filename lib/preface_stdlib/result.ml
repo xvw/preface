@@ -19,26 +19,60 @@ Preface_make.Functor.Via_map (struct
   let map f x = Bifunctor.bimap f id x
 end)
 
-module Applicative (T : Preface_specs.Types.T0) =
-Preface_make.Applicative.Via_apply (struct
-  module F = Functor (T)
+let traverse_aux pure map f = function
+  | Error x -> pure (Error x)
+  | Ok x -> map (fun x -> Ok x) (f x)
+;;
 
-  type nonrec 'a t = ('a, T.t) t
+module Applicative (T : Preface_specs.Types.T0) = struct
+  module A = Preface_make.Applicative.Via_apply (struct
+    module F = Functor (T)
 
-  let pure = pure
+    type nonrec 'a t = ('a, T.t) t
 
-  let apply fa xa =
-    (match (fa, xa) with (Ok f, x) -> F.map f x | (Error x, _) -> Error x)
-  ;;
-end)
+    let pure = pure
 
-module Monad (T : Preface_specs.Types.T0) = Preface_make.Monad.Via_bind (struct
-  type nonrec 'a t = ('a, T.t) t
+    let apply fa xa =
+      (match (fa, xa) with (Ok f, x) -> F.map f x | (Error x, _) -> Error x)
+    ;;
+  end)
 
-  let return = pure
+  module T (A : Preface_specs.APPLICATIVE) =
+    Preface_make.Traversable.Over_applicative
+      (A)
+      (struct
+        type 'a t = 'a A.t
 
-  let bind f = function Ok x -> f x | Error x -> Error x
-end)
+        type 'a iter = ('a, T.t) Bifunctor.t
+
+        let traverse f x = traverse_aux A.pure A.map f x
+      end)
+
+  include Preface_make.Traversable.Join_with_applicative (A) (T)
+end
+
+module Monad (T : Preface_specs.Types.T0) = struct
+  module M = Preface_make.Monad.Via_bind (struct
+    type nonrec 'a t = ('a, T.t) t
+
+    let return = pure
+
+    let bind f = function Ok x -> f x | Error x -> Error x
+  end)
+
+  module T (M : Preface_specs.MONAD) =
+    Preface_make.Traversable.Over_monad
+      (M)
+      (struct
+        type 'a t = 'a M.t
+
+        type 'a iter = ('a, T.t) Bifunctor.t
+
+        let traverse f x = traverse_aux M.return M.map f x
+      end)
+
+  include Preface_make.Traversable.Join_with_monad (M) (T)
+end
 
 let equal f g left right =
   match (left, right) with
