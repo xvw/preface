@@ -114,30 +114,3 @@
 
 module Over (T : Preface_specs.Types.T1) :
   Preface_specs.FREER_MONAD with type 'a f = 'a T.t
-
-(** Get a traversable from a Freer Monad. *)
-module Traversable (Freer : Preface_specs.FREER_MONAD) : sig
-  module Applicative
-      (A : Preface_specs.APPLICATIVE)
-      (T : functor
-        (Ap : Preface_specs.APPLICATIVE with type 'a t = 'a A.t)
-        ->
-        Preface_specs.TRAVERSABLE
-          with type 'a t = 'a Ap.t
-           and type 'a iter = 'a Freer.f) :
-    Preface_specs.TRAVERSABLE
-      with type 'a iter = 'a Freer.t
-       and type 'a t = 'a A.t
-
-  module Monad
-      (M : Preface_specs.MONAD)
-      (T : functor
-        (Mn : Preface_specs.MONAD with type 'a t = 'a M.t)
-        ->
-        Preface_specs.TRAVERSABLE
-          with type 'a t = 'a Mn.t
-           and type 'a iter = 'a Freer.f) :
-    Preface_specs.TRAVERSABLE
-      with type 'a iter = 'a Freer.t
-       and type 'a t = 'a M.t
-end

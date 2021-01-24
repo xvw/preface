@@ -122,30 +122,3 @@ module Over_applicative (F : Preface_specs.APPLICATIVE) :
 (** Incarnation of a [Free_monad] from a [Monad] *)
 module Over_monad (F : Preface_specs.MONAD) :
   Preface_specs.FREE_MONAD with type 'a f = 'a F.t
-
-(** Get a traversable from a Free Monad. *)
-module Traversable (Free : Preface_specs.FREE_MONAD) : sig
-  module Applicative
-      (A : Preface_specs.APPLICATIVE)
-      (T : functor
-        (Ap : Preface_specs.APPLICATIVE with type 'a t = 'a A.t)
-        ->
-        Preface_specs.TRAVERSABLE
-          with type 'a t = 'a Ap.t
-           and type 'a iter = 'a Free.f) :
-    Preface_specs.TRAVERSABLE
-      with type 'a iter = 'a Free.t
-       and type 'a t = 'a A.t
-
-  module Monad
-      (M : Preface_specs.MONAD)
-      (T : functor
-        (Mn : Preface_specs.MONAD with type 'a t = 'a M.t)
-        ->
-        Preface_specs.TRAVERSABLE
-          with type 'a t = 'a Mn.t
-           and type 'a iter = 'a Free.f) :
-    Preface_specs.TRAVERSABLE
-      with type 'a iter = 'a Free.t
-       and type 'a t = 'a M.t
-end
