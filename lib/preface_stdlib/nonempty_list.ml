@@ -26,19 +26,18 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map = map
 end)
 
-module Applicative = struct
-  module A = Preface_make.Applicative.Via_apply (struct
-    type nonrec 'a t = 'a t
+module Applicative_internal = Preface_make.Applicative.Via_apply (struct
+  type nonrec 'a t = 'a t
 
-    let pure = pure
+  let pure = pure
 
-    let apply fs xs = flatten @@ map (fun f -> map (fun x -> f x) xs) fs
-  end)
+  let apply fs xs = flatten @@ map (fun f -> map (fun x -> f x) xs) fs
+end)
 
-  module Traversable (A : Preface_specs.APPLICATIVE) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a A.t and type 'a iter = 'a t =
-  struct
-    module T = struct
+module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
+  Preface_make.Traversable.Over_applicative
+    (A)
+    (struct
       type 'a t = 'a A.t
 
       type 'a iter = 'a Preface_core.Nonempty_list.t
@@ -51,29 +50,27 @@ module Applicative = struct
         in
         traverse_aux
       ;;
-    end
+    end)
 
-    include Preface_make.Traversable.Over_applicative (A) (T)
-  end
+module Applicative =
+  Preface_make.Traversable.Join_with_applicative
+    (Applicative_internal)
+    (Applicative_traversable)
 
-  include A
-end
+module Monad_internal = Preface_make.Monad.Via_map_and_join (struct
+  type nonrec 'a t = 'a t
 
-module Monad = struct
-  module M = Preface_make.Monad.Via_map_and_join (struct
-    type nonrec 'a t = 'a t
+  let return = pure
 
-    let return = pure
+  let map = map
 
-    let map = map
+  let join = flatten
+end)
 
-    let join = flatten
-  end)
-
-  module Traversable (M : Preface_specs.MONAD) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a M.t and type 'a iter = 'a t =
-  struct
-    module T = struct
+module Monad_traversable (M : Preface_specs.MONAD) =
+  Preface_make.Traversable.Over_monad
+    (M)
+    (struct
       type 'a t = 'a M.t
 
       type 'a iter = 'a Preface_core.Nonempty_list.t
@@ -91,14 +88,10 @@ module Monad = struct
         in
         traverse_aux
       ;;
-    end
+    end)
 
-    include Preface_make.Traversable.Over_monad (M) (T)
-  end
-
-  include M
-end
-
+module Monad =
+  Preface_make.Traversable.Join_with_monad (Monad_internal) (Monad_traversable)
 module Selective =
   Preface_make.Selective.Over_applicative
     (Applicative)

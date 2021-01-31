@@ -27,11 +27,13 @@ module Functor (T : Preface_specs.Types.T0) :
 
 (** {2 Applicative API} *)
 module Applicative (T : Preface_specs.Types.T0) :
-  Preface_specs.APPLICATIVE with type 'a t = ('a, T.t) Bifunctor.t
+  Preface_specs.Traversable.API_OVER_APPLICATIVE
+    with type 'a t = ('a, T.t) Bifunctor.t
 
 (** {2 Monad API} *)
 module Monad (T : Preface_specs.Types.T0) :
-  Preface_specs.MONAD with type 'a t = ('a, T.t) Bifunctor.t
+  Preface_specs.Traversable.API_OVER_MONAD
+    with type 'a t = ('a, T.t) Bifunctor.t
 
 (** {1 Helpers} *)
 

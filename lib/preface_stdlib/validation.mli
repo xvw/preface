@@ -24,7 +24,8 @@ module Functor (T : Preface_specs.Types.T0) :
 
 (** {2 Applicative API} *)
 module Applicative (Errors : Preface_specs.SEMIGROUP) :
-  Preface_specs.APPLICATIVE with type 'a t = ('a, Errors.t) t
+  Preface_specs.Traversable.API_OVER_APPLICATIVE
+    with type 'a t = ('a, Errors.t) t
 
 (** {2 Selective API} *)
 module Selective (Errors : Preface_specs.SEMIGROUP) :
@@ -32,7 +33,7 @@ module Selective (Errors : Preface_specs.SEMIGROUP) :
 
 (** {2 Monad API} *)
 module Monad (T : Preface_specs.Types.T0) :
-  Preface_specs.MONAD with type 'a t = ('a, T.t) t
+  Preface_specs.Traversable.API_OVER_MONAD with type 'a t = ('a, T.t) t
 
 (** {1 Helpers} *)
 

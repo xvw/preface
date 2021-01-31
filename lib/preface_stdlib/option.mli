@@ -75,13 +75,14 @@ module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 (** {2 Functor API} *)
 
-module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
+module Applicative :
+  Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a t
 (** {2 Applicative API} *)
 
 module Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a t
 (** {2 Alternative API} *)
 
-module Monad : Preface_specs.MONAD with type 'a t = 'a t
+module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
 (** {2 Monad API} *)
 
 module Monad_plus : Preface_specs.MONAD_PLUS with type 'a t = 'a t

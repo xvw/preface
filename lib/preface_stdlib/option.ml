@@ -28,9 +28,28 @@ module Alternative = Preface_make.Alternative.Via_apply (struct
   let combine l r = (match (l, r) with (None, x) -> x | (x, _) -> x)
 end)
 
-module Applicative = Preface_make.Applicative.From_alternative (Alternative)
+let traverse_aux pure map f = function
+  | None -> pure None
+  | Some x -> map Stdlib.Option.some (f x)
+;;
 
-module Monad = Preface_make.Monad.Via_bind (struct
+module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
+  Preface_make.Traversable.Over_applicative
+    (A)
+    (struct
+      type 'a t = 'a A.t
+
+      type 'a iter = 'a option
+
+      let traverse f x = traverse_aux A.pure A.map f x
+    end)
+
+module Applicative =
+  Preface_make.Traversable.Join_with_applicative
+    (Alternative)
+    (Applicative_traversable)
+
+module Monad_internal = Preface_make.Monad.Via_bind (struct
   type nonrec 'a t = 'a t
 
   let return x = Some x
@@ -38,6 +57,19 @@ module Monad = Preface_make.Monad.Via_bind (struct
   let bind f = function Some x -> f x | None -> None
 end)
 
+module Monad_traversable (M : Preface_specs.MONAD) =
+  Preface_make.Traversable.Over_monad
+    (M)
+    (struct
+      type 'a t = 'a M.t
+
+      type 'a iter = 'a option
+
+      let traverse f x = traverse_aux M.return M.map f x
+    end)
+
+module Monad =
+  Preface_make.Traversable.Join_with_monad (Monad_internal) (Monad_traversable)
 module Monad_plus =
   Preface_make.Monad_plus.Over_monad_and_alternative (Monad) (Alternative)
 

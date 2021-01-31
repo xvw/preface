@@ -24,17 +24,11 @@ module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 (** {2 Functor API} *)
 
+module Applicative :
+  Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a t
 (** {2 Applicative API}
 
     Applicative and Traversable for [List.t]. *)
-module Applicative : sig
-  (** {2 Traversable using Applicative form} *)
-  module Traversable (A : Preface_specs.APPLICATIVE) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a A.t and type 'a iter = 'a t
-
-  include Preface_specs.APPLICATIVE with type 'a t = 'a t
-  (** {2 Applicative API} *)
-end
 
 module Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a t
 (** {2 Alternative API} *)
@@ -42,18 +36,11 @@ module Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a t
 module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 (** {2 Selective API} *)
 
+module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
 (** {2 Monad API}
 
     Monad and Traversable for [List.t]. The implementation of [bind] come from
     [concat_map] in OCaml's Stdlib (available since OCaml 4.10) *)
-module Monad : sig
-  (** {2 Traversable using Monadic form} *)
-  module Traversable (M : Preface_specs.MONAD) :
-    Preface_specs.TRAVERSABLE with type 'a t = 'a M.t and type 'a iter = 'a t
-
-  include Preface_specs.MONAD with type 'a t = 'a t
-  (** {2 Monad API} *)
-end
 
 module Monad_plus : Preface_specs.MONAD_PLUS with type 'a t = 'a t
 (** {2 Alternative API} *)

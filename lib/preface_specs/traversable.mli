@@ -43,6 +43,26 @@ module type API = sig
   include OPERATION with type 'a t := 'a t and type 'a iter := 'a iter
 end
 
+(** The complete interface of a [Traversable] over a [Monad]*)
+module type API_OVER_MONAD = sig
+  include Monad.API
+  (** {2 Monad API} *)
+
+  (** {2 Traversable using Monadic form} *)
+  module Traversable (M : Monad.API) :
+    API with type 'a iter = 'a t and type 'a t = 'a M.t
+end
+
+(** The complete interface of a [Traversable] over an [Applicative]*)
+module type API_OVER_APPLICATIVE = sig
+  include Applicative.API
+  (** {2 Applicative API} *)
+
+  (** {2 Traversable using Applicative form} *)
+  module Traversable (A : Applicative.API) :
+    API with type 'a iter = 'a t and type 'a t = 'a A.t
+end
+
 (** {1 Bibliography}
 
     - {{:http://www.soi.city.ac.uk/~ross/papers/Applicative.html} Applicative

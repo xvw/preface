@@ -69,3 +69,27 @@ struct
   include Core
   include Operation
 end
+
+module Join_with_monad
+    (I : Preface_specs.MONAD) (T : functor (M : Preface_specs.MONAD) ->
+      Preface_specs.TRAVERSABLE
+        with type 'a t = 'a M.t
+         and type 'a iter = 'a I.t) :
+  Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a I.t = struct
+  module Traversable = T
+  include I
+end
+
+module Join_with_applicative
+    (I : Preface_specs.APPLICATIVE)
+    (T : functor
+      (A : Preface_specs.APPLICATIVE)
+      ->
+      Preface_specs.TRAVERSABLE
+        with type 'a t = 'a A.t
+         and type 'a iter = 'a I.t) :
+  Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a I.t =
+struct
+  module Traversable = T
+  include I
+end
