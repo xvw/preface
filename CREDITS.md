@@ -5,7 +5,7 @@ Preface is a free (an open-source) library written in (and for)
 The library is mainly maintained by:
 
 - [Didier Plaindoux](https://github.com/d-plaindoux)
-- [Pierre Ruyter](https://github.com/pytre)
+- [Pierre Ruyter](https://github.com/gr-im)
 - [Xavier Van de Woestyne](https://github.com/xvw/)
 
 ### Warm thanks
@@ -13,8 +13,9 @@ The library is mainly maintained by:
 - [Gabriel Scherer](https://github.com/gasche) for many design choice and
   technical help about specific subject
 - [Andrey Mokhov](https://github.com/snowleopard) for his help in understanding
-  Selectives
+  Selectives (and Free Selective)
 - [Florian Angeletti](https://github.com/Octachron) for advices and help
+- [Oleg Kiselyov](http://okmij.org/ftp) for advices about Freer monad
 
 ## Used libraries
 
