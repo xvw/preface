@@ -13,7 +13,8 @@ let run number =
     @ Validate.cases number
     @ Stream.cases number
     @ Either.cases number
-    @ State.cases number )
+    @ State.cases number
+    @ Predicate.cases number )
 ;;
 
 let () = run 500
