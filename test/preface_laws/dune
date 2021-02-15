@@ -1,0 +1,14 @@
+(library
+ (name preface_laws)
+ (public_name preface.laws)
+ (synopsis "Encoding laws as a set of tests")
+ (modules functor applicative selective monad comonad bifunctor semigroup
+   monoid alternative monad_plus alt)
+ (libraries qcheck-core qcheck-alcotest preface.core preface.specs
+   preface.make preface.stdlib preface.qcheck))
+
+(test
+ (name preface_laws_suite)
+ (modules misc identity continuation option list nonempty_list try either
+   stream result validation validate state preface_laws_suite)
+ (libraries preface.qcheck preface.stdlib alcotest preface_laws))

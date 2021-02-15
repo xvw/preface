@@ -1,8 +1,10 @@
-open Preface_stdlib.Stream
-open Preface_stdlib.Stream.Comonad
-module Try = Preface_stdlib.Try
+open Preface.Stream
+open Comonad
+module Try = Preface.Try
 
-let subject_try a = Alcotest.testable (Try.pp (Alcotest.pp a)) (Try.equal ( = ))
+let subject_try a =
+  Alcotest.testable (Try.pp (Alcotest.pp a)) (Try.equal (Alcotest.equal a))
+;;
 
 let rec numbers n = stream n (lazy (numbers (n + 1)))
 
@@ -187,7 +189,7 @@ let drop_while_test () =
     "should_drop_while" expected computed
 ;;
 
-let test_cases =
+let cases =
   let open Alcotest in
   [
     ( "Stream"

@@ -1,4 +1,3 @@
 let () =
-  let open Alcotest in
-  run "Preface_core" [ Fun_test.test_cases; Nonempty_list_test.test_cases ]
+  Alcotest.(run "Preface_core" [ Nonempty_list_test.cases; Fun_test.cases ])
 ;;

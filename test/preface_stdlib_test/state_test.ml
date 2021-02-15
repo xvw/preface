@@ -1,4 +1,4 @@
-open Preface_stdlib.State.Over (struct
+open Preface.State.Over (struct
   type t = int
 end)
 
@@ -85,7 +85,7 @@ let should_get_modify_and_get_a_value () =
     "Should get modify and get the value" expected computed
 ;;
 
-let test_cases =
+let cases =
   let open Alcotest in
   [
     ( "State"

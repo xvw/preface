@@ -33,10 +33,10 @@
 
     {2 Vector state creation}
 
-    The corresponding [State] monad is created using the `Via_type` functor.
+    The corresponding [State] monad is created using the `Over_type` functor.
 
     {[
-      module State = Preface_stdlib.State.Via_type (struct
+      module State = Preface_stdlib.State.Over_type (struct
         type t = Vector_2D.t
       end)
     ]}
@@ -71,9 +71,7 @@
 
 (** {1 Implementation} *)
 
-module Over (T : sig
-  type t
-end) : sig
+module Over (T : Preface_specs.Types.T0) : sig
   (** {2 Types} *)
 
   type state = T.t
@@ -92,6 +90,9 @@ end) : sig
   (** {2 Monad API} *)
 
   (** {2 Helpers} *)
+
+  val run : state -> 'a t -> 'a * state
+  (** Run the given program. *)
 
   val get : state t
   (** Returns the current state *)

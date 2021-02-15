@@ -26,7 +26,7 @@ let should_compose_left_to_right_with_infix_operator () =
     "should_compose_left_to_right_with_infix_operator" expected computed
 ;;
 
-let test_cases =
+let cases =
   let open Alcotest in
   ( "Fun"
   , [

@@ -18,6 +18,9 @@ type ('a, 'errors) t =
 
 (** {1 Implementation} *)
 
+module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
+(** {2 Bifunctor API} *)
+
 (** {2 Functor API} *)
 module Functor (T : Preface_specs.Types.T0) :
   Preface_specs.FUNCTOR with type 'a t = ('a, T.t) t

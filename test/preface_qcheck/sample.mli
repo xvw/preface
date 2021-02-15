@@ -1,51 +1,27 @@
 (** Sampling data. *)
 
-(** {2 QCheck generator} *)
-
-module type GENERATOR = sig
-  type input
-
-  val arbitrary : input Arbitrary.t
-
-  val observable : input QCheck.Observable.t
-
-  val eq : input -> input -> bool
-end
-
-module type PACK = sig
-  module T1 : GENERATOR
-
-  module T2 : GENERATOR
-
-  module T3 : GENERATOR
-
-  module T4 : GENERATOR
-
-  module T5 : GENERATOR
-
-  module T6 : GENERATOR
-end
-
 (** {2 Presaved generators} *)
 
-module Int : GENERATOR with type input = int
+module Int : Model.T0 with type t = int
 
-module String : GENERATOR with type input = string
+module String : Model.T0 with type t = string
 
-module Float : GENERATOR with type input = float
+module Float : Model.T0 with type t = float
 
-(** {2 Packed generators} *)
+(** {2 Packaged Samples} *)
 
-module Pack : sig
-  module T1 : GENERATOR with type input = int
+module type PACKAGE = sig
+  module A : Model.T0
 
-  module T2 : GENERATOR with type input = string
+  module B : Model.T0
 
-  module T3 : GENERATOR with type input = float
+  module C : Model.T0
 
-  module T4 : GENERATOR with type input = int
+  module D : Model.T0
 
-  module T5 : GENERATOR with type input = string
+  module E : Model.T0
 
-  module T6 : GENERATOR with type input = float
+  module F : Model.T0
 end
+
+module Pack1 : PACKAGE

@@ -46,6 +46,12 @@ val validation :
   -> ('a, 'b) Preface_stdlib.Validation.t t
 (** Arbitrary for [Validation.t] *)
 
+val validate :
+     ?collect:('a Preface_stdlib.Validate.t -> string)
+  -> 'a t
+  -> 'a Preface_stdlib.Validate.t t
+(** Arbitrary for [Validate.t] *)
+
 val nonempty_list :
      ?collect:('a Preface_stdlib.Nonempty_list.t -> string)
   -> 'a t
@@ -65,7 +71,7 @@ val stream :
 (** Arbitrary for [Stream.t] *)
 
 val state : 'a t -> ('b -> 'a * 'b) t
-(** Arbitrary for [State.t].*)
+(** Arbitrary for [State.t] *)
 
 (** {2 QCheck's arbitraries} *)
 

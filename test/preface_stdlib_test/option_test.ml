@@ -1,20 +1,5 @@
-open Preface_core.Fun
-open Preface_stdlib.Option
-
-module Functor_test = Support.Functor (struct
-  include Preface_stdlib.Option
-  include Functor
-end)
-
-module Applicative_test = Support.Applicative (struct
-  include Preface_stdlib.Option
-  include Applicative
-end)
-
-module Monad_test = Support.Monad (struct
-  include Preface_stdlib.Option
-  include Monad
-end)
+open Preface.Fun
+open Preface.Option
 
 let map_scenario_1 () =
   let expected = Some 31
@@ -160,18 +145,10 @@ let fold_map_over_empty () =
   Alcotest.(check int) "fold_map with success" expected computed
 ;;
 
-let test_cases =
+let cases =
   let open Alcotest in
   [
-    ("Option Functor", Functor_test.cases)
-  ; ("Option Applicative", Applicative_test.cases)
-  ; ("Option Monad", Monad_test.cases)
-  ; ( "Option Foldable"
-    , [
-        test_case "Fold_map over values" `Quick fold_map_over_values
-      ; test_case "Fold_map over empty" `Quick fold_map_over_empty
-      ] )
-  ; ( "Option Validation"
+    ( "Option"
     , [
         test_case "Map scenario 1" `Quick map_scenario_1
       ; test_case "Map scenario 2" `Quick map_scenario_2

@@ -1,33 +1,35 @@
-module N = Preface_core.Nonempty_list
+let nel_testable a =
+  Alcotest.testable
+    (Preface_core.Nonempty_list.pp (Alcotest.pp a))
+    (Preface_core.Nonempty_list.equal (Alcotest.equal a))
+;;
 
-let subject a = Alcotest.testable (N.pp (Alcotest.pp a)) (N.equal ( = ))
-
-open N
+open Preface_core.Nonempty_list
 
 let should_create () =
   let expected = Last 10
   and computed = create 10 in
-  Alcotest.(check (subject int)) "should_create" expected computed
+  Alcotest.(check (nel_testable int)) "should_create" expected computed
 ;;
 
 let should_create_from_list_nonempty () =
   let expected = Some (10 :: 11 :: 12 :: Last 13)
   and computed = from_list [ 10; 11; 12; 13 ] in
-  Alcotest.(check (option (subject int)))
+  Alcotest.(check (option (nel_testable int)))
     "should_create_from_list_nonempty" expected computed
 ;;
 
 let should_create_from_list_singleton () =
   let expected = Some (Last 10)
   and computed = from_list [ 10 ] in
-  Alcotest.(check (option (subject int)))
+  Alcotest.(check (option (nel_testable int)))
     "should_create_from_list_singleton" expected computed
 ;;
 
 let should_create_from_list_empty () =
   let expected = None
   and computed = from_list [] in
-  Alcotest.(check (option (subject int)))
+  Alcotest.(check (option (nel_testable int)))
     "should_create_from_list_empty" expected computed
 ;;
 
@@ -52,14 +54,14 @@ let should_create_list () =
 let should_extract_empty_list () =
   let expected = None
   and computed = tl (create 200) in
-  Alcotest.(check (option (subject int)))
+  Alcotest.(check (option (nel_testable int)))
     "should_extract_empty_list" expected computed
 ;;
 
 let should_extract_list () =
   let expected = Some (300 :: 400 :: Last 500)
   and computed = tl (cons 200 (cons 300 (cons 400 (create 500)))) in
-  Alcotest.(check (option (subject int)))
+  Alcotest.(check (option (nel_testable int)))
     "should_extract_list" expected computed
 ;;
 
@@ -78,19 +80,19 @@ let should_have_length_4 () =
 let should_cons () =
   let expected = 200 :: 300 :: 400 :: Last 500
   and computed = cons 200 (cons 300 (cons 400 (create 500))) in
-  Alcotest.(check (subject int)) "should_cons" expected computed
+  Alcotest.(check (nel_testable int)) "should_cons" expected computed
 ;;
 
 let should_rev_singleton () =
   let expected = create 200
   and computed = rev (create 200) in
-  Alcotest.(check (subject int)) "should_rev_singleton" expected computed
+  Alcotest.(check (nel_testable int)) "should_rev_singleton" expected computed
 ;;
 
 let should_rev () =
   let expected = 500 :: 400 :: 300 :: Last 200
   and computed = rev (cons 200 (cons 300 (cons 400 (create 500)))) in
-  Alcotest.(check (subject int)) "should_rev_singleton" expected computed
+  Alcotest.(check (nel_testable int)) "should_rev_singleton" expected computed
 ;;
 
 let should_iteri_1 () =
@@ -138,13 +140,15 @@ let should_mapi_1 () =
   and computed =
     mapi (fun i x -> (i, string_of_int x)) (1 :: 2 :: 3 :: Last 4)
   in
-  Alcotest.(check (subject (pair int string))) "should_mapi_1" expected computed
+  Alcotest.(check (nel_testable (pair int string)))
+    "should_mapi_1" expected computed
 ;;
 
 let should_mapi_2 () =
   let expected = Last (0, "1")
   and computed = mapi (fun i x -> (i, string_of_int x)) (Last 1) in
-  Alcotest.(check (subject (pair int string))) "should_mapi_1" expected computed
+  Alcotest.(check (nel_testable (pair int string)))
+    "should_mapi_1" expected computed
 ;;
 
 let should_map_1 () =
@@ -152,13 +156,13 @@ let should_map_1 () =
   and computed =
     map (fun x -> string_of_int (x + 10)) (1 :: 2 :: 3 :: Last 4)
   in
-  Alcotest.(check (subject string)) "should_mapi_1" expected computed
+  Alcotest.(check (nel_testable string)) "should_mapi_1" expected computed
 ;;
 
 let should_map_2 () =
   let expected = Last "11"
   and computed = map (fun x -> string_of_int (x + 10)) (Last 1) in
-  Alcotest.(check (subject string)) "should_mapi_1" expected computed
+  Alcotest.(check (nel_testable string)) "should_mapi_1" expected computed
 ;;
 
 let should_fold_left_1 () =
@@ -192,7 +196,7 @@ let should_fold_right_2 () =
 let should_append () =
   let expected = 1 :: 2 :: 3 :: 4 :: 5 :: Last 6
   and computed = append (1 :: 2 :: Last 3) (4 :: 5 :: Last 6) in
-  Alcotest.(check (subject int)) "should_append" expected computed
+  Alcotest.(check (nel_testable int)) "should_append" expected computed
 ;;
 
 let should_rev_append () =
@@ -211,16 +215,16 @@ let should_flatten_1 () =
   and computed =
     flatten ((1 :: Last 2) :: (3 :: Last 4) :: Last (5 :: Last 6))
   in
-  Alcotest.(check (subject int)) "should_flatten_1" expected computed
+  Alcotest.(check (nel_testable int)) "should_flatten_1" expected computed
 ;;
 
 let should_flatten_2 () =
   let expected = Last 1
   and computed = flatten (Last (Last 1)) in
-  Alcotest.(check (subject int)) "should_flatten_2" expected computed
+  Alcotest.(check (nel_testable int)) "should_flatten_2" expected computed
 ;;
 
-let test_cases =
+let cases =
   let open Alcotest in
   ( "Nonempty_list"
   , let open List in

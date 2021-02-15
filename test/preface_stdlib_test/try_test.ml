@@ -1,21 +1,8 @@
-module Functor_test = Support.Functor (struct
-  include Preface_stdlib.Try
-  include Functor
-end)
+open Preface.Try
 
-module Applicative_test = Support.Applicative (struct
-  include Preface_stdlib.Try
-  include Applicative
-end)
-
-module Monad_test = Support.Monad (struct
-  include Preface_stdlib.Try
-  include Monad
-end)
-
-open Preface_stdlib.Try
-
-let subject a = Alcotest.testable (pp (Alcotest.pp a)) (equal ( = ))
+let subject a =
+  Alcotest.testable (pp (Alcotest.pp a)) (equal (Alcotest.equal a))
+;;
 
 exception Invalid_name of string
 
@@ -53,12 +40,9 @@ let simple_validation_failure_2 () =
     "should be invalid" expected computed
 ;;
 
-let test_cases =
+let cases =
   [
-    ("Try Functor", Functor_test.cases)
-  ; ("Try Applicative", Applicative_test.cases)
-  ; ("Try Monad", Monad_test.cases)
-  ; ( "Try use cases"
+    ( "Try"
     , let open Alcotest in
       [
         test_case "Simple validation with success" `Quick
