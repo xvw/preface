@@ -10,5 +10,5 @@
 (test
  (name preface_laws_suite)
  (modules misc identity continuation option list nonempty_list try either
-          stream result validation validate state preface_laws_suite)
+   stream result validation validate state preface_laws_suite)
  (libraries preface.qcheck preface.stdlib alcotest preface_laws))
