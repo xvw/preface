@@ -1,24 +1,38 @@
-name: Preface
-on: [push]
+name: Preface workflow
+on:
+  - pull_request
+
 jobs:
-  run:
-    name: Tests
-    runs-on: ${{ matrix.operating-system }}
+  build:
     strategy:
+      fail-fast: false
       matrix:
-        operating-system: [macos-latest, ubuntu-latest]
-        ocaml-version: [ '4.09.0', '4.08.1', '4.08.0' ]
+        os:
+          - macos-latest
+          - ubuntu-latest
+        ocaml-version:
+          - 4.11.0
+          - 4.10.1
+          - 4.09.1
+          - 4.08.1
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-    - uses: actions/checkout@master
-    - uses: avsm/setup-ocaml@v1.0
-      with:
-        ocaml-version: ${{ matrix.ocaml-version }}
-    - run: opam pin add preface.dev -n .
-    - name: Packages
-      run: opam depext -yt preface
-    - name: Dependencies
-      run: opam install -t . --deps-only
-    - name: Build
-      run: opam exec -- dune build
-    - name: Test
-      run: opam exec -- dune runtest
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+
+      - run: opam pin add preface.dev . --no-action
+
+      - run: opam depext preface --yes --with-doc --with-test
+
+      - run: opam install . --deps-only --with-doc --with-test
+
+      - run: opam exec -- dune build
+
+      - run: opam exec -- dune runtest
