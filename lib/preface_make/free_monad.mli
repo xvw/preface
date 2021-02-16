@@ -52,10 +52,10 @@
       module Store_free = Preface_make.Free_monad.Over_functor (Store.Functor)
     ]}
 
-    {3 Defining an interpeter}
+    {3 Defining a Handler}
 
-    Then we can propose one interpretation using an OCaml side effect for
-    instance, here the side effect is a mutable reference
+    Then we can propose a handler using an OCaml side effect for instance, here
+    the side effect is a mutable reference
 
     {[
       let runStore l = function

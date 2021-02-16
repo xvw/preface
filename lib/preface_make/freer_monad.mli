@@ -15,12 +15,7 @@
     In this example we propose a Store where strings can be stored and retrieved
     with a key which is also a string.
 
-    {3 Defining a [Functor]}
-
-    The first piece of this jigsaw should be an Algebraic Data Type (ADT) and
-    it's dedicated [map] function. In a language like Haskell such mapping
-    function can be automatically derived. In [Preface] this is not the case
-    yet.
+    {3 Defining effects}
 
     {[
       (* file: store.ml *)
@@ -38,18 +33,18 @@
 
     {[ module Store_free = Preface_make.Freer_monad.Over (Store) ]}
 
-    {3 Defining an interpeter}
+    {3 Defining a Handler}
 
-    Then we can propose one interpretation using an OCaml side effect for
-    instance, here the side effect is a mutable reference
+    Then we can propose a handler using an OCaml side effect for instance, here
+    the side effect is a mutable reference
 
     {[
-      let runStore l = function
+      let runStore l resume = function
         | Store.Get (k, f) ->
-          f (Option.map snd (List.find_opt (fun (k', _) -> k' = k) !l))
+          resume (f (Option.map snd (List.find_opt (fun (k', _) -> k' = k) !l)))
         | Store.Set (k, v, f) ->
           let () = l := (k, v) :: !l in
-          f ()
+          resume (f ())
       ;;
     ]}
 
@@ -64,19 +59,19 @@
       let set k v = Store_free.perform (Store.Set (k, v, id)))
     ]}
 
-    {3 Building the interpreter}
+    {3 Building the handler}
 
-    Therefor the [Freer_monad] requires an interpeter with the following type:
+    Therefor the [Freer_monad] requires a handler with the following type:
 
-    {[ type interpret = { interpreter : 'a. 'a Store.t -> 'a } ]}
+    {[ type 'a handler = { handler : 'b. ('b -> 'a) -> 'b f -> 'a } ]}
 
-    Such interpreter shoud be created thanks to a function with an embedded let
+    Such handler shoud be created thanks to a function with an embedded let
     which provides the more general type i.e. `'a. 'a Store.t -> 'a`.
 
     {[
       let interpreter l =
         let i = runStore l in
-        Store_free.{ interpreter = i }
+        Store_free.{ handler = i }
       ;;
     ]}
 

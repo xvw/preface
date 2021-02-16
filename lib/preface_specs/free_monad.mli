@@ -1,6 +1,6 @@
 (** A [Free_monad] allows you to build a monad from a given functor. Such monad
     is equiped with two additional functions: one dedicated to the creation of a
-    new data and another one for the interpretation. *)
+    new data and another one for the effect handling. *)
 
 (** {1 Structure anatomy} *)
 
@@ -18,7 +18,7 @@ module type CORE = sig
   (** Create a new ['a t] from a ['a f]. *)
 
   val run : ('a f -> 'a) -> 'a t -> 'a
-  (** Execute a given interpret for given data *)
+  (** Execute a given handler for given data *)
 end
 
 (** {1 API} *)

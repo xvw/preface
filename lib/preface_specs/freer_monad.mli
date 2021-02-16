@@ -14,14 +14,14 @@ module type CORE = sig
     | Return : 'a -> 'a t
     | Bind : 'b f * ('b -> 'a t) -> 'a t
 
-  type interpreter = { interpreter : 'a. 'a f -> 'a }
-  (** The interpreter type *)
+  type 'a handler = { handler : 'b. ('b -> 'a) -> 'b f -> 'a }
+  (** The handler type *)
 
   val perform : 'a f -> 'a t
   (** Create a new ['a t] from a ['a f]. *)
 
-  val run : interpreter -> 'a t -> 'a
-  (** Execute a given interpret for given data *)
+  val run : 'a handler -> 'a t -> 'a
+  (** Execute a given handler for given data *)
 end
 
 (** {1 API} *)
