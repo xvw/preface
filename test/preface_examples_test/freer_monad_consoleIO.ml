@@ -12,19 +12,19 @@ let tell x = IO.perform (ConsoleIO.Tell (x, id))
 
 let ask s = IO.perform (ConsoleIO.Ask (s, id))
 
-let runConsoleIO output = function
+let runConsoleIO output sk = function
   | ConsoleIO.Tell (s, k) ->
     let () = output := !output @ [ "Tell " ^ s ] in
-    k ()
+    sk (k ())
   | ConsoleIO.Ask (s, k) ->
     let () = output := !output @ [ "Ask " ^ s ^ "?" ] in
-    k s
+    sk (k s)
 ;;
 
 let runConsole output =
   let open IO in
   let i c = runConsoleIO output c in
-  { interpreter = i }
+  { handler = i }
 ;;
 
 let write_hello () =

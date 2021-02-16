@@ -9,13 +9,14 @@ module Over (Type : Preface_specs.Types.T1) = struct
 
   let perform f = Bind (f, (fun a -> Return a))
 
-  type interpreter = { interpreter : 'a. 'a f -> 'a }
+  type 'a handler = { handler : 'b. ('b -> 'a) -> 'b f -> 'a }
 
   let run f =
     let rec loop_run = function
       | Return a -> a
-      | Bind (intermediate, continuation) ->
-        loop_run (continuation (f.interpreter intermediate))
+      | Bind (intermediate, continue) ->
+        let k x = loop_run (continue x) in
+        f.handler k intermediate
     in
     loop_run
   ;;
