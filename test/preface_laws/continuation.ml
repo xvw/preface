@@ -5,7 +5,9 @@ module Req = struct
 
   let observable x = Preface_qcheck.Observable.continuation x
 
-  let equal f x y = Preface_stdlib.Continuation.(f (x.run Fun.id) (y.run Fun.id))
+  let equal f x y =
+    Preface_stdlib.Continuation.(f (x.run Stdlib.Fun.id) (y.run Stdlib.Fun.id))
+  ;;
 end
 
 module Functor =
