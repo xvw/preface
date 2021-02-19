@@ -1,11 +1,25 @@
+open Aliases
+
+module type LAWS = sig
+  include Category.LAWS
+
+  val law1 : string * (unit -> ('a, 'a) t pair)
+
+  val law2 : string * (('a -> 'b) -> ('b -> 'c) -> ('a, 'c) t pair)
+
+  val law3 : string * (('a -> 'b) -> ('a * 'c, 'b * 'c) t pair)
+
+  val law4 : string * (('a, 'b) t -> ('b, 'c) t -> ('a * 'd, 'c * 'd) t pair)
+
+  val law5 : string * (('a, 'b) t -> ('c -> 'd) -> ('a * 'c, 'b * 'd) t pair)
+
+  val law6 : string * (('a, 'b) t -> ('a * 'c, 'b) t pair)
+
+  val law7 : string * (('a, 'b) t -> (('a * 'c) * 'd, 'b * ('c * 'd)) t pair)
+end
+
 module Laws (A : Preface_specs.ARROW) = struct
-  module C = Category.Laws (A)
-
-  let right_identity = C.right_identity
-
-  let left_identity = C.left_identity
-
-  let associativity = C.associativity
+  include Category.Laws (A)
 
   let law1 = ("arrow id = id", (fun () -> (A.arrow (fun x -> x), A.id)))
 
@@ -32,8 +46,8 @@ module Laws (A : Preface_specs.ARROW) = struct
   let law5 =
     let left f g = A.(fst f >>> arrow (fun (x, y) -> (x, g y)))
     and right f g = A.(arrow (fun (x, y) -> (x, g y)) >>> fst f) in
-    ( "fst f >>> arrow (fun (x,y) -> (x,g y)) = arrow (fun (x,y) -> (x,g y)) >>>\n\
-      \     fst f"
+    ( "fst f >>> arrow (fun (x,y) -> (x,g y)) = arrow (fun (x,y) -> (x,g y)) \
+       >>> fst f"
     , (fun f g -> (left f g, right f g)) )
   ;;
 
