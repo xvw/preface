@@ -24,7 +24,7 @@ module type WITH_CHOOSE = sig
 end
 
 (** Choose and left operation. *)
-module type WITH_LEFT_AND_CHOSE = sig
+module type WITH_LEFT_AND_CHOOSE = sig
   include WITH_LEFT
 
   include WITH_CHOOSE with type ('a, 'b) t := ('a, 'b) t

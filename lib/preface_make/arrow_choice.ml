@@ -247,7 +247,7 @@ end
 
 module Over_arrow_with_left_and_choose
     (Arrow : Preface_specs.ARROW)
-    (Choose_left : Preface_specs.Arrow_choice.WITH_LEFT_AND_CHOSE
+    (Choose_left : Preface_specs.Arrow_choice.WITH_LEFT_AND_CHOOSE
                      with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Choose_left.t =
 struct
