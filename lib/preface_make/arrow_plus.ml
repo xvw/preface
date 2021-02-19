@@ -83,7 +83,7 @@ module Over_category_and_via_arrow_and_fst
   include Infix
 end
 
-module Over_category_and_via_arrow_an_split
+module Over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
     (Core : Preface_specs.Arrow_plus.CORE_WITH_ARROW_AND_SPLIT
               with type ('a, 'b) t = ('a, 'b) Category.t) :
