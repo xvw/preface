@@ -90,11 +90,26 @@ module Over_arrow
     (Neutral : Preface_specs.Arrow_zero.NEUTRAL
                  with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_ZERO with type ('a, 'b) t = ('a, 'b) Neutral.t = struct
+  module Core_aux =
+    Core_over_category_and_via_arrow_and_fst
+      (Arrow)
+      (struct
+        include Arrow
+        include Neutral
+      end)
+
+  module Operation_aux = Operation_over_category (Arrow) (Core_aux)
+  module Infix_aux = Infix_over_category (Arrow) (Core_aux) (Operation_aux)
+  include Core_aux
+  include Operation_aux
   include Arrow
 
-  include (
-    Neutral :
-      Preface_specs.Arrow_zero.NEUTRAL with type ('a, 'b) t := ('a, 'b) t )
+  module Infix = struct
+    include Arrow.Infix
+    include Infix_aux
+  end
+
+  include Infix
 end
 
 module From_arrow_plus (Plus : Preface_specs.ARROW_PLUS) :
