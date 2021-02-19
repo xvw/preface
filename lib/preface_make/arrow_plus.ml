@@ -98,25 +98,6 @@ module Over_category_and_via_arrow_and_split
   include Infix
 end
 
-module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
-  Preface_specs.ARROW_PLUS with type ('a, 'b) t = 'a -> 'b Monad.t = struct
-  module Cat = Category.From_monad (Monad)
-
-  module Arr = struct
-    type ('a, 'b) t = 'a -> 'b Monad.t
-
-    let arrow f = (fun f g x -> f (g x)) Monad.return f
-
-    let fst f (b, d) = Monad.bind (fun c -> Monad.return (c, d)) (f b)
-
-    let combine f g x = Monad.combine (f x) (g x)
-
-    let neutral _ = Monad.neutral
-  end
-
-  include Over_category_and_via_arrow_and_fst (Cat) (Arr)
-end
-
 module Over_arrow
     (Arrow : Preface_specs.ARROW)
     (Combine_and_neutral : Preface_specs.Arrow_plus.COMBINE_AND_NEUTRAL
@@ -144,3 +125,16 @@ struct
 
   include Infix
 end
+
+module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
+  Preface_specs.ARROW_PLUS with type ('a, 'b) t = 'a -> 'b Monad.t =
+  Over_arrow
+    (Arrow.From_monad
+       (Monad))
+       (struct
+         type ('a, 'b) t = 'a -> 'b Monad.t
+
+         let combine f g x = Monad.combine (f x) (g x)
+
+         let neutral _ = Monad.neutral
+       end)
