@@ -9,13 +9,6 @@ module type COMBINE_AND_NEUTRAL = sig
   include Arrow_alt.COMBINE with type ('a, 'b) t := ('a, 'b) t
 end
 
-(** Requirement via [arrow], [combine] and [neutral]. *)
-module type CORE_WITH_ARROW = sig
-  include COMBINE_AND_NEUTRAL
-
-  include Arrow.CORE_WITH_ARROW with type ('a, 'b) t := ('a, 'b) t
-end
-
 (** Requirement via [fst], [neutral] and [combine]. *)
 module type CORE_WITH_ARROW_AND_FST = sig
   include COMBINE_AND_NEUTRAL

@@ -11,13 +11,6 @@ module type NEUTRAL = sig
   (** The neutral element of the [Arrow_zero]. *)
 end
 
-(** Requirement via [arrow] and [neutral]. *)
-module type CORE_WITH_ARROW = sig
-  include NEUTRAL
-
-  include Arrow.CORE_WITH_ARROW with type ('a, 'b) t := ('a, 'b) t
-end
-
 (** Requirement via [fst] and [neutral]. *)
 module type CORE_WITH_ARROW_AND_FST = sig
   include NEUTRAL
