@@ -8,12 +8,16 @@ module type CORE_WITH_SELECT = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
-  val pure : 'a -> 'a t
-  (** Create a new ['a t]. *)
-
   val select : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
   (** [select e f] apply [f] if [e] is [Left]. It allow to skip effect using
       [Right]. *)
+end
+
+module type CORE_WITH_PURE_AND_SELECT = sig
+  include CORE_WITH_SELECT
+
+  val pure : 'a -> 'a t
+  (** Create a new ['a t]. *)
 end
 
 (** Standard requirement. *)

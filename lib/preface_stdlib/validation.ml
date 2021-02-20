@@ -65,8 +65,6 @@ module Selective (Errors : Preface_specs.SEMIGROUP) = struct
       (struct
         type nonrec 'a t = ('a, Errors.t) t
 
-        let pure = valid
-
         let select either f =
           let open Either in
           match either with
