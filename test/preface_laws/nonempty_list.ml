@@ -27,6 +27,9 @@ module Monad =
 module Alt =
   Preface_laws.Alt.Semigroup_cases (Preface_stdlib.Nonempty_list.Alt) (Req)
     (Preface_qcheck.Sample.Pack1)
+module Comonad =
+  Preface_laws.Comonad.Cases (Preface_stdlib.Nonempty_list.Comonad) (Req)
+    (Preface_qcheck.Sample.Pack1)
 
 let cases n =
   [
@@ -35,5 +38,6 @@ let cases n =
   ; ("Nonempty_list Selective Laws", Selective.cases n)
   ; ("Nonempty_list Monad Laws", Monad.cases n)
   ; ("Nonempty_list Alt Laws", Alt.cases n)
+  ; ("Nonempty_list Comonad Laws", Comonad.cases n)
   ]
 ;;
