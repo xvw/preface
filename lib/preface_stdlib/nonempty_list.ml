@@ -97,6 +97,16 @@ module Selective =
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
 
+module Comonad = Preface_make.Comonad.Via_extend (struct
+  type nonrec 'a t = 'a t
+
+  let extract = function Last x | x :: _ -> x
+
+  let rec extend f nel =
+    (match nel with Last _ -> Last (f nel) | _ :: xs -> f nel :: extend f xs)
+  ;;
+end)
+
 module Semigroup (T : Preface_specs.Types.T0) :
   Preface_specs.SEMIGROUP with type t = T.t t =
 Preface_make.Semigroup.Via_combine (struct

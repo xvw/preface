@@ -7,6 +7,7 @@
     - {!val:Selective}
     - {!val:Foldable}
     - {!val:Monad} with Traversable module
+    - {!val:Comonad}
     - [Traversable] for {!val:Applicative} and {!val:Monad}
     - {!val:Semigroup} *)
 
@@ -40,6 +41,8 @@ module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
 (** {2 Monad API}
 
     Monad and Traversable for [Nonempty_list.t].*)
+
+module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
 
 (** {2 Semigroup API} *)
 module Semigroup (T : Preface_specs.Types.T0) :
