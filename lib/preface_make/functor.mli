@@ -100,6 +100,14 @@
 module Via_map (Core : Preface_specs.Functor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 
+(** {2 Functor composition}
+
+    Some tools for composition between functors. *)
+
+(** Right-to-left composition of functors.*)
+module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.FUNCTOR with type 'a t = 'a G.t F.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Functor], constructing and assembling a

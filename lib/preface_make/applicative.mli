@@ -196,6 +196,16 @@ module From_monad (Monad : Preface_specs.MONAD) :
 module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Alternative.t
 
+(** {2 Applicatives composition}
+
+    Some tools for composition between applicatives. *)
+
+(** Right-to-left composition of applicatives.*)
+module Composition
+    (F : Preface_specs.APPLICATIVE)
+    (G : Preface_specs.APPLICATIVE) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a G.t F.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Applicative Functor], constructing and assembling

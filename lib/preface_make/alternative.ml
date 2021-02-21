@@ -111,3 +111,17 @@ module Over_applicative
 
       include Applicative.Syntax
     end)
+
+module Composition
+    (F : Preface_specs.ALTERNATIVE)
+    (G : Preface_specs.APPLICATIVE) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a G.t F.t =
+  Over_applicative
+    (Applicative.Composition (F) (G))
+       (struct
+         type 'a t = 'a G.t F.t
+
+         let neutral = F.neutral
+
+         let combine = F.combine
+       end)

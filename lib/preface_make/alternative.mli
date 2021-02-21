@@ -25,6 +25,16 @@ module Over_applicative
               with type 'a t = 'a Applicative.t) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Core.t
 
+(** {2 Alternative composition}
+
+    Some tools for composition between alternatives. *)
+
+(** Right-to-left composition of alternative with applicatives.*)
+module Composition
+    (F : Preface_specs.ALTERNATIVE)
+    (G : Preface_specs.APPLICATIVE) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a G.t F.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Alternative], constructing and assembling a
