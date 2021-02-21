@@ -120,3 +120,14 @@ end
 module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Alternative.t =
   Alternative
+
+module Composition
+    (F : Preface_specs.APPLICATIVE)
+    (G : Preface_specs.APPLICATIVE) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a G.t F.t = Via_apply (struct
+  type 'a t = 'a G.t F.t
+
+  let pure x = F.pure (G.pure x)
+
+  let apply f x = F.lift2 G.apply f x
+end)
