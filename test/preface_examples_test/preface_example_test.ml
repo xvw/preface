@@ -9,5 +9,6 @@ let () =
     @ Freer_monad_os_effect.cases
     @ Freer_monad_os_explicit_continuation.cases
     @ Template_reader.cases
-    @ Debruijn_reader.cases )
+    @ Debruijn_reader.cases
+    @ Approximation_for_selective.cases )
 ;;

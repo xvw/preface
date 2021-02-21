@@ -2,7 +2,7 @@ open Preface_core.Fun
 
 module Core_over_functor
     (Functor : Preface_specs.Functor.CORE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
+    (Select : Preface_specs.Selective.CORE_WITH_PURE_AND_SELECT
                 with type 'a t = 'a Functor.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Functor.t = struct
   include Functor
@@ -107,7 +107,7 @@ end
 
 module Over_functor
     (Functor : Preface_specs.Functor.CORE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
+    (Select : Preface_specs.Selective.CORE_WITH_PURE_AND_SELECT
                 with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Select.t = struct
   module Core = Core_over_functor (Functor) (Select)

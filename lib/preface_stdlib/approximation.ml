@@ -1,0 +1,41 @@
+module Over (M : Preface_specs.MONOID) = struct
+  type _ t = Over of M.t
+
+  module Applicative = Preface_make.Applicative.Via_apply (struct
+    type nonrec 'a t = 'a t
+
+    let pure _ = Over M.neutral
+
+    let apply (Over x) (Over y) = Over M.(x <|> y)
+  end)
+
+  module Selective =
+    Preface_make.Selective.Over_applicative
+      (Applicative)
+      (struct
+        type nonrec 'a t = 'a t
+
+        let select (Over x) (Over y) = Over M.(x <|> y)
+      end)
+end
+
+module Under (M : Preface_specs.MONOID) = struct
+  type _ t = Under of M.t
+
+  module Applicative = Preface_make.Applicative.Via_apply (struct
+    type nonrec 'a t = 'a t
+
+    let pure _ = Under M.neutral
+
+    let apply (Under x) (Under y) = Under M.(x <|> y)
+  end)
+
+  module Selective =
+    Preface_make.Selective.Over_applicative
+      (Applicative)
+      (struct
+        type nonrec 'a t = 'a t
+
+        let select (Under x) _ = Under x
+      end)
+end
