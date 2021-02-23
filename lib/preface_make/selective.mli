@@ -6,19 +6,33 @@
 
     Standard way to build [Selective Functor]. *)
 
-(** Incarnation of a [Selective] over an [Applicative]. *)
-module Over_applicative
+(** Incarnation of a [Selective] over an [Applicative] using [select]. *)
+module Over_applicative_via_select
     (Applicative : Preface_specs.APPLICATIVE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
                 with type 'a t = 'a Applicative.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Select.t
 
-(** Incarnation of a [Selective] over a [Functor]. *)
-module Over_functor
+(** Incarnation of a [Selective] over an [Applicative] using branch. *)
+module Over_applicative_via_branch
+    (Applicative : Preface_specs.APPLICATIVE)
+    (Branch : Preface_specs.Selective.CORE_WITH_BRANCH
+                with type 'a t = 'a Applicative.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Branch.t
+
+(** Incarnation of a [Selective] over a [Functor] using [select] and [pure]. *)
+module Over_functor_via_select
     (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_PURE_AND_SELECT
                 with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Select.t
+
+(** Incarnation of a [Selective] over a [Functor] using [branch] and [pure]. *)
+module Over_functor_via_branch
+    (Functor : Preface_specs.Functor.CORE)
+    (Branch : Preface_specs.Selective.CORE_WITH_PURE_AND_BRANCH
+                with type 'a t = 'a Functor.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Branch.t
 
 (** {2 Manual construction}
 
@@ -34,17 +48,31 @@ module Via
     (Syntax : Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Core.t
 
-(** Incarnation of a [Selective.Core] over a [Functor]. *)
-module Core_over_functor
+(** Incarnation of a [Selective.Core] over a [Functor] via [select] and [pure]. *)
+module Core_over_functor_via_select
     (Functor : Preface_specs.Functor.CORE)
     (Select : Preface_specs.Selective.CORE_WITH_PURE_AND_SELECT
                 with type 'a t = 'a Functor.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Functor.t
 
-(** Incarnation of a [Selective.Core] over an [Applicative]. *)
-module Core_over_applicative
+(** Incarnation of a [Selective.Core] over a [Functor] via [branch] and [pure]. *)
+module Core_over_functor_via_branch
+    (Functor : Preface_specs.Functor.CORE)
+    (Branch : Preface_specs.Selective.CORE_WITH_PURE_AND_BRANCH
+                with type 'a t = 'a Functor.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Functor.t
+
+(** Incarnation of a [Selective.Core] over an [Applicative] using [select]. *)
+module Core_over_applicative_via_select
     (Applicative : Preface_specs.APPLICATIVE)
     (Select : Preface_specs.Selective.CORE_WITH_SELECT
+                with type 'a t = 'a Applicative.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Applicative.t
+
+(** Incarnation of a [Selective.Core] over an [Applicative] using [branch]. *)
+module Core_over_applicative_via_branch
+    (Applicative : Preface_specs.APPLICATIVE)
+    (Branch : Preface_specs.Selective.CORE_WITH_BRANCH
                 with type 'a t = 'a Applicative.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Applicative.t
 

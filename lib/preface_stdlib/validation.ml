@@ -60,7 +60,7 @@ module Selective (Errors : Preface_specs.SEMIGROUP) = struct
   module A = Applicative (Errors)
 
   module S =
-    Preface_make.Selective.Over_applicative
+    Preface_make.Selective.Over_applicative_via_select
       (A)
       (struct
         type nonrec 'a t = ('a, Errors.t) t

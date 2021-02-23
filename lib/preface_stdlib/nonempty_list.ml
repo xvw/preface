@@ -93,7 +93,7 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 module Monad =
   Preface_make.Traversable.Join_with_monad (Monad_internal) (Monad_traversable)
 module Selective =
-  Preface_make.Selective.Over_applicative
+  Preface_make.Selective.Over_applicative_via_select
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
 
