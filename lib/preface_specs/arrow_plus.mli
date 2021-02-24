@@ -51,7 +51,7 @@ end
 
 (** {1 API} *)
 
-(** The complete interface of an [Arrow_alt]. *)
+(** The complete interface of an [Arrow_plus]. *)
 module type API = sig
   include CORE
 

@@ -43,7 +43,7 @@ module type INFIX = Arrow.INFIX
 
 (** {1 API} *)
 
-(** The complete interface of an [Arro_zero]. *)
+(** The complete interface of an [Arrow_zero]. *)
 module type API = sig
   include CORE
 

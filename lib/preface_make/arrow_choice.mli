@@ -69,7 +69,7 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
 
 (** {2 Manual construction}
 
-    Advanced way to build an [Arrow_plus], constructing and assembling a
+    Advanced way to build an [Arrow_choice], constructing and assembling a
     component-by-component an arrow. (In order to provide your own
     implementation for some features.) *)
 
