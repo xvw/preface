@@ -42,6 +42,10 @@ module From_arrow_zero (Zero : Preface_specs.ARROW_ZERO) :
 module From_arrow_choice (Choice : Preface_specs.ARROW_CHOICE) :
   Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Choice.t
 
+(** Incarnation of an [Arrow] using from an [Arrow_apply]. *)
+module From_arrow_apply (Apply : Preface_specs.ARROW_APPLY) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Apply.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Arrow], constructing and assembling a

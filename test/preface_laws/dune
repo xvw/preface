@@ -4,7 +4,7 @@
  (synopsis "Encoding laws as a set of tests")
  (modules aliases functor applicative selective monad comonad bifunctor
    semigroup monoid alternative monad_plus alt contravariant category arrow
-   arrow_choice)
+   arrow_choice arrow_apply)
  (libraries qcheck-core qcheck-alcotest preface.core preface.specs
    preface.make preface.stdlib preface.qcheck))
 

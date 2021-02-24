@@ -74,7 +74,6 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
     implementation for some features.) *)
 
 (** Incarnation of an [Arrow_choice] using each components of a [Arrow_choice]. *)
-
 module Via
     (Core : Preface_specs.Arrow_choice.CORE)
     (Operation : Preface_specs.Arrow_choice.OPERATION

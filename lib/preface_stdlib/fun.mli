@@ -21,6 +21,9 @@ module Arrow_choice :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) t
 (** {2 Arrow CHoice API} *)
 
+module Arrow_apply : Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) t
+(** {2 Arrow CHoice API} *)
+
 (** {1 API} *)
 
 include module type of Preface_core.Fun
