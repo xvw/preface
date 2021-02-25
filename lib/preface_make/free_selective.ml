@@ -37,7 +37,7 @@ module Over_functor (F : Preface_specs.Functor.CORE) = struct
    ;;
   end
 
-  module S = Selective.Over_functor (Functor) (Core)
+  module S = Selective.Over_functor_via_select (Functor) (Core)
 
   module Transformation (Selective : Preface_specs.Selective.CORE) = struct
     type natural_transformation = { transform : 'a. 'a f -> 'a Selective.t }

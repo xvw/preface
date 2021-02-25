@@ -10,7 +10,7 @@ module Over (M : Preface_specs.MONOID) = struct
   end)
 
   module Selective =
-    Preface_make.Selective.Over_applicative
+    Preface_make.Selective.Over_applicative_via_select
       (Applicative)
       (struct
         type nonrec 'a t = 'a t
@@ -31,7 +31,7 @@ module Under (M : Preface_specs.MONOID) = struct
   end)
 
   module Selective =
-    Preface_make.Selective.Over_applicative
+    Preface_make.Selective.Over_applicative_via_select
       (Applicative)
       (struct
         type nonrec 'a t = 'a t

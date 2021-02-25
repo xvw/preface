@@ -4,6 +4,7 @@
 
 (** {1 Structure anatomy} *)
 
+(** Standard requirement with [select]. *)
 module type CORE_WITH_SELECT = sig
   type 'a t
   (** The type held by the [Selective]. *)
@@ -13,6 +14,16 @@ module type CORE_WITH_SELECT = sig
       [Right]. *)
 end
 
+(** Standard requirement with [branch]. *)
+module type CORE_WITH_BRANCH = sig
+  type 'a t
+  (** The type held by the [Selective]. *)
+
+  val branch : ('a, 'b) Either.t t -> ('a -> 'c) t -> ('b -> 'c) t -> 'c t
+  (** [branch] is like [select]. It chooses between two effects. *)
+end
+
+(** Standard requirement including [pure] and [select]. *)
 module type CORE_WITH_PURE_AND_SELECT = sig
   include CORE_WITH_SELECT
 
@@ -20,9 +31,19 @@ module type CORE_WITH_PURE_AND_SELECT = sig
   (** Create a new ['a t]. *)
 end
 
-(** Standard requirement. *)
+(** Standard requirement including [pure] and [branch]. *)
+module type CORE_WITH_PURE_AND_BRANCH = sig
+  include CORE_WITH_BRANCH
+
+  val pure : 'a -> 'a t
+  (** Create a new ['a t]. *)
+end
+
+(** Standard requirement including Applicative requirements. *)
 module type CORE = sig
   include CORE_WITH_SELECT
+
+  include CORE_WITH_BRANCH with type 'a t := 'a t
 
   include Applicative.CORE with type 'a t := 'a t
   (** Each [Selective] is also an [Applicative]. *)
@@ -35,9 +56,6 @@ module type OPERATION = sig
 
   include Applicative.OPERATION with type 'a t := 'a t
   (** Each [Selective] is also an [Applicative]. *)
-
-  val branch : ('a, 'b) Either.t t -> ('a -> 'c) t -> ('b -> 'c) t -> 'c t
-  (** [branch] is like [select]. It chooses between two effects. *)
 
   val if_ : bool t -> 'a t -> 'a t -> 'a t
   (** Same of [branch] but using a [Boolean] as disjunction. *)

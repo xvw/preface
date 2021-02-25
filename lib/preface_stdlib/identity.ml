@@ -27,7 +27,7 @@ module Monad = Preface_make.Monad.Via_bind (struct
 end)
 
 module Selective =
-  Preface_make.Selective.Over_applicative
+  Preface_make.Selective.Over_applicative_via_select
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
 
