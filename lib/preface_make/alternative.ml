@@ -125,3 +125,16 @@ module Composition
 
          let combine = F.combine
        end)
+
+module From_arrow_plus (A : Preface_specs.ARROW_PLUS) :
+  Preface_specs.ALTERNATIVE with type 'a t = (unit, 'a) A.t =
+  Over_applicative
+    (Applicative.From_arrow
+       (A))
+       (struct
+         type 'a t = (unit, 'a) A.t
+
+         let neutral = A.neutral
+
+         let combine x y = A.(x <|> y)
+       end)

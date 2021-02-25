@@ -224,3 +224,18 @@ module Select_from_monad (Monad : Preface_specs.MONAD) :
     xs >>= Preface_core.Shims.Either.case (fun a -> fs >|= (fun f -> f a)) pure
   ;;
 end
+
+module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
+  Preface_specs.SELECTIVE with type 'a t = (unit, 'a) A.t =
+  Over_applicative
+    (Applicative.From_arrow
+       (A))
+       (struct
+         type 'a t = (unit, 'a) A.t
+
+         let to_arrow f =
+           A.(arrow (fun x -> ((), x)) >>> fst f >>> arrow (fun (f, x) -> f x))
+         ;;
+
+         let select x y = A.(x >>> (to_arrow y ||| return ()))
+       end)

@@ -570,6 +570,41 @@ let arrow_apply_law10 (module P : Preface_qcheck.Sample.PACKAGE) count =
       P.B.equal l r)
 ;;
 
+module Req = struct
+  type 'a t = (unit, 'a) Preface_stdlib.Fun.t
+
+  let arbitrary x = QCheck.(fun1 Observable.unit x |> map Fn.apply)
+
+  let observable x =
+    let open QCheck.Observable in
+    let eq l r = (equal x) (l ()) (r ()) in
+    let hash l = (hash x) (l ()) in
+    let print f = (print x) (f ()) in
+    QCheck.Observable.make ~eq ~hash print
+  ;;
+
+  let equal eq x y = eq (x ()) (y ())
+end
+
+module Functor =
+  Preface_laws.Functor.Cases
+    (Preface_make.Functor.From_arrow (Preface_stdlib.Fun.Arrow)) (Req)
+    (Preface_qcheck.Sample.Pack1)
+module Applicative =
+  Preface_laws.Applicative.Cases
+    (Preface_make.Applicative.From_arrow (Preface_stdlib.Fun.Arrow)) (Req)
+    (Preface_qcheck.Sample.Pack1)
+module Monad =
+  Preface_laws.Monad.Cases
+    (Preface_make.Monad.From_arrow_apply (Preface_stdlib.Fun.Arrow_apply)) (Req)
+    (Preface_qcheck.Sample.Pack1)
+module Selective =
+  Preface_laws.Selective.Cases
+    (Preface_make.Selective.From_arrow_choice
+       (Preface_stdlib.Fun.Arrow_choice))
+       (Req)
+    (Preface_qcheck.Sample.Pack1)
+
 let cases n =
   [
     ( "Fun Category Laws"
@@ -629,5 +664,9 @@ let cases n =
       ; arrow_apply_law10 (module Preface_qcheck.Sample.Pack1) n
       ]
       |> Stdlib.List.map QCheck_alcotest.to_alcotest )
+  ; ("Fun Functor Laws (using Arrow Monad)", Functor.cases n)
+  ; ("Fun Applicative Laws (using Arrow Monad)", Applicative.cases n)
+  ; ("Fun Monad Laws (using Arrow Monad)", Monad.cases n)
+  ; ("Fun Selective Laws (using Arrow Monad)", Selective.cases n)
   ]
 ;;

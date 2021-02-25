@@ -139,3 +139,12 @@ end
 module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
   Preface_specs.MONAD with type 'a t = 'a Monad_plus.t =
   Monad_plus
+
+module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
+  Preface_specs.MONAD with type 'a t = (unit, 'a) A.t = Via_bind (struct
+  type 'a t = (unit, 'a) A.t
+
+  let return x = A.arrow (constant x)
+
+  let bind f x = A.(x >>> arrow (fun x -> (f x, ())) >>> apply)
+end)

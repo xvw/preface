@@ -25,6 +25,11 @@ module Over_applicative
               with type 'a t = 'a Applicative.t) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Core.t
 
+(** Incarnation of an [Alternative] using an [Arrow_plus] via [Arrow Monad]
+    encoding.*)
+module From_arrow_plus (A : Preface_specs.ARROW_PLUS) :
+  Preface_specs.ALTERNATIVE with type 'a t = (unit, 'a) A.t
+
 (** {2 Alternative composition}
 
     Some tools for composition between alternatives. *)

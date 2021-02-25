@@ -37,6 +37,13 @@ module Over_monad
               with type 'a t = 'a Monad.t) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Core.t
 
+(** Incarnation of a [Monad_plus] using an [Arrow_apply] (for Monad) and
+    [Arrow_plus] (for Alternative) via [Arrow Monad] encoding.*)
+module From_arrow_apply_and_arrow_plus
+    (A : Preface_specs.ARROW_APPLY)
+    (P : Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) A.t) :
+  Preface_specs.MONAD_PLUS with type 'a t = (unit, 'a) P.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Monad_plus], constructing and assembling a

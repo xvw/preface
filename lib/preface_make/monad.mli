@@ -97,6 +97,10 @@ module Via_kleisli_composition
 module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
   Preface_specs.MONAD with type 'a t = 'a Monad_plus.t
 
+(** Incarnation of a [Monad] using an [Arrow_apply] via [Arrow Monad] encoding.*)
+module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
+  Preface_specs.MONAD with type 'a t = (unit, 'a) A.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Monad], constructing and assembling a

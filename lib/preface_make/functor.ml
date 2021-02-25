@@ -50,3 +50,10 @@ module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
 
   let map f x = F.map (G.map f) x
 end)
+
+module From_arrow (A : Preface_specs.ARROW) :
+  Preface_specs.FUNCTOR with type 'a t = (unit, 'a) A.t = Via_map (struct
+  type 'a t = (unit, 'a) A.t
+
+  let map f x = A.(x >>> arrow f)
+end)
