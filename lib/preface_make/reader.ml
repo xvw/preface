@@ -9,13 +9,13 @@ module Over (T : Preface_specs.Types.T0) = struct
 
   let map = ( <% )
 
-  module Functor = Preface_make.Functor.Via_map (struct
+  module Functor = Functor.Via_map (struct
     type nonrec 'a t = 'a t
 
     let map = map
   end)
 
-  module Applicative = Preface_make.Applicative.Via_apply (struct
+  module Applicative = Applicative.Via_apply (struct
     type nonrec 'a t = 'a t
 
     let pure = pure
@@ -23,7 +23,7 @@ module Over (T : Preface_specs.Types.T0) = struct
     let apply mf ma s = map (mf s) ma s
   end)
 
-  module Monad = Preface_make.Monad.Via_bind (struct
+  module Monad = Monad.Via_bind (struct
     type nonrec 'a t = 'a t
 
     let return = pure
