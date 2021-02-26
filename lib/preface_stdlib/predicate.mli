@@ -20,3 +20,35 @@ val lift : ('a -> bool) -> 'a t
 
 val run : 'a t -> 'a -> bool
 (** Run a predicate. *)
+
+(** {1 Predicate modification} *)
+
+val negate : 'a t -> 'a t
+(** negate the predicate. *)
+
+val tautology : 'a t
+(** A predicate always true. *)
+
+val contradiction : 'a t
+(** A predicate always false. *)
+
+val and_ : 'a t -> 'a t -> 'a t
+(** Compose two predicates (using and). *)
+
+val or_ : 'a t -> 'a t -> 'a t
+(** Compose two predicates (using or). *)
+
+(** {1 Infix} *)
+
+module Infix : sig
+  val ( && ) : 'a t -> 'a t -> 'a t
+  (** Compose two predicates (using and). *)
+
+  val ( || ) : 'a t -> 'a t -> 'a t
+  (** Compose two predicates (using or). *)
+
+  val ( ! ) : 'a t -> 'a t
+  (** negate the predicate. *)
+end
+
+include module type of Infix
