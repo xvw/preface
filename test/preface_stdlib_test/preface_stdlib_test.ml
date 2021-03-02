@@ -8,5 +8,7 @@ let () =
     @ Option_test.cases
     @ State_test.cases
     @ Stream_test.cases
-    @ Try_test.cases )
+    @ Try_test.cases
+    @ Tuple_test.cases
+    @ Predicate_test.cases )
 ;;

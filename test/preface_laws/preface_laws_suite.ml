@@ -14,7 +14,8 @@ let run number =
     @ Stream.cases number
     @ Either.cases number
     @ Predicate.cases number
-    @ Fun.cases number )
+    @ Fun.cases number
+    @ Tuple.cases number )
 ;;
 
 let () = run 500

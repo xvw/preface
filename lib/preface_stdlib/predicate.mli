@@ -6,17 +6,41 @@
 
 (** {1 Type} *)
 
-type 'a t
+type 'a t = 'a -> bool
 
 (** {1 Implementation} *)
 
 module Contravariant : Preface_specs.CONTRAVARIANT with type 'a t = 'a t
-(** {2 Foldable API} *)
+(** {2 Contravariant API} *)
 
-(** {1 Helpers} *)
+(** {1 Predicate modification} *)
 
-val lift : ('a -> bool) -> 'a t
-(** Lift a function from ['a] to [bool] into a predicate. *)
+val negate : 'a t -> 'a t
+(** negate the predicate. *)
 
-val run : 'a t -> 'a -> bool
-(** Run a predicate. *)
+val tautology : 'a t
+(** A predicate always true. *)
+
+val contradiction : 'a t
+(** A predicate always false. *)
+
+val and_ : 'a t -> 'a t -> 'a t
+(** Compose two predicates (using and). *)
+
+val or_ : 'a t -> 'a t -> 'a t
+(** Compose two predicates (using or). *)
+
+(** {1 Infix} *)
+
+module Infix : sig
+  val ( && ) : 'a t -> 'a t -> 'a t
+  (** Compose two predicates (using and). *)
+
+  val ( || ) : 'a t -> 'a t -> 'a t
+  (** Compose two predicates (using or). *)
+
+  val ( ! ) : 'a t -> 'a t
+  (** negate the predicate. *)
+end
+
+include module type of Infix
