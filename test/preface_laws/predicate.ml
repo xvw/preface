@@ -3,9 +3,9 @@ let preserve_identity (module P : Preface_qcheck.Model.T0) count =
   let arbitrary = pair (fun1 P.observable bool) P.arbitrary in
   Test.make ~name:"map id = id" ~count arbitrary (fun (f', value) ->
       let open Preface_stdlib.Predicate in
-      let f = lift (Fn.apply f') in
-      let l = run (Contravariant.contramap (fun x -> x) f) value
-      and r = run f value in
+      let f = Fn.apply f' in
+      let l = (Contravariant.contramap (fun x -> x) f) value
+      and r = f value in
       Bool.equal l r)
 ;;
 
@@ -21,12 +21,12 @@ let preserve_morphism (module P : Preface_qcheck.Sample.PACKAGE) count =
     arbitrary (fun (x', f', g', value) ->
       let open Preface_stdlib.Predicate in
       let open Preface_core.Fun.Infix in
-      let x = lift (Fn.apply x') in
+      let x = Fn.apply x' in
       let f = Fn.apply f' in
       let g = Fn.apply g' in
-      let l = run (Contravariant.contramap (g % f) x) value
+      let l = (Contravariant.contramap (g % f) x) value
       and r =
-        run ((Contravariant.contramap f % Contravariant.contramap g) x) value
+        ((Contravariant.contramap f % Contravariant.contramap g) x) value
       in
       Bool.equal l r)
 ;;

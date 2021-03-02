@@ -6,20 +6,12 @@
 
 (** {1 Type} *)
 
-type 'a t
+type 'a t = 'a -> bool
 
 (** {1 Implementation} *)
 
 module Contravariant : Preface_specs.CONTRAVARIANT with type 'a t = 'a t
-(** {2 Foldable API} *)
-
-(** {1 Helpers} *)
-
-val lift : ('a -> bool) -> 'a t
-(** Lift a function from ['a] to [bool] into a predicate. *)
-
-val run : 'a t -> 'a -> bool
-(** Run a predicate. *)
+(** {2 Contravariant API} *)
 
 (** {1 Predicate modification} *)
 
