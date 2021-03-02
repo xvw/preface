@@ -148,3 +148,7 @@ module From_arrow_alt (Alt : Preface_specs.ARROW_ALT) :
 module From_arrow_zero (Zero : Preface_specs.ARROW_ZERO) :
   Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Zero.t =
   Zero
+
+module From_arrow_choice (Choice : Preface_specs.ARROW_CHOICE) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Choice.t =
+  Choice

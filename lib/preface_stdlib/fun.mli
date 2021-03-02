@@ -17,6 +17,10 @@ module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t
 module Arrow : Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) t
 (** {2 Arrow API} *)
 
+module Arrow_choice :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) t
+(** {2 Arrow CHoice API} *)
+
 (** {1 API} *)
 
 include module type of Preface_core.Fun

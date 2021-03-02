@@ -2,8 +2,9 @@
  (name preface_laws)
  (public_name preface.laws)
  (synopsis "Encoding laws as a set of tests")
- (modules functor applicative selective monad comonad bifunctor semigroup
-   monoid alternative monad_plus alt contravariant category arrow)
+ (modules aliases functor applicative selective monad comonad bifunctor
+   semigroup monoid alternative monad_plus alt contravariant category arrow
+   arrow_choice)
  (libraries qcheck-core qcheck-alcotest preface.core preface.specs
    preface.make preface.stdlib preface.qcheck))
 

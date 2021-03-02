@@ -83,7 +83,7 @@ module Over_category_and_via_arrow_and_fst
   include Infix
 end
 
-module Over_category_and_via_arrow_an_split
+module Over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
     (Core : Preface_specs.Arrow_plus.CORE_WITH_ARROW_AND_SPLIT
               with type ('a, 'b) t = ('a, 'b) Category.t) :
@@ -98,54 +98,43 @@ module Over_category_and_via_arrow_an_split
   include Infix
 end
 
-module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
-  Preface_specs.ARROW_PLUS with type ('a, 'b) t = 'a -> 'b Monad.t = struct
-  module Cat = Category.From_monad (Monad)
-
-  module Arr = struct
-    type ('a, 'b) t = 'a -> 'b Monad.t
-
-    let arrow f = (fun f g x -> f (g x)) Monad.return f
-
-    let fst f (b, d) = Monad.bind (fun c -> Monad.return (c, d)) (f b)
-
-    let combine f g x = Monad.combine (f x) (g x)
-
-    let neutral _ = Monad.neutral
-  end
-
-  include Over_category_and_via_arrow_and_fst (Cat) (Arr)
-end
-
 module Over_arrow
     (Arrow : Preface_specs.ARROW)
     (Combine_and_neutral : Preface_specs.Arrow_plus.COMBINE_AND_NEUTRAL
                              with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) Combine_and_neutral.t =
 struct
+  module Core_aux =
+    Core_over_category_and_via_arrow_and_fst
+      (Arrow)
+      (struct
+        include Arrow
+        include Combine_and_neutral
+      end)
+
+  module Operation_aux = Operation_over_category (Arrow) (Core_aux)
+  module Infix_aux = Infix_over_category (Arrow) (Core_aux) (Operation_aux)
+  include Core_aux
+  include Operation_aux
   include Arrow
-
-  include (
-    Combine_and_neutral :
-      Preface_specs.Arrow_plus.COMBINE_AND_NEUTRAL
-        with type ('a, 'b) t := ('a, 'b) t )
-
-  let times n x = Preface_core.Monoid.times Combine_and_neutral.combine n x
-
-  let reduce_nel list =
-    Preface_core.Monoid.reduce_nel Combine_and_neutral.combine list
-  ;;
-
-  let reduce list =
-    Preface_core.Monoid.reduce Combine_and_neutral.combine
-      Combine_and_neutral.neutral list
-  ;;
 
   module Infix = struct
     include Arrow.Infix
-
-    let ( <|> ) = Combine_and_neutral.combine
+    include Infix_aux
   end
 
   include Infix
 end
+
+module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
+  Preface_specs.ARROW_PLUS with type ('a, 'b) t = 'a -> 'b Monad.t =
+  Over_arrow
+    (Arrow.From_monad
+       (Monad))
+       (struct
+         type ('a, 'b) t = 'a -> 'b Monad.t
+
+         let combine f g x = Monad.combine (f x) (g x)
+
+         let neutral _ = Monad.neutral
+       end)

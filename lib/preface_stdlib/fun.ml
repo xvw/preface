@@ -20,3 +20,14 @@ module Arrow =
 
       let split f g (x, y) = (f x, g y)
     end)
+
+module Arrow_choice =
+  Preface_make.Arrow_choice.Over_arrow_with_choose
+    (Arrow)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let case f g = Either.fold ~left:f ~right:g
+
+      let choose f g = case (Either.left % f) (Either.right % g)
+    end)
