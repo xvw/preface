@@ -1,11 +1,11 @@
-open Preface.State.Over (struct
+open Preface.Make.State.Over (struct
   type t = int
 end)
 
 let should_get_value () =
   let value = 42 in
   let expected = (value, value)
-  and computed = get value in
+  and computed = run get value in
   Alcotest.(check (pair int int)) "Should retrieve value" expected computed
 ;;
 
@@ -17,7 +17,7 @@ let should_get_and_set_a_new_value () =
     set @@ (1 + v)
   in
   let expected = ((), value)
-  and computed = program 41 in
+  and computed = run program 41 in
   Alcotest.(check (pair unit int))
     "Should retrieve and set a new value" expected computed
 ;;
@@ -26,7 +26,7 @@ let should_modify_a_value () =
   let value = 42 in
   let program = modify @@ ( + ) 1 in
   let expected = ((), value)
-  and computed = program 41 in
+  and computed = run program 41 in
   Alcotest.(check (pair unit int)) "Should modify the value" expected computed
 ;;
 
@@ -38,7 +38,7 @@ let should_set_and_modify_a_value () =
     modify @@ ( + ) 1
   in
   let expected = ((), value)
-  and computed = program 0 in
+  and computed = run program 0 in
   Alcotest.(check (pair unit int))
     "Should set and modify the value" expected computed
 ;;
@@ -52,7 +52,7 @@ let should_get_set_and_modify_a_value () =
     modify @@ ( + ) 1
   in
   let expected = ((), value)
-  and computed = program 40 in
+  and computed = run program 40 in
   Alcotest.(check (pair unit int))
     "Should get and modify the value" expected computed
 ;;
@@ -66,7 +66,7 @@ let should_set_modify_and_get_a_value () =
     get
   in
   let expected = (value, value)
-  and computed = program 0 in
+  and computed = run program 0 in
   Alcotest.(check (pair int int))
     "Should set modify and get the value" expected computed
 ;;
@@ -80,7 +80,7 @@ let should_get_modify_and_get_a_value () =
     get
   in
   let expected = (value, value)
-  and computed = program 21 in
+  and computed = run program 21 in
   Alcotest.(check (pair int int))
     "Should get modify and get the value" expected computed
 ;;

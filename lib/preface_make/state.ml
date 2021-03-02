@@ -3,7 +3,7 @@ module Over (T : Preface_specs.Types.T0) = struct
 
   type 'a t = state -> 'a * state
 
-  let run s ma = ma s
+  let run ma s = ma s
 
   let pure a s = (a, s)
 
@@ -12,31 +12,31 @@ module Over (T : Preface_specs.Types.T0) = struct
     (f a, s')
   ;;
 
-  module Functor = Preface_make.Functor.Via_map (struct
+  module Functor = Functor.Via_map (struct
     type nonrec 'a t = 'a t
 
     let map = map
   end)
 
-  module Applicative = Preface_make.Applicative.Via_apply (struct
+  module Applicative = Applicative.Via_apply (struct
     type nonrec 'a t = 'a t
 
     let pure = pure
 
     let apply mf ma s =
-      let (f, s') = run s mf in
+      let (f, s') = run mf s in
       map f ma s'
     ;;
   end)
 
-  module Monad = Preface_make.Monad.Via_bind (struct
+  module Monad = Monad.Via_bind (struct
     type nonrec 'a t = 'a t
 
     let return = pure
 
     let bind f ma s =
-      let (a, s') = run s ma in
-      run s' @@ f a
+      let (a, s') = run ma s in
+      run (f a) s'
     ;;
   end)
 

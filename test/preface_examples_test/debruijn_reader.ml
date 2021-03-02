@@ -35,7 +35,7 @@ let lookup n e =
   lookup 1 e
 ;;
 
-module Reader = Preface.Reader.Over (struct
+module Reader = Preface.Make.Reader.Over (struct
   type t = string list
 end)
 

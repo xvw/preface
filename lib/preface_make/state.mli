@@ -77,7 +77,7 @@ module Over (T : Preface_specs.Types.T0) : sig
   type state = T.t
   (** The encapsulated state *)
 
-  type 'a t = state -> 'a * state
+  type 'a t
   (** The type *)
 
   module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
@@ -91,8 +91,8 @@ module Over (T : Preface_specs.Types.T0) : sig
 
   (** {2 Helpers} *)
 
-  val run : state -> 'a t -> 'a * state
-  (** Run the given program. *)
+  val run : 'a t -> state -> 'a * state
+  (** Run the given program with a default value. *)
 
   val get : state t
   (** Returns the current state *)

@@ -6,7 +6,7 @@ type template = template_item list
 
 module Bindings = Map.Make (String)
 
-module Reader = Preface.Reader.Over (struct
+module Reader = Preface.Make.Reader.Over (struct
   type t = string Bindings.t
 end)
 
