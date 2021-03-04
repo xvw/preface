@@ -34,6 +34,11 @@ module Over_functor_via_branch
                 with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Branch.t
 
+(** Incarnation of an [Selective] using an [Arrow_choice] via [Arrow Monad]
+    encoding.*)
+module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
+  Preface_specs.SELECTIVE with type 'a t = (unit, 'a) A.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Selective Functor], constructing and assembling a

@@ -120,6 +120,12 @@ module Arrow_plus = Arrow_plus
 module Arrow_choice = Arrow_choice
 (** Describes an arrow choice. *)
 
+module Arrow_apply = Arrow_apply
+(** Describes an arrow apply. *)
+
+module Arrow_loop = Arrow_loop
+(** Describes an arrow loop. *)
+
 (** {1 API Shortcuts}
 
     Shortcuts for the API of each objects (by convention, OCaml module types are
@@ -172,3 +178,7 @@ module type ARROW_ALT = Arrow_alt.API
 module type ARROW_PLUS = Arrow_plus.API
 
 module type ARROW_CHOICE = Arrow_choice.API
+
+module type ARROW_APPLY = Arrow_apply.API
+
+module type ARROW_LOOP = Arrow_loop.API

@@ -44,6 +44,24 @@ module Circuit = struct
         ;;
       end)
 
+  module Choice =
+    Preface.Make.Arrow_choice.Over_arrow_with_left
+      (Arrow)
+      (struct
+        type nonrec ('a, 'b) t = ('a, 'b) t
+
+        let rec left origin =
+          {
+            eval =
+              (function
+              | Either.Left b ->
+                let (circuit', c) = origin.eval b in
+                (left circuit', Either.Left c)
+              | Either.Right d -> (left origin, Either.Right d))
+          }
+        ;;
+      end)
+
   let rec run circuit = function
     | [] -> []
     | x :: xs ->

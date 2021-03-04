@@ -196,6 +196,10 @@ module From_monad (Monad : Preface_specs.MONAD) :
 module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Alternative.t
 
+(** Incarnation of an [Applicative] using an [Arrow] via [Arrow Monad] encoding.*)
+module From_arrow (A : Preface_specs.ARROW) :
+  Preface_specs.APPLICATIVE with type 'a t = (unit, 'a) A.t
+
 (** {2 Applicatives composition}
 
     Some tools for composition between applicatives. *)

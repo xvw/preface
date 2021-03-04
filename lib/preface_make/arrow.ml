@@ -152,3 +152,7 @@ module From_arrow_zero (Zero : Preface_specs.ARROW_ZERO) :
 module From_arrow_choice (Choice : Preface_specs.ARROW_CHOICE) :
   Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Choice.t =
   Choice
+
+module From_arrow_apply (Apply : Preface_specs.ARROW_APPLY) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Apply.t =
+  Apply

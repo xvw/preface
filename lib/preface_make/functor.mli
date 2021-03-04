@@ -100,6 +100,10 @@
 module Via_map (Core : Preface_specs.Functor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 
+(** Incarnation of an [Functor] using an [Arrow] via [Arrow Monad] encoding.*)
+module From_arrow (A : Preface_specs.ARROW) :
+  Preface_specs.FUNCTOR with type 'a t = (unit, 'a) A.t
+
 (** {2 Functor composition}
 
     Some tools for composition between functors. *)

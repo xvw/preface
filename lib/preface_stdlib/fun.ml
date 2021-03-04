@@ -31,3 +31,12 @@ module Arrow_choice =
 
       let choose f g = case (Either.left % f) (Either.right % g)
     end)
+
+module Arrow_apply =
+  Preface_make.Arrow_apply.Over_arrow_with_apply
+    (Arrow)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let apply (f, x) = f x
+    end)

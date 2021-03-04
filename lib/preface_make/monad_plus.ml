@@ -155,3 +155,10 @@ module Over_monad_and_alternative
     (Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a Monad.t) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Alternative.t =
   Over_monad (Monad) (Alternative)
+
+module From_arrow_apply_and_arrow_plus
+    (A : Preface_specs.ARROW_APPLY)
+    (P : Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) A.t) :
+  Preface_specs.MONAD_PLUS with type 'a t = (unit, 'a) P.t =
+  Over_monad_and_alternative
+    (Monad.From_arrow_apply (A)) (Alternative.From_arrow_plus (P))

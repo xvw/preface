@@ -19,7 +19,10 @@ module Arrow : Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) t
 
 module Arrow_choice :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) t
-(** {2 Arrow CHoice API} *)
+(** {2 Arrow Choice API} *)
+
+module Arrow_apply : Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) t
+(** {2 Arrow Apply API} *)
 
 (** {1 API} *)
 
