@@ -227,7 +227,7 @@ end
 
 module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
   Preface_specs.SELECTIVE with type 'a t = (unit, 'a) A.t =
-  Over_applicative
+  Over_applicative_via_select
     (Applicative.From_arrow
        (A))
        (struct
