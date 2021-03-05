@@ -28,7 +28,10 @@ module Over (W : Preface_specs.MONOID) : sig
   (** {2 Monad API} *)
 
   val run : 'a t -> 'a * output
-  (* [run] execute the effect and returns the result and the corresoonding output *)
+  (* [run] execute the effect and returns the result and the corresponding output *)
+
+  val write : ('a * output) -> 'a t
+  (* [write] embeds an output and provides the corresponding effect *)
 
   val tell : output -> unit t
   (* [tell] helps to enrich the output. This is done thanks to the semigroup combine operation *)

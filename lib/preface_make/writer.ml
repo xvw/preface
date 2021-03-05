@@ -45,6 +45,11 @@ module Over (W : Preface_specs.MONOID) = struct
 
   let tell s = ((), s)
 
+  let write (a,s) =
+    let open Monad in
+    let* _ = tell s in
+    return a
+
   let listen ma =
     let (a, s) = run ma in
     ((a, s), s)
