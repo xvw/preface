@@ -1,10 +1,12 @@
-module Over (M : Preface_specs.MONOID) = struct
+module Over (W : Preface_specs.MONOID) = struct
 
-  type 'a t = 'a * M.t
+  type output = W.t
+
+  type 'a t = 'a * output
 
   let run = Preface_core.Fun.id
 
-  let pure a = (a, M.neutral)
+  let pure a = (a, W.neutral)
 
   let map f ma =
     let (a, s) = run ma in
@@ -25,7 +27,7 @@ module Over (M : Preface_specs.MONOID) = struct
     let apply mf ma =
       let (a, s') = run ma in
       let (f, s) = run mf in
-      (f a, M.combine s s')
+      (f a, W.combine s s')
     ;;
   end)
 
@@ -37,7 +39,25 @@ module Over (M : Preface_specs.MONOID) = struct
     let bind f ma =
       let (a, s) = run ma in
       let (b, s') = run (f a) in
-      (b, M.combine s s')
+      (b, W.combine s s')
     ;;
   end)
+
+  let tell s = ((), s)
+
+  let listen ma =
+    let (a, s) = run ma in
+    ((a, s), s)
+  ;;
+
+  let pass ma =
+    let ((a, f), s) = run ma in
+    (a, f s)
+  ;;
+
+  let listens f ma =
+    let ((a,s),s') = listen ma in
+    ((a, f s), s')
+  ;;
+
 end
