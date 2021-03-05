@@ -8,9 +8,7 @@
 
     The Writer module gives you the ability to accumulate values thanks to the
     parametric `Monoid`. Then for instance it can be used to create a log
-    reflecting performed operations.
-
-    {1 Example} *)
+    reflecting performed operations. *)
 
 module Over (W : Preface_specs.MONOID) : sig
 

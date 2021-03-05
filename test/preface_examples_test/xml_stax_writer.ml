@@ -79,6 +79,14 @@ let should_transform_a_sequence () =
     "transform_a_sequence" expected computed
 ;;
 
+let should_transform_empty () =
+  let open Writer in
+  let expected = []
+  and _, computed = run (sax_like Xml.Empty) in
+  Alcotest.(check (list sax))
+    "transform_empty" expected computed
+;;
+
 let cases =
   let open Alcotest in
   [ ("Xml to Stax reader", [
@@ -88,5 +96,7 @@ let cases =
                 should_transform_a_tag
     ; test_case "Should transform a sequence" `Quick
                 should_transform_a_sequence
+    ; test_case "Should transform empty" `Quick
+                should_transform_empty
   ]) ]
 ;;

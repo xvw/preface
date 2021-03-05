@@ -66,6 +66,6 @@ module Over (W : Preface_specs.MONOID) = struct
   ;;
 
   let censor f ma =
-    let open Monad in
-    pass (let* a = ma in return (a, f))
+    pass Monad.(ma >>= fun a -> return (a, f))
+  ;;
 end
