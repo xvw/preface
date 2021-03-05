@@ -44,4 +44,7 @@ module Over (W : Preface_specs.MONOID) : sig
 
   val listens : (output -> 'b) -> 'a t -> ('a * 'b) t
   (* [listens] executes the effect and returns the result and the transformation of the output thanks to the parametric function *)
+
+  val censor : (output -> output) -> 'a t -> 'a t
+  (* [censor] executes the effects, apply the function to the corresponding output and returns an effects with the value unchanged *)
 end
