@@ -11,7 +11,6 @@
     reflecting performed operations. *)
 
 module Over (W : Preface_specs.MONOID) : sig
-
   type output = W.t
 
   type 'a t
@@ -28,7 +27,7 @@ module Over (W : Preface_specs.MONOID) : sig
   val run : 'a t -> 'a * output
   (* [run] execute the effect and returns the result and the corresponding output *)
 
-  val write : ('a * output) -> 'a t
+  val write : 'a * output -> 'a t
   (* [write] embeds an output and provides the corresponding effect *)
 
   val tell : output -> unit t

@@ -63,7 +63,7 @@ module Circuit = struct
   let reduce acc f =
     fold acc (fun a b ->
         let aux = f a b in
-        (aux, aux))
+        (aux, aux) )
   ;;
 end
 

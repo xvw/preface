@@ -42,7 +42,9 @@ module Operation (Core : Preface_specs.Monad.CORE) :
 
   let lift = Core.map
 
-  let lift2 f ma mb = Core.(bind (fun a -> bind (fun b -> return (f a b)) mb) ma)
+  let lift2 f ma mb =
+    Core.(bind (fun a -> bind (fun b -> return (f a b)) mb) ma)
+  ;;
 
   let lift3 f ma mb mc =
     let open Core in

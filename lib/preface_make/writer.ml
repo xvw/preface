@@ -1,5 +1,4 @@
 module Over (W : Preface_specs.MONOID) = struct
-
   type output = W.t
 
   type 'a t = 'a * output
@@ -45,10 +44,11 @@ module Over (W : Preface_specs.MONOID) = struct
 
   let tell s = ((), s)
 
-  let write (a,s) =
+  let write (a, s) =
     let open Monad in
     let* _ = tell s in
     return a
+  ;;
 
   let listen ma =
     let (a, s) = run ma in
@@ -61,11 +61,9 @@ module Over (W : Preface_specs.MONOID) = struct
   ;;
 
   let listens f ma =
-    let ((a,s),s') = listen ma in
+    let ((a, s), s') = listen ma in
     ((a, f s), s')
   ;;
 
-  let censor f ma =
-    pass Monad.(ma >>= fun a -> return (a, f))
-  ;;
+  let censor f ma = pass Monad.(ma >>= (fun a -> return (a, f)))
 end

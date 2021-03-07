@@ -6,7 +6,7 @@ let preserve_identity (module P : Preface_qcheck.Model.T0) count =
       let f = Fn.apply f' in
       let l = (Contravariant.contramap (fun x -> x) f) value
       and r = f value in
-      Bool.equal l r)
+      Bool.equal l r )
 ;;
 
 let preserve_morphism (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -28,7 +28,7 @@ let preserve_morphism (module P : Preface_qcheck.Sample.PACKAGE) count =
       and r =
         ((Contravariant.contramap f % Contravariant.contramap g) x) value
       in
-      Bool.equal l r)
+      Bool.equal l r )
 ;;
 
 let cases n =

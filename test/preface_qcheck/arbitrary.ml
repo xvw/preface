@@ -7,7 +7,7 @@ let p x = x.QCheck.print
 let shrink_identity shrink value =
   value
   |> Preface_stdlib.Identity.Functor.map (fun x ->
-         x |> shrink |> QCheck.Iter.map Preface_stdlib.Identity.pure)
+         x |> shrink |> QCheck.Iter.map Preface_stdlib.Identity.pure )
   |> Preface_stdlib.Identity.extract
 ;;
 
@@ -62,8 +62,8 @@ let validation ?collect valid invalid =
     >>= fun vprinter ->
     invalid.QCheck.print
     >|= fun iprinter -> function
-    | Preface_stdlib.Validation.Valid x -> "Valid " ^ vprinter x
-    | Preface_stdlib.Validation.Invalid x -> "Invalid " ^ iprinter x
+          | Preface_stdlib.Validation.Valid x -> "Valid " ^ vprinter x
+          | Preface_stdlib.Validation.Invalid x -> "Invalid " ^ iprinter x
   in
   QCheck.make ?print ?collect gen
 ;;
