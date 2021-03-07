@@ -119,7 +119,7 @@ module Over (T : Preface_specs.Types.T0) : sig
   (** Provides the monad environment *)
 
   val local : (env -> env) -> 'a t -> 'a t
-  (** Modify the environement and execute the reader *)
+  (** Modify the environment and execute the reader *)
 
   val reader : (env -> 'a) -> 'a t
   (** Build a reader from a function *)

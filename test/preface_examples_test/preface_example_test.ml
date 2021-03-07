@@ -10,5 +10,6 @@ let () =
     @ Freer_monad_os_explicit_continuation.cases
     @ Template_reader.cases
     @ Debruijn_reader.cases
-    @ Approximation_for_selective.cases )
+    @ Approximation_for_selective.cases
+    @ Xml_stax_writer.cases )
 ;;

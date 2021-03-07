@@ -274,17 +274,18 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = 'a -> 'b Monad.t = struct
   module Arr = Arrow.From_monad (Monad)
 
-  include Over_arrow_with_choose
-            (Arr)
-            (struct
-              type ('a, 'b) t = 'a -> 'b Monad.t
+  include
+    Over_arrow_with_choose
+      (Arr)
+      (struct
+        type ('a, 'b) t = 'a -> 'b Monad.t
 
-              let case f g = Either.fold ~left:f ~right:g
+        let case f g = Either.fold ~left:f ~right:g
 
-              let choose f g =
-                let left = Arr.(f >>> arrow Either.left)
-                and right = Arr.(g >>> arrow Either.right) in
-                case left right
-              ;;
-            end)
+        let choose f g =
+          let left = Arr.(f >>> arrow Either.left)
+          and right = Arr.(g >>> arrow Either.right) in
+          case left right
+        ;;
+      end)
 end

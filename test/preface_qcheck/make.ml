@@ -19,6 +19,6 @@ module Test (T : DRIVER) = struct
     QCheck.Test.make ~name:T.name ~count T.arbitrary (fun input ->
         let left = T.left input
         and right = T.right input in
-        T.equal left right)
+        T.equal left right )
   ;;
 end

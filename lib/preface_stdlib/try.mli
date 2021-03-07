@@ -23,9 +23,7 @@
 
       exception Invalid_name of string
 
-      let validate_age age =
-        if age >= 0 then Ok age else Error (Invalid_age age)
-      ;;
+      let validate_age age = if age >= 0 then Ok age else Error (Invalid_age age)
 
       let validate_name name =
         if String.length name >= 2 then Ok name else Error (Invalid_name name)

@@ -1,4 +1,4 @@
-version = 0.15.0
+version = 0.17.0
 margin = 80
 max-indent = 68
 
@@ -53,7 +53,6 @@ let-and = sparse
 let-binding-indent = 2
 let-binding-spacing = double-semicolon
 let-module = compact
-let-open = auto
 
 match-indent = 0
 match-indent-nested = never

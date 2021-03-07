@@ -32,8 +32,8 @@ let fold_map_over_empty () =
 ;;
 
 let should_traverse_without_failure_applicative () =
-  let open Preface.List.Applicative.Traversable
-             (Preface_stdlib.Option.Applicative) in
+  let open
+    Preface.List.Applicative.Traversable (Preface_stdlib.Option.Applicative) in
   let expected = Some [ 1; 2; 3 ]
   and computed = sequence [ Some 1; Some 2; Some 3 ] in
   Alcotest.(check (option (list int)))
@@ -41,8 +41,8 @@ let should_traverse_without_failure_applicative () =
 ;;
 
 let should_traverse_with_failure_applicative () =
-  let open Preface.List.Applicative.Traversable
-             (Preface_stdlib.Option.Applicative) in
+  let open
+    Preface.List.Applicative.Traversable (Preface_stdlib.Option.Applicative) in
   let expected = None
   and computed = sequence [ Some 1; None; Some 3 ] in
   Alcotest.(check (option (list int)))
