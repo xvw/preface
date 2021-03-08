@@ -1,10 +1,16 @@
+open Preface_core.Fun
+
 module Over
     (S : Preface_specs.Types.T0)
     (P : Preface_specs.MONOID) (R : sig
       val right : P.t -> S.t -> S.t
     end) =
 struct
-  type 'a t = S.t -> 'a * P.t
+  type env = S.t
+
+  type output = P.t
+
+  type 'a t = env -> 'a * output
 
   let pure a _ = (a, P.neutral)
 
@@ -31,5 +37,11 @@ struct
       let (ma', p') = t (R.right p s) in
       (ma', P.combine p p')
     ;;
+  end)
+
+  module Functor = Functor.Via_map(struct
+    type nonrec 'a t = 'a t
+
+    let map f ma = Monad.(bind (f %> return) ma)
   end)
 end
