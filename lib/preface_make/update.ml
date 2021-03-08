@@ -42,6 +42,6 @@ struct
   module Functor = Functor.Via_map(struct
     type nonrec 'a t = 'a t
 
-    let map f ma = Monad.(bind (f %> return) ma)
+    let map f ma = Monad.(ma >>= f %> return)
   end)
 end
