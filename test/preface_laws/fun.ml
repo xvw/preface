@@ -2,9 +2,118 @@ module Category = Preface_laws.Category.Laws (Preface_stdlib.Fun.Category)
 module Arrow = Preface_laws.Arrow.Laws (Preface_stdlib.Fun.Arrow)
 module Choice = Preface_laws.Arrow_choice.Laws (Preface_stdlib.Fun.Arrow_choice)
 module Apply = Preface_laws.Arrow_apply.Laws (Preface_stdlib.Fun.Arrow_apply)
+module Profunctor = Preface_laws.Profunctor.Laws (Preface_stdlib.Fun.Profunctor)
 module Either = Preface_stdlib.Either
 
 let tuple_eq f g (a, b) (a', b') = f a a' && g b b'
+
+let pro_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Profunctor.dimap_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test () in
+      P.B.equal ((left f) value) ((right f) value) )
+;;
+
+let pro_fst_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Profunctor.contramap_fst_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test () in
+      P.B.equal ((left f) value) ((right f) value) )
+;;
+
+let pro_snd_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Profunctor.map_snd_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test () in
+      P.B.equal ((left f) value) ((right f) value) )
+;;
+
+let pro_dimap_eq (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (fun1 P.B.observable P.C.arbitrary)
+      P.A.arbitrary
+  in
+  let (name, test) = Profunctor.dimap_equality in
+  Test.make ~name ~count arbitrary (fun (f', g', pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g in
+      P.D.equal ((left p) value) ((right p) value) )
+;;
+
+let pro_dimap_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (pair
+         (fun1 P.A.observable P.B.arbitrary)
+         (fun1 P.C.observable P.A.arbitrary) )
+      (pair
+         (fun1 P.D.observable P.E.arbitrary)
+         (fun1 P.F.observable P.D.arbitrary) )
+      (fun1 P.B.observable P.F.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Profunctor.dimap_parametricity in
+  Test.make ~name ~count arbitrary (fun ((f', g'), (h', i'), pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let h = Fn.apply h' in
+      let i = Fn.apply i' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g h i in
+      P.E.equal ((left p) value) ((right p) value) )
+;;
+
+let pro_fst_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.B.observable P.D.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Profunctor.contramap_fst_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g in
+      P.D.equal ((left p) value) ((right p) value) )
+;;
+
+let pro_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.D.observable P.C.arbitrary)
+      P.D.arbitrary
+  in
+  let (name, test) = Profunctor.map_snd_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g in
+      P.B.equal ((left p) value) ((right p) value) )
+;;
 
 let cat_right_identity (module P : Preface_qcheck.Sample.PACKAGE) count =
   let open QCheck in
@@ -607,7 +716,18 @@ module Selective =
 
 let cases n =
   [
-    ( "Fun Category Laws"
+    ( "Fun Profunctor Laws"
+    , [
+        pro_dimap_id (module Preface_qcheck.Sample.Pack1) n
+      ; pro_fst_id (module Preface_qcheck.Sample.Pack1) n
+      ; pro_snd_id (module Preface_qcheck.Sample.Pack1) n
+      ; pro_dimap_eq (module Preface_qcheck.Sample.Pack1) n
+      ; pro_dimap_param (module Preface_qcheck.Sample.Pack1) n
+      ; pro_fst_param (module Preface_qcheck.Sample.Pack1) n
+      ; pro_snd_param (module Preface_qcheck.Sample.Pack1) n
+      ]
+      |> Stdlib.List.map QCheck_alcotest.to_alcotest )
+  ; ( "Fun Category Laws"
     , [
         cat_right_identity (module Preface_qcheck.Sample.Pack1) n
       ; cat_left_identity (module Preface_qcheck.Sample.Pack1) n

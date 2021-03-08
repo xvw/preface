@@ -40,6 +40,8 @@ module type PACKAGE = sig
   module E : Model.T0
 
   module F : Model.T0
+
+  module G : Model.T0
 end
 
 module Pack1 = struct
@@ -49,4 +51,5 @@ module Pack1 = struct
   module D = String
   module E = Float
   module F = Int
+  module G = String
 end
