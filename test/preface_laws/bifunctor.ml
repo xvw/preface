@@ -27,7 +27,7 @@ module Perserve_first
     (X : Model.T0)
     (Y : Model.T0) =
 Preface_qcheck.Make.Test (struct
-  let name = "fst id = id"
+  let name = "map_fst id = id"
 
   type input = (X.t, Y.t) F.t
 
@@ -37,7 +37,7 @@ Preface_qcheck.Make.Test (struct
 
   let equal = A.equal X.equal Y.equal
 
-  let left x = F.fst (fun x -> x) x
+  let left x = F.map_fst (fun x -> x) x
 
   let right x = (fun x -> x) x
 end)
@@ -48,7 +48,7 @@ module Perserve_second
     (X : Model.T0)
     (Y : Model.T0) =
 Preface_qcheck.Make.Test (struct
-  let name = "snd id = id"
+  let name = "map_snd id = id"
 
   type input = (X.t, Y.t) F.t
 
@@ -58,7 +58,7 @@ Preface_qcheck.Make.Test (struct
 
   let equal = A.equal X.equal Y.equal
 
-  let left x = F.snd (fun x -> x) x
+  let left x = F.map_snd (fun x -> x) x
 
   let right x = (fun x -> x) x
 end)
@@ -71,7 +71,7 @@ module Bimap_fst_snd
     (Y : Model.T0)
     (Z : Model.T0) =
 Preface_qcheck.Make.Test (struct
-  let name = "bimap f g = (fst f) % (snd g)"
+  let name = "bimap f g = (map_fst f) % (map_snd g)"
 
   type input =
     (W.t, X.t) F.t * (W.t -> Y.t) QCheck.fun_ * (X.t -> Z.t) QCheck.fun_
@@ -98,7 +98,7 @@ Preface_qcheck.Make.Test (struct
     let open Preface_core.Fun.Infix in
     let f = QCheck.Fn.apply f' in
     let g = QCheck.Fn.apply g' in
-    F.(fst f % snd g) x
+    F.(map_fst f % map_snd g) x
   ;;
 end)
 
@@ -158,7 +158,7 @@ module Fst_parametricity
     (Y : Model.T0)
     (Z : Model.T0) =
 Preface_qcheck.Make.Test (struct
-  let name = "fst (f % g) = (fst f) % (fst g)"
+  let name = "map_fst (f % g) = (map_fst f) % (map_fst g)"
 
   type input =
     (W.t, X.t) F.t * (Y.t -> Z.t) QCheck.fun_ * (W.t -> Y.t) QCheck.fun_
@@ -179,14 +179,14 @@ Preface_qcheck.Make.Test (struct
     let open Preface_core.Fun.Infix in
     let f = QCheck.Fn.apply f' in
     let g = QCheck.Fn.apply g' in
-    F.fst (f % g) x
+    F.map_fst (f % g) x
   ;;
 
   let right (x, f', g') =
     let open Preface_core.Fun.Infix in
     let f = QCheck.Fn.apply f' in
     let g = QCheck.Fn.apply g' in
-    F.(fst f % fst g) x
+    F.(map_fst f % map_fst g) x
   ;;
 end)
 
@@ -198,7 +198,7 @@ module Snd_parametricity
     (Y : Model.T0)
     (Z : Model.T0) =
 Preface_qcheck.Make.Test (struct
-  let name = "snd (f % g) = (snd f) % (snd g)"
+  let name = "map_snd (f % g) = (map_snd f) % (map_snd g)"
 
   type input =
     (W.t, X.t) F.t * (Y.t -> Z.t) QCheck.fun_ * (X.t -> Y.t) QCheck.fun_
@@ -219,14 +219,14 @@ Preface_qcheck.Make.Test (struct
     let open Preface_core.Fun.Infix in
     let f = QCheck.Fn.apply f' in
     let g = QCheck.Fn.apply g' in
-    F.snd (f % g) x
+    F.map_snd (f % g) x
   ;;
 
   let right (x, f', g') =
     let open Preface_core.Fun.Infix in
     let f = QCheck.Fn.apply f' in
     let g = QCheck.Fn.apply g' in
-    F.(snd f % snd g) x
+    F.(map_snd f % map_snd g) x
   ;;
 end)
 

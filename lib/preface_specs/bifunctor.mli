@@ -10,15 +10,15 @@ module type CORE_WITH_BIMAP = sig
   (** Mapping over both arguments at the same time. *)
 end
 
-(** Requirement via [fst] and [snd]. *)
-module type CORE_WITH_FST_AND_SND = sig
+(** Requirement via [map_fst] and [map_snd]. *)
+module type CORE_WITH_MAP_FST_AND_MAP_SND = sig
   type ('a, 'b) t
   (** The type held by the [Bifunctor]*)
 
-  val fst : ('a -> 'b) -> ('a, 'c) t -> ('b, 'c) t
+  val map_fst : ('a -> 'b) -> ('a, 'c) t -> ('b, 'c) t
   (** Mapping over the first argument. *)
 
-  val snd : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
+  val map_snd : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
   (** Mapping over the second argument. *)
 end
 
@@ -26,7 +26,7 @@ end
 module type CORE = sig
   include CORE_WITH_BIMAP
 
-  include CORE_WITH_FST_AND_SND with type ('a, 'b) t := ('a, 'b) t
+  include CORE_WITH_MAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
 end
 
 (** Operations *)
