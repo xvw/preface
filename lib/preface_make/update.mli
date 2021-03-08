@@ -6,13 +6,11 @@
 
     {1 Use cases} *)
 
-module Over (R : sig
-  module S : Preface_specs.Types.T0
-
-  module P : Preface_specs.MONOID
-
-  val right : P.t -> S.t -> S.t
-end) : sig
+module Over
+    (S : Preface_specs.Types.T0)
+    (P : Preface_specs.MONOID) (R : sig
+      val right : P.t -> S.t -> S.t
+    end) : sig
   type 'a t
 
   module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
