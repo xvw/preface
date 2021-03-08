@@ -2,14 +2,20 @@
 
     {1 Capabilities}
 
+    - {!val:Profunctor}
     - {!val:Category}
-    - {!val:Arrow} *)
+    - {!val:Arrow}
+    - {!val:Arrow_choice}
+    - {!val:Arrow_apply} *)
 
 (** {1 Type} *)
 
 type ('a, 'b) t = 'a -> 'b
 
 (** {1 Implementation} *)
+
+module Profunctor : Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) t
+(** {2 Category API} *)
 
 module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t
 (** {2 Category API} *)
