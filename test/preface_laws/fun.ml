@@ -399,7 +399,7 @@ let arrow_apply_right_identity (module P : Preface_qcheck.Sample.PACKAGE) count
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      P.B.equal (left value) (right value))
+      P.B.equal (left value) (right value) )
 ;;
 
 let arrow_apply_left_identity (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -409,7 +409,7 @@ let arrow_apply_left_identity (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      P.B.equal (left value) (right value))
+      P.B.equal (left value) (right value) )
 ;;
 
 let arrow_apply_associativity (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -427,7 +427,7 @@ let arrow_apply_associativity (module P : Preface_qcheck.Sample.PACKAGE) count =
       let g = Fn.apply g' in
       let h = Fn.apply h' in
       let (left, right) = test f g h in
-      P.B.equal (left value) (right value))
+      P.B.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law1 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -436,7 +436,7 @@ let arrow_apply_law1 (module P : Preface_qcheck.Sample.PACKAGE) count =
   let (name, test) = Apply.law1 in
   Test.make ~name ~count arbitrary (fun value ->
       let (left, right) = test () in
-      P.A.equal (left value) (right value))
+      P.A.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law2 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -452,7 +452,7 @@ let arrow_apply_law2 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let g = Fn.apply g' in
       let (left, right) = test f g in
-      P.C.equal (left value) (right value))
+      P.C.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law3 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -464,7 +464,7 @@ let arrow_apply_law3 (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      tuple_eq P.B.equal P.C.equal (left value) (right value))
+      tuple_eq P.B.equal P.C.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law4 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -480,7 +480,7 @@ let arrow_apply_law4 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let g = Fn.apply g' in
       let (left, right) = test f g in
-      tuple_eq P.C.equal P.D.equal (left value) (right value))
+      tuple_eq P.C.equal P.D.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law5 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -496,7 +496,7 @@ let arrow_apply_law5 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let g = Fn.apply g' in
       let (left, right) = test f g in
-      tuple_eq P.B.equal P.D.equal (left value) (right value))
+      tuple_eq P.B.equal P.D.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law6 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -508,7 +508,7 @@ let arrow_apply_law6 (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      P.B.equal (left value) (right value))
+      P.B.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law7 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -524,7 +524,7 @@ let arrow_apply_law7 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let (left, right) = test f in
       tuple_eq P.B.equal
         (tuple_eq P.C.equal P.D.equal)
-        (left value) (right value))
+        (left value) (right value) )
 ;;
 
 let arrow_apply_law8 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -533,7 +533,7 @@ let arrow_apply_law8 (module P : Preface_qcheck.Sample.PACKAGE) count =
   let (name, test) = Apply.law8 in
   Test.make ~name ~count arbitrary (fun value ->
       let (left, right) = test () in
-      tuple_eq P.A.equal P.B.equal (left value) (right value))
+      tuple_eq P.A.equal P.B.equal (left value) (right value) )
 ;;
 
 let arrow_apply_law9 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -550,7 +550,7 @@ let arrow_apply_law9 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let (left, right) = test f in
       let l = left (g, value) in
       let r = right (g, value) in
-      P.C.equal l r)
+      P.C.equal l r )
 ;;
 
 let arrow_apply_law10 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -567,7 +567,7 @@ let arrow_apply_law10 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let (left, right) = test f in
       let l = left (g, value) in
       let r = right (g, value) in
-      P.B.equal l r)
+      P.B.equal l r )
 ;;
 
 module Req = struct
