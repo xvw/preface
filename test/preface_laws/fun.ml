@@ -15,8 +15,8 @@ let pro_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
   let (name, test) = Profunctor.dimap_identity in
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
-      let (left, right) = test () in
-      P.B.equal ((left f) value) ((right f) value) )
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
 ;;
 
 let pro_fst_id (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -25,8 +25,8 @@ let pro_fst_id (module P : Preface_qcheck.Sample.PACKAGE) count =
   let (name, test) = Profunctor.contramap_fst_identity in
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
-      let (left, right) = test () in
-      P.B.equal ((left f) value) ((right f) value) )
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
 ;;
 
 let pro_snd_id (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -35,8 +35,8 @@ let pro_snd_id (module P : Preface_qcheck.Sample.PACKAGE) count =
   let (name, test) = Profunctor.map_snd_identity in
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
-      let (left, right) = test () in
-      P.B.equal ((left f) value) ((right f) value) )
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
 ;;
 
 let pro_dimap_eq (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -53,8 +53,8 @@ let pro_dimap_eq (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let g = Fn.apply g' in
       let p = Fn.apply pro' in
-      let (left, right) = test f g in
-      P.D.equal ((left p) value) ((right p) value) )
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
 ;;
 
 let pro_dimap_param (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -77,8 +77,8 @@ let pro_dimap_param (module P : Preface_qcheck.Sample.PACKAGE) count =
       let h = Fn.apply h' in
       let i = Fn.apply i' in
       let p = Fn.apply pro' in
-      let (left, right) = test f g h i in
-      P.E.equal ((left p) value) ((right p) value) )
+      let (left, right) = test f g h i p in
+      P.E.equal (left value) (right value) )
 ;;
 
 let pro_fst_param (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -95,8 +95,8 @@ let pro_fst_param (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let g = Fn.apply g' in
       let p = Fn.apply pro' in
-      let (left, right) = test f g in
-      P.D.equal ((left p) value) ((right p) value) )
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
 ;;
 
 let pro_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -113,8 +113,8 @@ let pro_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let g = Fn.apply g' in
       let p = Fn.apply pro' in
-      let (left, right) = test f g in
-      P.B.equal ((left p) value) ((right p) value) )
+      let (left, right) = test f g p in
+      P.B.equal (left value) (right value) )
 ;;
 
 let cat_right_identity (module P : Preface_qcheck.Sample.PACKAGE) count =
