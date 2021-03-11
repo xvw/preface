@@ -156,3 +156,17 @@ module From_arrow_choice (Choice : Preface_specs.ARROW_CHOICE) :
 module From_arrow_apply (Apply : Preface_specs.ARROW_APPLY) :
   Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Apply.t =
   Apply
+
+module From_strong_and_category
+    (Strong : Preface_specs.Strong.CORE_WITH_DIMAP_AND_FST)
+    (Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Strong.t) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Category.t =
+  Over_category_and_via_arrow_and_fst
+    (Category)
+    (struct
+      type ('a, 'b) t = ('a, 'b) Category.t
+
+      let arrow f = Strong.dimap f (fun x -> x) Category.id
+
+      let fst = Strong.fst
+    end)
