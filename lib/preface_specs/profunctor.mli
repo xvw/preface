@@ -5,7 +5,7 @@
 (** Requirement via [dimap]. *)
 module type CORE_WITH_DIMAP = sig
   type ('a, 'b) t
-  (** The type held by the [Profunctor]*)
+  (** The type held by the [Profunctor]. *)
 
   val dimap : ('a -> 'b) -> ('c -> 'd) -> ('b, 'c) t -> ('a, 'd) t
 end
@@ -13,7 +13,7 @@ end
 (** Requirement via [contramap_fst] and [map_snd]. *)
 module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND = sig
   type ('a, 'b) t
-  (** The type held by the [Profunctor]*)
+  (** The type held by the [Profunctor]. *)
 
   val contramap_fst : ('a -> 'b) -> ('b, 'c) t -> ('a, 'c) t
   (** Contramapping over the first argument. *)
