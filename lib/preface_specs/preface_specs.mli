@@ -188,3 +188,5 @@ module type ARROW_CHOICE = Arrow_choice.API
 module type ARROW_APPLY = Arrow_apply.API
 
 module type ARROW_LOOP = Arrow_loop.API
+
+module type READER = Reader.API

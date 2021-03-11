@@ -29,5 +29,5 @@ end
 
 (** {1 Bibliography}
 
-    - {{:https://danel.ahman.ee/papers/types13postproc.pdf}
-      Update Monads: Cointerpreting Directed Containers} *)
+    - {{:https://danel.ahman.ee/papers/types13postproc.pdf} Update Monads:
+      Cointerpreting Directed Containers} *)

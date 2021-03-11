@@ -41,3 +41,37 @@ module Over (T : Preface_specs.Types.T0) = struct
 
   let reader = id
 end
+
+(*
+module Over_update(T : Preface_specs.Types.T0) = struct
+  module Unit = Monoid.Via_combine_and_neutral(struct
+    type t = unit
+    let neutral = ()
+    let combine () () = ()
+  end)
+
+  module Update = Update.Over(T)(Unit)(struct
+    let right _ s = s
+  end)
+
+  type env = Update.env
+
+  type 'a t = 'a Update.t
+
+  module Functor = Update.Functor
+
+  module Applicative = Update.Applicative
+
+  module Monad = Update.Monad
+
+  let run a = failwith "TODO"
+
+  let ask = fun e -> e,()
+
+  let local f a = fun e -> a (f e),()
+
+  let reader f = fun e -> (f e), ()
+   (** Build a reader from a function *)
+
+end
+*)

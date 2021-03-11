@@ -1,5 +1,3 @@
-open Preface_core.Fun
-
 module Over
     (S : Preface_specs.Types.T0)
     (P : Preface_specs.MONOID) (R : sig
@@ -39,9 +37,5 @@ struct
     ;;
   end)
 
-  module Functor = Functor.Via_map(struct
-    type nonrec 'a t = 'a t
-
-    let map f ma = Monad.(ma >>= f %> return)
-  end)
+  module Functor = Functor.Via_map (Monad)
 end

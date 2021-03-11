@@ -92,38 +92,13 @@
     {[ let run t env = Reader.run (transform t) env ]} *)
 
 (** {1 Implementation} *)
-module Over (T : Preface_specs.Types.T0) : sig
-  (** {2 Types} *)
+module Over (T : Preface_specs.Types.T0) :
+  Preface_specs.READER with type env = T.t
 
-  type env = T.t
-  (** The encapsulated state *)
-
-  type 'a t
-  (** The type *)
-
-  module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-  (** {2 Functor API} *)
-
-  module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
-  (** {2 Applicative API} *)
-
-  module Monad : Preface_specs.MONAD with type 'a t = 'a t
-  (** {2 Monad API} *)
-
-  (** {2 Helpers} *)
-
-  val run : 'a t -> env -> 'a
-  (** Run the reader and extracting the value *)
-
-  val ask : env t
-  (** Provides the monad environment *)
-
-  val local : (env -> env) -> 'a t -> 'a t
-  (** Modify the environment and execute the reader *)
-
-  val reader : (env -> 'a) -> 'a t
-  (** Build a reader from a function *)
-end
+(*
+module Over_update (T : Preface_specs.Types.T0) :
+    Preface_specs.READER with type env = T.t
+*)
 
 (** {1 Additional Example}
 

@@ -8,7 +8,7 @@ module Over (T : Preface_specs.Types.T0) = struct
   let pure a s = (a, s)
 
   let map f ma s =
-    let (a, s') = ma s in
+    let (a, s') = run ma s in
     (f a, s')
   ;;
 
@@ -44,5 +44,5 @@ module Over (T : Preface_specs.Types.T0) = struct
 
   let set s _ = ((), s)
 
-  let modify f = Monad.(get >>= (fun s -> set @@ f s))
+  let modify f = Monad.(get >>= (fun s -> set (f s)))
 end
