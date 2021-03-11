@@ -3,6 +3,7 @@
     {1 Capabilities}
 
     - {!val:Profunctor}
+    - {!val:Strong}
     - {!val:Category}
     - {!val:Arrow}
     - {!val:Arrow_choice}
@@ -15,7 +16,10 @@ type ('a, 'b) t = 'a -> 'b
 (** {1 Implementation} *)
 
 module Profunctor : Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) t
-(** {2 Category API} *)
+(** {2 Profunctor API} *)
+
+module Strong : Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) t
+(** {2 Profunctor API} *)
 
 module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t
 (** {2 Category API} *)
