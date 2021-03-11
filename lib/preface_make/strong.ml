@@ -143,3 +143,20 @@ module Over_profunctor_via_snd
   include Core
   include Operation (Core)
 end
+
+module From_monad (Monad : Preface_specs.Monad.CORE) :
+  Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Monad.t = struct
+  module Prof = Profunctor.From_monad (Monad)
+
+  include
+    Over_profunctor_via_fst
+      (Prof)
+      (struct
+        type ('a, 'b) t = 'a -> 'b Monad.t
+
+        let fst f (a, c) =
+          let open Monad in
+          bind (fun b -> return (b, c)) (f a)
+        ;;
+      end)
+end

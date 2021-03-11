@@ -36,6 +36,11 @@ module Over_profunctor_via_snd
     (S : Preface_specs.Strong.WITH_SND with type ('a, 'b) t = ('a, 'b) P.t) :
   Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) S.t
 
+(** Incarnation of a [Strong Profunctor] using a [monad] using the Kleisli
+    composition. *)
+module From_monad (Monad : Preface_specs.Monad.CORE) :
+  Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Monad.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Strong Profunctor], constructing and assembling a
