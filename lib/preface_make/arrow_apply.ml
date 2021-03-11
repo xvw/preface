@@ -101,11 +101,12 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.ARROW_APPLY with type ('a, 'b) t = 'a -> 'b Monad.t = struct
   module Arr = Arrow.From_monad (Monad)
 
-  include Over_arrow_with_apply
-            (Arr)
-            (struct
-              type ('a, 'b) t = 'a -> 'b Monad.t
+  include
+    Over_arrow_with_apply
+      (Arr)
+      (struct
+        type ('a, 'b) t = 'a -> 'b Monad.t
 
-              let apply (f, x) = f x
-            end)
+        let apply (f, x) = f x
+      end)
 end

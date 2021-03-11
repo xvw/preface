@@ -58,7 +58,11 @@ module Functor = Functor
 (** Describes an object that can be mapped. *)
 
 module Bifunctor = Bifunctor
-(** Describes a functor with two type parameters *)
+(** Describes an object of two covariant functors. *)
+
+module Profunctor = Profunctor
+(** Describes and object where the first parameter is a contravariant functor
+    and the second is a covariant functor.*)
 
 module Applicative = Applicative
 (** Describes an applicative functor. *)
@@ -138,6 +142,8 @@ module type MONOID = Monoid.API
 module type FUNCTOR = Functor.API
 
 module type BIFUNCTOR = Bifunctor.API
+
+module type PROFUNCTOR = Profunctor.API
 
 module type APPLICATIVE = Applicative.API
 

@@ -22,6 +22,8 @@ module type PACKAGE = sig
   module E : Model.T0
 
   module F : Model.T0
+
+  module G : Model.T0
 end
 
 module Pack1 : PACKAGE

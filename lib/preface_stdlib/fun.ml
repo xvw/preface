@@ -2,6 +2,12 @@ type ('a, 'b) t = 'a -> 'b
 
 include Preface_core.Fun
 
+module Profunctor = Preface_make.Profunctor.Via_dimap (struct
+  type nonrec ('a, 'b) t = ('a, 'b) t
+
+  let dimap x y z = y % z % x
+end)
+
 module Category = Preface_make.Category.Via_id_and_compose (struct
   type nonrec ('a, 'b) t = ('a, 'b) t
 

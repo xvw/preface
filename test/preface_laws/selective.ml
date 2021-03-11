@@ -111,7 +111,7 @@ module Theorem1
     (Z : Model.T0) =
 Preface_qcheck.Make.Test (struct
   let name =
-    "(f <$> select x y) = (select (Bifunctor.snd f <$> x) (((%) f) <$> y))"
+    "(f <$> select x y) = (select (Bifunctor.map_snd f <$> x) (((%) f) <$> y))"
   ;;
 
   type input =
@@ -141,7 +141,7 @@ Preface_qcheck.Make.Test (struct
     let f = QCheck.Fn.apply f'
     and y = F.map QCheck.Fn.apply y' in
     let open Preface_core.Fun in
-    F.(select (Either.Bifunctor.snd f <$> x) (( % ) f <$> y))
+    F.(select (Either.Bifunctor.map_snd f <$> x) (( % ) f <$> y))
   ;;
 end)
 
@@ -152,7 +152,9 @@ module Theorem2
     (Y : Model.T0)
     (Z : Model.T0) =
 Preface_qcheck.Make.Test (struct
-  let name = "(select (Bifunctor.fst f <$> x) y) = (select x ((%>) f) <$> y))"
+  let name =
+    "(select (Bifunctor.map_fst f <$> x) y) = (select x ((%>) f) <$> y))"
+  ;;
 
   type input =
     (X.t -> Y.t) QCheck.fun_
@@ -174,7 +176,7 @@ Preface_qcheck.Make.Test (struct
   let left (f', x, y') =
     let f = QCheck.Fn.apply f'
     and y = F.map QCheck.Fn.apply y' in
-    F.(select (Either.Bifunctor.fst f <$> x) y)
+    F.(select (Either.Bifunctor.map_fst f <$> x) y)
   ;;
 
   let right (f', x, y') =
@@ -193,8 +195,8 @@ module Theorem3
     (Z : Model.T0) =
 Preface_qcheck.Make.Test (struct
   let name =
-    "(select x (f <$> y)) = (select (Bifunctor.fst (flip f) <$> x) ((|>) <$> \
-     y))"
+    "(select x (f <$> y)) = (select (Bifunctor.map_fst (flip f) <$> x) ((|>) \
+     <$> y))"
   ;;
 
   type input =
@@ -220,7 +222,7 @@ Preface_qcheck.Make.Test (struct
   let right (f', x, y) =
     let f = QCheck.Fn.apply f' in
     let open Preface_core.Fun in
-    F.(select (Either.Bifunctor.fst (flip f) <$> x) (( |> ) <$> y))
+    F.(select (Either.Bifunctor.map_fst (flip f) <$> x) (( |> ) <$> y))
   ;;
 end)
 

@@ -8,8 +8,9 @@
 module Via_bimap (Core : Preface_specs.Bifunctor.CORE_WITH_BIMAP) :
   Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t
 
-(** Incarnation of a [Bifunctor] with [fst] and [snd]. *)
-module Via_fst_and_snd (Core : Preface_specs.Bifunctor.CORE_WITH_FST_AND_SND) :
+(** Incarnation of a [Bifunctor] with [map_fst] and [map_snd]. *)
+module Via_map_fst_and_map_snd
+    (Core : Preface_specs.Bifunctor.CORE_WITH_MAP_FST_AND_MAP_SND) :
   Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t
 
 (** {2 Manual construction}
@@ -29,9 +30,9 @@ module Via
 module Core_via_bimap (Core : Preface_specs.Bifunctor.CORE_WITH_BIMAP) :
   Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Core.t
 
-(** Incarnation of a [Bifunctor.Core] with [fst] and [snd]. *)
-module Core_via_fst_and_snd
-    (Core : Preface_specs.Bifunctor.CORE_WITH_FST_AND_SND) :
+(** Incarnation of a [Bifunctor.Core] with [map_fst] and [map_snd]. *)
+module Core_via_map_fst_and_map_snd
+    (Core : Preface_specs.Bifunctor.CORE_WITH_MAP_FST_AND_MAP_SND) :
   Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Core.t
 
 (** Incarnation of a [Bifunctor.Operation] with [Bifunctor.Core]. *)
