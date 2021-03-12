@@ -41,11 +41,24 @@ module type CORE = sig
   include WITH_CLOSED with type ('a, 'b) t := ('a, 'b) t
 end
 
+(** Operation *)
+module type OPERATION = sig
+  type ('a, 'b) t
+  (** The type held by the [Closed Profunctor]. *)
+
+  val curry : ('a * 'b, 'c) t -> ('a, 'b -> 'c) t
+  (** Transform an uncurried function into a curried one. *)
+end
+
 (** {1 API} *)
 
 (** The complete interface of a [Closed Profunctor]. *)
 
-module type API = CORE
+module type API = sig
+  include CORE
+
+  include OPERATION with type ('a, 'b) t := ('a, 'b) t
+end
 
 (** {1 Bibliography}
 
