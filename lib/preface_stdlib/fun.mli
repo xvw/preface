@@ -4,6 +4,7 @@
 
     - {!val:Profunctor}
     - {!val:Strong}
+    - {!val:Choice}
     - {!val:Category}
     - {!val:Arrow}
     - {!val:Arrow_choice}
@@ -19,7 +20,10 @@ module Profunctor : Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) t
 (** {2 Profunctor API} *)
 
 module Strong : Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) t
-(** {2 Profunctor API} *)
+(** {2 Strong Profunctor API} *)
+
+module Choice : Preface_specs.CHOICE with type ('a, 'b) t = ('a, 'b) t
+(** {2 Choice Profunctor API} *)
 
 module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t
 (** {2 Category API} *)

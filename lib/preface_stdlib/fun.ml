@@ -17,6 +17,18 @@ module Strong =
       let fst x (y, z) = (x y, z)
     end)
 
+module Choice =
+  Preface_make.Choice.Over_profunctor_via_left
+    (Profunctor)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let left f = function
+        | Either.Left x -> Either.Left (f x)
+        | Either.Right x -> Either.Right x
+      ;;
+    end)
+
 module Category = Preface_make.Category.Via_id_and_compose (struct
   type nonrec ('a, 'b) t = ('a, 'b) t
 
