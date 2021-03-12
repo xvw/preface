@@ -27,3 +27,15 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
 
   let map_snd k f = Monad.map k % f
 end
+
+module From_strong (Strong : Preface_specs.STRONG) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Strong.t =
+  Strong
+
+module From_choice (Choice : Preface_specs.CHOICE) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Choice.t =
+  Choice
+
+module From_closed (Closed : Preface_specs.CLOSED) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Closed.t =
+  Closed
