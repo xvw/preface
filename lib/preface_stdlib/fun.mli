@@ -25,6 +25,9 @@ module Strong : Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) t
 module Choice : Preface_specs.CHOICE with type ('a, 'b) t = ('a, 'b) t
 (** {2 Choice Profunctor API} *)
 
+module Closed : Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) t
+(** {2 Closed Profunctor API} *)
+
 module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t
 (** {2 Category API} *)
 

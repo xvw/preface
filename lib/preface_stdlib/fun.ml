@@ -29,6 +29,15 @@ module Choice =
       ;;
     end)
 
+module Closed =
+  Preface_make.Closed.Over_profunctor_via_closed
+    (Profunctor)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let closed = Preface_core.Fun.compose_right_to_left
+    end)
+
 module Category = Preface_make.Category.Via_id_and_compose (struct
   type nonrec ('a, 'b) t = ('a, 'b) t
 
