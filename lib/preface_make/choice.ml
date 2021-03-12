@@ -1,4 +1,4 @@
-let mirror x = Either.(fold ~left:right ~right:left) x
+open Preface_core.Shims
 
 module Right_via_left
     (D : Preface_specs.Profunctor.CORE_WITH_DIMAP)
@@ -6,7 +6,7 @@ module Right_via_left
   Preface_specs.Choice.WITH_RIGHT with type ('a, 'b) t = ('a, 'b) L.t = struct
   type ('a, 'b) t = ('a, 'b) L.t
 
-  let right x = D.dimap mirror mirror (L.left x)
+  let right x = D.dimap Either.swap Either.swap (L.left x)
 end
 
 module Left_via_right
@@ -15,7 +15,7 @@ module Left_via_right
   Preface_specs.Choice.WITH_LEFT with type ('a, 'b) t = ('a, 'b) R.t = struct
   type ('a, 'b) t = ('a, 'b) R.t
 
-  let left x = D.dimap mirror mirror (R.right x)
+  let left x = D.dimap Either.swap Either.swap (R.right x)
 end
 
 module Via_dimap_and_left (Core : Preface_specs.Choice.CORE_WITH_DIMAP_AND_LEFT) :
