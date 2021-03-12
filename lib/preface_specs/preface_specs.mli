@@ -70,6 +70,9 @@ module Strong = Strong
 module Choice = Choice
 (** Describes a profunctor which can act on sum/Either. *)
 
+module Closed = Closed
+(** Describes a profunctor which can act on function. *)
+
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
@@ -154,6 +157,8 @@ module type PROFUNCTOR = Profunctor.API
 module type STRONG = Strong.API
 
 module type CHOICE = Choice.API
+
+module type CLOSED = Closed.API
 
 module type APPLICATIVE = Applicative.API
 

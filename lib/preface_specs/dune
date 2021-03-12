@@ -5,5 +5,5 @@
    selective monad comonad traversable bifunctor free_applicative free_monad
    freer_monad free_selective semigroup monoid foldable alt alternative
    monad_plus contravariant category arrow arrow_zero arrow_alt arrow_plus
-   arrow_choice arrow_apply arrow_loop profunctor strong choice)
+   arrow_choice arrow_apply arrow_loop profunctor strong choice closed)
  (libraries preface.core either))
