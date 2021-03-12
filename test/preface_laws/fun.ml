@@ -5,6 +5,7 @@ module Arrow_choice =
 module Arrow_apply =
   Preface_laws.Arrow_apply.Laws (Preface_stdlib.Fun.Arrow_apply)
 module Profunctor = Preface_laws.Profunctor.Laws (Preface_stdlib.Fun.Profunctor)
+module Strong = Preface_laws.Strong.Laws (Preface_stdlib.Fun.Strong)
 module Either = Preface_stdlib.Either
 
 let tuple_eq f g (a, b) (a', b') = f a a' && g b b'
@@ -115,6 +116,229 @@ let pro_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
       let p = Fn.apply pro' in
       let (left, right) = test f g p in
       P.B.equal (left value) (right value) )
+;;
+
+let strong_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Strong.dimap_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_fst_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Strong.contramap_fst_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_snd_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Strong.map_snd_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_dimap_eq (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (fun1 P.B.observable P.C.arbitrary)
+      P.A.arbitrary
+  in
+  let (name, test) = Strong.dimap_equality in
+  Test.make ~name ~count arbitrary (fun (f', g', strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let strong_dimap_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (pair
+         (fun1 P.A.observable P.B.arbitrary)
+         (fun1 P.C.observable P.A.arbitrary) )
+      (pair
+         (fun1 P.D.observable P.E.arbitrary)
+         (fun1 P.F.observable P.D.arbitrary) )
+      (fun1 P.B.observable P.F.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Strong.dimap_parametricity in
+  Test.make ~name ~count arbitrary (fun ((f', g'), (h', i'), strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let h = Fn.apply h' in
+      let i = Fn.apply i' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g h i p in
+      P.E.equal (left value) (right value) )
+;;
+
+let strong_fst_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.B.observable P.D.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Strong.contramap_fst_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let strong_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.D.observable P.C.arbitrary)
+      P.D.arbitrary
+  in
+  let (name, test) = Strong.map_snd_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g p in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_fst_define_snd (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Strong.fst_define_snd in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq P.B.equal P.C.equal (left value) (right value) )
+;;
+
+let strong_snd_define_fst (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Strong.snd_define_fst in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq P.C.equal P.B.equal (left value) (right value) )
+;;
+
+let strong_contramap_fst (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Strong.contramap_fst in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_contramap_snd (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Strong.contramap_snd in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_dinaturality_fst (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    triple
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (pair P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Strong.dinaturality_fst in
+  Test.make ~name ~count arbitrary (fun (f', strong', value) ->
+      let f = Fn.apply f' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f p in
+      tuple_eq P.D.equal P.B.equal (left value) (right value) )
+;;
+
+let strong_dinaturality_snd (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    triple
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (pair P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Strong.dinaturality_snd in
+  Test.make ~name ~count arbitrary (fun (f', strong', value) ->
+      let f = Fn.apply f' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f p in
+      tuple_eq P.B.equal P.D.equal (left value) (right value) )
+;;
+
+let strong_fst_fst_is_dimap (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1 P.A.observable P.B.arbitrary)
+      (pair (pair P.A.arbitrary P.C.arbitrary) P.D.arbitrary)
+  in
+  let (name, test) = Strong.fst_fst_is_dmap in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq
+        (tuple_eq P.B.equal P.C.equal)
+        P.D.equal (left value) (right value) )
+;;
+
+let strong_snd_snd_is_dimap (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1
+         (Observable.pair P.A.observable P.B.observable)
+         (pair P.C.arbitrary P.D.arbitrary) )
+      (pair P.E.arbitrary
+         (pair P.F.arbitrary (pair P.A.arbitrary P.B.arbitrary)) )
+  in
+  let (name, test) = Strong.snd_snd_is_dmap in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq P.E.equal
+        (tuple_eq P.F.equal (tuple_eq P.C.equal P.D.equal))
+        (left value) (right value) )
 ;;
 
 let cat_right_identity (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -727,6 +951,25 @@ let cases n =
       ; pro_dimap_param (module Preface_qcheck.Sample.Pack1) n
       ; pro_fst_param (module Preface_qcheck.Sample.Pack1) n
       ; pro_snd_param (module Preface_qcheck.Sample.Pack1) n
+      ]
+      |> Stdlib.List.map QCheck_alcotest.to_alcotest )
+  ; ( "Fun Strong Laws"
+    , [
+        strong_dimap_id (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_id (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_id (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dimap_eq (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dimap_param (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_param (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_param (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_define_snd (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_define_fst (module Preface_qcheck.Sample.Pack1) n
+      ; strong_contramap_fst (module Preface_qcheck.Sample.Pack1) n
+      ; strong_contramap_snd (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dinaturality_fst (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dinaturality_snd (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_fst_is_dimap (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_snd_is_dimap (module Preface_qcheck.Sample.Pack1) n
       ]
       |> Stdlib.List.map QCheck_alcotest.to_alcotest )
   ; ( "Fun Category Laws"
