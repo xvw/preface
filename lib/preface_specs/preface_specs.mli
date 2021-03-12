@@ -67,6 +67,9 @@ module Profunctor = Profunctor
 module Strong = Strong
 (** Describes a profunctor which can act on product/tuples. *)
 
+module Choice = Choice
+(** Describes a profunctor which can act on sum/Either. *)
+
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
@@ -149,6 +152,8 @@ module type BIFUNCTOR = Bifunctor.API
 module type PROFUNCTOR = Profunctor.API
 
 module type STRONG = Strong.API
+
+module type CHOICE = Choice.API
 
 module type APPLICATIVE = Applicative.API
 
