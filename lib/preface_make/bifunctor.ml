@@ -52,3 +52,28 @@ module Via_map_fst_and_map_snd
   include Core
   include Operation
 end
+
+module From_functors_product
+    (F : Preface_specs.FUNCTOR)
+    (G : Preface_specs.FUNCTOR) :
+  Preface_specs.BIFUNCTOR with type ('a, 'b) t = 'a F.t * 'b G.t =
+Via_map_fst_and_map_snd (struct
+  type ('a, 'b) t = 'a F.t * 'b G.t
+
+  let map_fst f (x, y) = (F.map f x, y)
+
+  let map_snd f (x, y) = (x, G.map f y)
+end)
+
+module From_functors_sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) =
+struct
+  type ('a, 'b) sum =
+    | L of 'a F.t
+    | R of 'b G.t
+
+  include Via_bimap (struct
+    type ('a, 'b) t = ('a, 'b) sum
+
+    let bimap f g = function L x -> L (F.map f x) | R x -> R (G.map g x)
+  end)
+end
