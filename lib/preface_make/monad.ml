@@ -34,7 +34,7 @@ end
 
 module Operation (Core : Preface_specs.Monad.CORE) :
   Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
+  include Functor.Operation (Core)
 
   let void _ = Core.return ()
 
@@ -65,7 +65,7 @@ module Infix
     (Core : Preface_specs.Monad.CORE)
     (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Monad.INFIX with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
+  include Functor.Infix (Core) (Operation)
 
   let ( >|= ) x f = Core.map f x
 
