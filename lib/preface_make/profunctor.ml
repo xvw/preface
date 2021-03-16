@@ -42,13 +42,15 @@ module From_closed (Closed : Preface_specs.CLOSED) :
 
 module Composition (F : Preface_specs.PROFUNCTOR) (G : Preface_specs.PROFUNCTOR) =
 struct
-  type (_, _) t = C : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+  type (_, _) t = Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
 
   include (
     Via_dimap (struct
       type nonrec ('a, 'b) t = ('a, 'b) t
 
-      let dimap l r (C (f, g)) = C (F.contramap_fst l f, G.map_snd r g)
+      let dimap l r (Composed (f, g)) =
+        Composed (F.contramap_fst l f, G.map_snd r g)
+      ;;
     end) :
       Preface_specs.PROFUNCTOR with type ('a, 'b) t := ('a, 'b) t )
 end

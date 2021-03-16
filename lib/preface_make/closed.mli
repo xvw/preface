@@ -27,7 +27,7 @@ module Over_profunctor_via_closed
 
 (** Composition between two Closed Profunctors. *)
 module Composition (F : Preface_specs.CLOSED) (G : Preface_specs.CLOSED) : sig
-  type (_, _) t = C : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+  type (_, _) t = Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
 
   include Preface_specs.CLOSED with type ('a, 'b) t := ('a, 'b) t
 end

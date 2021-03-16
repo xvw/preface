@@ -70,7 +70,7 @@ struct
   module P = Profunctor.Composition (F) (G)
 
   type ('a, 'b) t = ('a, 'b) P.t =
-    | C : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+    | Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
 
   include (
     Over_profunctor_via_closed
@@ -78,7 +78,7 @@ struct
       (struct
         type nonrec ('a, 'b) t = ('a, 'b) t
 
-        let closed (C (x, y)) = C (F.closed x, G.closed y)
+        let closed (Composed (x, y)) = Composed (F.closed x, G.closed y)
       end) :
         Preface_specs.CLOSED with type ('a, 'b) t := ('a, 'b) t )
 end

@@ -93,7 +93,7 @@ struct
   module P = Profunctor.Composition (F) (G)
 
   type ('a, 'b) t = ('a, 'b) P.t =
-    | C : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+    | Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
 
   include (
     Over_profunctor_via_left
@@ -101,7 +101,7 @@ struct
       (struct
         type nonrec ('a, 'b) t = ('a, 'b) t
 
-        let left (C (x, y)) = C (F.left x, G.left y)
+        let left (Composed (x, y)) = Composed (F.left x, G.left y)
       end) :
         Preface_specs.CHOICE with type ('a, 'b) t := ('a, 'b) t )
 end
