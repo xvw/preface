@@ -5,7 +5,7 @@
 
 (** Additional operations over [Applicative]. *)
 module type CORE_WITH_NEUTRAL_AND_COMBINE = sig
-  include Alt.CORE
+  include Alt.WITH_COMBINE
 
   val neutral : 'a t
   (** The neutral element of the [Alternative]. *)

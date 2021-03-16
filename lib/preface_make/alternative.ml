@@ -36,7 +36,7 @@ module Infix
     (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Alternative.INFIX with type 'a t = 'a Core.t = struct
   include Applicative.Infix (Core) (Operation)
-  include Alt.Infix (Core)
+  include Alt.Infix (Core) (Operation)
 end
 
 module Via
@@ -94,7 +94,11 @@ module Over_applicative
       let neutral = Core.neutral
     end)
     (struct
-      include Alt.Operation (Core)
+      include Alt.Operation (struct
+        include Applicative
+        include Core
+      end)
+
       include Applicative
 
       let reduce list = reduce' Core.combine Core.neutral list

@@ -62,9 +62,7 @@ module type OPERATION = sig
   (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
       and ['c t] to ['d t]. *)
 
-  val replace : 'a -> 'b t -> 'a t
-  (** Create a new ['a t], replacing all values in the ['b t] by given a value
-      of ['a]. *)
+  include Functor.OPERATION with type 'a t := 'a t
 end
 
 (** Syntax extensions *)
@@ -84,9 +82,6 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
-  (** Infix version of {!val:CORE.map}. *)
-
   val ( <*> ) : ('a -> 'b) t -> 'a t -> 'b t
   (** Applicative functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 
@@ -99,11 +94,7 @@ module type INFIX = sig
   val ( <* ) : 'a t -> unit t -> 'a t
   (** Discard the value of the second argument. *)
 
-  val ( <$ ) : 'a -> 'b t -> 'a t
-  (** Infix version of {!val:OPERATION.replace}. *)
-
-  val ( $> ) : 'a t -> 'b -> 'b t
-  (** Flipped and infix version of {!val:OPERATION.replace}. *)
+  include Functor.INFIX with type 'a t := 'a t
 end
 
 (** {1 API} *)

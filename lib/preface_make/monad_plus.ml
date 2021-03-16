@@ -49,7 +49,11 @@ module Operation_over_monad
               with type 'a t = 'a Monad.t) :
   Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t = struct
   include Monad
-  include Alt.Operation (Core)
+
+  include Alt.Operation (struct
+    include Monad
+    include Core
+  end)
 
   let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 

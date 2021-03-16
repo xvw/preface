@@ -1,14 +1,22 @@
-(** [Alt] is a kind of [Semigroup] over a parametrized type. *)
+(** [Alt] is a [Functor] which is a kind of [Semigroup] over a parametrized
+    type. *)
 
 (** {1 Structure anatomy} *)
 
-(** Standard requirement *)
-module type CORE = sig
+(** Combine operation. *)
+module type WITH_COMBINE = sig
   type 'a t
   (** A type ['a t] which is an [Alt]. *)
 
   val combine : 'a t -> 'a t -> 'a t
   (** Combine two values of ['a t] into one. *)
+end
+
+(** Standard requirement. *)
+module type CORE = sig
+  include WITH_COMBINE
+
+  include Functor.CORE with type 'a t := 'a t
 end
 
 (** Operations *)
@@ -22,6 +30,8 @@ module type OPERATION = sig
 
   val reduce_nel : 'a t Preface_core.Nonempty_list.t -> 'a t
   (** Reduce a [Nonempty_list.t] using [combine]. *)
+
+  include Functor.OPERATION with type 'a t := 'a t
 end
 
 (** Infix notation *)
@@ -31,6 +41,8 @@ module type INFIX = sig
 
   val ( <|> ) : 'a t -> 'a t -> 'a t
   (** Infix version of {!val:CORE.combine} *)
+
+  include Functor.INFIX with type 'a t := 'a t
 end
 
 (** The complete interface of an [Alt]. *)
