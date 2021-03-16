@@ -6,6 +6,13 @@
 
     Standard way to build an [Arrow]. *)
 
+(** Incarnation of an [Arrow] using {!Preface_specs.STRONG} and
+    {!Preface_specs.CATEGORY}. *)
+module From_strong_and_category
+    (Strong : Preface_specs.Strong.CORE_WITH_DIMAP_AND_FST)
+    (Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Strong.t) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Category.t
+
 (** Incarnation of an [Arrow] using a {!Preface_specs.CATEGORY}, [arrow] and
     [fst]. *)
 module Over_category_and_via_arrow_and_fst

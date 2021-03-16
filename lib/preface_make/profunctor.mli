@@ -16,3 +16,15 @@ module Via_contramap_fst_and_map_snd
 (** Incarnation of a [Profunctor] using a [monad] using the Kleisli composition. *)
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.PROFUNCTOR with type ('a, 'b) t = 'a -> 'b Monad.t
+
+(** Convert a [Strong Profunctor] into a [Profunctor]. *)
+module From_strong (Strong : Preface_specs.STRONG) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Strong.t
+
+(** Convert a [Choice Profunctor] into a [Profunctor]. *)
+module From_choice (Choice : Preface_specs.CHOICE) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Choice.t
+
+(** Convert a [Closed Profunctor] into a [Profunctor]. *)
+module From_closed (Closed : Preface_specs.CLOSED) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Closed.t

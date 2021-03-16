@@ -5,9 +5,14 @@ module Arrow_choice =
 module Arrow_apply =
   Preface_laws.Arrow_apply.Laws (Preface_stdlib.Fun.Arrow_apply)
 module Profunctor = Preface_laws.Profunctor.Laws (Preface_stdlib.Fun.Profunctor)
+module Strong = Preface_laws.Strong.Laws (Preface_stdlib.Fun.Strong)
+module Choice = Preface_laws.Choice.Laws (Preface_stdlib.Fun.Choice)
+module Closed = Preface_laws.Closed.Laws (Preface_stdlib.Fun.Closed)
 module Either = Preface_stdlib.Either
 
 let tuple_eq f g (a, b) (a', b') = f a a' && g b b'
+
+let either l r = Preface_qcheck.Arbitrary.either l r
 
 let pro_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
   let open QCheck in
@@ -114,6 +119,606 @@ let pro_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
       let g = Fn.apply g' in
       let p = Fn.apply pro' in
       let (left, right) = test f g p in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Strong.dimap_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_fst_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Strong.contramap_fst_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_snd_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Strong.map_snd_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_dimap_eq (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (fun1 P.B.observable P.C.arbitrary)
+      P.A.arbitrary
+  in
+  let (name, test) = Strong.dimap_equality in
+  Test.make ~name ~count arbitrary (fun (f', g', strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let strong_dimap_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (pair
+         (fun1 P.A.observable P.B.arbitrary)
+         (fun1 P.C.observable P.A.arbitrary) )
+      (pair
+         (fun1 P.D.observable P.E.arbitrary)
+         (fun1 P.F.observable P.D.arbitrary) )
+      (fun1 P.B.observable P.F.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Strong.dimap_parametricity in
+  Test.make ~name ~count arbitrary (fun ((f', g'), (h', i'), strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let h = Fn.apply h' in
+      let i = Fn.apply i' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g h i p in
+      P.E.equal (left value) (right value) )
+;;
+
+let strong_fst_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.B.observable P.D.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Strong.contramap_fst_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let strong_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.D.observable P.C.arbitrary)
+      P.D.arbitrary
+  in
+  let (name, test) = Strong.map_snd_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', strong', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f g p in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_fst_define_snd (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Strong.fst_define_snd in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq P.B.equal P.C.equal (left value) (right value) )
+;;
+
+let strong_snd_define_fst (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Strong.snd_define_fst in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq P.C.equal P.B.equal (left value) (right value) )
+;;
+
+let strong_contramap_fst (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Strong.contramap_fst in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_contramap_snd (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair (fun1 P.A.observable P.B.arbitrary) (pair P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Strong.contramap_snd in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      P.B.equal (left value) (right value) )
+;;
+
+let strong_dinaturality_fst (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    triple
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (pair P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Strong.dinaturality_fst in
+  Test.make ~name ~count arbitrary (fun (f', strong', value) ->
+      let f = Fn.apply f' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f p in
+      tuple_eq P.D.equal P.B.equal (left value) (right value) )
+;;
+
+let strong_dinaturality_snd (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    triple
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (pair P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Strong.dinaturality_snd in
+  Test.make ~name ~count arbitrary (fun (f', strong', value) ->
+      let f = Fn.apply f' in
+      let p = Fn.apply strong' in
+      let (left, right) = test f p in
+      tuple_eq P.B.equal P.D.equal (left value) (right value) )
+;;
+
+let strong_fst_fst_is_dimap (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1 P.A.observable P.B.arbitrary)
+      (pair (pair P.A.arbitrary P.C.arbitrary) P.D.arbitrary)
+  in
+  let (name, test) = Strong.fst_fst_is_dmap in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq
+        (tuple_eq P.B.equal P.C.equal)
+        P.D.equal (left value) (right value) )
+;;
+
+let strong_snd_snd_is_dimap (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1
+         (Observable.pair P.A.observable P.B.observable)
+         (pair P.C.arbitrary P.D.arbitrary) )
+      (pair P.E.arbitrary
+         (pair P.F.arbitrary (pair P.A.arbitrary P.B.arbitrary)) )
+  in
+  let (name, test) = Strong.snd_snd_is_dmap in
+  Test.make ~name ~count arbitrary (fun (strong', value) ->
+      let p = Fn.apply strong' in
+      let (left, right) = test p in
+      tuple_eq P.E.equal
+        (tuple_eq P.F.equal (tuple_eq P.C.equal P.D.equal))
+        (left value) (right value) )
+;;
+
+let choice_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Choice.dimap_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let choice_fst_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Choice.contramap_fst_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let choice_snd_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Choice.map_snd_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let choice_dimap_eq (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (fun1 P.B.observable P.C.arbitrary)
+      P.A.arbitrary
+  in
+  let (name, test) = Choice.dimap_equality in
+  Test.make ~name ~count arbitrary (fun (f', g', choice', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply choice' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let choice_dimap_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (pair
+         (fun1 P.A.observable P.B.arbitrary)
+         (fun1 P.C.observable P.A.arbitrary) )
+      (pair
+         (fun1 P.D.observable P.E.arbitrary)
+         (fun1 P.F.observable P.D.arbitrary) )
+      (fun1 P.B.observable P.F.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Choice.dimap_parametricity in
+  Test.make ~name ~count arbitrary (fun ((f', g'), (h', i'), choice', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let h = Fn.apply h' in
+      let i = Fn.apply i' in
+      let p = Fn.apply choice' in
+      let (left, right) = test f g h i p in
+      P.E.equal (left value) (right value) )
+;;
+
+let choice_fst_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.B.observable P.D.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Choice.contramap_fst_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', choice', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply choice' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let choice_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.D.observable P.C.arbitrary)
+      P.D.arbitrary
+  in
+  let (name, test) = Choice.map_snd_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', choice', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply choice' in
+      let (left, right) = test f g p in
+      P.B.equal (left value) (right value) )
+;;
+
+let choice_left_defined_by_right (module P : Preface_qcheck.Sample.PACKAGE)
+    count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1 P.A.observable P.B.arbitrary)
+      (either P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Choice.left_defined_by_right in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      Either.equal P.B.equal P.C.equal (left value) (right value) )
+;;
+
+let choice_right_defined_by_left (module P : Preface_qcheck.Sample.PACKAGE)
+    count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1 P.A.observable P.B.arbitrary)
+      (either P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Choice.right_defined_by_left in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      Either.equal P.C.equal P.B.equal (left value) (right value) )
+;;
+
+let choice_map_snd_left (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Choice.map_snd_left in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      Either.equal P.B.equal P.C.equal (left value) (right value) )
+;;
+
+let choice_map_snd_right (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Choice.map_snd_right in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      Either.equal P.C.equal P.B.equal (left value) (right value) )
+;;
+
+let choice_contramp_fst_right (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    triple
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (either P.C.arbitrary P.A.arbitrary)
+  in
+  let (name, test) = Choice.contramap_fst_right in
+  Test.make ~name ~count arbitrary (fun (f', c', value) ->
+      let f = Fn.apply f' in
+      let c = Fn.apply c' in
+      let (left, right) = test f c in
+      Either.equal P.D.equal P.B.equal (left value) (right value) )
+;;
+
+let choice_contramp_fst_left (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    triple
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (either P.A.arbitrary P.C.arbitrary)
+  in
+  let (name, test) = Choice.contramap_fst_left in
+  Test.make ~name ~count arbitrary (fun (f', c', value) ->
+      let f = Fn.apply f' in
+      let c = Fn.apply c' in
+      let (left, right) = test f c in
+      Either.equal P.B.equal P.D.equal (left value) (right value) )
+;;
+
+let choice_left_left (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1 P.A.observable P.B.arbitrary)
+      (either (either P.A.arbitrary P.C.arbitrary) P.D.arbitrary)
+  in
+  let (name, test) = Choice.left_left in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      Either.equal
+        (Either.equal P.B.equal P.C.equal)
+        P.D.equal (left value) (right value) )
+;;
+
+let choice_right_right (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    pair
+      (fun1 P.A.observable P.B.arbitrary)
+      (either P.C.arbitrary (either P.D.arbitrary P.A.arbitrary))
+  in
+  let (name, test) = Choice.right_right in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      Either.equal P.C.equal
+        (Either.equal P.D.equal P.B.equal)
+        (left value) (right value) )
+;;
+
+let closed_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Closed.dimap_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let closed_fst_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Closed.contramap_fst_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let closed_snd_id (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+  let (name, test) = Closed.map_snd_identity in
+  Test.make ~name ~count arbitrary (fun (f', value) ->
+      let f = Fn.apply f' in
+      let (left, right) = test f in
+      P.B.equal (left value) (right value) )
+;;
+
+let closed_dimap_eq (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (fun1 P.B.observable P.C.arbitrary)
+      P.A.arbitrary
+  in
+  let (name, test) = Closed.dimap_equality in
+  Test.make ~name ~count arbitrary (fun (f', g', pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let closed_dimap_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (pair
+         (fun1 P.A.observable P.B.arbitrary)
+         (fun1 P.C.observable P.A.arbitrary) )
+      (pair
+         (fun1 P.D.observable P.E.arbitrary)
+         (fun1 P.F.observable P.D.arbitrary) )
+      (fun1 P.B.observable P.F.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Closed.dimap_parametricity in
+  Test.make ~name ~count arbitrary (fun ((f', g'), (h', i'), pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let h = Fn.apply h' in
+      let i = Fn.apply i' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g h i p in
+      P.E.equal (left value) (right value) )
+;;
+
+let closed_fst_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.B.observable P.D.arbitrary)
+      P.C.arbitrary
+  in
+  let (name, test) = Closed.contramap_fst_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g p in
+      P.D.equal (left value) (right value) )
+;;
+
+let closed_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.A.arbitrary)
+      (fun1 P.D.observable P.C.arbitrary)
+      P.D.arbitrary
+  in
+  let (name, test) = Closed.map_snd_parametricity in
+  Test.make ~name ~count arbitrary (fun (f', g', pro', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f g p in
+      P.B.equal (left value) (right value) )
+;;
+
+let closed_contramap_fst_closed (module P : Preface_qcheck.Sample.PACKAGE) count
+    =
+  let open QCheck in
+  let arbitrary =
+    quad
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun1 P.C.observable P.D.arbitrary)
+      (fun1 P.B.observable P.C.arbitrary)
+      P.A.arbitrary
+  in
+  let (name, test) = Closed.contramap_fst_closed in
+  Test.make ~name ~count arbitrary (fun (f', pro', g', value) ->
+      let f = Fn.apply f' in
+      let g = Fn.apply g' in
+      let p = Fn.apply pro' in
+      let (left, right) = test f p in
+      P.D.equal (left g value) (right g value) )
+;;
+
+let closed_closed (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary =
+    triple
+      (fun1 P.A.observable P.B.arbitrary)
+      (fun2 P.C.observable P.D.observable P.A.arbitrary)
+      (pair P.C.arbitrary P.D.arbitrary)
+  in
+
+  let (name, test) = Closed.closed_closed in
+  Test.make ~name ~count arbitrary (fun (p', f', (a, b)) ->
+      let f = Fn.apply f' in
+      let p = Fn.apply p' in
+      let (left, right) = test p in
+      P.B.equal (left f a b) (right f a b) )
+;;
+
+let closed_dimap_const (module P : Preface_qcheck.Sample.PACKAGE) count =
+  let open QCheck in
+  let arbitrary = pair (fun1 P.A.observable P.B.arbitrary) P.A.arbitrary in
+
+  let (name, test) = Closed.dimap_const in
+  Test.make ~name ~count arbitrary (fun (p', value) ->
+      let p = Fn.apply p' in
+      let (left, right) = test p in
       P.B.equal (left value) (right value) )
 ;;
 
@@ -428,8 +1033,6 @@ let arrow_choice_law7 (module P : Preface_qcheck.Sample.PACKAGE) count =
         (left value) (right value) )
 ;;
 
-let either l r = Preface_qcheck.Arbitrary.either l r
-
 let arrow_choice_law8 (module P : Preface_qcheck.Sample.PACKAGE) count =
   let open QCheck in
   let arbitrary =
@@ -727,6 +1330,58 @@ let cases n =
       ; pro_dimap_param (module Preface_qcheck.Sample.Pack1) n
       ; pro_fst_param (module Preface_qcheck.Sample.Pack1) n
       ; pro_snd_param (module Preface_qcheck.Sample.Pack1) n
+      ]
+      |> Stdlib.List.map QCheck_alcotest.to_alcotest )
+  ; ( "Fun Strong Laws"
+    , [
+        strong_dimap_id (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_id (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_id (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dimap_eq (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dimap_param (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_param (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_param (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_define_snd (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_define_fst (module Preface_qcheck.Sample.Pack1) n
+      ; strong_contramap_fst (module Preface_qcheck.Sample.Pack1) n
+      ; strong_contramap_snd (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dinaturality_fst (module Preface_qcheck.Sample.Pack1) n
+      ; strong_dinaturality_snd (module Preface_qcheck.Sample.Pack1) n
+      ; strong_fst_fst_is_dimap (module Preface_qcheck.Sample.Pack1) n
+      ; strong_snd_snd_is_dimap (module Preface_qcheck.Sample.Pack1) n
+      ]
+      |> Stdlib.List.map QCheck_alcotest.to_alcotest )
+  ; ( "Fun Choice Laws"
+    , [
+        choice_dimap_id (module Preface_qcheck.Sample.Pack1) n
+      ; choice_fst_id (module Preface_qcheck.Sample.Pack1) n
+      ; choice_snd_id (module Preface_qcheck.Sample.Pack1) n
+      ; choice_dimap_eq (module Preface_qcheck.Sample.Pack1) n
+      ; choice_dimap_param (module Preface_qcheck.Sample.Pack1) n
+      ; choice_fst_param (module Preface_qcheck.Sample.Pack1) n
+      ; choice_snd_param (module Preface_qcheck.Sample.Pack1) n
+      ; choice_left_defined_by_right (module Preface_qcheck.Sample.Pack1) n
+      ; choice_right_defined_by_left (module Preface_qcheck.Sample.Pack1) n
+      ; choice_map_snd_left (module Preface_qcheck.Sample.Pack1) n
+      ; choice_map_snd_right (module Preface_qcheck.Sample.Pack1) n
+      ; choice_contramp_fst_right (module Preface_qcheck.Sample.Pack1) n
+      ; choice_contramp_fst_left (module Preface_qcheck.Sample.Pack1) n
+      ; choice_left_left (module Preface_qcheck.Sample.Pack1) n
+      ; choice_right_right (module Preface_qcheck.Sample.Pack1) n
+      ]
+      |> Stdlib.List.map QCheck_alcotest.to_alcotest )
+  ; ( "Fun Closed Laws"
+    , [
+        closed_dimap_id (module Preface_qcheck.Sample.Pack1) n
+      ; closed_fst_id (module Preface_qcheck.Sample.Pack1) n
+      ; closed_snd_id (module Preface_qcheck.Sample.Pack1) n
+      ; closed_dimap_eq (module Preface_qcheck.Sample.Pack1) n
+      ; closed_dimap_param (module Preface_qcheck.Sample.Pack1) n
+      ; closed_fst_param (module Preface_qcheck.Sample.Pack1) n
+      ; closed_snd_param (module Preface_qcheck.Sample.Pack1) n
+      ; closed_contramap_fst_closed (module Preface_qcheck.Sample.Pack1) n
+      ; closed_closed (module Preface_qcheck.Sample.Pack1) n
+      ; closed_dimap_const (module Preface_qcheck.Sample.Pack1) n
       ]
       |> Stdlib.List.map QCheck_alcotest.to_alcotest )
   ; ( "Fun Category Laws"

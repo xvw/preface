@@ -8,6 +8,36 @@ module Profunctor = Preface_make.Profunctor.Via_dimap (struct
   let dimap x y z = y % z % x
 end)
 
+module Strong =
+  Preface_make.Strong.Over_profunctor_via_fst
+    (Profunctor)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let fst x (y, z) = (x y, z)
+    end)
+
+module Choice =
+  Preface_make.Choice.Over_profunctor_via_left
+    (Profunctor)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let left f = function
+        | Either.Left x -> Either.Left (f x)
+        | Either.Right x -> Either.Right x
+      ;;
+    end)
+
+module Closed =
+  Preface_make.Closed.Over_profunctor_via_closed
+    (Profunctor)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let closed = Preface_core.Fun.compose_right_to_left
+    end)
+
 module Category = Preface_make.Category.Via_id_and_compose (struct
   type nonrec ('a, 'b) t = ('a, 'b) t
 
@@ -16,16 +46,7 @@ module Category = Preface_make.Category.Via_id_and_compose (struct
   let compose = compose_right_to_left
 end)
 
-module Arrow =
-  Preface_make.Arrow.Over_category_and_via_arrow_an_split
-    (Category)
-    (struct
-      type nonrec ('a, 'b) t = ('a, 'b) t
-
-      let arrow f = f
-
-      let split f g (x, y) = (f x, g y)
-    end)
+module Arrow = Preface_make.Arrow.From_strong_and_category (Strong) (Category)
 
 module Arrow_choice =
   Preface_make.Arrow_choice.Over_arrow_with_choose

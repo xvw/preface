@@ -64,6 +64,15 @@ module Profunctor = Profunctor
 (** Describes and object where the first parameter is a contravariant functor
     and the second is a covariant functor.*)
 
+module Strong = Strong
+(** Describes a profunctor which can act on product/tuples. *)
+
+module Choice = Choice
+(** Describes a profunctor which can act on sum/Either. *)
+
+module Closed = Closed
+(** Describes a profunctor which can act on function. *)
+
 module Applicative = Applicative
 (** Describes an applicative functor. *)
 
@@ -144,6 +153,12 @@ module type FUNCTOR = Functor.API
 module type BIFUNCTOR = Bifunctor.API
 
 module type PROFUNCTOR = Profunctor.API
+
+module type STRONG = Strong.API
+
+module type CHOICE = Choice.API
+
+module type CLOSED = Closed.API
 
 module type APPLICATIVE = Applicative.API
 

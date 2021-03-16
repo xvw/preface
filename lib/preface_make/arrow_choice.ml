@@ -1,10 +1,5 @@
 open Preface_core.Shims
 
-let mirror = function
-  | Either.Left x -> Either.Right x
-  | Either.Right x -> Either.Left x
-;;
-
 let extract = function Either.Left x | Either.Right x -> x
 
 module Choose_over_left
@@ -15,7 +10,10 @@ module Choose_over_left
 struct
   let choose f g =
     let open Category in
-    Left.left f >>> Arrow.arrow mirror >>> Left.left g >>> Arrow.arrow mirror
+    Left.left f
+    >>> Arrow.arrow Either.swap
+    >>> Left.left g
+    >>> Arrow.arrow Either.swap
   ;;
 end
 
@@ -280,12 +278,10 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
       (struct
         type ('a, 'b) t = 'a -> 'b Monad.t
 
-        let case f g = Either.fold ~left:f ~right:g
-
         let choose f g =
           let left = Arr.(f >>> arrow Either.left)
           and right = Arr.(g >>> arrow Either.right) in
-          case left right
+          Preface_core.Shims.Either.case left right
         ;;
       end)
 end
