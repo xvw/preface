@@ -8,14 +8,16 @@ The library is mainly maintained by:
 - [Pierre Ruyter](https://github.com/gr-im)
 - [Xavier Van de Woestyne](https://github.com/xvw/)
 
-### Warm thanks
+### Warm thanks and help
 
 - [Gabriel Scherer](https://github.com/gasche) for many design choice and
   technical help about specific subject
 - [Andrey Mokhov](https://github.com/snowleopard) for his help in understanding
-  Selectives (and Free Selective)
+  Selectives (and Free Selective) and constant reviews related to Selectives
 - [Florian Angeletti](https://github.com/Octachron) for advices and help
 - [Oleg Kiselyov](http://okmij.org/ftp) for advices about Freer monad
+- [XHTMLBoy](https://github.com/xhtmlboi) for providing an implementation of Freer capable of not executing the continuation
+- [Pierre-Evariste Dagand](https://pages.lip6.fr/Pierre-Evariste.Dagand/) for a lot of help with Arrows
 
 ## Used libraries
 
