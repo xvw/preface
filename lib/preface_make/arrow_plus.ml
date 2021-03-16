@@ -138,3 +138,15 @@ module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
 
          let neutral _ = Monad.neutral
        end)
+
+module Product (F : Preface_specs.ARROW_PLUS) (G : Preface_specs.ARROW_PLUS) :
+  Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t =
+  Over_arrow
+    (Arrow.Product (F) (G))
+       (struct
+         type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
+         let neutral = (F.neutral, G.neutral)
+
+         let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
+       end)

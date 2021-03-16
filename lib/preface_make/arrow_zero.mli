@@ -38,6 +38,14 @@ module Over_category_and_via_arrow_an_split
 module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
   Preface_specs.ARROW_ZERO with type ('a, 'b) t = 'a -> 'b Monad.t
 
+(** {2 Arrow Zero composition}
+
+    Some tools for composition between arrows zero. *)
+
+(** Product of two Arrows zero. *)
+module Product (F : Preface_specs.ARROW_ZERO) (G : Preface_specs.ARROW_ZERO) :
+  Preface_specs.ARROW_ZERO with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Arrow_zero], constructing and assembling a

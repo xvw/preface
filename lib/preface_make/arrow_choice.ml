@@ -285,3 +285,13 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
         ;;
       end)
 end
+
+module Product (F : Preface_specs.ARROW_CHOICE) (G : Preface_specs.ARROW_CHOICE) :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t =
+  Over_arrow_with_left
+    (Arrow.Product (F) (G))
+       (struct
+         type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
+         let left (x, y) = (F.left x, G.left y)
+       end)

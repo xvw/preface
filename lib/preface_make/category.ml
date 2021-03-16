@@ -53,3 +53,13 @@ Via_id_and_compose (struct
 
   let compose f g = Monad.compose_left_to_right g f
 end)
+
+module Product (F : Preface_specs.CATEGORY) (G : Preface_specs.CATEGORY) :
+  Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t =
+Via_id_and_compose (struct
+  type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
+  let id = (F.id, G.id)
+
+  let compose (x1, y1) (x2, y2) = (F.compose x1 x2, G.compose y1 y2)
+end)

@@ -170,3 +170,15 @@ module From_strong_and_category
 
       let fst = Strong.fst
     end)
+
+module Product (F : Preface_specs.ARROW) (G : Preface_specs.ARROW) :
+  Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t =
+  Over_category_and_via_arrow_and_fst
+    (Category.Product (F) (G))
+       (struct
+         type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
+         let arrow f = (F.arrow f, G.arrow f)
+
+         let fst (x, y) = (F.fst x, G.fst y)
+       end)
