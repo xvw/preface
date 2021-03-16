@@ -57,3 +57,13 @@ module Over_functor_via_combine
 
   include Infix
 end
+
+module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.ALT with type 'a t = 'a G.t F.t =
+  Over_functor_via_combine
+    (Functor.Composition (F) (G))
+       (struct
+         type 'a t = 'a G.t F.t
+
+         let combine x y = F.combine x y
+       end)

@@ -14,6 +14,14 @@ module Over_functor_via_combine
     (Combine : Preface_specs.Alt.WITH_COMBINE with type 'a t = 'a Functor.t) :
   Preface_specs.ALT with type 'a t = 'a Combine.t
 
+(** {2 Alt composition}
+
+    Some tools for composition between Alts. *)
+
+(** Right-to-left composition of Alt with Functor.*)
+module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.ALT with type 'a t = 'a G.t F.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Alt], constructing and assembling a
