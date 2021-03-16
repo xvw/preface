@@ -65,3 +65,12 @@ module Via_fold_map (F : Preface_specs.Foldable.CORE_WITH_FOLD_MAP) :
   module O = Operation (C)
   include Via (C) (O)
 end
+
+module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
+  Preface_specs.FOLDABLE with type 'a t = 'a G.t F.t = Via_fold_map (struct
+  type 'a t = 'a G.t F.t
+
+  let fold_map' neutral combine f x =
+    F.fold_map' neutral combine (G.fold_map' neutral combine f) x
+  ;;
+end)
