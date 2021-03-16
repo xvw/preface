@@ -101,6 +101,14 @@ module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
 module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
   Preface_specs.MONAD with type 'a t = (unit, 'a) A.t
 
+(** {2 Monad composition}
+
+    Some tools for composition between monads. *)
+
+(** Product of two Monads. *)
+module Product (F : Preface_specs.MONAD) (G : Preface_specs.MONAD) :
+  Preface_specs.MONAD with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Monad], constructing and assembling a

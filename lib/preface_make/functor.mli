@@ -145,6 +145,10 @@ module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) : sig
   include Preface_specs.FUNCTOR with type 'a t = 'a sum
 end
 
+(** Product of two functors. *)
+module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.FUNCTOR with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Functor], constructing and assembling a

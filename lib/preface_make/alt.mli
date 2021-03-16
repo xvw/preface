@@ -22,6 +22,10 @@ module Over_functor_via_combine
 module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
   Preface_specs.ALT with type 'a t = 'a G.t F.t
 
+(** Product of two Alts. *)
+module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
+  Preface_specs.ALT with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Alt], constructing and assembling a

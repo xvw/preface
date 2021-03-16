@@ -67,3 +67,13 @@ module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
 
          let combine x y = F.combine x y
        end)
+
+module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
+  Preface_specs.ALT with type 'a t = 'a F.t * 'a G.t =
+  Over_functor_via_combine
+    (Functor.Product (F) (G))
+       (struct
+         type 'a t = 'a F.t * 'a G.t
+
+         let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
+       end)

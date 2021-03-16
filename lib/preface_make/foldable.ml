@@ -89,3 +89,12 @@ module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) = struct
     ;;
   end)
 end
+
+module Product (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
+  Preface_specs.FOLDABLE with type 'a t = 'a F.t * 'a G.t = Via_fold_map (struct
+  type 'a t = 'a F.t * 'a G.t
+
+  let fold_map' neutral combine f (x, y) =
+    combine (F.fold_map' neutral combine f x) (G.fold_map' neutral combine f y)
+  ;;
+end)

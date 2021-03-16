@@ -150,3 +150,12 @@ module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
 
   let bind f x = A.(x >>> arrow (fun x -> (f x, ())) >>> apply)
 end)
+
+module Product (F : Preface_specs.MONAD) (G : Preface_specs.MONAD) :
+  Preface_specs.MONAD with type 'a t = 'a F.t * 'a G.t = Via_bind (struct
+  type 'a t = 'a F.t * 'a G.t
+
+  let return x = (F.return x, G.return x)
+
+  let bind f (m, n) = (F.bind (fst % f) m, G.bind (snd % f) n)
+end)

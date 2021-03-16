@@ -40,6 +40,10 @@ module Composition
     (G : Preface_specs.APPLICATIVE) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a G.t F.t
 
+(** Product of two Alternatives. *)
+module Product (F : Preface_specs.ALTERNATIVE) (G : Preface_specs.ALTERNATIVE) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Alternative], constructing and assembling a

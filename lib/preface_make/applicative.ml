@@ -134,3 +134,12 @@ module From_arrow (A : Preface_specs.ARROW) :
 
   let apply f x = A.(f &&& x >>> arrow (uncurry Fun.id))
 end)
+
+module Product (F : Preface_specs.APPLICATIVE) (G : Preface_specs.APPLICATIVE) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a F.t * 'a G.t = Via_apply (struct
+  type 'a t = 'a F.t * 'a G.t
+
+  let pure x = (F.pure x, G.pure x)
+
+  let apply (f, g) (x, y) = (F.apply f x, G.apply g y)
+end)

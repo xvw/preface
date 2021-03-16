@@ -38,6 +38,10 @@ module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) : sig
   include Preface_specs.FOLDABLE with type 'a t = 'a sum
 end
 
+(** Product of two Foldables. *)
+module Product (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
+  Preface_specs.FOLDABLE with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Foldable], constructing and assembling a

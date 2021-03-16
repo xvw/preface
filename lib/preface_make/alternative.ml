@@ -142,3 +142,15 @@ module From_arrow_plus (A : Preface_specs.ARROW_PLUS) :
 
          let combine x y = A.(x <|> y)
        end)
+
+module Product (F : Preface_specs.ALTERNATIVE) (G : Preface_specs.ALTERNATIVE) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a F.t * 'a G.t =
+  Over_applicative
+    (Applicative.Product (F) (G))
+       (struct
+         type 'a t = 'a F.t * 'a G.t
+
+         let neutral = (F.neutral, G.neutral)
+
+         let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
+       end)

@@ -93,3 +93,10 @@ module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) = struct
     let map f = function L x -> L (F.map f x) | R x -> R (G.map f x)
   end)
 end
+
+module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.FUNCTOR with type 'a t = 'a F.t * 'a G.t = Via_map (struct
+  type 'a t = 'a F.t * 'a G.t
+
+  let map f (x, y) = (F.map f x, G.map f y)
+end)
