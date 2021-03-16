@@ -136,6 +136,15 @@ module From_comonad (Comonad : Preface_specs.COMONAD) :
 module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
   Preface_specs.FUNCTOR with type 'a t = 'a G.t F.t
 
+(** Sum of two functors. *)
+module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) : sig
+  type 'a sum =
+    | L of 'a F.t
+    | R of 'a G.t
+
+  include Preface_specs.FUNCTOR with type 'a t = 'a sum
+end
+
 (** {2 Manual construction}
 
     Advanced way to build a [Functor], constructing and assembling a

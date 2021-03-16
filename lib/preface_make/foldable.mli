@@ -29,7 +29,14 @@ module Via_fold_right (F : Preface_specs.Foldable.CORE_WITH_FOLD_RIGHT) :
 module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
   Preface_specs.FOLDABLE with type 'a t = 'a G.t F.t
 
-(** Right-to-left composition of Foldables.*)
+(** Sum of two foldables. *)
+module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) : sig
+  type 'a sum =
+    | L of 'a F.t
+    | R of 'a G.t
+
+  include Preface_specs.FOLDABLE with type 'a t = 'a sum
+end
 
 (** {2 Manual construction}
 

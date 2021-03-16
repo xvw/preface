@@ -81,3 +81,15 @@ module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
 module From_comonad (Comonad : Preface_specs.COMONAD) :
   Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t =
   Comonad
+
+module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) = struct
+  type 'a sum =
+    | L of 'a F.t
+    | R of 'a G.t
+
+  include Via_map (struct
+    type 'a t = 'a sum
+
+    let map f = function L x -> L (F.map f x) | R x -> R (G.map f x)
+  end)
+end

@@ -74,3 +74,18 @@ module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
     F.fold_map' neutral combine (G.fold_map' neutral combine f) x
   ;;
 end)
+
+module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) = struct
+  type 'a sum =
+    | L of 'a F.t
+    | R of 'a G.t
+
+  include Via_fold_map (struct
+    type 'a t = 'a sum
+
+    let fold_map' neutral combine f = function
+      | L x -> F.fold_map' neutral combine f x
+      | R x -> G.fold_map' neutral combine f x
+    ;;
+  end)
+end
