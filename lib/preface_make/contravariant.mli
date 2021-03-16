@@ -10,6 +10,14 @@
 module Via_contramap (Core : Preface_specs.Contravariant.CORE) :
   Preface_specs.CONTRAVARIANT with type 'a t = 'a Core.t
 
+(** {2 Contravariant composition}
+
+    Some tools for composition between Contravariant functors. *)
+
+(** Left-to-right composition of contravariant with functor.*)
+module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.CONTRAVARIANT) :
+  Preface_specs.CONTRAVARIANT with type 'a t = 'a G.t F.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Contravariant], constructing and assembling a

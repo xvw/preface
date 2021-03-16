@@ -43,3 +43,11 @@ module Via_contramap (Core : Preface_specs.Contravariant.CORE) :
   module Infix = Infix (Core) (Operation)
   include Infix
 end
+
+module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.CONTRAVARIANT) :
+  Preface_specs.CONTRAVARIANT with type 'a t = 'a G.t F.t =
+Via_contramap (struct
+  type 'a t = 'a G.t F.t
+
+  let contramap f x = F.map (G.contramap f) x
+end)
