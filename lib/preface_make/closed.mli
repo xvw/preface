@@ -21,6 +21,17 @@ module Over_profunctor_via_closed
     (C : Preface_specs.Closed.WITH_CLOSED with type ('a, 'b) t = ('a, 'b) P.t) :
   Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) C.t
 
+(** {2 Closed Profunctors composition}
+
+    Some tools for composition between Closed Profunctors. *)
+
+(** Composition between two Closed Profunctors. *)
+module Composition (F : Preface_specs.CLOSED) (G : Preface_specs.CLOSED) : sig
+  type (_, _) t = C : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+
+  include Preface_specs.CLOSED with type ('a, 'b) t := ('a, 'b) t
+end
+
 (** {2 Manual construction}
 
     Advanced way to build a [Closed Profunctor], constructing and assembling a
