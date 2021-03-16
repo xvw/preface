@@ -28,6 +28,23 @@ module From_functors_sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR)
   include Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) sum
 end
 
+(** {2 Bifunctor composition}
+
+    Some tools for composition between Bifunctors. *)
+
+(** Product of two Bifunctors. *)
+module Product (F : Preface_specs.BIFUNCTOR) (G : Preface_specs.BIFUNCTOR) :
+  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
+(** Sum of two Bifunctors. *)
+module Sum (F : Preface_specs.BIFUNCTOR) (G : Preface_specs.BIFUNCTOR) : sig
+  type ('a, 'b) sum =
+    | L of ('a, 'b) F.t
+    | R of ('a, 'b) G.t
+
+  include Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) sum
+end
+
 (** {2 Manual construction}
 
     Advanced way to build a [Bifunctor], constructing and assembling a
