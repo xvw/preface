@@ -49,7 +49,11 @@ module Operation_over_monad
               with type 'a t = 'a Monad.t) :
   Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t = struct
   include Monad
-  include Alt.Operation (Core)
+
+  include Alt.Operation (struct
+    include Monad
+    include Core
+  end)
 
   let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 
@@ -162,3 +166,15 @@ module From_arrow_apply_and_arrow_plus
   Preface_specs.MONAD_PLUS with type 'a t = (unit, 'a) P.t =
   Over_monad_and_alternative
     (Monad.From_arrow_apply (A)) (Alternative.From_arrow_plus (P))
+
+module Product (F : Preface_specs.MONAD_PLUS) (G : Preface_specs.MONAD_PLUS) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a F.t * 'a G.t =
+  Over_monad
+    (Monad.Product (F) (G))
+       (struct
+         type 'a t = 'a F.t * 'a G.t
+
+         let neutral = (F.neutral, G.neutral)
+
+         let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
+       end)

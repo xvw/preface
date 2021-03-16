@@ -28,3 +28,14 @@ module From_choice (Choice : Preface_specs.CHOICE) :
 (** Convert a [Closed Profunctor] into a [Profunctor]. *)
 module From_closed (Closed : Preface_specs.CLOSED) :
   Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Closed.t
+
+(** {2 Profunctors composition}
+
+    Some tools for composition between Profunctors. *)
+
+(** Composition between two Profunctors. *)
+module Composition (F : Preface_specs.PROFUNCTOR) (G : Preface_specs.PROFUNCTOR) : sig
+  type (_, _) t = Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+
+  include Preface_specs.PROFUNCTOR with type ('a, 'b) t := ('a, 'b) t
+end

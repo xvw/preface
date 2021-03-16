@@ -64,3 +64,21 @@ module Via_contramap_fst_and_map_snd_and_closed
   include C
   include Operation (C)
 end
+
+module Composition (F : Preface_specs.CLOSED) (G : Preface_specs.CLOSED) =
+struct
+  module P = Profunctor.Composition (F) (G)
+
+  type ('a, 'b) t = ('a, 'b) P.t =
+    | Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+
+  include (
+    Over_profunctor_via_closed
+      (P)
+      (struct
+        type nonrec ('a, 'b) t = ('a, 'b) t
+
+        let closed (Composed (x, y)) = Composed (F.closed x, G.closed y)
+      end) :
+        Preface_specs.CLOSED with type ('a, 'b) t := ('a, 'b) t )
+end

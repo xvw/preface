@@ -133,3 +133,13 @@ module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
 module From_arrow_plus (Plus : Preface_specs.ARROW_PLUS) :
   Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) Plus.t =
   Plus
+
+module Product (F : Preface_specs.ARROW_ALT) (G : Preface_specs.ARROW_ALT) :
+  Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t =
+  Over_arrow
+    (Arrow.Product (F) (G))
+       (struct
+         type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
+         let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
+       end)

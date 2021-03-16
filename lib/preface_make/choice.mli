@@ -41,3 +41,14 @@ module Over_profunctor_via_right
     composition. *)
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.CHOICE with type ('a, 'b) t = 'a -> 'b Monad.t
+
+(** {2 Choice Profunctors composition}
+
+    Some tools for composition between Choice Profunctors. *)
+
+(** Composition between two Choice Profunctors. *)
+module Composition (F : Preface_specs.CHOICE) (G : Preface_specs.CHOICE) : sig
+  type (_, _) t = Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+
+  include Preface_specs.CHOICE with type ('a, 'b) t := ('a, 'b) t
+end

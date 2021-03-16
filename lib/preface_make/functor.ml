@@ -57,3 +57,46 @@ module From_arrow (A : Preface_specs.ARROW) :
 
   let map f x = A.(x >>> arrow f)
 end)
+
+module From_applicative (Applicative : Preface_specs.APPLICATIVE) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Applicative.t =
+  Applicative
+
+module From_alt (Alt : Preface_specs.ALT) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Alt.t =
+  Alt
+
+module From_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Monad.t =
+  Monad
+
+module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Alternative.t =
+  Alternative
+
+module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Monad_plus.t =
+  Monad_plus
+
+module From_comonad (Comonad : Preface_specs.COMONAD) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t =
+  Comonad
+
+module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) = struct
+  type 'a sum =
+    | L of 'a F.t
+    | R of 'a G.t
+
+  include Via_map (struct
+    type 'a t = 'a sum
+
+    let map f = function L x -> L (F.map f x) | R x -> R (G.map f x)
+  end)
+end
+
+module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.FUNCTOR with type 'a t = 'a F.t * 'a G.t = Via_map (struct
+  type 'a t = 'a F.t * 'a G.t
+
+  let map f (x, y) = (F.map f x, G.map f y)
+end)

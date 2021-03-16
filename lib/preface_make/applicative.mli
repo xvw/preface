@@ -210,6 +210,10 @@ module Composition
     (G : Preface_specs.APPLICATIVE) :
   Preface_specs.APPLICATIVE with type 'a t = 'a G.t F.t
 
+(** Product of two Applicatives. *)
+module Product (F : Preface_specs.APPLICATIVE) (G : Preface_specs.APPLICATIVE) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Applicative Functor], constructing and assembling

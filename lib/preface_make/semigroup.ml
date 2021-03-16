@@ -34,7 +34,9 @@ module Via_combine (Core : Preface_specs.Semigroup.CORE) :
   include Infix
 end
 
-module From_alt (Alt : Preface_specs.ALT) (T : Preface_specs.Types.T0) :
+module From_alt
+    (Alt : Preface_specs.Alt.WITH_COMBINE)
+    (T : Preface_specs.Types.T0) :
   Preface_specs.SEMIGROUP with type t = T.t Alt.t = Via_combine (struct
   type t = T.t Alt.t
 

@@ -46,7 +46,7 @@ end
 
 module Operation (Core : Preface_specs.Comonad.CORE) :
   Preface_specs.Comonad.OPERATION with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
+  include Functor.Operation (Core)
 
   let lift = Core.map
 
@@ -61,7 +61,7 @@ module Infix
     (Core : Preface_specs.Comonad.CORE)
     (Operation : Preface_specs.Comonad.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Comonad.INFIX with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
+  include Functor.Infix (Core) (Operation)
 
   let ( <<= ) = Core.extend
 

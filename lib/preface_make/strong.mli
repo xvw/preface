@@ -41,6 +41,17 @@ module Over_profunctor_via_snd
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Monad.t
 
+(** {2 Strong Profunctors composition}
+
+    Some tools for composition between Strong Profunctors. *)
+
+(** Composition between two Strong Profunctors. *)
+module Composition (F : Preface_specs.STRONG) (G : Preface_specs.STRONG) : sig
+  type (_, _) t = Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+
+  include Preface_specs.STRONG with type ('a, 'b) t := ('a, 'b) t
+end
+
 (** {2 Manual construction}
 
     Advanced way to build a [Strong Profunctor], constructing and assembling a

@@ -85,9 +85,6 @@ module type OPERATION = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
-  val void : 'a t -> unit t
-  (** Discard the result of evaluation. *)
-
   val compose_right_to_left : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
   (** Composing monadic functions using Kleisli Arrow (from right to left). *)
 
@@ -100,6 +97,8 @@ module type OPERATION = sig
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
   (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
       and ['c t] to ['d t]. *)
+
+  include Functor.OPERATION with type 'a t := 'a t
 end
 
 (** Syntax extensions. *)
@@ -148,6 +147,8 @@ module type INFIX = sig
   val ( << ) : 'a t -> unit t -> 'a t
   (** Sequentially compose two actions, discarding any value produced by the
       second. *)
+
+  include Functor.INFIX with type 'a t := 'a t
 end
 
 (** {1 API} *)

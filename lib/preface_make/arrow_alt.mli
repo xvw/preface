@@ -38,6 +38,14 @@ module Over_category_and_via_arrow_an_split
 module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
   Preface_specs.ARROW_ALT with type ('a, 'b) t = 'a -> 'b Monad.t
 
+(** {2 Arrow Alt composition}
+
+    Some tools for composition between arrows alt. *)
+
+(** Product of two Arrows alt. *)
+module Product (F : Preface_specs.ARROW_ALT) (G : Preface_specs.ARROW_ALT) :
+  Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Arrow_alt], constructing and assembling a

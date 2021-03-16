@@ -100,9 +100,33 @@
 module Via_map (Core : Preface_specs.Functor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 
-(** Incarnation of an [Functor] using an [Arrow] via [Arrow Monad] encoding.*)
+(** Incarnation of a [Functor] using an [Arrow] via [Arrow Monad] encoding.*)
 module From_arrow (A : Preface_specs.ARROW) :
   Preface_specs.FUNCTOR with type 'a t = (unit, 'a) A.t
+
+(** Incarnation of a [Functor] using an [Applicative].*)
+module From_applicative (Applicative : Preface_specs.APPLICATIVE) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Applicative.t
+
+(** Incarnation of a [Functor] using an [Alt].*)
+module From_alt (Alt : Preface_specs.ALT) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Alt.t
+
+(** Incarnation of a [Functor] using a [Monad].*)
+module From_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Monad.t
+
+(** Incarnation of a [Functor] using an [Alternative].*)
+module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Alternative.t
+
+(** Incarnation of a [Functor] using a [Monad plus].*)
+module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Monad_plus.t
+
+(** Incarnation of a [Functor] using a [Comonad].*)
+module From_comonad (Comonad : Preface_specs.COMONAD) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t
 
 (** {2 Functor composition}
 
@@ -111,6 +135,19 @@ module From_arrow (A : Preface_specs.ARROW) :
 (** Right-to-left composition of functors.*)
 module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
   Preface_specs.FUNCTOR with type 'a t = 'a G.t F.t
+
+(** Sum of two functors. *)
+module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) : sig
+  type 'a sum =
+    | L of 'a F.t
+    | R of 'a G.t
+
+  include Preface_specs.FUNCTOR with type 'a t = 'a sum
+end
+
+(** Product of two functors. *)
+module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.FUNCTOR with type 'a t = 'a F.t * 'a G.t
 
 (** {2 Manual construction}
 

@@ -67,6 +67,14 @@ module Over_category_and_via_arrow_and_split_and_choose
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = 'a -> 'b Monad.t
 
+(** {2 Arrow Choice composition}
+
+    Some tools for composition between arrows choice. *)
+
+(** Product of two Arrows choice. *)
+module Product (F : Preface_specs.ARROW_CHOICE) (G : Preface_specs.ARROW_CHOICE) :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Arrow_choice], constructing and assembling a

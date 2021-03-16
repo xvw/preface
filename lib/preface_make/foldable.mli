@@ -21,6 +21,27 @@ module Via_fold_map (F : Preface_specs.Foldable.CORE_WITH_FOLD_MAP) :
 module Via_fold_right (F : Preface_specs.Foldable.CORE_WITH_FOLD_RIGHT) :
   Preface_specs.FOLDABLE with type 'a t = 'a F.t
 
+(** {2 Foldable composition}
+
+    Some tools for composition between Foldables. *)
+
+(** Right-to-left composition of Foldables.*)
+module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
+  Preface_specs.FOLDABLE with type 'a t = 'a G.t F.t
+
+(** Sum of two foldables. *)
+module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) : sig
+  type 'a sum =
+    | L of 'a F.t
+    | R of 'a G.t
+
+  include Preface_specs.FOLDABLE with type 'a t = 'a sum
+end
+
+(** Product of two Foldables. *)
+module Product (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
+  Preface_specs.FOLDABLE with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build a [Foldable], constructing and assembling a

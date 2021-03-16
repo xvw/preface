@@ -19,15 +19,13 @@ end
 
 module Operation (Core : Preface_specs.Applicative.CORE) :
   Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
+  include Functor.Operation (Core)
 
   let lift = Core.map
 
   let lift2 f a = Core.(apply @@ apply (pure f) a)
 
   let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
-
-  let replace value x = (Core.map <% const) value x
 end
 
 module Syntax (Core : Preface_specs.Applicative.CORE) :
@@ -43,9 +41,7 @@ module Infix
     (Core : Preface_specs.Applicative.CORE)
     (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t = struct
-  type 'a t = 'a Core.t
-
-  let ( <$> ) = Core.map
+  include Functor.Infix (Core) (Operation)
 
   let ( <*> ) = Core.apply
 
@@ -54,10 +50,6 @@ module Infix
   let ( *> ) a b = Operation.lift2 (fun _x y -> y) a b
 
   let ( <* ) a b = Operation.lift2 const a b
-
-  let ( <$ ) value x = Operation.replace value x
-
-  let ( $> ) x value = Operation.replace value x
 end
 
 module Via
@@ -141,4 +133,13 @@ module From_arrow (A : Preface_specs.ARROW) :
   let uncurry f (x, y) = f x y
 
   let apply f x = A.(f &&& x >>> arrow (uncurry Fun.id))
+end)
+
+module Product (F : Preface_specs.APPLICATIVE) (G : Preface_specs.APPLICATIVE) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a F.t * 'a G.t = Via_apply (struct
+  type 'a t = 'a F.t * 'a G.t
+
+  let pure x = (F.pure x, G.pure x)
+
+  let apply (f, g) (x, y) = (F.apply f x, G.apply g y)
 end)

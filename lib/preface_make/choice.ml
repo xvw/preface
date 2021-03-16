@@ -87,3 +87,21 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
         ;;
       end)
 end
+
+module Composition (F : Preface_specs.CHOICE) (G : Preface_specs.CHOICE) =
+struct
+  module P = Profunctor.Composition (F) (G)
+
+  type ('a, 'b) t = ('a, 'b) P.t =
+    | Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
+
+  include (
+    Over_profunctor_via_left
+      (P)
+      (struct
+        type nonrec ('a, 'b) t = ('a, 'b) t
+
+        let left (Composed (x, y)) = Composed (F.left x, G.left y)
+      end) :
+        Preface_specs.CHOICE with type ('a, 'b) t := ('a, 'b) t )
+end

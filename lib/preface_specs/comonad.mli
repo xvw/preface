@@ -83,6 +83,8 @@ module type OPERATION = sig
 
   val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
   (** Composing comonadic functions using Co-Kleisli Arrow (from right to left). *)
+
+  include Functor.OPERATION with type 'a t := 'a t
 end
 
 (** Syntax *)
@@ -127,6 +129,8 @@ module type INFIX = sig
 
   val ( <@ ) : 'a t -> unit t -> 'a t
   (** Discard the value of the second argument. *)
+
+  include Functor.INFIX with type 'a t := 'a t
 end
 
 (** {1 API} *)

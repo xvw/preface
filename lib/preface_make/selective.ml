@@ -239,3 +239,23 @@ module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
 
          let select x y = A.(x >>> (to_arrow y ||| return ()))
        end)
+
+module Composition (F : Preface_specs.APPLICATIVE) (G : Preface_specs.SELECTIVE) :
+  Preface_specs.SELECTIVE with type 'a t = 'a G.t F.t =
+  Over_applicative_via_select
+    (Applicative.Composition (F) (G))
+       (struct
+         type 'a t = 'a G.t F.t
+
+         let select x y = F.apply (F.map G.select x) y
+       end)
+
+module Product (F : Preface_specs.SELECTIVE) (G : Preface_specs.SELECTIVE) :
+  Preface_specs.SELECTIVE with type 'a t = 'a F.t * 'a G.t =
+  Over_applicative_via_select
+    (Applicative.Product (F) (G))
+       (struct
+         type 'a t = 'a F.t * 'a G.t
+
+         let select (x1, y1) (x2, y2) = (F.select x1 x2, G.select y1 y2)
+       end)
