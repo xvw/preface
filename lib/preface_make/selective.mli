@@ -39,6 +39,18 @@ module Over_functor_via_branch
 module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
   Preface_specs.SELECTIVE with type 'a t = (unit, 'a) A.t
 
+(** {2 Selective composition}
+
+    Some tools for composition between selectives. *)
+
+(** Right-to-left composition of selectives with applicatives.*)
+module Composition (F : Preface_specs.APPLICATIVE) (G : Preface_specs.SELECTIVE) :
+  Preface_specs.SELECTIVE with type 'a t = 'a G.t F.t
+
+(** Product of two Selectives *)
+module Product (F : Preface_specs.SELECTIVE) (G : Preface_specs.SELECTIVE) :
+  Preface_specs.SELECTIVE with type 'a t = 'a F.t * 'a G.t
+
 (** {2 Manual construction}
 
     Advanced way to build an [Selective Functor], constructing and assembling a
