@@ -3,6 +3,7 @@ let () =
   run "Preface examples"
     ( Arrow_tutorial.cases
     @ Formlet.cases
+    @ Free_applicative_formlet.cases
     @ Shape.cases
     @ Free_monad_consoleIO.cases
     @ Free_monad_consoleIO_composition.cases
