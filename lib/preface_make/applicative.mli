@@ -200,6 +200,16 @@ module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
 module From_arrow (A : Preface_specs.ARROW) :
   Preface_specs.APPLICATIVE with type 'a t = (unit, 'a) A.t
 
+(** Incarnation of an [Applicative] over a [Monoid] using [Const].*)
+module Const (M : Preface_specs.Monoid.CORE) : sig
+  type 'a t = Const of M.t
+
+  include Preface_specs.APPLICATIVE with type 'a t := 'a t
+
+  val get : 'a t -> M.t
+  (** Retreive the [Monoid] value from the [Const]. *)
+end
+
 (** {2 Applicatives composition}
 
     Some tools for composition between applicatives. *)

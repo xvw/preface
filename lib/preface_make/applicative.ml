@@ -143,3 +143,19 @@ module Product (F : Preface_specs.APPLICATIVE) (G : Preface_specs.APPLICATIVE) :
 
   let apply (f, g) (x, y) = (F.apply f x, G.apply g y)
 end)
+
+module Const (M : Preface_specs.Monoid.CORE) = struct
+  type 'a t = Const of M.t
+
+  include (
+    Via_apply (struct
+      type nonrec 'a t = 'a t
+
+      let pure _ = Const M.neutral
+
+      let apply (Const f) (Const x) = Const (M.combine f x)
+    end) :
+      Preface_specs.APPLICATIVE with type 'a t := 'a t )
+
+  let get (Const value) = value
+end

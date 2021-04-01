@@ -44,7 +44,7 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
       (Applicative.Infix (Core) (Operation))
       (Applicative.Syntax (Core))
 
-  module Transformation (Applicative : Preface_specs.Applicative.CORE) = struct
+  module To_applicative (Applicative : Preface_specs.Applicative.CORE) = struct
     type natural_transformation = { transform : 'a. 'a f -> 'a Applicative.t }
 
     let rec run : type a. natural_transformation -> a t -> a Applicative.t =
@@ -55,12 +55,29 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
    ;;
   end
 
+  module To_monoid (Monoid : Preface_specs.Monoid.CORE) = struct
+    type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
+
+    module C = Applicative.Const (Monoid)
+    module T = To_applicative (C)
+
+    let run nt x =
+      let n =
+        let transform x = C.Const (nt.transform x) in
+        let open T in
+        { transform }
+      in
+
+      C.get (T.run n x)
+    ;;
+  end
+
   include (A : Preface_specs.APPLICATIVE with type 'a t := 'a t)
 end
 
 module Over_applicative (A : Preface_specs.Applicative.CORE) = struct
   include Over_functor (A)
-  module R = Transformation (A)
+  module R = To_applicative (A)
 
   let run x =
     let t = R.{ transform = id } in
