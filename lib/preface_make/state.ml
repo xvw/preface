@@ -1,48 +1,93 @@
-module Over (T : Preface_specs.Types.T0) = struct
-  type state = T.t
+module Core_over_monad
+    (M : Preface_specs.MONAD)
+    (State : Preface_specs.Types.T0) =
+struct
+  type state = State.t
 
-  type 'a t = state -> 'a * state
+  type 'a monad = 'a M.t
 
-  let run ma s = ma s
+  type 'a t = state -> ('a * state) monad
 
-  let pure a s = (a, s)
+  let state f x = M.return (f x)
 
-  let map f ma s =
-    let (a, s') = ma s in
-    (f a, s')
+  let eval m s = M.map fst (m s)
+
+  let exec m s = M.map snd (m s)
+
+  let run m s = m s
+
+  let get s = state (fun s -> (s, s)) s
+
+  let set s = state (fun _ -> ((), s))
+
+  let modify f = state (fun s -> ((), f s))
+
+  let gets f = state (fun s -> (f s, s))
+end
+
+module Functor (F : Preface_specs.FUNCTOR) (State : Preface_specs.Types.T0) =
+Functor.Via_map (struct
+  type 'a t = State.t -> ('a * State.t) F.t
+
+  let map f m s = F.map (fun (x, s) -> (f x, s)) (m s)
+end)
+
+module Applicative (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) =
+Applicative.Via_apply (struct
+  type 'a t = State.t -> ('a * State.t) M.t
+
+  let pure x s = M.return (x, s)
+
+  let apply mf mx s =
+    let open M in
+    let* (f, x) = mf s in
+    let+ (y, st) = mx x in
+    (f y, st)
   ;;
+end)
 
-  module Functor = Functor.Via_map (struct
-    type nonrec 'a t = 'a t
+module Monad (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) =
+Monad.Via_bind (struct
+  type 'a t = State.t -> ('a * State.t) M.t
 
-    let map = map
-  end)
+  let return x s = M.return (x, s)
 
-  module Applicative = Applicative.Via_apply (struct
-    type nonrec 'a t = 'a t
+  let bind f m s =
+    let open M in
+    let* (v, st) = m s in
+    f v st
+  ;;
+end)
 
-    let pure = pure
+module Monad_plus
+    (M : Preface_specs.MONAD_PLUS)
+    (State : Preface_specs.Types.T0) =
+  Monad_plus.Over_monad
+    (Monad (M) (State))
+       (struct
+         type 'a t = State.t -> ('a * State.t) M.t
 
-    let apply mf ma s =
-      let (f, s') = run mf s in
-      map f ma s'
-    ;;
-  end)
+         let neutral _ = M.neutral
 
-  module Monad = Monad.Via_bind (struct
-    type nonrec 'a t = 'a t
+         let combine state_l state_r s = M.combine (state_l s) (state_r s)
+       end)
 
-    let return = pure
+module Alternative
+    (M : Preface_specs.MONAD_PLUS)
+    (State : Preface_specs.Types.T0) =
+  Alternative.Over_applicative
+    (Applicative (M) (State))
+       (struct
+         type 'a t = State.t -> ('a * State.t) M.t
 
-    let bind f ma s =
-      let (a, s') = run ma s in
-      run (f a) s'
-    ;;
-  end)
+         let neutral _ = M.neutral
 
-  let get s = (s, s)
+         let combine state_l state_r s = M.combine (state_l s) (state_r s)
+       end)
 
-  let set s _ = ((), s)
-
-  let modify f = Monad.(get >>= (fun s -> set @@ f s))
+module Over_monad (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) =
+struct
+  include Core_over_monad (M) (State)
+  module Monad = Monad (M) (State)
+  include Monad
 end

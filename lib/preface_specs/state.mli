@@ -1,0 +1,49 @@
+(** A [State] monad parametrized over an inner monad and a [state]. [State] is a
+    monad transformer.*)
+
+(** Operation of [State] monad parametrized over an inner monad and [state]. *)
+module type CORE = sig
+  type state
+  (** The encapsulated state. *)
+
+  type 'a monad
+  (** The inner monad.*)
+
+  type 'a t = state -> ('a * state) monad
+  (** The type held by the state monad.*)
+
+  val eval : 'a t -> state -> 'a monad
+  (** Unwrap the state computation and extract the current value.*)
+
+  val exec : 'a t -> state -> state monad
+  (** Unwrap the state computation and extract the current state.*)
+
+  val run : 'a t -> state -> ('a * state) monad
+  (** Unwrap the state computation.*)
+
+  val state : (state -> 'a * state) -> 'a t
+  (** Lift a function into a state. *)
+
+  val get : state t
+  (** Returns the current state. *)
+
+  val set : state -> unit t
+  (** Replace the state with the given one. *)
+
+  val modify : (state -> state) -> unit t
+  (** Modify the state applying the given function. *)
+
+  val gets : (state -> 'a) -> 'a t
+  (** Apply a function to the current state and return it. *)
+end
+
+(** {1 API} *)
+
+(** The complete interface of a [State] monad. *)
+module type API = sig
+  include CORE
+
+  module Monad : Monad.API
+
+  include module type of Monad with type 'a t := 'a t
+end

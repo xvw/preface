@@ -1,6 +1,10 @@
 (** A [Writer] monad parametrized over an inner monad and a monoidal tape.
     [Writer] is a monad transformer.*)
 
+(** {1 Structure anatomy} *)
+
+(** Operation of [Writer] monad parametrized over an inner monad and a monoidal
+    tape. *)
 module type CORE = sig
   type tape
   (** The encapsulated tape. *)

@@ -142,6 +142,9 @@ module Reader = Reader
 module Writer = Writer
 (** Describes a Writer parametrized over a Monad and an Tape. *)
 
+module State = State
+(** Describes a State parametrized over a Monad and a state. *)
+
 (** {1 API Shortcuts}
 
     Shortcuts for the API of each objects (by convention, OCaml module types are
@@ -208,3 +211,5 @@ module type ARROW_APPLY = Arrow_apply.API
 module type READER = Reader.API
 
 module type WRITER = Writer.API
+
+module type STATE = State.API
