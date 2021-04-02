@@ -6,13 +6,12 @@ type template = template_item list
 
 module Bindings = Map.Make (String)
 
-module Reader = Preface.Make.Reader.Over (struct
+module Reader = Preface.Reader.Over (struct
   type t = string Bindings.t
 end)
 
 let transform_item =
   let open Reader in
-  let open Reader.Monad in
   let open Bindings in
   function
   | Const s -> return s
@@ -22,7 +21,7 @@ let transform_item =
 ;;
 
 let rec transform =
-  let open Reader.Monad in
+  let open Reader in
   function
   | [] -> return ""
   | a :: l ->
@@ -33,28 +32,28 @@ let rec transform =
 
 let should_transform_constant () =
   let expected = "Hello"
-  and computed = Reader.run (transform [ Const "Hello" ]) Bindings.empty in
+  and computed = Reader.eval (transform [ Const "Hello" ]) Bindings.empty in
   Alcotest.(check string) "transform_constant" expected computed
 ;;
 
 let should_transform_variable () =
   let expected = "Alice"
   and computed =
-    Reader.run (transform [ Var "name" ]) (Bindings.singleton "name" "Alice")
+    Reader.eval (transform [ Var "name" ]) (Bindings.singleton "name" "Alice")
   in
   Alcotest.(check string) "transform_variable" expected computed
 ;;
 
 let should_not_transform_variable () =
   let expected = "N/A"
-  and computed = Reader.run (transform [ Var "name" ]) Bindings.empty in
+  and computed = Reader.eval (transform [ Var "name" ]) Bindings.empty in
   Alcotest.(check string) "not_transform_variable" expected computed
 ;;
 
 let should_transform_constant_and_variable () =
   let expected = "Hello, Alice"
   and computed =
-    Reader.run
+    Reader.eval
       (transform [ Const "Hello"; Const ", "; Var "name" ])
       (Bindings.singleton "name" "Alice")
   in

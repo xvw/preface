@@ -1,43 +1,76 @@
-module Over (T : Preface_specs.Types.T0) = struct
-  open Preface_core.Fun
+module Core_over_monad
+    (Monad : Preface_specs.MONAD)
+    (Env : Preface_specs.Types.T0) =
+struct
+  type env = Env.t
 
-  type env = T.t
+  type 'a monad = 'a Monad.t
 
-  type 'a t = env -> 'a
+  type 'a t = env -> 'a monad
 
-  let pure = constant
+  let run reader_m env = reader_m env
 
-  let map = ( <% )
+  let ask = Monad.return
 
-  module Functor = Functor.Via_map (struct
-    type nonrec 'a t = 'a t
+  let local f reader x = reader (f x)
 
-    let map = map
-  end)
+  let reader f = f
+end
 
-  module Applicative = Applicative.Via_apply (struct
-    type nonrec 'a t = 'a t
+module Functor (F : Preface_specs.FUNCTOR) (Env : Preface_specs.Types.T0) =
+Functor.Via_map (struct
+  type 'a t = Env.t -> 'a F.t
 
-    let pure = pure
+  let map f reader x = (F.map f) (reader x)
+end)
 
-    let apply mf ma s = map (mf s) ma s
-  end)
+module Applicative
+    (A : Preface_specs.APPLICATIVE)
+    (Env : Preface_specs.Types.T0) =
+Applicative.Via_apply (struct
+  type 'a t = Env.t -> 'a A.t
 
-  module Monad = Monad.Via_bind (struct
-    type nonrec 'a t = 'a t
+  let pure x = Fun.const (A.pure x)
 
-    let return = pure
+  let apply reader_f reader_v x = A.apply (reader_f x) (reader_v x)
+end)
 
-    let bind f ma s = map f ma s s
-  end)
+module Alternative
+    (A : Preface_specs.ALTERNATIVE)
+    (Env : Preface_specs.Types.T0) =
+  Alternative.Over_applicative
+    (Applicative (A) (Env))
+       (struct
+         type 'a t = Env.t -> 'a A.t
 
-  (** {2 Helpers} *)
+         let neutral _ = A.neutral
 
-  let run = id
+         let combine reader_l reader_r r = A.combine (reader_l r) (reader_r r)
+       end)
 
-  let ask = id
+module Monad (M : Preface_specs.MONAD) (Env : Preface_specs.Types.T0) =
+Monad.Via_bind (struct
+  type 'a t = Env.t -> 'a M.t
 
-  let local = ( %> )
+  let return x = Fun.const (M.return x)
 
-  let reader = id
+  let bind f reader r = M.bind (fun a -> (f a) r) (reader r)
+end)
+
+module Monad_plus (M : Preface_specs.MONAD_PLUS) (Env : Preface_specs.Types.T0) =
+  Monad_plus.Over_monad
+    (Monad (M) (Env))
+       (struct
+         type 'a t = Env.t -> 'a M.t
+
+         let neutral _ = M.neutral
+
+         let combine reader_l reader_r r = M.combine (reader_l r) (reader_r r)
+       end)
+
+module Over_monad (M : Preface_specs.MONAD) (Env : Preface_specs.Types.T0) =
+struct
+  include Core_over_monad (M) (Env)
+  module Monad = Monad (M) (Env)
+  include Monad
 end
