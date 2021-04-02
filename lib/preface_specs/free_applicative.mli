@@ -21,10 +21,18 @@ module type CORE = sig
 
   (** The natural transformation from a free applicative to an other
       applicative. *)
-  module Transformation (Applicative : Applicative.CORE) : sig
+  module To_applicative (Applicative : Applicative.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> 'a Applicative.t }
 
     val run : natural_transformation -> 'a t -> 'a Applicative.t
+    (** Run the natural transformation over the free applicative. *)
+  end
+
+  (** The natural transformation from a free applicative to a monoid. *)
+  module To_monoid (Monoid : Monoid.CORE) : sig
+    type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
+
+    val run : natural_transformation -> 'a t -> Monoid.t
     (** Run the natural transformation over the free applicative. *)
   end
 end

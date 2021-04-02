@@ -259,3 +259,21 @@ module Product (F : Preface_specs.SELECTIVE) (G : Preface_specs.SELECTIVE) :
 
          let select (x1, y1) (x2, y2) = (F.select x1 x2, G.select y1 y2)
        end)
+
+module Const (M : Preface_specs.Monoid.CORE) = struct
+  module App = Applicative.Const (M)
+
+  type 'a t = 'a App.t = Const of M.t
+
+  include (
+    Over_applicative_via_select
+      (App)
+      (struct
+        type nonrec 'a t = 'a t
+
+        let select (Const x) (Const y) = Const (M.combine x y)
+      end) :
+        Preface_specs.SELECTIVE with type 'a t := 'a t )
+
+  let get (Const value) = value
+end

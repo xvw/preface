@@ -17,6 +17,8 @@ module Over (M : Preface_specs.MONOID) = struct
 
         let select (Over x) (Over y) = Over M.(x <|> y)
       end)
+
+  let get (Over x) = x
 end
 
 module Under (M : Preface_specs.MONOID) = struct
@@ -38,4 +40,6 @@ module Under (M : Preface_specs.MONOID) = struct
 
         let select (Under x) _ = Under x
       end)
+
+  let get (Under x) = x
 end

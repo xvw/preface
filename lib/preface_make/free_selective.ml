@@ -39,7 +39,7 @@ module Over_functor (F : Preface_specs.Functor.CORE) = struct
 
   module S = Selective.Over_functor_via_select (Functor) (Core)
 
-  module Transformation (Selective : Preface_specs.Selective.CORE) = struct
+  module To_selective (Selective : Preface_specs.Selective.CORE) = struct
     type natural_transformation = { transform : 'a. 'a f -> 'a Selective.t }
 
     let rec run : type a. natural_transformation -> a t -> a Selective.t =
@@ -52,6 +52,23 @@ module Over_functor (F : Preface_specs.Functor.CORE) = struct
    ;;
   end
 
+  module To_monoid (Monoid : Preface_specs.Monoid.CORE) = struct
+    type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
+
+    module C = Selective.Const (Monoid)
+    module T = To_selective (C)
+
+    let run nt x =
+      let n =
+        let transform x = C.Const (nt.transform x) in
+        let open T in
+        { transform }
+      in
+
+      C.get (T.run n x)
+    ;;
+  end
+
   include (S : Preface_specs.SELECTIVE with type 'a t := 'a t)
 
   let promote x = Select (Pure (Either.left ()), F.map const x)
@@ -61,7 +78,7 @@ module Over_applicative = Over_functor
 
 module Over_selective (F : Preface_specs.Selective.CORE) = struct
   include Over_functor (F)
-  module R = Transformation (F)
+  module R = To_selective (F)
 
   let run x =
     let t = R.{ transform = id } in
