@@ -15,6 +15,9 @@ module Over (M : Preface_specs.MONOID) : sig
   module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 
   module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
+
+  val get : 'a t -> M.t
+  (** Retreive the [Monoid] value from the [Over] approximation. *)
 end
 
 (** {1 Under approximation}
@@ -29,4 +32,7 @@ module Under (M : Preface_specs.MONOID) : sig
   module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 
   module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
+
+  val get : 'a t -> M.t
+  (** Retreive the [Monoid] value from the [Under] approximation. *)
 end

@@ -39,6 +39,17 @@ module Over_functor_via_branch
 module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
   Preface_specs.SELECTIVE with type 'a t = (unit, 'a) A.t
 
+(** Incarnation of a [Selective] over a [Monoid] using [Const] (as
+    [Over approximation]).*)
+module Const (M : Preface_specs.Monoid.CORE) : sig
+  type 'a t = Const of M.t
+
+  include Preface_specs.SELECTIVE with type 'a t := 'a t
+
+  val get : 'a t -> M.t
+  (** Retreive the [Monoid] value from the [Const]. *)
+end
+
 (** {2 Selective composition}
 
     Some tools for composition between selectives. *)

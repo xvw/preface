@@ -21,10 +21,18 @@ module type CORE = sig
   (** Promote a value from the functor into the free selective. *)
 
   (** The natural transformation from a free selective to an other selective. *)
-  module Transformation (Selective : Selective.CORE) : sig
+  module To_selective (Selective : Selective.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> 'a Selective.t }
 
     val run : natural_transformation -> 'a t -> 'a Selective.t
+    (** Run the natural transformation over the free selective. *)
+  end
+
+  (** The natural transformation from a free selective to a monoid. *)
+  module To_monoid (Monoid : Monoid.CORE) : sig
+    type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
+
+    val run : natural_transformation -> 'a t -> Monoid.t
     (** Run the natural transformation over the free selective. *)
   end
 end
