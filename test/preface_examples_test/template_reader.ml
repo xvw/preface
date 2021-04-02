@@ -32,28 +32,34 @@ let rec transform =
 
 let should_transform_constant () =
   let expected = "Hello"
-  and computed = Reader.eval (transform [ Const "Hello" ]) Bindings.empty in
+  and computed =
+    Reader.run_identity (transform [ Const "Hello" ]) Bindings.empty
+  in
   Alcotest.(check string) "transform_constant" expected computed
 ;;
 
 let should_transform_variable () =
   let expected = "Alice"
   and computed =
-    Reader.eval (transform [ Var "name" ]) (Bindings.singleton "name" "Alice")
+    Reader.run_identity
+      (transform [ Var "name" ])
+      (Bindings.singleton "name" "Alice")
   in
   Alcotest.(check string) "transform_variable" expected computed
 ;;
 
 let should_not_transform_variable () =
   let expected = "N/A"
-  and computed = Reader.eval (transform [ Var "name" ]) Bindings.empty in
+  and computed =
+    Reader.run_identity (transform [ Var "name" ]) Bindings.empty
+  in
   Alcotest.(check string) "not_transform_variable" expected computed
 ;;
 
 let should_transform_constant_and_variable () =
   let expected = "Hello, Alice"
   and computed =
-    Reader.eval
+    Reader.run_identity
       (transform [ Const "Hello"; Const ", "; Var "name" ])
       (Bindings.singleton "name" "Alice")
   in

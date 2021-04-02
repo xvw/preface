@@ -11,9 +11,9 @@
     {1 Use cases}
 
     The Reader module gives you the ability to read from an environment. This is
-    done thanks to the [eval] function which takes the environment and returns a
-    value. Finally, this type of environment is given by applying the "Over"
-    functor module on a module providing the required type.
+    done thanks to the [run_identity] function which takes the environment and
+    returns a value. Finally, this type of environment is given by applying the
+    "Over" functor module on a module providing the required type.
 
     {1 Example}
 
@@ -89,7 +89,7 @@
     The last piece of the jigsaw relies on the capability to perform such
     transformation thanks to the [Reader] [run] function.
 
-    {[ let run t env = Reader.eval (transform t) env ]} *)
+    {[ let run t env = Reader.run_identity (transform t) env ]} *)
 
 (** {1 Implementation} *)
 
@@ -97,7 +97,7 @@ module Over (Env : Preface_specs.Types.T0) : sig
   include Preface_specs.READER with type env = Env.t
   (** {2 Monad API} *)
 
-  val eval : 'a t -> Env.t -> 'a
+  val run_identity : 'a t -> Env.t -> 'a
   (** Run the reader through the [identity].*)
 
   module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t

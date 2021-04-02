@@ -68,21 +68,23 @@ let subject a =
 
 let should_transform_bound_variable () =
   let expected = Ok DeBruijn.(Var 1)
-  and computed = Reader.eval (transform Lambda.(Var "n")) [ "n" ] in
+  and computed = Reader.run_identity (transform Lambda.(Var "n")) [ "n" ] in
   Alcotest.(check (subject debruijn))
     "transform_bind_variable" expected computed
 ;;
 
 let should_transform_free_variable () =
   let expected = Error (FreeVariable "n")
-  and computed = Reader.eval (transform Lambda.(Var "n")) [] in
+  and computed = Reader.run_identity (transform Lambda.(Var "n")) [] in
   Alcotest.(check (subject debruijn))
     "transform_free_variable" expected computed
 ;;
 
 let should_transform_identity_abstraction () =
   let expected = Ok DeBruijn.(Abs (Var 1))
-  and computed = Reader.eval (transform Lambda.(Abs ("n", Var "n"))) [] in
+  and computed =
+    Reader.run_identity (transform Lambda.(Abs ("n", Var "n"))) []
+  in
   Alcotest.(check (subject debruijn))
     "transform_identity_abstraction" expected computed
 ;;
@@ -90,7 +92,7 @@ let should_transform_identity_abstraction () =
 let should_transform_application () =
   let expected = Ok DeBruijn.(App (Abs (Var 1), Abs (Var 1)))
   and computed =
-    Reader.eval
+    Reader.run_identity
       (transform Lambda.(App (Abs ("n", Var "n"), Abs ("n", Var "n"))))
       []
   in

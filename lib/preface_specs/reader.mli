@@ -1,4 +1,4 @@
-(** A [Reader] moand parametrized over an inner monad and an environment.
+(** A [Reader] monad parametrized over an inner monad and an environment.
     [Reader] is a monad transformer.*)
 
 (** {1 Structure anatomy} *)

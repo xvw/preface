@@ -139,6 +139,9 @@ module Arrow_apply = Arrow_apply
 module Reader = Reader
 (** Describes a Reader parametrized over a Monad and an Environment. *)
 
+module Writer = Writer
+(** Describes a Writer parametrized over a Monad and an Tape. *)
+
 (** {1 API Shortcuts}
 
     Shortcuts for the API of each objects (by convention, OCaml module types are
@@ -203,3 +206,5 @@ module type ARROW_CHOICE = Arrow_choice.API
 module type ARROW_APPLY = Arrow_apply.API
 
 module type READER = Reader.API
+
+module type WRITER = Writer.API

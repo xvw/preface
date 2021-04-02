@@ -4,5 +4,5 @@ module Over (Env : Preface_specs.Types.T0) = struct
   module Applicative =
     Preface_make.Reader.Applicative (Identity.Applicative) (Env)
 
-  let eval reader env = Identity.extract (run reader env)
+  let run_identity reader env = Identity.extract (run reader env)
 end

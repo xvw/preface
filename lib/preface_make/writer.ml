@@ -1,69 +1,85 @@
-module Over (W : Preface_specs.MONOID) = struct
-  type output = W.t
+module Core_over_monad
+    (Monad : Preface_specs.MONAD)
+    (Tape : Preface_specs.MONOID) =
+struct
+  type tape = Tape.t
 
-  type 'a t = 'a * output
+  type 'a monad = 'a Monad.t
 
-  let run = Preface_core.Fun.id
+  type 'a t = ('a * tape) monad
 
-  let pure a = (a, W.neutral)
+  let writer (x, t) = Monad.return (x, t)
 
-  let map f ma =
-    let (a, s) = run ma in
-    (f a, s)
+  let run writer_m = writer_m
+
+  let exec x = Monad.map snd x
+
+  let tell s = writer ((), s)
+
+  let listen m = Monad.map (fun (x, b) -> ((x, b), b)) m
+
+  let listens f m = Monad.map (fun (x, b) -> ((x, f b), b)) m
+
+  let pass m = Monad.map (fun ((x, f), b) -> (x, f b)) m
+
+  let censor f m = Monad.map (fun (x, b) -> (x, f b)) m
+end
+
+module Functor (F : Preface_specs.FUNCTOR) (Tape : Preface_specs.MONOID) =
+Functor.Via_map (struct
+  type 'a t = ('a * Tape.t) F.t
+
+  let map f x = F.map (fun (y, t) -> (f y, t)) x
+end)
+
+module Applicative (A : Preface_specs.APPLICATIVE) (Tape : Preface_specs.MONOID) =
+Applicative.Via_apply (struct
+  type 'a t = ('a * Tape.t) A.t
+
+  let pure x = A.pure (x, Tape.neutral)
+
+  let apply f v =
+    let g (x, t) (y, u) = (x y, Tape.combine t u) in
+    A.lift2 g f v
   ;;
+end)
 
-  module Functor = Functor.Via_map (struct
-    type nonrec 'a t = 'a t
+module Alternative (A : Preface_specs.ALTERNATIVE) (Tape : Preface_specs.MONOID) =
+  Alternative.Over_applicative
+    (Applicative (A) (Tape))
+       (struct
+         type 'a t = ('a * Tape.t) A.t
 
-    let map = map
-  end)
+         let neutral = A.neutral
 
-  module Applicative = Applicative.Via_apply (struct
-    type nonrec 'a t = 'a t
+         let combine writer_l writer_r = A.combine writer_l writer_r
+       end)
 
-    let pure = pure
+module Monad (M : Preface_specs.MONAD) (Tape : Preface_specs.MONOID) =
+Monad.Via_bind (struct
+  type 'a t = ('a * Tape.t) M.t
 
-    let apply mf ma =
-      let (a, s') = run ma in
-      let (f, s) = run mf in
-      (f a, W.combine s s')
-    ;;
-  end)
+  let return x = M.return (x, Tape.neutral)
 
-  module Monad = Monad.Via_bind (struct
-    type nonrec 'a t = 'a t
-
-    let return = pure
-
-    let bind f ma =
-      let (a, s) = run ma in
-      let (b, s') = run (f a) in
-      (b, W.combine s s')
-    ;;
-  end)
-
-  let tell s = ((), s)
-
-  let write (a, s) =
-    let open Monad in
-    let* _ = tell s in
-    return a
+  let bind f m =
+    M.(m >>= (fun (x, t) -> f x >|= (fun (y, u) -> (y, Tape.combine t u))))
   ;;
+end)
 
-  let listen ma =
-    let (a, s) = run ma in
-    ((a, s), s)
-  ;;
+module Monad_plus (M : Preface_specs.MONAD_PLUS) (Tape : Preface_specs.MONOID) =
+  Monad_plus.Over_monad
+    (Monad (M) (Tape))
+       (struct
+         type 'a t = ('a * Tape.t) M.t
 
-  let pass ma =
-    let ((a, f), s) = run ma in
-    (a, f s)
-  ;;
+         let neutral = M.neutral
 
-  let listens f ma =
-    let ((a, s), s') = listen ma in
-    ((a, f s), s')
-  ;;
+         let combine writer_l writer_r = M.combine writer_l writer_r
+       end)
 
-  let censor f ma = pass Monad.(ma >>= (fun a -> return (a, f)))
+module Over_monad (M : Preface_specs.MONAD) (Tape : Preface_specs.MONOID) =
+struct
+  include Core_over_monad (M) (Tape)
+  module Monad = Monad (M) (Tape)
+  include Monad
 end
