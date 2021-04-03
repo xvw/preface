@@ -15,7 +15,7 @@ let run number =
     @ Either.cases number
     @ Predicate.cases number
     @ Fun.cases number
-    @ Tuple.cases number )
+    @ Pair.cases number )
 ;;
 
 let () = run 500

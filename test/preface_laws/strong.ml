@@ -1,5 +1,5 @@
 open Aliases
-module T = Preface_stdlib.Tuple
+module P = Preface_stdlib.Pair
 
 module type LAWS = sig
   include Profunctor.LAWS
@@ -33,27 +33,27 @@ module Laws (S : Preface_specs.STRONG) = struct
 
   let fst_define_snd =
     let lhs x = S.fst x in
-    let rhs x = S.dimap T.swap T.swap (S.snd x) in
-    ("fst = dimap Tuple.swap Tuple.swap % snd", (fun x -> (lhs x, rhs x)))
+    let rhs x = S.dimap P.swap P.swap (S.snd x) in
+    ("fst = dimap Pair.swap Pair.swap % snd", (fun x -> (lhs x, rhs x)))
   ;;
 
   let snd_define_fst =
     let lhs x = S.snd x in
-    let rhs x = S.dimap T.swap T.swap (S.fst x) in
-    ("fst = dimap Tuple.swap Tuple.swap % snd", (fun x -> (lhs x, rhs x)))
+    let rhs x = S.dimap P.swap P.swap (S.fst x) in
+    ("fst = dimap Pair.swap Pair.swap % snd", (fun x -> (lhs x, rhs x)))
   ;;
 
   let contramap_fst =
-    let lhs x = S.contramap_fst T.fst x in
-    let rhs x = S.map_snd T.fst (S.fst x) in
-    ( "contramap_fst Tuple.fst = (map_snd Tuple.fst) % fst"
+    let lhs x = S.contramap_fst P.fst x in
+    let rhs x = S.map_snd P.fst (S.fst x) in
+    ( "contramap_fst Pair.fst = (map_snd Pair.fst) % fst"
     , (fun x -> (lhs x, rhs x)) )
   ;;
 
   let contramap_snd =
-    let lhs x = S.contramap_fst T.snd x in
-    let rhs x = S.map_snd T.snd (S.snd x) in
-    ( "contramap_fst Tuple.snd = (map_snd Tuple.snd) % snd"
+    let lhs x = S.contramap_fst P.snd x in
+    let rhs x = S.map_snd P.snd (S.snd x) in
+    ( "contramap_fst Pair.snd = (map_snd Pair.snd) % snd"
     , (fun x -> (lhs x, rhs x)) )
   ;;
 

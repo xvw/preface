@@ -101,7 +101,7 @@ useful for the greatest number of people!
 | --- | --- | --- |
 |`Approximation.Over`| A generalization of `Const` (the phantom monoid) for over approximation  | `Applicative`, `Selective`|
 | `Approximation.Under` | Same of `Over` but for under approximation | `Applicative`, `Selective` |
-|`Continuation`|A continuation that can't be delimitted| `Functor`, `Applicative`, `Monad`|
+|`Continuation`|A continuation that can't be delimited| `Functor`, `Applicative`, `Monad`|
 |`Either`| Represent a disjunction between `left` and `right`|`Bifunctor` and can be specialised for the `left` part; `Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
 |`Fun`| Function `'a -> 'b`| `Profunctor`, `Strong`, `Choice`, `Closed`, `Category`, `Arrow`, `Arrow_choice`, `Arrow_apply`|
 |`Identity`|A trivial type constructor, `typa 'a t = 'a`| `Functor`, `Applicative`, `Selective`, `Monad`, `Comonad` |
@@ -114,7 +114,7 @@ useful for the greatest number of people!
 |`State`| The state monad using `Identity` as inner monad| `Functor`, `Applicative`, `Monad` |
 |`Stream`|Infinite list|`Functor`, `Applicative`, `Monad`, `Comonad`|
 |`Try`| A biased version of `Result` with `exception` as the error part|`Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
-|`Tuple`| A tuple `'a * 'b`|`Bifunctor`|
+|`Pair`| A pair `'a * 'b`|`Bifunctor`|
 |`Validate`|A biased version of `Validation` with `exception Nonempty_list` as `invalid` part| `Functor`, `Applicative`, `Selective`, `Monad`, `Traversable` through Applicative and Monad|
 | `Validation`| Like `Result` but the `invalid` part is a `Semigroup` for accumulating errors | `Bifunctor` and can be specialized on the `invalid` part: `Functor`, `Applicative`, `Selective`, `Monad`, `Traversable` through Applicative and Monad|
 |`Writer`| The writer monad using `Identity` as inner monad| `Functor`, `Applicative`, `Monad` |
@@ -155,7 +155,7 @@ the convention in practice) and:
 
 - `bind` (`>>=`)
 - `map` and `join`
-- or eventually `>=>`
+- or possibly `>=>`
 
 In addition, on the basis of these minimum combinators, it is possible
 to derive other combinators. However, it happens that these

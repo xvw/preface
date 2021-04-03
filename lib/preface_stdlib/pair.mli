@@ -1,4 +1,4 @@
-(** Exposes [Tuple.t] a tuple over a and b.
+(** Exposes [Pair.t], an alias for ['a * 'b].
 
     {1 Capabilities}
 
@@ -29,10 +29,10 @@ val swap : ('a, 'b) t -> ('b, 'a) t
 (** {2 For function application} *)
 
 val curry : (('a, 'b) t -> 'c) -> 'a -> 'b -> 'c
-(** Convert a function which take a tuple to a curried version. *)
+(** Convert a function which take a pair to a curried version. *)
 
 val uncurry : ('a -> 'b -> 'c) -> ('a, 'b) t -> 'c
-(** Convert a curried function to a function which take a tuple. *)
+(** Convert a curried function to a function which take a pair. *)
 
 (** {2 infix operators} *)
 
