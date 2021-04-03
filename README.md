@@ -84,7 +84,7 @@ can see, the diagram is heavily inspired by the
 Obviously, the set of useful abstractions is still far from being
 present in Preface. One can deplore the absence, for example, of
 contravariant Divisible functors, and probably many others. We have
-decided to privilege those which we had a short and medium term
+decided to privilege those for which we had a short and medium term
 use. But if you find that an abstraction is missing, the development
 of Preface is open, don't hesitate to contribute by adding what was
 missing.
@@ -97,14 +97,14 @@ those that allowed us to test certain abstractions (`Predicate` and
 `Contravariant` for example). Don't hesitate to add some that would be
 useful for the greatest number of people!
 
-| Name | Description | Implementation |
+| Name | Description | Abstractions |
 | --- | --- | --- |
 |`Approximation.Over`| A generalization of `Const` (the phantom monoid) for over approximation  | `Applicative`, `Selective`|
 | `Approximation.Under` | Same of `Over` but for under approximation | `Applicative`, `Selective` |
 |`Continuation`|A continuation that can't be delimitted| `Functor`, `Applicative`, `Monad`|
-|`Either`| Represent a disjunction betzeen `left` and `right`|`Bifunctor` and can be specialised for the `left` part; `Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
+|`Either`| Represent a disjunction between `left` and `right`|`Bifunctor` and can be specialised for the `left` part; `Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
 |`Fun`| Function `'a -> 'b`| `Profunctor`, `Strong`, `Choice`, `Closed`, `Category`, `Arrow`, `Arrow_choice`, `Arrow_apply`|
-|`Identity`|A trivial type constructor, each values of type `a` can be a `a Identity.t`| `Functor`, `Applicative`, `Selective`, `Monad`, `Comonad` |
+|`Identity`|A trivial type constructor, `typa 'a t = 'a`| `Functor`, `Applicative`, `Selective`, `Monad`, `Comonad` |
 |`List`| The standard list of OCaml| `Foldable`, `Functor`, `Applicative`, `Alternative`, `Selective`, `Monad`, `Nonad_plus`, `Traversable` through Applicative or Monad, `Monoid` (where the inner type must be fixed)|
 |`Nonempty_list`| A list with, at least, one element| `Foldable`, `Functor`, `Alt`, `Applicative`, `Selective`, `Monad`, `Comonad`, `Traversable` through Applicative or Monad, `Semigroup` (where the inner type must be fixed)|
 |`Option`|Deal with absence of values| `Foldable`, `Functor`, `Applicative`, `Alternative`, `Monad`, `Monad_plus`, `Traversable` through Applicative of Monad, `Monoid` (where the inner type must be fixed)|
@@ -127,7 +127,7 @@ decided to describe each abstraction in a dedicated sub-module. For
 example `Option.Functor` or `Option.Monad` to let the user choose
 which combinators to use.
 
-#### Do not shadowing the standard library
+#### Do not shadow the standard library
 
 Although it was tempting to extend the standard OCaml library with
 this technique:
