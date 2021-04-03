@@ -1,47 +1,48 @@
-(** {1 Capabilities}
+(** Modules for building {!Preface_specs.WRITER} modules. *)
 
-    - {!val:Functor}
-    - {!val:Applicative}
-    - {!val:Monad}
+(** {1 Documentation} *)
 
-    {1 Use cases}
+(** {1 Construction}
 
-    The Writer module gives you the ability to accumulate values thanks to the
-    parametric `Monoid`. Then for instance it can be used to create a log
-    reflecting performed operations. *)
+    Standard way to build a [Writer Monad]. *)
 
-module Over (W : Preface_specs.MONOID) : sig
-  type output = W.t
+(** Given a [Monad] and a [Monoid] produces a [Writer monad] over the monoid and
+    using the monad as an inner monad. *)
+module Over_monad (M : Preface_specs.MONAD) (Tape : Preface_specs.MONOID) :
+  Preface_specs.WRITER with type tape = Tape.t and type 'a monad = 'a M.t
 
-  type 'a t
+(** {1 Improving API} *)
 
-  module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-  (** {2 Functor API} *)
+(** Incarnation of a [Functor] over a [Writer Monad]. *)
+module Functor (F : Preface_specs.FUNCTOR) (Tape : Preface_specs.MONOID) :
+  Preface_specs.FUNCTOR with type 'a t = ('a * Tape.t) F.t
 
-  module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
-  (** {2 Applicative API} *)
+(** Incarnation of an [Applicative] over a [Writer Monad]. *)
+module Applicative (A : Preface_specs.APPLICATIVE) (Tape : Preface_specs.MONOID) :
+  Preface_specs.APPLICATIVE with type 'a t = ('a * Tape.t) A.t
 
-  module Monad : Preface_specs.MONAD with type 'a t = 'a t
-  (** {2 Monad API} *)
+(** Incarnation of an [Alternative] over a [Writer Monad]. *)
+module Alternative (A : Preface_specs.ALTERNATIVE) (Tape : Preface_specs.MONOID) :
+  Preface_specs.ALTERNATIVE with type 'a t = ('a * Tape.t) A.t
 
-  val run : 'a t -> 'a * output
-  (* [run] execute the effect and returns the result and the corresponding output *)
+(** Incarnation of a [Monad] over a [Writer Monad]. *)
+module Monad (M : Preface_specs.MONAD) (Tape : Preface_specs.MONOID) :
+  Preface_specs.MONAD with type 'a t = ('a * Tape.t) M.t
 
-  val write : 'a * output -> 'a t
-  (* [write] embeds an output and provides the corresponding effect *)
+(** Incarnation of a [Monad plus] over a [Writer Monad]. *)
+module Monad_plus (M : Preface_specs.MONAD_PLUS) (Tape : Preface_specs.MONOID) :
+  Preface_specs.MONAD_PLUS with type 'a t = ('a * Tape.t) M.t
 
-  val tell : output -> unit t
-  (* [tell] helps to enrich the output. This is done thanks to the semigroup combine operation *)
+(** {2 Manual construction}
 
-  val listen : 'a t -> ('a * output) t
-  (* [listen] executes the effect and return both the result and the corresponding output within the effect *)
+    Advanced way to build a [Writer Monad], constructing and assembling a
+    component-by-component a monad. (In order to provide your own implementation
+    for some features.) *)
 
-  val pass : ('a * (output -> output)) t -> 'a t
-  (* [pass] executes the effect and apply the function to the corresponding output *)
-
-  val listens : (output -> 'b) -> 'a t -> ('a * 'b) t
-  (* [listens] executes the effect and returns the result and the transformation of the output thanks to the parametric function *)
-
-  val censor : (output -> output) -> 'a t -> 'a t
-  (* [censor] executes the effects, apply the function to the corresponding output and returns an effects with the value unchanged *)
-end
+(** Incarnation of the core of a [Writer Monad] over a [Monad] and a [Monoid]. *)
+module Core_over_monad
+    (Monad : Preface_specs.MONAD)
+    (Tape : Preface_specs.MONOID) :
+  Preface_specs.Writer.CORE
+    with type tape = Tape.t
+     and type 'a monad = 'a Monad.t

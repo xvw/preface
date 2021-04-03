@@ -1,105 +1,50 @@
-(** Exposes [State.t].
+(** Modules for building {!Preface_specs.STATE} modules. *)
 
-    {1 Capabilities}
+(** {1 Documentation} *)
 
-    - {!val:Functor}
-    - {!val:Applicative}
-    - {!val:Monad}
+(** {1 Construction}
 
-    {1 Use cases}
+    Standard way to build a [State Monad]. *)
 
-    The State module allows you to deal with the capability to manage a state.
-    Management means getting the current state, setting a new state replacing
-    the current one and finally modifying the sate thanks to a function.
+(** Given a [Monad] and a [State] produces a [State monad] over the state and
+    using the monad as an inner monad. *)
+module Over_monad (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) :
+  Preface_specs.STATE with type state = State.t and type 'a monad = 'a M.t
 
-    {1 Example}
+(** {1 Improving API} *)
 
-    In this example we propose the manipulation of 2D vectors.
+(** Incarnation of a [Functor] over a [State Monad]. *)
+module Functor (F : Preface_specs.FUNCTOR) (State : Preface_specs.Types.T0) :
+  Preface_specs.FUNCTOR with type 'a t = State.t -> ('a * State.t) F.t
 
-    {2 Vector ADT and basic operations}
+(** Incarnation of an [Applicative] over a [State Monad]. *)
+module Applicative (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) :
+  Preface_specs.APPLICATIVE with type 'a t = State.t -> ('a * State.t) M.t
 
-    For this purpose such vector can be represented by a pair i.e. generative
-    algebra. Then we can define basic operations.
+(** Incarnation of a [Monad] over a [State Monad]. *)
+module Monad (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) :
+  Preface_specs.MONAD with type 'a t = State.t -> ('a * State.t) M.t
 
-    {[
-      module Vector_2D = struct
-        type t = int * int
+(** Incarnation of a [Monad plus] over a [State Monad]. *)
+module Monad_plus
+    (M : Preface_specs.MONAD_PLUS)
+    (State : Preface_specs.Types.T0) :
+  Preface_specs.MONAD_PLUS with type 'a t = State.t -> ('a * State.t) M.t
 
-        let add (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+(** Incarnation of an [Alternative] over a [State Monad]. *)
+module Alternative
+    (M : Preface_specs.MONAD_PLUS)
+    (State : Preface_specs.Types.T0) :
+  Preface_specs.ALTERNATIVE with type 'a t = State.t -> ('a * State.t) M.t
 
-        let mult k (x, y) = (k * x, k * y)
-      end
-    ]}
+(** {2 Manual construction}
 
-    {2 Vector state creation}
+    Advanced way to build a [State Monad], constructing and assembling a
+    component-by-component a monad. (In order to provide your own implementation
+    for some features.) *)
 
-    The corresponding [State] monad is created using the `Over_type` functor.
-
-    {[
-      module State = Preface_stdlib.State.Over_type (struct
-        type t = Vector_2D.t
-      end)
-    ]}
-
-    {2 Manipulating state vectors}
-
-    Then we are able to create new state vector instance, setting it, modifying
-    it and getting its value. In addition the vector functions can be also
-    proposed for state vectors.
-
-    {[
-      let add v2 = State.modify (Vector_2D.add v2)
-
-      let mult k = State.modify (Vector_2D.mult k)
-    ]}
-
-    Finally we can build simple program using monad syntax. This program takes a
-    vector, creates the corresponding state monad and do an addition and a
-    multiplication and return the corresponding state.
-
-    {[
-      let program =
-        let open State in
-        let open State.Monad in
-        let* () = add (2, 1) in
-        let* () = mult 3 in
-        get
-      ;;
-
-      let v = fst (program (1, 0)) (* v is the vector (9, 3) *)
-    ]} *)
-
-(** {1 Implementation} *)
-
-module Over (T : Preface_specs.Types.T0) : sig
-  (** {2 Types} *)
-
-  type state = T.t
-  (** The encapsulated state *)
-
-  type 'a t
-  (** The type *)
-
-  module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-  (** {2 Functor API} *)
-
-  module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
-  (** {2 Applicative API} *)
-
-  module Monad : Preface_specs.MONAD with type 'a t = 'a t
-  (** {2 Monad API} *)
-
-  (** {2 Helpers} *)
-
-  val run : 'a t -> state -> 'a * state
-  (** Run the given program with a default value. *)
-
-  val get : state t
-  (** Returns the current state *)
-
-  val set : state -> unit t
-  (** Replace the state with the parametric one *)
-
-  val modify : (state -> state) -> unit t
-  (** Modify the state applying the parametric function *)
-end
+(** Incarnation of the core of a [State Monad] over a [Monad] and a [State]. *)
+module Core_over_monad
+    (M : Preface_specs.MONAD)
+    (State : Preface_specs.Types.T0) :
+  Preface_specs.State.CORE with type state = State.t and type 'a monad = 'a M.t

@@ -31,13 +31,12 @@ module Monoid = Preface_stdlib.List.Monoid (struct
   type t = Stax.token
 end)
 
-module Writer = Preface.Make.Writer.Over (Monoid)
+module Writer = Preface.Writer.Over (Monoid)
 
 let rec sax_like =
   let open Xml in
   let open Stax in
   let open Writer in
-  let open Writer.Monad in
   function
   | PCData s -> tell [ Text s ]
   | Tag (n, x) ->
@@ -57,14 +56,14 @@ let sax = Alcotest.testable Stax.pp (Stax.equal ( = ))
 let should_transform_a_pcdata () =
   let open Writer in
   let expected = Stax.[ Text "Hello World" ]
-  and (_, computed) = run (sax_like Xml.(PCData "Hello World")) in
+  and (_, computed) = run_identity (sax_like Xml.(PCData "Hello World")) in
   Alcotest.(check (list sax)) "transform_a_pcdata" expected computed
 ;;
 
 let should_transform_a_tag () =
   let open Writer in
   let expected = Stax.[ Open "A"; Close "A" ]
-  and (_, computed) = run (sax_like Xml.(Tag ("A", Empty))) in
+  and (_, computed) = run_identity (sax_like Xml.(Tag ("A", Empty))) in
   Alcotest.(check (list sax)) "transform_a_tag" expected computed
 ;;
 
@@ -72,7 +71,7 @@ let should_transform_a_sequence () =
   let open Writer in
   let expected = Stax.[ Open "A"; Close "A"; Text "Hello World" ]
   and (_, computed) =
-    run (sax_like Xml.(Seq (Tag ("A", Empty), PCData "Hello World")))
+    run_identity (sax_like Xml.(Seq (Tag ("A", Empty), PCData "Hello World")))
   in
   Alcotest.(check (list sax)) "transform_a_sequence" expected computed
 ;;
@@ -80,7 +79,7 @@ let should_transform_a_sequence () =
 let should_transform_empty () =
   let open Writer in
   let expected = []
-  and (_, computed) = run (sax_like Xml.Empty) in
+  and (_, computed) = run_identity (sax_like Xml.Empty) in
   Alcotest.(check (list sax)) "transform_empty" expected computed
 ;;
 
