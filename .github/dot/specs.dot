@@ -1,0 +1,57 @@
+graph {
+        node [shape=plaintext; fontname = "Helvetica"; style=filled; fillcolor=black; fontcolor=white];
+        edge [color = gray];
+        
+        Contravariant;      
+        Functor -- Applicative -- Selective --  Monad;
+        Applicative -- Alternative;
+        Monad -- Monad_plus;
+        Functor -- Alt;
+        Functor -- Comonad;
+        
+        Semigroup -- Monoid;
+        Monoid -- Alternative [style=dotted; arrowhead=none; constraint=false];
+        Monoid -- Monad_plus [style=dotted; arrowhead=none; constraint=false];
+        Semigroup -- Alt [style=dotted; arrowhead=none; constraint=false];
+        Monoid -- Monad [style=dotted; arrowhead=none];
+        Monoid -- Foldable;
+
+        Functor -- Free_selective [style=dotted; arrowhead=none];
+        Functor -- Free_applicative [style=dotted; arrowhead=none];
+        Functor -- Free_monad [style=dotted; arrowhead=none];
+        
+        Free_selective -- Selective;
+        Free_applicative -- Applicative;
+        Free_monad -- Monad;
+        Freer_monad -- Monad;
+
+        Profunctor;
+        Bifunctor;
+
+        Contravariant -- Profunctor;
+        Functor -- Profunctor;
+        Functor -- Bifunctor;
+
+        Monad --State;
+        Monad -- Reader;
+        Monad -- Writer;
+
+        Applicative -- Traversable;
+        Monad -- Traversable;
+
+        Monoid -- Category [style=dotted; arrowhead=none; constraint=false];
+        Category -- Arrow;
+        Profunctor -- Strong;
+        Profunctor -- Choice;
+        Profunctor -- Closed;
+        Strong -- Arrow;
+        Arrow -- Arrow_zero;
+        Arrow -- Arrow_alt;
+        Arrow -- Arrow_plus;
+        Arrow -- Arrow_choice;
+        Arrow -- Arrow_apply;
+        Arrow_zero -- Arrow_plus [style=dotted; arrowhead=none];
+        Arrow_alt -- Arrow_plus [style=dotted; arrowhead=none];
+        Monoid -- Arrow_plus [style=dotted; arrowhead=none];
+        Semigroup -- Arrow_alt [style=dotted; arrowhead=none];
+}
