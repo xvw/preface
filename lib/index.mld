@@ -1,0 +1,29 @@
+{0 Preface}
+
+Preface is an opinionated library designed to facilitate the handling
+of recurring functional programming idioms in {{:https://ocaml.org}
+OCaml}. Many of the design decisions were made in an attempt to
+calibrate, as best as possible, to the OCaml language. Trying to get
+the most out of the module language. The name "{e Preface}" is a nod
+to "{e Prelude}".   
+
+When learning functional programming, one is often confronted with
+constructs derived (or not) from category theory. Languages such as
+Haskell offer very complete libraries to use them, and thus,
+facilitate their learning. In OCaml, it often happens that these
+abstractions are buried in the heart of certain
+libraries/projects. This is why one of the objectives of Preface is to
+propose tools for concretising these abstractions, at least as a
+pedagogical tool.
+
+- {{:https://github.com/xvw/preface} Preface on Github}
+- {{:https://github.com/xvw/preface/issues} Bugtracker}
+
+The library is released under the
+{{:https://github.com/xvw/preface/blob/master/LICENSE} MIT License}
+
+{1 Full Documentation}
+
+You can browse the full library documentation by clicking on the link below.
+
+{{:Preface/index.html} Access to the full library API}.
