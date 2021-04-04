@@ -1,14 +1,15 @@
 (** A [Traversable] is a data structure that can be traversed from left to
-    right, performing an action on each element.
+    right, performing an action on each element. *)
 
-    A common usage of [Traversable] is to turn any
-    [Traversable.t of Applicative.t] into a [Applicative.t of Traversable.t].
+(** A common usage of [Traversable] is to turn any [Traversable] of
+    {!module:Applicative} into a {!module:Applicative} of [Traversable].
 
     For example, going to ['a option list] to ['a list option]. *)
 
 (** {1 Structure anatomy} *)
 
-(** Standard requirement. *)
+(** The minimum definition of a traversable. It is by using the combinators of
+    this module that the other combinators will be derived. *)
 module type CORE = sig
   type 'a t
   (** The type held by the [Traversable]. *)
@@ -21,7 +22,7 @@ module type CORE = sig
       left to right, and collect the results. **)
 end
 
-(** Operations *)
+(** Additional operations. *)
 module type OPERATION = sig
   type 'a t
   (** The type held by the [Traversable]. *)
@@ -34,36 +35,40 @@ module type OPERATION = sig
       results *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of a [Traversable] *)
 module type API = sig
   include CORE
+  (** @closed *)
 
+  (** @closed *)
   include OPERATION with type 'a t := 'a t and type 'a iter := 'a iter
 end
 
-(** The complete interface of a [Traversable] over a [Monad]*)
+(** The complete interface of a [Traversable] over a {!module:Monad}*)
 module type API_OVER_MONAD = sig
   include Monad.API
-  (** {2 Monad API} *)
+  (** @inline *)
 
-  (** {2 Traversable using Monadic form} *)
+  (** {1 Traversable using Monad form} *)
+
   module Traversable (M : Monad.API) :
     API with type 'a iter = 'a t and type 'a t = 'a M.t
 end
 
-(** The complete interface of a [Traversable] over an [Applicative]*)
+(** The complete interface of a [Traversable] over an {!module:Applicative}*)
 module type API_OVER_APPLICATIVE = sig
   include Applicative.API
-  (** {2 Applicative API} *)
+  (** @inline *)
 
-  (** {2 Traversable using Applicative form} *)
+  (** {1 Traversable using Applicative form} *)
+
   module Traversable (A : Applicative.API) :
     API with type 'a iter = 'a t and type 'a t = 'a A.t
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:http://www.soi.city.ac.uk/~ross/papers/Applicative.html} Applicative
       Programming with Effects}

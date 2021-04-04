@@ -1,59 +1,82 @@
-(** An [Arrow] is an abstract view of computation sitting between [Applicative]
-    and [Monad]. *)
+(** An [Arrow] is an abstract view of computation sitting between
+    {!module:Applicative} and {!module:Monad}. [Arrow] is built on the top of
+    {!module:Category} and {!module:Strong}. So an [Arrow] is also a
+    {!module:Category}. *)
+
+(** {2 Laws}
+
+    To have a predictable behaviour, the instance of [Arrow] must obey some
+    laws.
+
+    + All {!module:Category} laws
+    + [arrow id = id]
+    + [arrow (g % f) = arrow f >>> arrow g]
+    + [fst (arrow f) = arr (fst f)]
+    + [fst (f >>> g) = fst f >>> fst g]
+    + [fst f >>> arrow (fun (x,y) -> (x,g y)) = arrow (fun (x,y) -> (x,g y)) >>> fst f]
+    + [fst f >>> arrow Stdlib.fst = arrow Stdlib.fst >>> f]
+    + [fst (fst f) >>> arrow assoc = arrow assoc >>> fst f] *)
 
 (** {1 Structure anatomy} *)
 
-(** Requirement via [arrow]. *)
+(** Exposes the [arrow] function, mandatory for each requirement. *)
 module type CORE_WITH_ARROW = sig
   type ('a, 'b) t
   (** The type held by the [Arrow]. *)
 
   val arrow : ('a -> 'b) -> ('a, 'b) t
-  (** Lift a function to an Arrow. *)
+  (** Lift a function to an [Arrow]. *)
 end
 
-(** Requirement via [fst]. *)
+(** Minimal definition using [fst]. *)
 module type CORE_WITH_ARROW_AND_FST = sig
   include CORE_WITH_ARROW
+  (** @closed *)
 
   val fst : ('a, 'b) t -> ('a * 'd, 'b * 'd) t
-  (** Send the first component of the input through the argument arrow, and copy
-      the rest unchanged to the output. *)
+  (** Send the first component of the input through the argument [Arrow], and
+      copy the rest unchanged to the output. *)
 end
 
-(** Requirement via [split]. *)
+(** Minimal definition using [split]. *)
 module type CORE_WITH_ARROW_AND_SPLIT = sig
   include CORE_WITH_ARROW
+  (** @closed *)
 
   val split : ('a, 'b) t -> ('c, 'd) t -> ('a * 'c, 'b * 'd) t
-  (** Split the input between the two argument arrows and combine their output. *)
+  (** Split the input between the two given [Arrows] and combine their output. *)
 end
 
-(** Standard requirement *)
+(** The minimum definition of an [Arrow]. It is by using the combinators of this
+    module that the other combinators will be derived. *)
 module type CORE = sig
   type ('a, 'b) t
   (** The type held by the [Arrow]. *)
 
   include Category.CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Operations. *)
+(** Additional operations. *)
 module type OPERATION = sig
   type ('a, 'b) t
   (** The type held by the [Arrow]. *)
 
   include Category.OPERATION with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   val return : unit -> ('a, 'a) t
-  (** Represent the identity Arrow. *)
+  (** Represent the identity [Arrow]. *)
 
   val snd : ('a, 'b) t -> ('d * 'a, 'd * 'b) t
-  (** Send the second component of the input through the argument arrow, and
-      copy the rest unchanged to the output. *)
+  (** Send the second component of the input through the given [Arrow], and copy
+      the rest unchanged to the output. *)
 
   val fan_out : ('a, 'b) t -> ('a, 'c) t -> ('a, 'b * 'c) t
   (** Send the input to both argument arrows and combine their output. *)
@@ -71,7 +94,7 @@ module type OPERATION = sig
   (** Reversed version of {!val:post_compose_left_to_right}. *)
 end
 
-(** Aliases of operations functions. *)
+(** Aliases of some operations functions. *)
 module type ALIAS = sig
   type ('a, 'b) t
   (** The type held by the [Arrow]. *)
@@ -89,6 +112,7 @@ module type INFIX = sig
   (** The type held by the [Arrow]. *)
 
   include Category.INFIX with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   val ( *** ) : ('a, 'b) t -> ('c, 'd) t -> ('a * 'c, 'b * 'd) t
   (** Infix version of {!val:CORE.split}. *)
@@ -109,23 +133,46 @@ module type INFIX = sig
   (** Infix version of {!val:OPERATION.post_compose_right_to_left}. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of an [Arrow]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of an [Arrow]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
+
+  (** {1 Aliases}
+
+      Additional functions based on [Operation] mainly in order to be iso with
+      Haskell convention. *)
 
   include ALIAS with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
+  (** {2 Infix operators inclusion} *)
+
   include INFIX with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
+    - {{:http://www.cse.chalmers.se/~rjmh/Papers/arrows.pdf} Generalising Monads
+      to Arrows}
     - {{:https://www.haskell.org/arrows/} Arrows: A General Interface to
       Computation}
     - {{:https://hackage.haskell.org/package/base-4.14.0.0/docs/Control-Arrow.html}

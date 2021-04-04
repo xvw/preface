@@ -1,37 +1,28 @@
-(** A [Monad] for ['a t] is equiped by two things:
+(** A [Monad] allow to sequences operations that are dependent from one to
+    another, in contrast to {!module:Applicative}, which executes a series of
+    independent actions.*)
 
-    - a [return] function;
-    - a [bind] function.
+(** {2 Laws}
 
-    {2 Laws of [Monads]}
+    To have a predictable behaviour, the instance of [Monad] must obey some
+    laws.
 
-    Exactly like [Functor] and [Applicative]. An instance of [Monad] must obey
-    some laws. But there is three paths of expressing theses laws:
-
-    {3 Using [bind]}
-
-    - [return a >>= f] must be equivalent to [f a]
-    - [m >>= return] must be equivalent to [m]
-    - [(m >>= f) >>= g] must be equivalent to [m >>= (fun x -> f x >>= g)]
-
-    {3 Using [map] and [join]}
-
-    - [join <% join] must be equivalent to [join <% (map join)]
-    - [join <% pure] must be equivalent to [id] and to [join <% map pure]
-    - [map id] must be equivalent to [id]
-    - [map (g <% f)] must be equivalent to [map g <% map f]
-    - [map f <% join] must be equivalent to [join <% map (map f)]
-    - [map f <% pure] must be equivalent to [pure <% f]
-
-    {3 Using the Kleisli composition}
-
-    - [return >=> g] must be equivalent to [g]
-    - [f >=> return] must be equivalent to [f]
-    - [(f >=> g) >=> h] must be equivalent to [f >=> (g >=> h)] *)
+    + [return a >>= f = f a]
+    + [m >>= return = m]
+    + [(m >>= f) >>= g = m >>= (fun x +> f x >>= g)]
+    + [join % join = join % (map join)]
+    + [join % return = id = join % map pure]
+    + [map id = id]
+    + [map (g % f) = map g % map f]
+    + [map f % join = join % map (map f)]
+    + [map f % pure = pure % f]
+    + [return >=> g = g]
+    + [f >=> return = f]
+    + [(f >=> g) >=> h = f >=> (g >=> h)] *)
 
 (** {1 Structure anatomy} *)
 
-(** Requirement via [bind]. *)
+(** Minimal definition using [bind]. *)
 module type CORE_WITH_BIND = sig
   type 'a t
   (** The type held by the [Monad]. *)
@@ -43,7 +34,7 @@ module type CORE_WITH_BIND = sig
   (** [bind f m] passes the result of computation [m] to function [f]. *)
 end
 
-(** Requirement via [map] and [join]. *)
+(** Minimal definition using [map] and [join]. *)
 module type CORE_WITH_MAP_AND_JOIN = sig
   type 'a t
   (** The type held by the [Monad]. *)
@@ -59,7 +50,7 @@ module type CORE_WITH_MAP_AND_JOIN = sig
       argument into the outer level. *)
 end
 
-(** Requirement via [compose_left_to_right]. *)
+(** Minimal definition using [compose_left_to_right]. *)
 module type CORE_WITH_KLEISLI_COMPOSITION = sig
   type 'a t
   (** The type held by the [Monad]. *)
@@ -71,16 +62,20 @@ module type CORE_WITH_KLEISLI_COMPOSITION = sig
   (** Composing monadic functions using Kleisli Arrow (from left to right). *)
 end
 
-(** Standard requirement. *)
+(** The minimum definition of a [Monad]. It is by using the combinators of this
+    module that the other combinators will be derived. *)
 module type CORE = sig
   include CORE_WITH_BIND
+  (** @closed *)
 
   include CORE_WITH_MAP_AND_JOIN with type 'a t := 'a t
+  (** @closed *)
 
   include CORE_WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** Operations. *)
+(** Additional operations. *)
 module type OPERATION = sig
   type 'a t
   (** The type held by the [Monad]. *)
@@ -99,6 +94,7 @@ module type OPERATION = sig
       and ['c t] to ['d t]. *)
 
   include Functor.OPERATION with type 'a t := 'a t
+  (** @closed *)
 end
 
 (** Syntax extensions. *)
@@ -117,7 +113,7 @@ module type SYNTAX = sig
       [let+ x = e in f] is equals to [map (fun x -> f) e]. *)
 end
 
-(** Infix notations. *)
+(** Infix operators. *)
 module type INFIX = sig
   type 'a t
   (** The type held by the [Monad]. *)
@@ -149,26 +145,47 @@ module type INFIX = sig
       second. *)
 
   include Functor.INFIX with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of a [Monad]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of a [Monad]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type 'a t := 'a t
+  (** @closed *)
+
+  (** {1 Syntax} *)
 
   module Syntax : SYNTAX with type 'a t := 'a t
 
+  (** {2 Syntax inclusion} *)
+
   include module type of Syntax
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
+  (** {2 Infix operators inclusion} *)
+
   include module type of Infix
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Monad.html}
       Haskell's documentation of a Monad}

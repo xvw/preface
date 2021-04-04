@@ -1,5 +1,5 @@
-(** A [State] monad parametrized over an inner monad and a [state]. [State] is a
-    monad transformer.*)
+(** A [State monad] parametrized over an inner {!module:Monad} and a state
+    (which is an arbitrary type). [State] is a {e monad transformer}.*)
 
 (** Operation of [State] monad parametrized over an inner monad and [state]. *)
 module type CORE = sig
@@ -37,13 +37,20 @@ module type CORE = sig
   (** Apply a function to the current state and return it. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
-(** The complete interface of a [State] monad. *)
+(** The complete interface of a [State] monad wich introduces the
+    {!module:Monad} API into the [State] API. *)
 module type API = sig
   include CORE
+  (** @closed *)
+
+  (** {1 Monad API} *)
 
   module Monad : Monad.API
 
+  (** {2 Monad API inclusion} *)
+
   include module type of Monad with type 'a t := 'a t
+  (** @closed *)
 end

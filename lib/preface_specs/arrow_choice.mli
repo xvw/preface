@@ -1,8 +1,22 @@
-(** An [Arrow] with a conditionals capabilities. *)
+(** An [Arrow_choice] is an {!module:Arrow} with conditional capabilities. It is
+    a kind of {!module:Selective} in the arrow hierarchy. And an [Arrow_choice]
+    is also {!module:Arrow}. *)
+
+(** {2 Laws}
+
+    To have a predictable behaviour, the instance of [Arrow_choice] must obey
+    some laws.
+
+    + All {!module:Arrow} laws
+    + [left (arrow f) = arrow (f ++ id)]
+    + [left (f >>> g) = left f >>> left g]
+    + [f >>> arr Left = arr Left >>> left f]
+    + [left f >>> arrow (Fun.id +++ g) = arrow (Fun.id +++ g) >>> left f]
+    + [left (left f) >>> arrow assocsum = arrow assocsum >>> left f] *)
 
 (** {1 Structure anatomy} *)
 
-(** Left operation. *)
+(** Minimal definition using [left] operation without {!module:Arrow}. *)
 module type WITH_LEFT = sig
   type ('a, 'b) t
   (** The type held by the [Arrow_choice]. *)
@@ -12,7 +26,7 @@ module type WITH_LEFT = sig
       unchanged to the output. *)
 end
 
-(** Choose operation. *)
+(** Minimal definition using [choose] operation without {!module:Arrow}. *)
 module type WITH_CHOOSE = sig
   type ('a, 'b) t
   (** The type held by the [Arrow_choice]. *)
@@ -23,53 +37,68 @@ module type WITH_CHOOSE = sig
       their outputs. *)
 end
 
-(** Choose and left operation. *)
+(** Minimal definition using [choose] and [left] without {!module:Arrow}. *)
 module type WITH_LEFT_AND_CHOOSE = sig
   include WITH_LEFT
+  (** @closed *)
 
   include WITH_CHOOSE with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [arrow] and [fst] and [choose]. *)
+(** Minimal definition using [arrow] and [fst] and [choose]. *)
 module type CORE_WITH_ARROW_AND_FST_AND_CHOOSE = sig
   include WITH_CHOOSE
+  (** @closed *)
 
   include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [arrow] and [fst] and [left]. *)
+(** Minimal definition using [arrow] and [fst] and [left]. *)
 module type CORE_WITH_ARROW_AND_FST_AND_LEFT = sig
   include WITH_LEFT
+  (** @closed *)
 
   include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [arrow] and [fst] and [choose]. *)
+(** Minimal definition using [arrow] and [fst] and [choose]. *)
 module type CORE_WITH_ARROW_AND_SPLIT_AND_CHOOSE = sig
   include WITH_CHOOSE
+  (** @closed *)
 
   include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [arrow] and [fst] and [left]. *)
+(** Minimal definition using [arrow] and [fst] and [left]. *)
 module type CORE_WITH_ARROW_AND_SPLIT_AND_LEFT = sig
   include WITH_LEFT
+  (** @closed *)
 
   include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Standard requirement *)
+(** The minimum definition of an [Arrow_choice]. It is by using the combinators
+    of this module that the other combinators will be derived. *)
 module type CORE = sig
   include WITH_LEFT
+  (** @closed *)
 
   include WITH_CHOOSE with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Operations. *)
+(** Additional operations. *)
 module type OPERATION = sig
   include Arrow.OPERATION
+  (** @closed *)
 
   val right : ('a, 'b) t -> (('c, 'a) Either.t, ('c, 'b) Either.t) t
   (** The mirror image of [left]. *)
@@ -79,11 +108,12 @@ module type OPERATION = sig
 end
 
 module type ALIAS = Arrow.ALIAS
-(** Aliases of operations functions. *)
+(** Aliases of some operations functions. *)
 
 (** Infix operators. *)
 module type INFIX = sig
   include Arrow.INFIX
+  (** @closed *)
 
   val ( +++ ) :
     ('a, 'b) t -> ('c, 'd) t -> (('a, 'c) Either.t, ('b, 'd) Either.t) t
@@ -93,23 +123,46 @@ module type INFIX = sig
   (** Infix version of {!val:CORE.fan_in}. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of an [Arrow_choice]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of an [Arrow_choice]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
+
+  (** {1 Aliases}
+
+      Additional functions based on [Operation] mainly in order to be iso with
+      Haskell convention. *)
 
   include ALIAS with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
+  (** {2 Infix operators inclusion} *)
+
   include INFIX with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
+    - {{:http://www.cse.chalmers.se/~rjmh/Papers/arrows.pdf} Generalising Monads
+      to Arrows}
     - {{:https://www.haskell.org/arrows/} Arrows: A General Interface to
       Computation}
     - {{:https://hackage.haskell.org/package/base-4.14.0.0/docs/Control-Arrow.html}

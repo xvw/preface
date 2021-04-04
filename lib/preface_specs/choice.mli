@@ -1,6 +1,24 @@
-(** [Choice] is a [Profunctor] working on sum types (via [Either]). *)
+(** [Choice] is a {!module:Profunctor} working on sum types (via
+    {!module:Either}). *)
 
-(** Left operation. *)
+(** {2 Laws}
+
+    To have a predictable behaviour, the instance of [Strong] must obey some
+    laws.
+
+    + All {!module:Profunctor} laws
+    + [left = dimap Either.swap Either.swap % right]
+    + [right = dimap Either.swap Either.swap % left]
+    + [map_snd Either.left = contramap_fst Either.left % left]
+    + [map_snd Either.right = contramap_fst Either.right % right]
+    + [contramap_fst (Fun.Choice.right f) % left = map_snd (Fun.Choice.right f) % left]
+    + [contramap_fst (Fun.Choice.left f) % right = map_snd (Fun.Choice.left f) % right]
+    + [left % left = dimap assoc unassoc % left]
+    + [left % left = dimap unassoc assoc % right] *)
+
+(** {1 Structure anatomy} *)
+
+(** Minimal interface using [left] and without {!module:Profunctor}. *)
 module type WITH_LEFT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
@@ -9,7 +27,7 @@ module type WITH_LEFT = sig
   (** Act on the left parameter of the sum. *)
 end
 
-(** Right operation. *)
+(** Minimal interface using [right] and without {!module:Profunctor}. *)
 module type WITH_RIGHT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
@@ -18,17 +36,19 @@ module type WITH_RIGHT = sig
   (** Act on the right parameter of the sum. *)
 end
 
-(** Requirement via [dimap] and [left]. *)
+(** Minimal interface [dimap] and [left]. *)
 module type CORE_WITH_DIMAP_AND_LEFT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
 
   include Profunctor.CORE_WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [contramap_fst] and [map_snd] and [left]. *)
+(** Minimal interface using [contramap_fst] and [map_snd] and [left]. *)
 module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_LEFT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
@@ -36,21 +56,25 @@ module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_LEFT = sig
   include
     Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND
       with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [dimap] and [right]. *)
+(** Minimal interface using [dimap] and [right]. *)
 module type CORE_WITH_DIMAP_AND_RIGHT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
 
   include Profunctor.CORE_WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [contramap_fst] and [map_snd] and [right]. *)
+(** Minimal interfaces using [contramap_fst] and [map_snd] and [right]. *)
 module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_RIGHT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
@@ -58,29 +82,34 @@ module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_RIGHT = sig
   include
     Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND
       with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Standard requirement *)
+(** The minimum definition of an [Choice]. It is by using the combinators of
+    this module that the other combinators will be derived. *)
 module type CORE = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
 
   include Profunctor.CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** {1 API} *)
-
-(** The complete interface of a [Choice Profunctor]. *)
+(** {1 Complete API} *)
 
 module type API = CORE
+(** The complete interface of a [Choice Profunctor]. *)
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:https://hackage.haskell.org/package/profunctors-5.6.2/docs/Data-Profunctor.html#g:2}
       Haskell's documentation of Choice Profunctor} *)

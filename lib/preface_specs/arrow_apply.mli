@@ -1,8 +1,19 @@
-(** An [Arrow] with a application capabilities. *)
+(** An [Arrow_apply] is an {!module:Arrow} with application capabilities. An
+    [Arrow_apply] is also {!module:Arrow}. *)
+
+(** {2 Laws}
+
+    To have a predictable behaviour, the instance of [Arrow_apply] must obey
+    some laws.
+
+    + All {!module:Arrow} laws
+    + [fst (arrow (fun x -> arrow (fun y -> (x,y)))) >>> apply = id]
+    + [fst (arrow (fun x -> g >>> x)) >>> apply = snd g >>> apply]
+    + [fst (arrow (fun x -> x >>> h)) >>> apply = apply >>> h] *)
 
 (** {1 Structure anatomy} *)
 
-(** Apply operation *)
+(** Minimal definition using [apply] operation, without {!module:Arrow}. *)
 module type WITH_APPLY = sig
   type ('a, 'b) t
   (** The type held by the [Arrow_apply]. *)
@@ -11,53 +22,83 @@ module type WITH_APPLY = sig
   (** application of an arrow to an input.*)
 end
 
-(** Requirement via [arrow] and [fst] and [apply]. *)
+(** Minimal definition using [arrow] and [fst] and [apply]. *)
 module type CORE_WITH_ARROW_AND_FST_AND_APPLY = sig
   include WITH_APPLY
+  (** @closed *)
 
   include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Requirement via [arrow] and [fst] and [apply]. *)
+(** Minimal definition using [arrow] and [fst] and [apply]. *)
 module type CORE_WITH_ARROW_AND_SPLIT_AND_APPLY = sig
   include WITH_APPLY
+  (** @closed *)
 
   include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Standard requirement *)
+(** The minimum definition of an [Arrow_apply]. It is by using the combinators
+    of this module that the other combinators will be derived. *)
 module type CORE = sig
   include WITH_APPLY
+  (** @closed *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
 module type OPERATION = Arrow.OPERATION
-(** Operations. *)
+(** Additional operations. *)
 
 module type ALIAS = Arrow.ALIAS
-(** Aliases of operations functions. *)
+(** Aliases of some operations functions. *)
 
 module type INFIX = Arrow.INFIX
 (** Infix operators. *)
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
-(** The complete interface of an [Arrow_apply]. *)
+(** The complete interface of an [Arrow_choice]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of an [Arrow_choice]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
+
+  (** {1 Aliases}
+
+      Additional functions based on [Operation] mainly in order to be iso with
+      Haskell convention. *)
 
   include ALIAS with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
+  (** {2 Infix operators inclusion} *)
+
   include INFIX with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
+    - {{:http://www.cse.chalmers.se/~rjmh/Papers/arrows.pdf} Generalising Monads
+      to Arrows}
     - {{:https://www.haskell.org/arrows/} Arrows: A General Interface to
       Computation}
     - {{:https://hackage.haskell.org/package/base-4.14.0.0/docs/Control-Arrow.html}

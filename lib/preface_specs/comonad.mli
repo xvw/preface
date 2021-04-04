@@ -1,24 +1,23 @@
-(** A [Comonad] is the dual of the [Monad].
+(** A [Comonad] is the dual of the {!module:Monad}. *)
 
-    {2 Laws of [Comonad]}
+(** {2 Laws}
 
-    - [extend extract] must be equivalent to [id]
-    - [(extend %> extract) f] must be equivalent to [f]
-    - [extend g %> extend f] must be equivalent to [extend (extend g %> f)]
-    - [f =>= extract] must be equivalent to [f]
-    - [extract =>= f] must be equivalent to [f]
-    - [(f =>= g) =>= h] must be equivalent to [f =>= (g =>= h)]
-    - [extract <% duplicate] must be equivalent to [id]
-    - [fmap extract <% duplicate] must be equivalent to [id]
-    - [duplicate %> duplicate] must be equivalent to
-      [fmap duplicate <% duplicate]
-    - [extend f] must be equivalent to [fmap f <% duplicate]
-    - [duplicate] must be equivalent to [extend id]
-    - [fmap f] must be equivalent to [extend (f <% extract)] *)
+    - [extend extract = id]
+    - [(extend %> extract) f = f]
+    - [extend g %> extend f = extend (extend g %> f)]
+    - [f =>= extract = f]
+    - [extract =>= f = f]
+    - [(f =>= g) =>= h = f =>= (g =>= h)]
+    - [extract <% duplicate = id]
+    - [fmap extract <% duplicate = id]
+    - [duplicate %> duplicate = fmap duplicate <% duplicate]
+    - [extend f = fmap f <% duplicate]
+    - [duplicate = extend id]
+    - [fmap f = extend (f <% extract)] *)
 
 (** {1 Structure anatomy} *)
 
-(** Requirement via [map] and [duplicate]. *)
+(** Minimal definition using [map] and [duplicate]. *)
 module type CORE_WITH_MAP_AND_DUPLICATE = sig
   type 'a t
   (** The type held by the [Comonad]. *)
@@ -33,7 +32,7 @@ module type CORE_WITH_MAP_AND_DUPLICATE = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
-(** Requirement via [extend]. *)
+(** Minimal definition using [extend]. *)
 module type CORE_WITH_EXTEND = sig
   type 'a t
   (** The type held by the [Comonad]. *)
@@ -45,7 +44,7 @@ module type CORE_WITH_EXTEND = sig
   (** Dual of bind. *)
 end
 
-(** Requirement via [compose_left_to_right]. *)
+(** Minimal definition using [compose_left_to_right]. *)
 module type CORE_WITH_COKLEISLI_COMPOSITION = sig
   type 'a t
   (** The type held by the [Comonad]. *)
@@ -57,16 +56,20 @@ module type CORE_WITH_COKLEISLI_COMPOSITION = sig
   (** Composing monadic functions using Co-Kleisli Arrow (from left to right). *)
 end
 
-(** Standard requirement. *)
+(** The minimum definition of a [Comonad]. It is by using the combinators of
+    this module that the other combinators will be derived. *)
 module type CORE = sig
   include CORE_WITH_MAP_AND_DUPLICATE
+  (** @closed *)
 
   include CORE_WITH_EXTEND with type 'a t := 'a t
+  (** @closed *)
 
   include CORE_WITH_COKLEISLI_COMPOSITION with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** Operations. *)
+(** Additional operations. *)
 module type OPERATION = sig
   type 'a t
   (** The type held by the [Comonad]. *)
@@ -85,9 +88,10 @@ module type OPERATION = sig
   (** Composing comonadic functions using Co-Kleisli Arrow (from right to left). *)
 
   include Functor.OPERATION with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** Syntax *)
+(** Syntax extensions. *)
 module type SYNTAX = sig
   type 'a t
   (** The type held by the [Comonad]. *)
@@ -101,7 +105,7 @@ module type SYNTAX = sig
   (** Syntaxic shortcuts for version of {!val:CORE.map} *)
 end
 
-(** Infix notations. *)
+(** Infix operators. *)
 module type INFIX = sig
   type 'a t
   (** The type held by the [Comonad]. *)
@@ -131,21 +135,41 @@ module type INFIX = sig
   (** Discard the value of the second argument. *)
 
   include Functor.INFIX with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of a [Comonad]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of a [Comonad]. *)
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type 'a t := 'a t
+  (** @closed *)
+
+  (** {1 Syntax} *)
 
   module Syntax : SYNTAX with type 'a t := 'a t
 
+  (** {2 Syntax inclusion} *)
+
   include module type of Syntax
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
+  (** {2 Infix operators inclusion} *)
+
   include module type of Infix
+  (** @closed *)
 end

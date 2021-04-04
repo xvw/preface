@@ -16,7 +16,7 @@ module Laws (A : Preface_specs.ARROW_APPLY) = struct
   let law8 =
     let lhs () = A.(fst (arrow (fun x -> arrow (fun y -> (x, y)))) >>> apply) in
     let rhs () = A.id in
-    ( "fst (arrow (fun x -> arrow (fun y -> (x,y)))) >>> app = id"
+    ( "fst (arrow (fun x -> arrow (fun y -> (x,y)))) >>> apply = id"
     , (fun () -> (lhs (), rhs ())) )
   ;;
 
