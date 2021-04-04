@@ -6,9 +6,6 @@ all:
 test:
 	dune runtest --no-buffer -j 1
 
-doc:
-	dune build @doc
-
 clean:
 	dune clean
 
@@ -22,3 +19,9 @@ fmt:
 	  dot -Tsvg $(<) -o ./.github/figures/$(@)
 
 dot: specs.svg cut.svg
+
+
+doc: dot
+	dune build @doc
+	mkdir -p _build/default/_doc/_html/images
+	cp .github/figures/* _build/default/_doc/_html/images
