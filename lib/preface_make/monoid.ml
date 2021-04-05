@@ -1,11 +1,15 @@
 module Core_over_semigroup
     (S : Preface_specs.SEMIGROUP)
-    (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
+    (M : Preface_specs.Monoid.WITH_NEUTRAL with type t = S.t) :
   Preface_specs.Monoid.CORE with type t = M.t = struct
   include S
 
   let neutral = M.neutral
 end
+
+module Core (Req : Preface_specs.Monoid.WITH_NEUTRAL_AND_COMBINE) :
+  Preface_specs.Monoid.CORE with type t = Req.t =
+  Req
 
 module Operation (Core : Preface_specs.Monoid.CORE) :
   Preface_specs.Monoid.OPERATION with type t = Core.t = struct
@@ -30,8 +34,10 @@ module Via
   include Infix
 end
 
-module Via_combine_and_neutral (Core : Preface_specs.Monoid.CORE) :
-  Preface_specs.MONOID with type t = Core.t = struct
+module Via_combine_and_neutral
+    (Req : Preface_specs.Monoid.WITH_NEUTRAL_AND_COMBINE) :
+  Preface_specs.MONOID with type t = Req.t = struct
+  module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
   module Infix = Infix (Core)
@@ -41,7 +47,7 @@ end
 
 module Over_semigroup
     (S : Preface_specs.SEMIGROUP)
-    (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
+    (M : Preface_specs.Monoid.WITH_NEUTRAL with type t = S.t) :
   Preface_specs.MONOID with type t = S.t = struct
   module Core = Core_over_semigroup (S) (M)
   module Operation = Operation (Core)

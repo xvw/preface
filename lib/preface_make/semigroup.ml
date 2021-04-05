@@ -1,3 +1,7 @@
+module Core (Req : Preface_specs.Semigroup.WITH_COMBINE) :
+  Preface_specs.Semigroup.CORE with type t = Req.t =
+  Req
+
 module Operation (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.Semigroup.OPERATION with type t = Core.t = struct
   type t = Core.t
@@ -25,8 +29,9 @@ module Via
   include Infix
 end
 
-module Via_combine (Core : Preface_specs.Semigroup.CORE) :
-  Preface_specs.SEMIGROUP with type t = Core.t = struct
+module Via_combine (Req : Preface_specs.Semigroup.WITH_COMBINE) :
+  Preface_specs.SEMIGROUP with type t = Req.t = struct
+  module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
   module Infix = Infix (Core)

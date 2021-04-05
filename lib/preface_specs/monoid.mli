@@ -11,11 +11,11 @@
       {!module:Semigroup})
     + [combine x neutral = combine neutral x = x] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** A type [t] with a neutral element. This signature is mainly used to enrich a
     [Semigroup] with a neutral element. *)
-module type NEUTRAL = sig
+module type WITH_NEUTRAL = sig
   type t
   (** A type [t] which is a [Monoid]. *)
 
@@ -23,15 +23,18 @@ module type NEUTRAL = sig
   (** The neutral element of the [Monoid]. *)
 end
 
-(** The minimum definition of a [Monoid]. It is by using the combinators of this
-    module that the other combinators will be derived. *)
-module type CORE = sig
+module type WITH_NEUTRAL_AND_COMBINE = sig
   include Semigroup.CORE
   (** @inline *)
 
-  include NEUTRAL with type t := t
+  include WITH_NEUTRAL with type t := t
   (** @closed *)
 end
+
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_NEUTRAL_AND_COMBINE
+(** Basis operations.*)
 
 (** Additional operations. *)
 module type OPERATION = sig

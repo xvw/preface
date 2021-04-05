@@ -8,17 +8,22 @@
 
     + [combine (combine a b) c = combine a (combine b c) ] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** The minimum definition of a semigroup. It is by using the combinators of
     this module that the other combinators will be derived. *)
-module type CORE = sig
+module type WITH_COMBINE = sig
   type t
   (** the type held by the [Semigroup]. *)
 
   val combine : t -> t -> t
   (** [combine x y] Combine two values ([x] and [y]) of [t] into one. *)
 end
+
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_COMBINE
+(** Basis operations.*)
 
 (** Additional operations. *)
 module type OPERATION = sig
