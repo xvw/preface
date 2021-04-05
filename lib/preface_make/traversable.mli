@@ -77,14 +77,18 @@
 (** Incarnation of [Traversable] using an [Applicative]. *)
 module Over_applicative
     (A : Preface_specs.APPLICATIVE)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a A.t) :
-  Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter
+    (Req : Preface_specs.Traversable.WITH_TRAVERSE with type 'a t = 'a A.t) :
+  Preface_specs.TRAVERSABLE
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter
 
 (** Incarnation of [Traversable] using a [Monad]. *)
 module Over_monad
     (M : Preface_specs.MONAD)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a M.t) :
-  Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter
+    (Req : Preface_specs.Traversable.WITH_TRAVERSE with type 'a t = 'a M.t) :
+  Preface_specs.TRAVERSABLE
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter
 
 (** {2 Manual construction}
 
@@ -100,21 +104,27 @@ module Via
             and type 'a iter = 'a C.iter) :
   Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter
 
+(** Incarnation of [Traversable.Core] using [traverse]. *)
+module Core (Req : Preface_specs.Traversable.WITH_TRAVERSE) :
+  Preface_specs.Traversable.CORE
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter
+
 (** Incarnation of [Traversable.Core] using an [Applicative]. *)
 module Core_over_applicative
     (A : Preface_specs.APPLICATIVE)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a A.t) :
+    (Req : Preface_specs.Traversable.WITH_TRAVERSE with type 'a t = 'a A.t) :
   Preface_specs.Traversable.CORE
-    with type 'a t = 'a C.t
-     and type 'a iter = 'a C.iter
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter
 
 (** Incarnation of [Traversable.Core] using a [Monad]. *)
 module Core_over_monad
     (M : Preface_specs.MONAD)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a M.t) :
+    (Req : Preface_specs.Traversable.WITH_TRAVERSE with type 'a t = 'a M.t) :
   Preface_specs.Traversable.CORE
-    with type 'a t = 'a C.t
-     and type 'a iter = 'a C.iter
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter
 
 (** Incarnation of [Traversable.Operation] with [Traversable.Core].*)
 module Operation (C : Preface_specs.Traversable.CORE) :

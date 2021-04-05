@@ -18,10 +18,10 @@
     + [fmap f x = pure f <*> x]
     + [lift2 p (lift2 q u v) = lift2 f u % lift2 g v] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal interface using [map] and [product]. *)
-module type CORE_WITH_MAP_AND_PRODUCT = sig
+module type WITH_MAP_AND_PRODUCT = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
@@ -36,7 +36,7 @@ module type CORE_WITH_MAP_AND_PRODUCT = sig
 end
 
 (** Minimal interface using [apply]. *)
-module type CORE_WITH_APPLY = sig
+module type WITH_APPLY = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
@@ -47,13 +47,14 @@ module type CORE_WITH_APPLY = sig
   (** [Applicative] functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 end
 
-(** The minimum definition of an [Applicative]. It is by using the combinators
-    of this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include CORE_WITH_APPLY
+  include WITH_APPLY
   (** @closed *)
 
-  include CORE_WITH_MAP_AND_PRODUCT with type 'a t := 'a t
+  include WITH_MAP_AND_PRODUCT with type 'a t := 'a t
   (** @closed *)
 end
 

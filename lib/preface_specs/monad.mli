@@ -20,10 +20,10 @@
     + [f >=> return = f]
     + [(f >=> g) >=> h = f >=> (g >=> h)] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal definition using [bind]. *)
-module type CORE_WITH_BIND = sig
+module type WITH_BIND = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
@@ -35,7 +35,7 @@ module type CORE_WITH_BIND = sig
 end
 
 (** Minimal definition using [map] and [join]. *)
-module type CORE_WITH_MAP_AND_JOIN = sig
+module type WITH_MAP_AND_JOIN = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
@@ -51,7 +51,7 @@ module type CORE_WITH_MAP_AND_JOIN = sig
 end
 
 (** Minimal definition using [compose_left_to_right]. *)
-module type CORE_WITH_KLEISLI_COMPOSITION = sig
+module type WITH_KLEISLI_COMPOSITION = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
@@ -62,16 +62,17 @@ module type CORE_WITH_KLEISLI_COMPOSITION = sig
   (** Composing monadic functions using Kleisli Arrow (from left to right). *)
 end
 
-(** The minimum definition of a [Monad]. It is by using the combinators of this
-    module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include CORE_WITH_BIND
+  include WITH_BIND
   (** @closed *)
 
-  include CORE_WITH_MAP_AND_JOIN with type 'a t := 'a t
+  include WITH_MAP_AND_JOIN with type 'a t := 'a t
   (** @closed *)
 
-  include CORE_WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
+  include WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
   (** @closed *)
 end
 

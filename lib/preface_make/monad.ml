@@ -1,8 +1,8 @@
 open Preface_core.Fun
 
-module Core_via_bind (Core : Preface_specs.Monad.CORE_WITH_BIND) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Core.t = struct
-  include Core
+module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) :
+  Preface_specs.Monad.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let join m = bind id m
 
@@ -11,9 +11,9 @@ module Core_via_bind (Core : Preface_specs.Monad.CORE_WITH_BIND) :
   let compose_left_to_right f g x = bind g (f x)
 end
 
-module Core_via_map_and_join (Core : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Core.t = struct
-  include Core
+module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
+  Preface_specs.Monad.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let bind f m = join (map f m)
 
@@ -21,9 +21,9 @@ module Core_via_map_and_join (Core : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN)
 end
 
 module Core_via_kleisli_composition
-    (Core : Preface_specs.Monad.CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Core.t = struct
-  include Core
+    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.Monad.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let bind f m = (compose_left_to_right (constant m) f) ()
 
@@ -98,9 +98,9 @@ module Via
   module Infix = Infix
 end
 
-module Via_bind (Core_with_bind : Preface_specs.Monad.CORE_WITH_BIND) :
-  Preface_specs.MONAD with type 'a t = 'a Core_with_bind.t = struct
-  module Core = Core_via_bind (Core_with_bind)
+module Via_bind (Req : Preface_specs.Monad.WITH_BIND) :
+  Preface_specs.MONAD with type 'a t = 'a Req.t = struct
+  module Core = Core_via_bind (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -110,10 +110,9 @@ module Via_bind (Core_with_bind : Preface_specs.Monad.CORE_WITH_BIND) :
   include Infix
 end
 
-module Via_map_and_join
-    (Core_with_map_and_join : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.MONAD with type 'a t = 'a Core_with_map_and_join.t = struct
-  module Core = Core_via_map_and_join (Core_with_map_and_join)
+module Via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
+  Preface_specs.MONAD with type 'a t = 'a Req.t = struct
+  module Core = Core_via_map_and_join (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -124,11 +123,9 @@ module Via_map_and_join
 end
 
 module Via_kleisli_composition
-    (Core_with_kleisli_composition : Preface_specs.Monad
-                                     .CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.MONAD with type 'a t = 'a Core_with_kleisli_composition.t =
-struct
-  module Core = Core_via_kleisli_composition (Core_with_kleisli_composition)
+    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.MONAD with type 'a t = 'a Req.t = struct
+  module Core = Core_via_kleisli_composition (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)

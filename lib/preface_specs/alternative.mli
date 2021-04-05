@@ -12,10 +12,10 @@
     + All {!module:Alt} laws
     + [combine x neutral = combine neutral x = x] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
-(** Additional operations over [Alternative]. *)
-module type CORE_WITH_NEUTRAL_AND_COMBINE = sig
+(** Minimal interfaces of [Alternative] without {!module:Applicative}. *)
+module type WITH_NEUTRAL_AND_COMBINE = sig
   include Alt.WITH_COMBINE
   (** @closed *)
 
@@ -23,29 +23,30 @@ module type CORE_WITH_NEUTRAL_AND_COMBINE = sig
   (** The neutral element of the [Alternative]. *)
 end
 
-(** Minimal definition using [map] and [product]. *)
-module type CORE_WITH_MAP_AND_PRODUCT = sig
-  include Applicative.CORE_WITH_MAP_AND_PRODUCT
+(** Minimal definition using [neutral], [combine], [pure], [map] and [product]. *)
+module type WITH_MAP_AND_PRODUCT = sig
+  include Applicative.WITH_MAP_AND_PRODUCT
   (** @closed *)
 
-  include CORE_WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
   (** @closed *)
 end
 
-(** Minimal definition using [apply]. *)
-module type CORE_WITH_APPLY = sig
-  include Applicative.CORE_WITH_APPLY
+(** Minimal definition using [neutral], [combine], [pure] and [apply]. *)
+module type WITH_APPLY = sig
+  include Applicative.WITH_APPLY
 
-  include CORE_WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 
-(** The minimum definition of an [Alternative]. It is by using the combinators
-    of this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include CORE_WITH_APPLY
+  include WITH_NEUTRAL_AND_COMBINE
   (** @closed *)
 
-  include CORE_WITH_MAP_AND_PRODUCT with type 'a t := 'a t
+  include Applicative.CORE with type 'a t := 'a t
   (** @closed *)
 end
 

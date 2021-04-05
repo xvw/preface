@@ -1,13 +1,13 @@
 (** A [Foldable] is a data structure wich can be fold. In other word, reduced to
     a summary value one element at a time *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal definition using [fold_map'].
 
     [fold_map' neutral combine f x] use explicit monoidal combinators passing in
     order to deal with polymorphsim. *)
-module type CORE_WITH_FOLD_MAP = sig
+module type WITH_FOLD_MAP = sig
   type 'a t
   (** The type held by [Foldable]. *)
 
@@ -17,7 +17,7 @@ module type CORE_WITH_FOLD_MAP = sig
 end
 
 (** Minimal definition using [fold_right].*)
-module type CORE_WITH_FOLD_RIGHT = sig
+module type WITH_FOLD_RIGHT = sig
   type 'a t
   (** The type held by [Foldable]. *)
 
@@ -25,13 +25,14 @@ module type CORE_WITH_FOLD_RIGHT = sig
   (** Same of {!val:List.fold_right} for [Foldable]. *)
 end
 
-(** The minimum definition of a [Foldable]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operation. *)
 module type CORE = sig
-  include CORE_WITH_FOLD_MAP
+  include WITH_FOLD_MAP
   (** @closed *)
 
-  include CORE_WITH_FOLD_RIGHT with type 'a t := 'a t
+  include WITH_FOLD_RIGHT with type 'a t := 'a t
   (** @closed *)
 end
 

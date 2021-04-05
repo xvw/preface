@@ -9,16 +9,22 @@
     + [contramap id = id]
     + [(contramap f) % (contramap g) = contramap (g & f)] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
-(** Standard requirement. *)
-module type CORE = sig
+(** The minimum definition of a [Contravariant]. It is by using the combinators
+    of this module that the other combinators will be derived. *)
+module type WITH_CONTRAMAP = sig
   type 'a t
   (** The type held by the [Contravriant Functor]. *)
 
   val contramap : ('a -> 'b) -> 'b t -> 'a t
   (** Mapping over from ['a] to ['b] over ['b t] to ['a t]. *)
 end
+
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_CONTRAMAP
+(** Basis operations.*)
 
 (** Additional operations. *)
 module type OPERATION = sig

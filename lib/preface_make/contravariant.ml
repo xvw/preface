@@ -1,5 +1,9 @@
 open Preface_core.Fun
 
+module Core (Req : Preface_specs.Contravariant.WITH_CONTRAMAP) :
+  Preface_specs.Contravariant.CORE with type 'a t = 'a Req.t =
+  Req
+
 module Operation (Core : Preface_specs.Contravariant.CORE) :
   Preface_specs.Contravariant.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
@@ -35,8 +39,9 @@ module Via
   module Infix = Infix
 end
 
-module Via_contramap (Core : Preface_specs.Contravariant.CORE) :
-  Preface_specs.CONTRAVARIANT with type 'a t = 'a Core.t = struct
+module Via_contramap (Req : Preface_specs.Contravariant.WITH_CONTRAMAP) :
+  Preface_specs.CONTRAVARIANT with type 'a t = 'a Req.t = struct
+  module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
   include Operation

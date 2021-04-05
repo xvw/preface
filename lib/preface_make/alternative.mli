@@ -9,21 +9,20 @@
 (** Incarnation of an [Alternative] with standard requirements ([pure], [map],
     [product], [neutral] and [combine]). *)
 module Via_map_and_product
-    (Core_with_map_and_product : Preface_specs.Alternative
-                                 .CORE_WITH_MAP_AND_PRODUCT) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Core_with_map_and_product.t
+    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Alternative] with standard requirements ([pure], [apply],
     [neutral] and [combine]). *)
-module Via_apply (Core_with_apply : Preface_specs.Alternative.CORE_WITH_APPLY) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Core_with_apply.t
+module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Alternative] over an [Applicative].*)
 module Over_applicative
     (Applicative : Preface_specs.APPLICATIVE)
-    (Core : Preface_specs.Alternative.CORE_WITH_NEUTRAL_AND_COMBINE
-              with type 'a t = 'a Applicative.t) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Core.t
+    (Req : Preface_specs.Alternative.WITH_NEUTRAL_AND_COMBINE
+             with type 'a t = 'a Applicative.t) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Alternative] using an [Arrow_plus] via [Arrow Monad]
     encoding.*)
@@ -61,13 +60,13 @@ module Via
 (** Incarnation of an [Alternative.Core] with standard requirements ([pure],
     [map], [product], [neutral] and [combine]). *)
 module Core_via_map_and_product
-    (Core : Preface_specs.Alternative.CORE_WITH_MAP_AND_PRODUCT) :
-  Preface_specs.Alternative.CORE with type 'a t = 'a Core.t
+    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) :
+  Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Alternative.Core] with standard requirements ([pure],
     [apply], [neutral] and [combine]). *)
-module Core_via_apply (Core : Preface_specs.Alternative.CORE_WITH_APPLY) :
-  Preface_specs.Alternative.CORE with type 'a t = 'a Core.t
+module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
+  Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Alternative.Operation] with standard requirements
     ([pure], [map], [apply], [product], [neutral] and [combine]). *)

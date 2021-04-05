@@ -5,8 +5,8 @@
     Standard way to build a [Alt]. *)
 
 (** Incarnation of a [Alt] with [combine] and [map]. *)
-module Via_map_and_combine (Core : Preface_specs.Alt.CORE) :
-  Preface_specs.ALT with type 'a t = 'a Core.t
+module Via_map_and_combine (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) :
+  Preface_specs.ALT with type 'a t = 'a Req.t
 
 (** Incarnation of a [Alt] over a [Functor] and via the [combine] operation. *)
 module Over_functor_via_combine
@@ -38,6 +38,16 @@ module Via
     (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Alt.INFIX with type 'a t = 'a Operation.t) :
   Preface_specs.ALT with type 'a t = 'a Infix.t
+
+(** Incarnation of an [Alt.Core] using [combine] and a {!module:Functor}. *)
+module Core_over_functor
+    (Functor : Preface_specs.FUNCTOR)
+    (Req : Preface_specs.Alt.WITH_COMBINE with type 'a t = 'a Functor.t) :
+  Preface_specs.Alt.CORE with type 'a t = 'a Req.t
+
+(** Incarnation of an [Alt.Core] using [combine] and [map]. *)
+module Core (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) :
+  Preface_specs.Alt.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Alt.Operation] using [Core]. *)
 module Operation (Core : Preface_specs.Alt.CORE) :

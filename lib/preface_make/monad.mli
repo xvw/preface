@@ -77,21 +77,19 @@
     Standard way to build a [Monad]. *)
 
 (** Incarnation of a [Monad] with standard requirement ([return] and [bind]). *)
-module Via_bind (Core_with_bind : Preface_specs.Monad.CORE_WITH_BIND) :
-  Preface_specs.MONAD with type 'a t = 'a Core_with_bind.t
+module Via_bind (Req : Preface_specs.Monad.WITH_BIND) :
+  Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad] with map and join requirement ([return], [join] and
     [map]). *)
-module Via_map_and_join
-    (Core_with_map_and_join : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.MONAD with type 'a t = 'a Core_with_map_and_join.t
+module Via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
+  Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad] with kleisli composition requirement ([return] and
     [compose_left_to_right]). *)
 module Via_kleisli_composition
-    (Core_with_kleisli_composition : Preface_specs.Monad
-                                     .CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.MONAD with type 'a t = 'a Core_with_kleisli_composition.t
+    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad] using a [Monad_plus].*)
 module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
@@ -125,19 +123,19 @@ module Via
 
 (** Incarnation of a [Monad.Core] with standard requirement ([return] and
     [bind]). *)
-module Core_via_bind (Core : Preface_specs.Monad.CORE_WITH_BIND) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Core.t
+module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) :
+  Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad.Core] with map and join requirement ([return],
     [join] and [map]). *)
-module Core_via_map_and_join (Core : Preface_specs.Monad.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Core.t
+module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
+  Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad.Core] with kleisli composition requirement ([return]
     and [compose_left_to_right]). *)
 module Core_via_kleisli_composition
-    (Core : Preface_specs.Monad.CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Core.t
+    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad.Operation] with [Monad.Core].*)
 module Operation (Core : Preface_specs.Monad.CORE) :

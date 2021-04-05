@@ -10,7 +10,7 @@
 
 (** {1 Minimal definition} *)
 
-(** The minimum definition of a semigroup. It is by using the combinators of
+(** The minimum definition of a [Semigroup]. It is by using the combinators of
     this module that the other combinators will be derived. *)
 module type WITH_COMBINE = sig
   type t

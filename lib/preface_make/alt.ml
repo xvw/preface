@@ -1,3 +1,15 @@
+module Core_over_functor
+    (Functor : Preface_specs.FUNCTOR)
+    (Req : Preface_specs.Alt.WITH_COMBINE with type 'a t = 'a Functor.t) :
+  Preface_specs.Alt.CORE with type 'a t = 'a Req.t = struct
+  include Functor
+  include Req
+end
+
+module Core (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) :
+  Preface_specs.Alt.CORE with type 'a t = 'a Req.t =
+  Req
+
 module Times_and_reduce_nel (Core : Preface_specs.Alt.WITH_COMBINE) = struct
   let times n x = Preface_core.Monoid.times Core.combine n x
 
@@ -33,8 +45,9 @@ module Via
   include Infix
 end
 
-module Via_map_and_combine (Core : Preface_specs.Alt.CORE) :
-  Preface_specs.ALT with type 'a t = 'a Core.t = struct
+module Via_map_and_combine (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) :
+  Preface_specs.ALT with type 'a t = 'a Req.t = struct
+  module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)

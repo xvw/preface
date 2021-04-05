@@ -6,11 +6,10 @@
 
     For example, going to ['a option list] to ['a list option]. *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
-(** The minimum definition of a traversable. It is by using the combinators of
-    this module that the other combinators will be derived. *)
-module type CORE = sig
+(** Minimal definition using [traverse] over a ['a iter].*)
+module type WITH_TRAVERSE = sig
   type 'a t
   (** The type held by the [Traversable]. *)
 
@@ -21,6 +20,11 @@ module type CORE = sig
   (** Map each element of a structure to an action, evaluate these actions from
       left to right, and collect the results. **)
 end
+
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_TRAVERSE
+(** Basis operations. *)
 
 (** Additional operations. *)
 module type OPERATION = sig

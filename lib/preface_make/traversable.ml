@@ -1,30 +1,26 @@
 open Preface_core.Fun
 
+module Core (Req : Preface_specs.Traversable.WITH_TRAVERSE) :
+  Preface_specs.Traversable.CORE
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter =
+  Req
+
 module Core_over_applicative
     (A : Preface_specs.APPLICATIVE)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a A.t) :
+    (Req : Preface_specs.Traversable.WITH_TRAVERSE with type 'a t = 'a A.t) :
   Preface_specs.Traversable.CORE
-    with type 'a t = 'a C.t
-     and type 'a iter = 'a C.iter = struct
-  type 'a t = 'a C.t
-
-  type 'a iter = 'a C.iter
-
-  let traverse f x = C.traverse f x
-end
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter =
+  Core (Req)
 
 module Core_over_monad
     (M : Preface_specs.MONAD)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a M.t) :
+    (Req : Preface_specs.Traversable.CORE with type 'a t = 'a M.t) :
   Preface_specs.Traversable.CORE
-    with type 'a t = 'a C.t
-     and type 'a iter = 'a C.iter = struct
-  type 'a t = 'a C.t
-
-  type 'a iter = 'a C.iter
-
-  let traverse f x = C.traverse f x
-end
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter =
+  Core (Req)
 
 module Operation (C : Preface_specs.Traversable.CORE) :
   Preface_specs.Traversable.OPERATION
@@ -50,10 +46,11 @@ end
 
 module Over_applicative
     (A : Preface_specs.APPLICATIVE)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a A.t) :
-  Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter =
-struct
-  module Core = Core_over_applicative (A) (C)
+    (Req : Preface_specs.Traversable.WITH_TRAVERSE with type 'a t = 'a A.t) :
+  Preface_specs.TRAVERSABLE
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter = struct
+  module Core = Core_over_applicative (A) (Req)
   module Operation = Operation (Core)
   include Core
   include Operation
@@ -61,10 +58,11 @@ end
 
 module Over_monad
     (M : Preface_specs.MONAD)
-    (C : Preface_specs.Traversable.CORE with type 'a t = 'a M.t) :
-  Preface_specs.TRAVERSABLE with type 'a t = 'a C.t and type 'a iter = 'a C.iter =
-struct
-  module Core = Core_over_monad (M) (C)
+    (Req : Preface_specs.Traversable.WITH_TRAVERSE with type 'a t = 'a M.t) :
+  Preface_specs.TRAVERSABLE
+    with type 'a t = 'a Req.t
+     and type 'a iter = 'a Req.iter = struct
+  module Core = Core_over_monad (M) (Req)
   module Operation = Operation (Core)
   include Core
   include Operation

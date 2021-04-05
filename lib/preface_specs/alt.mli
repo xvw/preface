@@ -10,7 +10,7 @@
     + [combine (combine a b) c = combine a (combine b c)]
     + [map f (combine a b) = combine (map f a) (map f b)] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Combine operation. This signature is mainly used to enrich a
     {!module:Functor} with [combine].*)
@@ -24,12 +24,17 @@ end
 
 (** The minimum definition of an [Alt]. It is by using the combinators of this
     module that the other combinators will be derived. *)
-module type CORE = sig
+module type WITH_COMBINE_AND_MAP = sig
   include WITH_COMBINE
 
-  include Functor.CORE with type 'a t := 'a t
+  include Functor.WITH_MAP with type 'a t := 'a t
   (** @closed *)
 end
+
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_COMBINE_AND_MAP
+(** Basis operations.*)
 
 (** Additional operations. *)
 module type OPERATION = sig

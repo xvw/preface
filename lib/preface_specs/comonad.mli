@@ -15,10 +15,10 @@
     - [duplicate = extend id]
     - [fmap f = extend (f <% extract)] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
-(** Minimal definition using [map] and [duplicate]. *)
-module type CORE_WITH_MAP_AND_DUPLICATE = sig
+(** Minimal definition using [extract], [map] and [duplicate]. *)
+module type WITH_MAP_AND_DUPLICATE = sig
   type 'a t
   (** The type held by the [Comonad]. *)
 
@@ -32,8 +32,8 @@ module type CORE_WITH_MAP_AND_DUPLICATE = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
-(** Minimal definition using [extend]. *)
-module type CORE_WITH_EXTEND = sig
+(** Minimal definition using [extract] and [extend]. *)
+module type WITH_EXTEND = sig
   type 'a t
   (** The type held by the [Comonad]. *)
 
@@ -44,8 +44,8 @@ module type CORE_WITH_EXTEND = sig
   (** Dual of bind. *)
 end
 
-(** Minimal definition using [compose_left_to_right]. *)
-module type CORE_WITH_COKLEISLI_COMPOSITION = sig
+(** Minimal definition using [extract] and [compose_left_to_right]. *)
+module type WITH_COKLEISLI_COMPOSITION = sig
   type 'a t
   (** The type held by the [Comonad]. *)
 
@@ -56,16 +56,17 @@ module type CORE_WITH_COKLEISLI_COMPOSITION = sig
   (** Composing monadic functions using Co-Kleisli Arrow (from left to right). *)
 end
 
-(** The minimum definition of a [Comonad]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include CORE_WITH_MAP_AND_DUPLICATE
+  include WITH_MAP_AND_DUPLICATE
   (** @closed *)
 
-  include CORE_WITH_EXTEND with type 'a t := 'a t
+  include WITH_EXTEND with type 'a t := 'a t
   (** @closed *)
 
-  include CORE_WITH_COKLEISLI_COMPOSITION with type 'a t := 'a t
+  include WITH_COKLEISLI_COMPOSITION with type 'a t := 'a t
   (** @closed *)
 end
 

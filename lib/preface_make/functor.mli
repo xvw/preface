@@ -97,8 +97,8 @@
     Standard way to build a [Functor]. *)
 
 (** Incarnation of a [Functor] with standard requirements ([map]).*)
-module Via_map (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t
+module Via_map (Req : Preface_specs.Functor.WITH_MAP) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Req.t
 
 (** Incarnation of a [Functor] using an [Arrow] via [Arrow Monad] encoding.*)
 module From_arrow (A : Preface_specs.ARROW) :
@@ -161,6 +161,10 @@ module Via
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
+
+(** Incarnation of a [Functor.Core] with standard Requirements ([map]). *)
+module Core (Req : Preface_specs.Functor.WITH_MAP) :
+  Preface_specs.Functor.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Functor.Operation] with standard Requirements ([map]). *)
 module Operation (Core : Preface_specs.Functor.CORE) :

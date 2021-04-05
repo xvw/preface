@@ -2,19 +2,18 @@ open Preface_core.Fun
 open Preface_core.Fun.Infix
 
 module Core_via_map_and_duplicate
-    (Core : Preface_specs.Comonad.CORE_WITH_MAP_AND_DUPLICATE) :
-  Preface_specs.Comonad.CORE with type 'a t = 'a Core.t = struct
-  include Core
-  include Functor
+    (Req : Preface_specs.Comonad.WITH_MAP_AND_DUPLICATE) :
+  Preface_specs.Comonad.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let extend f = duplicate %> map f
 
   let compose_left_to_right f g = duplicate %> map f %> g
 end
 
-module Core_via_extend (Core : Preface_specs.Comonad.CORE_WITH_EXTEND) :
-  Preface_specs.Comonad.CORE with type 'a t = 'a Core.t = struct
-  include Core
+module Core_via_extend (Req : Preface_specs.Comonad.WITH_EXTEND) :
+  Preface_specs.Comonad.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let duplicate a = extend id a
 
@@ -24,9 +23,9 @@ module Core_via_extend (Core : Preface_specs.Comonad.CORE_WITH_EXTEND) :
 end
 
 module Core_via_cokleisli_composition
-    (Core : Preface_specs.Comonad.CORE_WITH_COKLEISLI_COMPOSITION) :
-  Preface_specs.Comonad.CORE with type 'a t = 'a Core.t = struct
-  include Core
+    (Req : Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION) :
+  Preface_specs.Comonad.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let extend f = compose_left_to_right f id
 
@@ -95,11 +94,9 @@ module Via
 end
 
 module Via_map_and_duplicate
-    (Core_with_map_and_duplicate : Preface_specs.Comonad
-                                   .CORE_WITH_MAP_AND_DUPLICATE) :
-  Preface_specs.COMONAD with type 'a t = 'a Core_with_map_and_duplicate.t =
-struct
-  module Core = Core_via_map_and_duplicate (Core_with_map_and_duplicate)
+    (Req : Preface_specs.Comonad.WITH_MAP_AND_DUPLICATE) :
+  Preface_specs.COMONAD with type 'a t = 'a Req.t = struct
+  module Core = Core_via_map_and_duplicate (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -109,9 +106,9 @@ struct
   include Infix
 end
 
-module Via_extend (Core_with_extend : Preface_specs.Comonad.CORE_WITH_EXTEND) :
-  Preface_specs.COMONAD with type 'a t = 'a Core_with_extend.t = struct
-  module Core = Core_via_extend (Core_with_extend)
+module Via_extend (Req : Preface_specs.Comonad.WITH_EXTEND) :
+  Preface_specs.COMONAD with type 'a t = 'a Req.t = struct
+  module Core = Core_via_extend (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -122,11 +119,9 @@ module Via_extend (Core_with_extend : Preface_specs.Comonad.CORE_WITH_EXTEND) :
 end
 
 module Via_cokleisli_composition
-    (Core_with_cokleisli_composition : Preface_specs.Comonad
-                                       .CORE_WITH_COKLEISLI_COMPOSITION) :
-  Preface_specs.COMONAD with type 'a t = 'a Core_with_cokleisli_composition.t =
-struct
-  module Core = Core_via_cokleisli_composition (Core_with_cokleisli_composition)
+    (Req : Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION) :
+  Preface_specs.COMONAD with type 'a t = 'a Req.t = struct
+  module Core = Core_via_cokleisli_composition (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)

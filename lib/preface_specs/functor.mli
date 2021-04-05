@@ -10,17 +10,22 @@
     + [map id = id];
     + [map (f % g) = map f % map g]. *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** The minimum definition of a [Functor]. It is by using the combinators of
     this module that the other combinators will be derived. *)
-module type CORE = sig
+module type WITH_MAP = sig
   type 'a t
   (** The type held by the [Functor]. *)
 
   val map : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
+
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_MAP
+(** Basis operations.*)
 
 (** Additional operations. *)
 module type OPERATION = sig

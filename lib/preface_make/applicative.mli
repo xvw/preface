@@ -179,14 +179,13 @@
 (** Incarnation of an [Applicative] with standard requirements ([pure], [map]
     and [product]). *)
 module Via_map_and_product
-    (Core_with_map_and_product : Preface_specs.Applicative
-                                 .CORE_WITH_MAP_AND_PRODUCT) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_map_and_product.t
+    (Req : Preface_specs.Applicative.WITH_MAP_AND_PRODUCT) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Applicative] with standard requirements ([pure] and
     [apply]). *)
-module Via_apply (Core_with_apply : Preface_specs.Applicative.CORE_WITH_APPLY) :
-  Preface_specs.APPLICATIVE with type 'a t = 'a Core_with_apply.t
+module Via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Applicative] using a [Monad].*)
 module From_monad (Monad : Preface_specs.MONAD) :
@@ -241,13 +240,13 @@ module Via
 (** Incarnation of an [Applicative.Core] for an ['a t] with standard
     Requirements ([pure], [map] and [product]). *)
 module Core_via_map_and_product
-    (Core : Preface_specs.Applicative.CORE_WITH_MAP_AND_PRODUCT) :
-  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t
+    (Req : Preface_specs.Applicative.WITH_MAP_AND_PRODUCT) :
+  Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Applicative.Core] with standard requirements ([pure],
     [apply]). *)
-module Core_via_apply (Core : Preface_specs.Applicative.CORE_WITH_APPLY) :
-  Preface_specs.Applicative.CORE with type 'a t = 'a Core.t
+module Core_via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
+  Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of an [Applicative.Operation] with standard requirements
     ([pure], [map], [apply] and [product]). *)

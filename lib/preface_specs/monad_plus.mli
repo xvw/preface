@@ -6,46 +6,48 @@
 
     + All alternatives laws *)
 
+(** {1 Minimal definition} *)
+
+(** Minimal interfaces of [Alternative] without {!module:Monad}. *)
+module type WITH_NEUTRAL_AND_COMBINE = sig
+  include Alternative.WITH_NEUTRAL_AND_COMBINE
+  (** @closed *)
+end
+
+(** Minimal definition using [neutral], [combine], [return], [map] and [join]. *)
+module type WITH_MAP_AND_JOIN = sig
+  include Monad.WITH_MAP_AND_JOIN
+  (** @closed *)
+
+  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  (** @closed *)
+end
+
+(** Minimal definition using [neutral], [combine], [return],
+    [compose_left_to_right]. *)
+module type WITH_KLEISLI_COMPOSITION = sig
+  include Monad.WITH_KLEISLI_COMPOSITION
+
+  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+end
+
+(** Minimal definition using [neutral], [combine], [return], [bind]. *)
+module type WITH_BIND = sig
+  include Monad.WITH_BIND
+  (** @closed *)
+
+  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  (** @closed *)
+end
+
 (** {1 Structure anatomy} *)
 
-(** Additional operations over a [Monad]. *)
-module type CORE_WITH_NEUTRAL_AND_COMBINE = sig
-  include Alternative.CORE_WITH_NEUTRAL_AND_COMBINE
-  (** @closed *)
-end
-
-(** Minimal definition using [map] and [join]. *)
-module type CORE_WITH_MAP_AND_JOIN = sig
-  include Monad.CORE_WITH_MAP_AND_JOIN
-  (** @closed *)
-
-  include CORE_WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
-  (** @closed *)
-end
-
-(** Minimal definition using [compose_left_to_right]. *)
-module type CORE_WITH_KLEISLI_COMPOSITION = sig
-  include Monad.CORE_WITH_KLEISLI_COMPOSITION
-
-  include CORE_WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
-end
-
-(** Minimal definition using [bind]. *)
-module type CORE_WITH_BIND = sig
-  include Monad.CORE_WITH_BIND
-  (** @closed *)
-
-  include CORE_WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
-  (** @closed *)
-end
-
-(** The minimum definition of a [Monad_plus]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** Basis operations. *)
 module type CORE = sig
   include Monad.CORE
   (** @closed *)
 
-  include CORE_WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
   (** @closed *)
 end
 
