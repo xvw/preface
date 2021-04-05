@@ -9,6 +9,6 @@ let () =
     @ State_test.cases
     @ Stream_test.cases
     @ Try_test.cases
-    @ Tuple_test.cases
+    @ Pair_test.cases
     @ Predicate_test.cases )
 ;;

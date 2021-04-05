@@ -1,0 +1,47 @@
+digraph {
+        node [shape=plaintext; fontname = "Helvetica"; style=filled; fillcolor=black; fontcolor=white];
+        edge [color = gray];
+
+        F[label=<Core_with_req_a(<i>Req_a</i>)>];
+        G[label=<Core_with_req_b(<i>Req_b</i>)>];
+
+        Operation_f[label=<Operation(<i>Core</i>)>];
+        Infix_f[label=<Infix(<i>Core</i>) (<i>Operation</i>)>];
+        Syntax_f[label=<Syntax(<i>Core</i>) (<i>Operation</i>)>];
+
+        Via[label=<Via(<i>Core</i>) (<i>Operation</i>) (<i>Infix</i>) (<i>Syntax</i>)>];
+
+        Core[label="CORE"];
+        Operation[label="OPERATION"];
+        Infix[label="INFIX"];
+        Syntax[label="SYNTAX"];
+        
+        Api[
+            shape=plaintext;
+            fillcolor=white;
+            fontcolor=black;
+            label=<<table border="0" cellspacing="0">
+            <tr><td border="1" bgcolor="black"><font color="white">Full API</font></td></tr>
+            <tr><td border="1">include <b>Core</b></td></tr>
+            <tr><td border="1">include <b>Operation</b></td></tr>
+            <tr><td border="1">module <b>Infix</b></td></tr>
+            <tr><td border="1">module <b>Syntax</b></td></tr>
+            <tr><td border="1">include <b>Infix</b></td></tr>
+            <tr><td border="1">include <b>Syntax</b></td></tr>
+            </table>>];
+ 
+        F -> Core;
+        G -> Core;
+
+        Core -> Operation_f -> Operation;
+        Core -> Infix_f -> Infix;
+        Operation -> Infix_f;
+        Core -> Syntax_f -> Syntax;
+        Operation -> Syntax_f;
+
+        Core -> Via;
+        Operation -> Via;
+        Infix -> Via;
+        Syntax -> Via;
+        Via -> Api;
+}
