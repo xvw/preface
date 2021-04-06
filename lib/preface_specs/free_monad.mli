@@ -40,7 +40,7 @@ module type API = sig
 
   (** {1 Functor API}
 
-      A [Free monad] is also an {!module:Functor}. *)
+      A [Free monad] is also a {!module:Functor}. *)
 
   module Functor : Functor.API with type 'a t = 'a t
 
@@ -52,7 +52,7 @@ module type API = sig
 
   (** {1 Monad API}
 
-      A [Free monad] is also (obviously) an {!module:Monad}. *)
+      A [Free monad] is also (obviously) a {!module:Monad}. *)
 
   module Monad : Monad.API with type 'a t = 'a t
 

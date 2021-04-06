@@ -7,8 +7,8 @@
 (** The [Freer Monad] API without the {!module:Monad} API. *)
 module type CORE = sig
   type 'a f
-  (** The parametric type (which, unlike a {!module:Free_monad} must not be a
-      {!module:Functor}). *)
+  (** The parametric type (which, unlike a {!module:Free_monad} don't need to be
+      a {!module:Functor}). *)
 
   (** The type held by [Freer monad]. *)
   type _ t =
@@ -47,7 +47,7 @@ module type API = sig
 
   (** {1 Monad API}
 
-      A [Freer monad] is also (obviously) an {!module:Monad}. *)
+      A [Freer monad] is also (obviously) a {!module:Monad}. *)
 
   module Monad : Monad.API with type 'a t = 'a t
 
