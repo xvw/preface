@@ -10,7 +10,7 @@
     + [closed % closed = dimap uncurry curry % closed]
     + [dimap const (fun f -> f ()) % closed = id] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimum interface using [closed] and without {!module:Profunctor}
     requirements. *)
@@ -23,11 +23,11 @@ module type WITH_CLOSED = sig
 end
 
 (** Minimum interface using [dimap] and [closed]. *)
-module type CORE_WITH_DIMAP_AND_CLOSED = sig
+module type WITH_DIMAP_AND_CLOSED = sig
   type ('a, 'b) t
   (** The type held by the [Closed Profunctor]. *)
 
-  include Profunctor.CORE_WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_CLOSED with type ('a, 'b) t := ('a, 'b) t
@@ -35,21 +35,21 @@ module type CORE_WITH_DIMAP_AND_CLOSED = sig
 end
 
 (** Minimum interface using [contramap_fst] and [map_snd] and [closed]. *)
-module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED = sig
+module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED = sig
   type ('a, 'b) t
   (** The type held by the [Closed Profunctor]. *)
 
   include
-    Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND
-      with type ('a, 'b) t := ('a, 'b) t
+    Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_CLOSED with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of a [Closed]. It is by using the combinators of this
-    module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
   type ('a, 'b) t
   (** The type held by the [Closed Profunctor]. *)

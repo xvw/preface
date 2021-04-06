@@ -158,7 +158,7 @@ module From_arrow_apply (Apply : Preface_specs.ARROW_APPLY) :
   Apply
 
 module From_strong_and_category
-    (Strong : Preface_specs.Strong.CORE_WITH_DIMAP_AND_FST)
+    (Strong : Preface_specs.Strong.WITH_DIMAP_AND_FST)
     (Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Strong.t) :
   Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) Category.t =
   Over_category_and_via_arrow_and_fst

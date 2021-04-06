@@ -1,15 +1,15 @@
 module Core_via_dimap_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_DIMAP_AND_CLOSED) :
-  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
-  include Profunctor.Via_dimap (Core)
+    (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
+  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
+  include Profunctor.Core_via_dimap (Req)
 end
 
 module Core_via_contramap_fst_and_map_snd_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
-  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
-  include Profunctor.Via_contramap_fst_and_map_snd (Core)
+    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
+  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
+  include Profunctor.Core_via_contramap_fst_and_map_snd (Req)
 end
 
 module Operation (Core : Preface_specs.Closed.CORE) :
@@ -41,12 +41,11 @@ module Over_profunctor_via_closed
   include Operation (Core)
 end
 
-module Via_dimap_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_DIMAP_AND_CLOSED) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Core.t = struct
+module Via_dimap_and_closed (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
+  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t = struct
   module C = struct
-    include Profunctor.Via_dimap (Core)
-    include Core
+    include Profunctor.Via_dimap (Req)
+    include Req
   end
 
   include C
@@ -54,11 +53,11 @@ module Via_dimap_and_closed
 end
 
 module Via_contramap_fst_and_map_snd_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Core.t = struct
+    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
+  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t = struct
   module C = struct
-    include Profunctor.Via_contramap_fst_and_map_snd (Core)
-    include Core
+    include Profunctor.Via_contramap_fst_and_map_snd (Req)
+    include Req
   end
 
   include C

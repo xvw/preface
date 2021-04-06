@@ -1,7 +1,7 @@
 let swap (x, y) = (y, x)
 
 module Snd_via_fst
-    (D : Preface_specs.Profunctor.CORE_WITH_DIMAP)
+    (D : Preface_specs.Profunctor.WITH_DIMAP)
     (F : Preface_specs.Strong.WITH_FST with type ('a, 'b) t = ('a, 'b) D.t) :
   Preface_specs.Strong.WITH_SND with type ('a, 'b) t = ('a, 'b) F.t = struct
   type ('a, 'b) t = ('a, 'b) F.t
@@ -10,7 +10,7 @@ module Snd_via_fst
 end
 
 module Fst_via_snd
-    (D : Preface_specs.Profunctor.CORE_WITH_DIMAP)
+    (D : Preface_specs.Profunctor.WITH_DIMAP)
     (S : Preface_specs.Strong.WITH_SND with type ('a, 'b) t = ('a, 'b) D.t) :
   Preface_specs.Strong.WITH_FST with type ('a, 'b) t = ('a, 'b) S.t = struct
   type ('a, 'b) t = ('a, 'b) S.t
@@ -18,40 +18,38 @@ module Fst_via_snd
   let fst x = D.dimap swap swap (S.snd x)
 end
 
-module Core_via_dimap_and_fst
-    (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_FST) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
-  module C = Profunctor.Via_dimap (Core)
+module Core_via_dimap_and_fst (Req : Preface_specs.Strong.WITH_DIMAP_AND_FST) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
+  module C = Profunctor.Core_via_dimap (Req)
   include C
-  include Snd_via_fst (C) (Core)
+  include Snd_via_fst (C) (Req)
 end
 
-module Core_via_dimap_and_snd
-    (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_SND) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
-  module C = Profunctor.Via_dimap (Core)
+module Core_via_dimap_and_snd (Req : Preface_specs.Strong.WITH_DIMAP_AND_SND) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
+  module C = Profunctor.Core_via_dimap (Req)
   include C
-  include Fst_via_snd (C) (Core)
+  include Fst_via_snd (C) (Req)
 end
 
 module Core_via_contramap_fst_and_map_snd_and_fst
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
-  module C = Profunctor.Via_contramap_fst_and_map_snd (Core)
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
+  module C = Profunctor.Core_via_contramap_fst_and_map_snd (Req)
   include C
-  include Snd_via_fst (C) (Core)
+  include Snd_via_fst (C) (Req)
 end
 
 module Core_via_contramap_fst_and_map_snd_and_snd
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
-  module C = Profunctor.Via_contramap_fst_and_map_snd (Core)
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
+  module C = Profunctor.Core_via_contramap_fst_and_map_snd (Req)
   include C
-  include Fst_via_snd (C) (Core)
+  include Fst_via_snd (C) (Req)
 end
 
 module Core_over_profunctor_via_fst
@@ -92,35 +90,35 @@ module Via
   include Operation
 end
 
-module Via_dimap_and_fst (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_FST) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  module Core = Core_via_dimap_and_fst (Core)
+module Via_dimap_and_fst (Req : Preface_specs.Strong.WITH_DIMAP_AND_FST) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  module Core = Core_via_dimap_and_fst (Req)
   module Operation = Operation (Core)
   include Core
   include Operation
 end
 
-module Via_dimap_and_snd (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_SND) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  module Core = Core_via_dimap_and_snd (Core)
+module Via_dimap_and_snd (Req : Preface_specs.Strong.WITH_DIMAP_AND_SND) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  module Core = Core_via_dimap_and_snd (Req)
   module Operation = Operation (Core)
   include Core
   include Operation
 end
 
 module Via_contramap_fst_and_map_snd_and_fst
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  module Core = Core_via_contramap_fst_and_map_snd_and_fst (Core)
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  module Core = Core_via_contramap_fst_and_map_snd_and_fst (Req)
   module Operation = Operation (Core)
   include Core
   include Operation
 end
 
 module Via_contramap_fst_and_map_snd_and_snd
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  module Core = Core_via_contramap_fst_and_map_snd_and_snd (Core)
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  module Core = Core_via_contramap_fst_and_map_snd_and_snd (Req)
   module Operation = Operation (Core)
   include Core
   include Operation

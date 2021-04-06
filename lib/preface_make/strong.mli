@@ -5,24 +5,24 @@
     Standard way to build a [Strong Profunctor]. *)
 
 (** Incarnation of a [Strong Profunctor] with [dimap] and [fst]. *)
-module Via_dimap_and_fst (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_FST) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t
+module Via_dimap_and_fst (Req : Preface_specs.Strong.WITH_DIMAP_AND_FST) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Strong Profunctor] with [dimap] and [snd]. *)
-module Via_dimap_and_snd (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_SND) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t
+module Via_dimap_and_snd (Req : Preface_specs.Strong.WITH_DIMAP_AND_SND) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Strong Profunctor] with [contramap_fst] and [map_snd] and
     [fst]. *)
 module Via_contramap_fst_and_map_snd_and_fst
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Strong Profunctor] with [contramap_fst] and [map_snd] and
     [snd]. *)
 module Via_contramap_fst_and_map_snd_and_snd
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
-  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
+  Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Strong Profunctor] over a [Profunctor] using [fst]. *)
 module Over_profunctor_via_fst
@@ -79,24 +79,22 @@ module Core_over_profunctor_via_snd
   Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) S.t
 
 (** Incarnation of [Strong.Core] over a [Profunctor] using [dimap] and [fst]. *)
-module Core_via_dimap_and_fst
-    (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_FST) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+module Core_via_dimap_and_fst (Req : Preface_specs.Strong.WITH_DIMAP_AND_FST) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of [Strong.Core] over a [Profunctor] using [dimap] and [snd]. *)
-module Core_via_dimap_and_snd
-    (Core : Preface_specs.Strong.CORE_WITH_DIMAP_AND_SND) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+module Core_via_dimap_and_snd (Req : Preface_specs.Strong.WITH_DIMAP_AND_SND) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Strong.Core] with [contramap_fst] and [map_snd] and [fst]. *)
 module Core_via_contramap_fst_and_map_snd_and_fst
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Strong.Core] with [contramap_fst] and [map_snd] and [snd]. *)
 module Core_via_contramap_fst_and_map_snd_and_snd
-    (Core : Preface_specs.Strong.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
-  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Strong.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND) :
+  Preface_specs.Strong.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Strong.Operation] using [Core]. *)
 module Operation (Core : Preface_specs.Strong.CORE) :

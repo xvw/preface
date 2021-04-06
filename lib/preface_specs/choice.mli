@@ -16,7 +16,7 @@
     + [left % left = dimap assoc unassoc % left]
     + [left % left = dimap unassoc assoc % right] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal interface using [left] and without {!module:Profunctor}. *)
 module type WITH_LEFT = sig
@@ -37,11 +37,11 @@ module type WITH_RIGHT = sig
 end
 
 (** Minimal interface [dimap] and [left]. *)
-module type CORE_WITH_DIMAP_AND_LEFT = sig
+module type WITH_DIMAP_AND_LEFT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
 
-  include Profunctor.CORE_WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
@@ -49,13 +49,12 @@ module type CORE_WITH_DIMAP_AND_LEFT = sig
 end
 
 (** Minimal interface using [contramap_fst] and [map_snd] and [left]. *)
-module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_LEFT = sig
+module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_LEFT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
 
   include
-    Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND
-      with type ('a, 'b) t := ('a, 'b) t
+    Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
@@ -63,11 +62,11 @@ module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_LEFT = sig
 end
 
 (** Minimal interface using [dimap] and [right]. *)
-module type CORE_WITH_DIMAP_AND_RIGHT = sig
+module type WITH_DIMAP_AND_RIGHT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
 
-  include Profunctor.CORE_WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
@@ -75,21 +74,21 @@ module type CORE_WITH_DIMAP_AND_RIGHT = sig
 end
 
 (** Minimal interfaces using [contramap_fst] and [map_snd] and [right]. *)
-module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_RIGHT = sig
+module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_RIGHT = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)
 
   include
-    Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND
-      with type ('a, 'b) t := ('a, 'b) t
+    Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of an [Choice]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
   type ('a, 'b) t
   (** The type held by the [Choice Profunctor]. *)

@@ -15,7 +15,7 @@
     + [contramap_fst (Fun.fst f) % snd = map_snd (Fun.fst f) % snd]
     + [snd % snd = dimap  (fun (a,(b,c)) -> ((a,b),c))  (fun ((a,b),c) -> (a,(b,c))) % snd ]*)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal interface using with [fst] and without {!module:Profunctor}
     requirements. *)
@@ -38,11 +38,11 @@ module type WITH_SND = sig
 end
 
 (** Minimal interface using [dimap] and [fst]. *)
-module type CORE_WITH_DIMAP_AND_FST = sig
+module type WITH_DIMAP_AND_FST = sig
   type ('a, 'b) t
   (** The type held by the [Strong Profunctor]. *)
 
-  include Profunctor.CORE_WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_FST with type ('a, 'b) t := ('a, 'b) t
@@ -50,13 +50,12 @@ module type CORE_WITH_DIMAP_AND_FST = sig
 end
 
 (** Minimal interface using [contramap_fst] and [map_snd] and [fst]. *)
-module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST = sig
+module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST = sig
   type ('a, 'b) t
   (** The type held by the [Strong Profunctor]. *)
 
   include
-    Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND
-      with type ('a, 'b) t := ('a, 'b) t
+    Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_FST with type ('a, 'b) t := ('a, 'b) t
@@ -64,11 +63,11 @@ module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST = sig
 end
 
 (** Minimal interface using [dimap] and [snd]. *)
-module type CORE_WITH_DIMAP_AND_SND = sig
+module type WITH_DIMAP_AND_SND = sig
   type ('a, 'b) t
   (** The type held by the [Strong Profunctor]. *)
 
-  include Profunctor.CORE_WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_SND with type ('a, 'b) t := ('a, 'b) t
@@ -76,21 +75,21 @@ module type CORE_WITH_DIMAP_AND_SND = sig
 end
 
 (** Minimal interface using [contramap_fst] and [map_snd] and [snd]. *)
-module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND = sig
+module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND = sig
   type ('a, 'b) t
   (** The type held by the [Strong Profunctor]. *)
 
   include
-    Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND
-      with type ('a, 'b) t := ('a, 'b) t
+    Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
   include WITH_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of an [Strong]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
   type ('a, 'b) t
   (** The type held by the [Strong Profunctor]. *)

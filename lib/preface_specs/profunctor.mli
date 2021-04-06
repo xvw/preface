@@ -15,10 +15,10 @@
     + [contramap_fst (f % g) = contramap_fst g % contramap_fst f]
     + [map_snd (f % g) = map_snd f % map_snd g] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal interface using [dimap]. *)
-module type CORE_WITH_DIMAP = sig
+module type WITH_DIMAP = sig
   type ('a, 'b) t
   (** The type held by the [Profunctor]. *)
 
@@ -26,7 +26,7 @@ module type CORE_WITH_DIMAP = sig
 end
 
 (** Minimal interface using [contramap_fst] and [map_snd]. *)
-module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND = sig
+module type WITH_CONTRAMAP_FST_AND_MAP_SND = sig
   type ('a, 'b) t
   (** The type held by the [Profunctor]. *)
 
@@ -37,13 +37,14 @@ module type CORE_WITH_CONTRAMAP_FST_AND_MAP_SND = sig
   (** Mapping over the second argument. *)
 end
 
-(** The minimum definition of an [Profunctor]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include CORE_WITH_DIMAP
+  include WITH_DIMAP
   (** @closed *)
 
-  include CORE_WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
+  include WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
