@@ -17,10 +17,10 @@
     + [fst f >>> arrow Stdlib.fst = arrow Stdlib.fst >>> f]
     + [fst (fst f) >>> arrow assoc = arrow assoc >>> fst f] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Exposes the [arrow] function, mandatory for each requirement. *)
-module type CORE_WITH_ARROW = sig
+module type WITH_ARROW = sig
   type ('a, 'b) t
   (** The type held by the [Arrow]. *)
 
@@ -29,8 +29,8 @@ module type CORE_WITH_ARROW = sig
 end
 
 (** Minimal definition using [fst]. *)
-module type CORE_WITH_ARROW_AND_FST = sig
-  include CORE_WITH_ARROW
+module type WITH_ARROW_AND_FST = sig
+  include WITH_ARROW
   (** @closed *)
 
   val fst : ('a, 'b) t -> ('a * 'd, 'b * 'd) t
@@ -39,16 +39,17 @@ module type CORE_WITH_ARROW_AND_FST = sig
 end
 
 (** Minimal definition using [split]. *)
-module type CORE_WITH_ARROW_AND_SPLIT = sig
-  include CORE_WITH_ARROW
+module type WITH_ARROW_AND_SPLIT = sig
+  include WITH_ARROW
   (** @closed *)
 
   val split : ('a, 'b) t -> ('c, 'd) t -> ('a * 'c, 'b * 'd) t
   (** Split the input between the two given [Arrows] and combine their output. *)
 end
 
-(** The minimum definition of an [Arrow]. It is by using the combinators of this
-    module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
   type ('a, 'b) t
   (** The type held by the [Arrow]. *)
@@ -56,10 +57,10 @@ module type CORE = sig
   include Category.CORE with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
-  include CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  include WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 
-  include CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  include WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 

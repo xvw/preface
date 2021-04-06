@@ -1,21 +1,21 @@
 module Core_over_category_and_via_arrow_and_fst_and_apply
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_apply.CORE_WITH_ARROW_AND_FST_AND_APPLY
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_apply.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Arrow.Core_over_category_and_via_arrow_and_fst (Category) (Core)
+    (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_FST
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_apply.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Arrow.Core_over_category_and_via_arrow_and_fst (Category) (Req)
 
-  let apply = Core.apply
+  let apply = Req.apply
 end
 
 module Core_over_category_and_via_arrow_and_split_and_apply
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_apply.CORE_WITH_ARROW_AND_SPLIT_AND_APPLY
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_apply.CORE with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Arrow.Core_over_category_and_via_arrow_and_split (Category) (Core)
+    (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_SPLIT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_apply.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Arrow.Core_over_category_and_via_arrow_and_split (Category) (Req)
 
-  let apply = Core.apply
+  let apply = Req.apply
 end
 
 module Operation_over_category = Arrow.Operation_over_category
@@ -40,11 +40,11 @@ end
 
 module Over_category_and_via_arrow_and_fst_and_apply
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_apply.CORE_WITH_ARROW_AND_FST_AND_APPLY
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) Core.t = struct
+    (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_FST
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) Req.t = struct
   module Core =
-    Core_over_category_and_via_arrow_and_fst_and_apply (Category) (Core)
+    Core_over_category_and_via_arrow_and_fst_and_apply (Category) (Req)
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category) (Core) (Operation)
@@ -56,11 +56,11 @@ end
 
 module Over_category_and_via_arrow_and_split_and_apply
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_apply.CORE_WITH_ARROW_AND_SPLIT_AND_APPLY
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) Core.t = struct
+    (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_SPLIT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) Req.t = struct
   module Core =
-    Core_over_category_and_via_arrow_and_split_and_apply (Category) (Core)
+    Core_over_category_and_via_arrow_and_split_and_apply (Category) (Req)
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category) (Core) (Operation)

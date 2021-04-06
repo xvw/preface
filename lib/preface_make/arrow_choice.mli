@@ -34,33 +34,33 @@ module Over_arrow_with_left_and_choose
     [arrow], [fst] and [left]. *)
 module Over_category_and_via_arrow_and_fst_and_left
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_FST_AND_LEFT
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_LEFT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice] over {!Preface_specs.CATEGORY} and using
     [arrow], [fst] and [choose]. *)
 module Over_category_and_via_arrow_and_fst_and_choose
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_FST_AND_CHOOSE
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_CHOOSE
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice] over {!Preface_specs.CATEGORY} and using
     [arrow], [split] and [left]. *)
 module Over_over_category_and_via_arrow_and_split_and_left
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_SPLIT_AND_LEFT
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_LEFT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice] over {!Preface_specs.CATEGORY} and using
     [arrow], [split] and [choose]. *)
 module Over_category_and_via_arrow_and_split_and_choose
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_SPLIT_AND_CHOOSE
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_CHOOSE
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice] using a [monad] using the Kleisli
     composition. *)
@@ -96,33 +96,33 @@ module Via
     using [arrow], [fst] and [left]. *)
 module Core_over_category_and_via_arrow_and_fst_and_left
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_FST_AND_LEFT
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_LEFT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice.Core] over {!Preface_specs.CATEGORY} and
     using [arrow], [split] and [left]. *)
 module Core_over_category_and_via_arrow_and_split_and_left
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_SPLIT_AND_LEFT
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_LEFT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice.Core] over {!Preface_specs.CATEGORY} and
     using [arrow], [fst] and [choose]. *)
 module Core_over_category_and_via_arrow_and_fst_and_choose
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_FST_AND_CHOOSE
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_CHOOSE
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice.Core] over {!Preface_specs.CATEGORY} and
     using [arrow], [split] and [choose]. *)
 module Core_over_category_and_via_arrow_and_split_and_choose
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_choice.CORE_WITH_ARROW_AND_SPLIT_AND_CHOOSE
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_CHOOSE
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_choice.Operation] over {!Preface_specs.CATEGORY}
     and [Core]. *)

@@ -10,10 +10,10 @@
     + All {!module:Arrow} laws
     + [combine (combine a b) c = combine a (combine b c)] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Exposes the [combine] function, mandatory for each requirement. *)
-module type COMBINE = sig
+module type WITH_COMBINE = sig
   type ('a, 'b) t
   (** The type held by the [Arrow_alt]. *)
 
@@ -22,27 +22,28 @@ module type COMBINE = sig
 end
 
 (** Minimal definition using [arrow], [fst] and [combine]. *)
-module type CORE_WITH_ARROW_AND_FST = sig
-  include COMBINE
+module type WITH_ARROW_AND_FST = sig
+  include WITH_COMBINE
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** Minimal definition using [arrow], [split] and [combine]. *)
-module type CORE_WITH_ARROW_AND_SPLIT = sig
-  include COMBINE
+module type WITH_ARROW_AND_SPLIT = sig
+  include WITH_COMBINE
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of an [Arrow_alt]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include COMBINE
+  include WITH_COMBINE
   (** @closed *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t

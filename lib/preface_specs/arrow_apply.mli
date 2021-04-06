@@ -11,7 +11,7 @@
     + [fst (arrow (fun x -> g >>> x)) >>> apply = snd g >>> apply]
     + [fst (arrow (fun x -> x >>> h)) >>> apply = apply >>> h] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal definition using [apply] operation, without {!module:Arrow}. *)
 module type WITH_APPLY = sig
@@ -23,25 +23,26 @@ module type WITH_APPLY = sig
 end
 
 (** Minimal definition using [arrow] and [fst] and [apply]. *)
-module type CORE_WITH_ARROW_AND_FST_AND_APPLY = sig
+module type WITH_ARROW_AND_FST = sig
   include WITH_APPLY
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [apply]. *)
-module type CORE_WITH_ARROW_AND_SPLIT_AND_APPLY = sig
+module type WITH_ARROW_AND_SPLIT = sig
   include WITH_APPLY
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of an [Arrow_apply]. It is by using the combinators
-    of this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
   include WITH_APPLY
   (** @closed *)

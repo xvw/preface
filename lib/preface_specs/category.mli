@@ -9,10 +9,10 @@
     + [id % f = f]
     + [f % (g % h) = (f % g) % h] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal interface using [id] and [compose]. *)
-module type CORE = sig
+module type WITH_ID_AND_COMPOSE = sig
   type ('a, 'b) t
   (** The type held by the [Category]. *)
 
@@ -22,6 +22,11 @@ module type CORE = sig
   val compose : ('b, 'c) t -> ('a, 'b) t -> ('a, 'c) t
   (** Morphism composition (from right to left). *)
 end
+
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_ID_AND_COMPOSE
+(** Basis operations. *)
 
 (** Additional operations. *)
 module type OPERATION = sig

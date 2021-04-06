@@ -8,10 +8,10 @@
 
     + All {!module:Arrow} laws *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Exposes the [neutral] value, mandatory for each requirement. *)
-module type NEUTRAL = sig
+module type WITH_NEUTRAL = sig
   type ('a, 'b) t
   (** The type held by the [Arrow_zero]. *)
 
@@ -20,27 +20,28 @@ module type NEUTRAL = sig
 end
 
 (** Minimal definition using [arrow], [fst] and [neutral]. *)
-module type CORE_WITH_ARROW_AND_FST = sig
-  include NEUTRAL
+module type WITH_ARROW_AND_FST = sig
+  include WITH_NEUTRAL
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** Minimal definition using [arrow], [split] and [neutral]. *)
-module type CORE_WITH_ARROW_AND_SPLIT = sig
-  include NEUTRAL
+module type WITH_ARROW_AND_SPLIT = sig
+  include WITH_NEUTRAL
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of an [Arrow_zero]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include NEUTRAL
+  include WITH_NEUTRAL
   (** @closed *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t

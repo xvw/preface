@@ -9,25 +9,25 @@
 (** Incarnation of an [Arrow_plus] over {!Preface_specs.ARROW}. *)
 module Over_arrow
     (Arrow : Preface_specs.ARROW)
-    (Combine_and_neutral : Preface_specs.Arrow_plus.COMBINE_AND_NEUTRAL
-                             with type ('a, 'b) t = ('a, 'b) Arrow.t) :
-  Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) Combine_and_neutral.t
+    (Req : Preface_specs.Arrow_plus.WITH_COMBINE_AND_NEUTRAL
+             with type ('a, 'b) t = ('a, 'b) Arrow.t) :
+  Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_plus] using a {!Preface_specs.CATEGORY}, [arrow],
     [fst] and [combine]. *)
 module Over_category_and_via_arrow_and_fst
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_plus.CORE_WITH_ARROW_AND_FST
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_plus.WITH_ARROW_AND_FST
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow] using a {!Preface_specs.CATEGORY}, [arrow],
     [split] and [combine]. *)
 module Over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_plus.CORE_WITH_ARROW_AND_SPLIT
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_plus.WITH_ARROW_AND_SPLIT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of an [Arrow_plus] using a [monad_plus] using the Kleisli
     composition. *)
@@ -63,16 +63,16 @@ module Via
     [combine]. *)
 module Core_over_category_and_via_arrow_and_fst
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_plus.CORE_WITH_ARROW_AND_FST
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_plus.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_plus.WITH_ARROW_AND_FST
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_plus.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of [Arrow_plus.Core] using a [Category], [arrow] and [split]. *)
 module Core_over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
-    (Core : Preface_specs.Arrow_plus.CORE_WITH_ARROW_AND_SPLIT
-              with type ('a, 'b) t = ('a, 'b) Category.t) :
-  Preface_specs.Arrow_plus.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Arrow_plus.WITH_ARROW_AND_SPLIT
+             with type ('a, 'b) t = ('a, 'b) Category.t) :
+  Preface_specs.Arrow_plus.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of [Arrow_plus.Operation] using a [Category] and [Core]. *)
 module Operation_over_category

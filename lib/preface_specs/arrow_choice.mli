@@ -14,7 +14,7 @@
     + [left f >>> arrow (Fun.id +++ g) = arrow (Fun.id +++ g) >>> left f]
     + [left (left f) >>> arrow assocsum = arrow assocsum >>> left f] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal definition using [left] operation without {!module:Arrow}. *)
 module type WITH_LEFT = sig
@@ -47,43 +47,44 @@ module type WITH_LEFT_AND_CHOOSE = sig
 end
 
 (** Minimal definition using [arrow] and [fst] and [choose]. *)
-module type CORE_WITH_ARROW_AND_FST_AND_CHOOSE = sig
+module type WITH_ARROW_AND_FST_AND_CHOOSE = sig
   include WITH_CHOOSE
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [left]. *)
-module type CORE_WITH_ARROW_AND_FST_AND_LEFT = sig
+module type WITH_ARROW_AND_FST_AND_LEFT = sig
   include WITH_LEFT
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [choose]. *)
-module type CORE_WITH_ARROW_AND_SPLIT_AND_CHOOSE = sig
+module type WITH_ARROW_AND_SPLIT_AND_CHOOSE = sig
   include WITH_CHOOSE
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [left]. *)
-module type CORE_WITH_ARROW_AND_SPLIT_AND_LEFT = sig
+module type WITH_ARROW_AND_SPLIT_AND_LEFT = sig
   include WITH_LEFT
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of an [Arrow_choice]. It is by using the combinators
-    of this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
   include WITH_LEFT
   (** @closed *)

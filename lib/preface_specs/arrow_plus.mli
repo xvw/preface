@@ -14,36 +14,37 @@
 
 (** Exposes the [neutral] value and [combine] function, mandatory for each
     requirement. *)
-module type COMBINE_AND_NEUTRAL = sig
-  include Arrow_zero.NEUTRAL
+module type WITH_COMBINE_AND_NEUTRAL = sig
+  include Arrow_zero.WITH_NEUTRAL
   (** @closed *)
 
-  include Arrow_alt.COMBINE with type ('a, 'b) t := ('a, 'b) t
+  include Arrow_alt.WITH_COMBINE with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** RMinimal definition using [arrow], [fst], [neutral] and [combine]. *)
-module type CORE_WITH_ARROW_AND_FST = sig
-  include COMBINE_AND_NEUTRAL
+module type WITH_ARROW_AND_FST = sig
+  include WITH_COMBINE_AND_NEUTRAL
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
 (** Minimal definition using [arrow], [split], [neutral] and [combine]. *)
-module type CORE_WITH_ARROW_AND_SPLIT = sig
-  include COMBINE_AND_NEUTRAL
+module type WITH_ARROW_AND_SPLIT = sig
+  include WITH_COMBINE_AND_NEUTRAL
   (** @closed *)
 
-  include Arrow.CORE_WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
+  include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
-(** The minimum definition of an [Arrow_plus]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include COMBINE_AND_NEUTRAL
+  include WITH_COMBINE_AND_NEUTRAL
   (** @closed *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t
