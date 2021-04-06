@@ -1,5 +1,5 @@
-(** A [Writer] monad parametrized over an inner monad and a monoidal tape.
-    [Writer] is a monad transformer.*)
+(** A [Writer monad] parametrized over an inner {!module:Monad} and an tape
+    which is a {!module:Monoid}. [Writer] is a {e monad transformer}.*)
 
 (** {1 Structure anatomy} *)
 
@@ -45,13 +45,20 @@ module type CORE = sig
       output and returns an effects with the value unchanged. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
-(** The complete interface of a [Writer] monad. *)
+(** The complete interface of a [Writer] monad wich introduces the
+    {!module:Monad} API into the [Writer] API. *)
 module type API = sig
   include CORE
+  (** @closed *)
+
+  (** {1 Monad API} *)
 
   module Monad : Monad.API
 
+  (** {2 Monad API inclusion} *)
+
   include module type of Monad with type 'a t := 'a t
+  (** @closed *)
 end

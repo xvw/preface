@@ -14,12 +14,12 @@
     Standard way to build a [Foldable]. *)
 
 (** Incarnation of a [Foldable] with [fold_map'] as requirement. *)
-module Via_fold_map (F : Preface_specs.Foldable.CORE_WITH_FOLD_MAP) :
-  Preface_specs.FOLDABLE with type 'a t = 'a F.t
+module Via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
+  Preface_specs.FOLDABLE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Foldable] with [fold_right] as requirement. *)
-module Via_fold_right (F : Preface_specs.Foldable.CORE_WITH_FOLD_RIGHT) :
-  Preface_specs.FOLDABLE with type 'a t = 'a F.t
+module Via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
+  Preface_specs.FOLDABLE with type 'a t = 'a Req.t
 
 (** {2 Foldable composition}
 
@@ -55,12 +55,12 @@ module Via
   Preface_specs.FOLDABLE with type 'a t = 'a O.t
 
 (** Incarnation of a [Foldable.CORE] with [fold_right] as requirement. *)
-module Core_via_fold_right (F : Preface_specs.Foldable.CORE_WITH_FOLD_RIGHT) :
-  Preface_specs.Foldable.CORE with type 'a t = 'a F.t
+module Core_via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
+  Preface_specs.Foldable.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Foldable.CORE] with [fold_map'] as requirement. *)
-module Core_via_fold_map (F : Preface_specs.Foldable.CORE_WITH_FOLD_MAP) :
-  Preface_specs.Foldable.CORE with type 'a t = 'a F.t
+module Core_via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
+  Preface_specs.Foldable.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Foldable.OPERATION] with [Foldable.CORE]. *)
 module Operation (C : Preface_specs.Foldable.CORE) :

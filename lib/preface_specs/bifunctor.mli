@@ -1,8 +1,23 @@
 (** A [Bifunctor] is a type constructor that takes two type arguments and is a
-    [Functor] in both arguments. *)
+    {!module:Functor} (Covariant) in both arguments. *)
 
-(** Requirement via [bimap]. *)
-module type CORE_WITH_BIMAP = sig
+(** {2 Laws}
+
+    To have a predictable behaviour, the instance of [Bifunctor] must obey some
+    laws.
+
+    + [bimap id id = id]
+    + [map_fst id = id]
+    + [map_snd id = id]
+    + [bimap f g = map_fst f % map_snd g]
+    + [bimap  (f % g) (h % i) = bimap f h % bimap g i]
+    + [map_fst  (f % g) = map_fst  f % map_snd  g]
+    + [map_snd (f % g) = map_snd f % map_snd g]*)
+
+(** {1 Minimal definition} *)
+
+(** Minimal interface using [bimap]. *)
+module type WITH_BIMAP = sig
   type ('a, 'b) t
   (** The type held by the [Bifunctor]*)
 
@@ -10,8 +25,8 @@ module type CORE_WITH_BIMAP = sig
   (** Mapping over both arguments at the same time. *)
 end
 
-(** Requirement via [map_fst] and [map_snd]. *)
-module type CORE_WITH_MAP_FST_AND_MAP_SND = sig
+(** Minimal interface using [map_fst] and [map_snd]. *)
+module type WITH_MAP_FST_AND_MAP_SND = sig
   type ('a, 'b) t
   (** The type held by the [Bifunctor]*)
 
@@ -22,14 +37,18 @@ module type CORE_WITH_MAP_FST_AND_MAP_SND = sig
   (** Mapping over the second argument. *)
 end
 
-(** Standard requirement. *)
-module type CORE = sig
-  include CORE_WITH_BIMAP
+(** {1 Structure anatomy} *)
 
-  include CORE_WITH_MAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
+(** Basis operations. *)
+module type CORE = sig
+  include WITH_BIMAP
+  (** @closed *)
+
+  include WITH_MAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** Operations *)
+(** Additional operations. *)
 module type OPERATION = sig
   type ('a, 'b) t
   (** The type held by the [Bifunctor]. *)
@@ -43,16 +62,26 @@ module type OPERATION = sig
       given a value of ['a]. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of a [Bifunctor]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of a [Bifunctor]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:https://wiki.haskell.org/Typeclassopedia#Bifunctor} Bifunctor on
       Typeclassopedia} *)

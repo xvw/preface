@@ -1,30 +1,29 @@
-module Core_via_bind (Core : Preface_specs.Monad_plus.CORE_WITH_BIND) :
-  Preface_specs.Monad_plus.CORE with type 'a t = 'a Core.t = struct
-  include Monad.Core_via_bind (Core)
+module Core_via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) :
+  Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t = struct
+  include Monad.Core_via_bind (Req)
 
-  let combine = Core.combine
+  let combine = Req.combine
 
-  let neutral = Core.neutral
+  let neutral = Req.neutral
 end
 
-module Core_via_map_and_join
-    (Core : Preface_specs.Monad_plus.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.Monad_plus.CORE with type 'a t = 'a Core.t = struct
-  include Monad.Core_via_map_and_join (Core)
+module Core_via_map_and_join (Req : Preface_specs.Monad_plus.WITH_MAP_AND_JOIN) :
+  Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t = struct
+  include Monad.Core_via_map_and_join (Req)
 
-  let combine = Core.combine
+  let combine = Req.combine
 
-  let neutral = Core.neutral
+  let neutral = Req.neutral
 end
 
 module Core_via_kleisli_composition
-    (Core : Preface_specs.Monad_plus.CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.Monad_plus.CORE with type 'a t = 'a Core.t = struct
-  include Monad.Core_via_kleisli_composition (Core)
+    (Req : Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t = struct
+  include Monad.Core_via_kleisli_composition (Req)
 
-  let combine = Core.combine
+  let combine = Req.combine
 
-  let neutral = Core.neutral
+  let neutral = Req.neutral
 end
 
 let filter' bind return neutral predicate m =
@@ -45,20 +44,20 @@ end
 
 module Operation_over_monad
     (Monad : Preface_specs.MONAD)
-    (Core : Preface_specs.Monad_plus.CORE_WITH_NEUTRAL_AND_COMBINE
-              with type 'a t = 'a Monad.t) :
-  Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t = struct
+    (Req : Preface_specs.Monad_plus.WITH_NEUTRAL_AND_COMBINE
+             with type 'a t = 'a Monad.t) :
+  Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Req.t = struct
   include Monad
 
   include Alt.Operation (struct
     include Monad
-    include Core
+    include Req
   end)
 
-  let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
+  let reduce list = Preface_core.Monoid.reduce Req.combine Req.neutral list
 
   let filter predicate m =
-    filter' Monad.bind Monad.return Core.neutral predicate m
+    filter' Monad.bind Monad.return Req.neutral predicate m
   ;;
 end
 
@@ -87,9 +86,9 @@ module Via
   module Infix = Infix
 end
 
-module Via_bind (Core_with_bind : Preface_specs.Monad_plus.CORE_WITH_BIND) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_bind.t = struct
-  module Core = Core_via_bind (Core_with_bind)
+module Via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t = struct
+  module Core = Core_via_bind (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -99,10 +98,9 @@ module Via_bind (Core_with_bind : Preface_specs.Monad_plus.CORE_WITH_BIND) :
   include Infix
 end
 
-module Via_map_and_join
-    (Core_with_map_and_join : Preface_specs.Monad_plus.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_map_and_join.t = struct
-  module Core = Core_via_map_and_join (Core_with_map_and_join)
+module Via_map_and_join (Req : Preface_specs.Monad_plus.WITH_MAP_AND_JOIN) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t = struct
+  module Core = Core_via_map_and_join (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -113,11 +111,9 @@ module Via_map_and_join
 end
 
 module Via_kleisli_composition
-    (Core_with_kleisli_composition : Preface_specs.Monad_plus
-                                     .CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_kleisli_composition.t =
-struct
-  module Core = Core_via_kleisli_composition (Core_with_kleisli_composition)
+    (Req : Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t = struct
+  module Core = Core_via_kleisli_composition (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -129,24 +125,24 @@ end
 
 module Over_monad
     (Monad : Preface_specs.MONAD)
-    (Core : Preface_specs.Monad_plus.CORE_WITH_NEUTRAL_AND_COMBINE
-              with type 'a t = 'a Monad.t) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core.t =
+    (Req : Preface_specs.Monad_plus.WITH_NEUTRAL_AND_COMBINE
+             with type 'a t = 'a Monad.t) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t =
   Via
     (struct
       include Monad
 
-      let combine = Core.combine
+      let combine = Req.combine
 
-      let neutral = Core.neutral
+      let neutral = Req.neutral
     end)
-    (Operation_over_monad (Monad) (Core))
+    (Operation_over_monad (Monad) (Req))
     (struct
       type 'a t = 'a Monad.t
 
       include Monad.Infix
 
-      let ( <|> ) = Core.combine
+      let ( <|> ) = Req.combine
     end)
     (struct
       type 'a t = 'a Monad.t

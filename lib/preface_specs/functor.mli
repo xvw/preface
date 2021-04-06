@@ -1,21 +1,20 @@
-(** A [Functor] for ['a t] is mappable from ['a] to ['b]. So for all ['a t], we
-    can go to ['b t] using the [map] function. In other words, if we have a type
-    ['a t] and a function [val map: ('a -> 'b) -> 'a t -> 'b t] (respecting
-    laws), it is a [Functor].
+(** A [Functor] represents a type that can be mapped over. So we can go from
+    ['a t] to ['b t] using a function from ['a] to ['b]. Mapping preserve the
+    structure of the input.*)
 
-    {2 Laws of [Functor]}
+(** {2 Laws}
 
     To have a predictable behaviour, the instance of [Functor] must obey some
-    laws. The role of these laws is to guarantee [map] behaves sanely and
-    actually performs a mapping operation.
+    laws.
 
-    - [map id] must be equivalent to [id];
-    - [map (f % g)] must be equivalent to [map f % map g]. *)
+    + [map id = id];
+    + [map (f % g) = map f % map g]. *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
-(** Standard requirement. *)
-module type CORE = sig
+(** The minimum definition of a [Functor]. It is by using the combinators of
+    this module that the other combinators will be derived. *)
+module type WITH_MAP = sig
   type 'a t
   (** The type held by the [Functor]. *)
 
@@ -23,7 +22,12 @@ module type CORE = sig
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 end
 
-(** Operations *)
+(** {1 Structure anatomy} *)
+
+module type CORE = WITH_MAP
+(** Basis operations.*)
+
+(** Additional operations. *)
 module type OPERATION = sig
   type 'a t
   (** The type held by the [Functor]. *)
@@ -36,7 +40,7 @@ module type OPERATION = sig
   (** Create a new [unit t], replacing all values in the ['a t] by [unit]. *)
 end
 
-(** Infix notation *)
+(** Infix operators. *)
 module type INFIX = sig
   type 'a t
   (** The type held by the [Functor]. *)
@@ -54,19 +58,34 @@ module type INFIX = sig
   (** Flipped and infix version of {!val:OPERATION.replace}. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of a [Functor]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of a [Functor]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type 'a t := 'a t
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
+  (** {2 Infix operators inclusion} *)
+
   include module type of Infix
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:https://wiki.haskell.org/Functor} Haskell's documentation of a Functor} *)

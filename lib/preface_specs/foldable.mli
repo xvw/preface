@@ -1,21 +1,23 @@
-(** A [Foldable] is a data structure wich can be fold.
+(** A [Foldable] is a data structure wich can be fold. In other word, reduced to
+    a summary value one element at a time *)
 
-    {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
-(** Requirement via [fold_map'].
+(** Minimal definition using [fold_map'].
 
     [fold_map' neutral combine f x] use explicit monoidal combinators passing in
     order to deal with polymorphsim. *)
-module type CORE_WITH_FOLD_MAP = sig
+module type WITH_FOLD_MAP = sig
   type 'a t
   (** The type held by [Foldable]. *)
 
   val fold_map' : 'a -> ('a -> 'a -> 'a) -> ('b -> 'a) -> 'b t -> 'a
-  (** Map each element of the [foldable] to a [monoid] an combine the result. *)
+  (** Map each element of the [Foldable] to a {!module:Monoid} an combine the
+      result. *)
 end
 
-(** Requirement via [fold_right].*)
-module type CORE_WITH_FOLD_RIGHT = sig
+(** Minimal definition using [fold_right].*)
+module type WITH_FOLD_RIGHT = sig
   type 'a t
   (** The type held by [Foldable]. *)
 
@@ -23,14 +25,18 @@ module type CORE_WITH_FOLD_RIGHT = sig
   (** Same of {!val:List.fold_right} for [Foldable]. *)
 end
 
-(** Standard requirement. *)
-module type CORE = sig
-  include CORE_WITH_FOLD_MAP
+(** {1 Structure anatomy} *)
 
-  include CORE_WITH_FOLD_RIGHT with type 'a t := 'a t
+(** Basis operation. *)
+module type CORE = sig
+  include WITH_FOLD_MAP
+  (** @closed *)
+
+  include WITH_FOLD_RIGHT with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** Operations. *)
+(** Additional operations. *)
 module type OPERATION = sig
   type 'a t
   (** The type held by [Foldable]. *)
@@ -47,26 +53,36 @@ module type OPERATION = sig
   (** Same of {!val:List.fold_left} for [Foldable]. *)
 
   val for_all : ('a -> bool) -> 'a t -> bool
-  (** Checks if all elements of the [foldable] satisfy the given predicate. *)
+  (** Checks if all elements of the [Foldable] satisfy the given predicate. *)
 
   val exists : ('a -> bool) -> 'a t -> bool
-  (** Checks if at least on element of the [foldable] satisfy the given
+  (** Checks if at least on element of the [Foldable] satisfy the given
       predicate. *)
 
   val length : 'a t -> int
-  (** Count the number of elements in the [foldable]. *)
+  (** Count the number of elements in the [Foldable]. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
 (** The complete interface of a [Foldable]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of a [Foldable]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:https://wiki.haskell.org/Foldable_and_Traversable} Haskell's wiki of
       Foldable and Traversable}

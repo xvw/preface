@@ -5,13 +5,13 @@
     Standard way to build a [Bifunctor]. *)
 
 (** Incarnation of a [Bifunctor] with [bimap]. *)
-module Via_bimap (Core : Preface_specs.Bifunctor.CORE_WITH_BIMAP) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t
+module Via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) :
+  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Bifunctor] with [map_fst] and [map_snd]. *)
 module Via_map_fst_and_map_snd
-    (Core : Preface_specs.Bifunctor.CORE_WITH_MAP_FST_AND_MAP_SND) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Bifunctor.WITH_MAP_FST_AND_MAP_SND) :
+  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Bifunctor] using the product of two [functors]. *)
 module From_functors_product
@@ -59,13 +59,13 @@ module Via
   Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t
 
 (** Incarnation of a [Bifunctor.Core] with [bimap]. *)
-module Core_via_bimap (Core : Preface_specs.Bifunctor.CORE_WITH_BIMAP) :
-  Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+module Core_via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) :
+  Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Bifunctor.Core] with [map_fst] and [map_snd]. *)
 module Core_via_map_fst_and_map_snd
-    (Core : Preface_specs.Bifunctor.CORE_WITH_MAP_FST_AND_MAP_SND) :
-  Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Bifunctor.WITH_MAP_FST_AND_MAP_SND) :
+  Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Bifunctor.Operation] with [Bifunctor.Core]. *)
 module Operation (Core : Preface_specs.Bifunctor.CORE) :

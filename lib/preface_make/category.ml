@@ -1,3 +1,7 @@
+module Core (Req : Preface_specs.Category.WITH_ID_AND_COMPOSE) :
+  Preface_specs.Category.CORE with type ('a, 'b) t = ('a, 'b) Req.t =
+  Req
+
 module Operation (Core : Preface_specs.Category.CORE) :
   Preface_specs.Category.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t =
 struct
@@ -23,8 +27,9 @@ module Infix (Core : Preface_specs.Category.CORE) :
   let ( >>> ) f g = Core.compose g f
 end
 
-module Via_id_and_compose (Core : Preface_specs.Category.CORE) :
-  Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Core.t = struct
+module Via_id_and_compose (Req : Preface_specs.Category.WITH_ID_AND_COMPOSE) :
+  Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  module Core = Core (Req)
   include Core
   include Operation (Core)
   module Infix = Infix (Core)

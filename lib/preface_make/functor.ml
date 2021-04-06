@@ -1,5 +1,9 @@
 open Preface_core.Fun
 
+module Core (Req : Preface_specs.Functor.WITH_MAP) :
+  Preface_specs.Functor.CORE with type 'a t = 'a Req.t =
+  Req
+
 module Operation (Core : Preface_specs.Functor.CORE) :
   Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
@@ -35,8 +39,9 @@ module Via
   module Infix = Infix
 end
 
-module Via_map (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t = struct
+module Via_map (Req : Preface_specs.Functor.WITH_MAP) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Req.t = struct
+  module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
   include Operation

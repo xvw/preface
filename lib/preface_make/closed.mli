@@ -5,15 +5,14 @@
     Standard way to build a [Closed Profunctor]. *)
 
 (** Incarnation of a [Closed Profunctor] with [dimap] and [closed]. *)
-module Via_dimap_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_DIMAP_AND_CLOSED) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Core.t
+module Via_dimap_and_closed (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
+  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Closed Profunctor] with [contramap_fst], [map_snd] and
     [closed]. *)
 module Via_contramap_fst_and_map_snd_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
+  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Closed Profunctor] over a [Profunctor] with [closed]. *)
 module Over_profunctor_via_closed
@@ -48,13 +47,13 @@ module Via
 
 (** Incarnation of a [Closed.Core] with [dimap] and [closed]. *)
 module Core_via_dimap_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_DIMAP_AND_CLOSED) :
-  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
+  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Closed.Core] with [contramap_fst], [map_snd] and [closed]. *)
 module Core_via_contramap_fst_and_map_snd_and_closed
-    (Core : Preface_specs.Closed.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
-  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Core.t
+    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
+  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** Incarnation of a [Closed.Operation] with [Closed.Core]. *)
 module Operation (Core : Preface_specs.Closed.CORE) :

@@ -1,19 +1,28 @@
-module Via_dimap (Core : Preface_specs.Profunctor.CORE_WITH_DIMAP) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
+module Core_via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) :
+  Preface_specs.Profunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
 
-  let contramap_fst f x = Core.dimap f Fun.id x
+  let contramap_fst f x = Req.dimap f Fun.id x
 
-  let map_snd f x = Core.dimap Fun.id f x
+  let map_snd f x = Req.dimap Fun.id f x
 end
 
-module Via_contramap_fst_and_map_snd
-    (Core : Preface_specs.Profunctor.CORE_WITH_CONTRAMAP_FST_AND_MAP_SND) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t = struct
-  include Core
+module Core_via_contramap_fst_and_map_snd
+    (Req : Preface_specs.Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND) :
+  Preface_specs.Profunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+  include Req
 
   let dimap f g x = contramap_fst f (map_snd g x)
 end
+
+module Via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t =
+  Core_via_dimap (Req)
+
+module Via_contramap_fst_and_map_snd
+    (Req : Preface_specs.Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t =
+  Core_via_contramap_fst_and_map_snd (Req)
 
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.PROFUNCTOR with type ('a, 'b) t = 'a -> 'b Monad.t = struct

@@ -54,7 +54,7 @@ module Laws (A : Preface_specs.ARROW) = struct
   let law6 =
     let left f = A.(fst f >>> arrow Stdlib.fst)
     and right f = A.(arrow Stdlib.fst >>> f) in
-    ( "fst f >>> arrow Stdlib.fst = arrow Stdlib.fst >>> f "
+    ( "fst f >>> arrow Stdlib.fst = arrow Stdlib.fst >>> f"
     , (fun f -> (left f, right f)) )
   ;;
 

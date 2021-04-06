@@ -1,6 +1,6 @@
-module Core_via_fold_right (F : Preface_specs.Foldable.CORE_WITH_FOLD_RIGHT) :
-  Preface_specs.Foldable.CORE with type 'a t = 'a F.t = struct
-  include F
+module Core_via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
+  Preface_specs.Foldable.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let fold_map' neutral combine f x =
     let reducer x acc = combine (f x) acc in
@@ -8,9 +8,9 @@ module Core_via_fold_right (F : Preface_specs.Foldable.CORE_WITH_FOLD_RIGHT) :
   ;;
 end
 
-module Core_via_fold_map (F : Preface_specs.Foldable.CORE_WITH_FOLD_MAP) :
-  Preface_specs.Foldable.CORE with type 'a t = 'a F.t = struct
-  include F
+module Core_via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
+  Preface_specs.Foldable.CORE with type 'a t = 'a Req.t = struct
+  include Req
 
   let fold_right f x acc =
     (fold_map' (fun x -> x) (fun f g x -> f (g x)) f) x acc
@@ -52,16 +52,16 @@ module Via
   include (O : Preface_specs.Foldable.OPERATION with type 'a t := 'a t)
 end
 
-module Via_fold_right (F : Preface_specs.Foldable.CORE_WITH_FOLD_RIGHT) :
-  Preface_specs.FOLDABLE with type 'a t = 'a F.t = struct
-  module C = Core_via_fold_right (F)
+module Via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
+  Preface_specs.FOLDABLE with type 'a t = 'a Req.t = struct
+  module C = Core_via_fold_right (Req)
   module O = Operation (C)
   include Via (C) (O)
 end
 
-module Via_fold_map (F : Preface_specs.Foldable.CORE_WITH_FOLD_MAP) :
-  Preface_specs.FOLDABLE with type 'a t = 'a F.t = struct
-  module C = Core_via_fold_map (F)
+module Via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
+  Preface_specs.FOLDABLE with type 'a t = 'a Req.t = struct
+  module C = Core_via_fold_map (Req)
   module O = Operation (C)
   include Via (C) (O)
 end

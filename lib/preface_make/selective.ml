@@ -2,29 +2,27 @@ open Preface_core.Fun
 
 module Branch_via_select
     (Functor : Preface_specs.Functor.CORE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Functor.t) =
+    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Functor.t) =
 struct
   let branch s l r =
     let a = Functor.map Either.(map_right left) s
     and b = Functor.map (compose_right_to_left Either.right) l in
-    Select.select (Select.select a b) r
+    Req.select (Req.select a b) r
   ;;
 end
 
-module Select_via_branch
-    (Select : Preface_specs.Selective.CORE_WITH_PURE_AND_BRANCH) =
+module Select_via_branch (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH) =
 struct
-  let select x y = Select.branch x y (Select.pure id)
+  let select x y = Req.branch x y (Req.pure id)
 end
 
 module Core_over_functor_via_select
     (Functor : Preface_specs.Functor.CORE)
-    (Select : Preface_specs.Selective.CORE_WITH_PURE_AND_SELECT
-                with type 'a t = 'a Functor.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Functor.t = struct
+    (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
+             with type 'a t = 'a Functor.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
   include Functor
-  include Select
+  include Req
 
   module Ap = struct
     type nonrec 'a t = 'a t
@@ -34,18 +32,18 @@ module Core_over_functor_via_select
     let apply f x = select (map Either.left f) (map ( |> ) x)
   end
 
-  include Branch_via_select (Functor) (Select)
+  include Branch_via_select (Functor) (Req)
   include Applicative.Core_via_apply (Ap)
 end
 
 module Core_over_functor_via_branch
     (Functor : Preface_specs.Functor.CORE)
-    (Branch : Preface_specs.Selective.CORE_WITH_PURE_AND_BRANCH
-                with type 'a t = 'a Functor.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Functor.t = struct
+    (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
+             with type 'a t = 'a Functor.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
   include Functor
-  include Branch
-  include Select_via_branch (Branch)
+  include Req
+  include Select_via_branch (Req)
 
   module Ap = struct
     type nonrec 'a t = 'a t
@@ -60,26 +58,24 @@ end
 
 module Core_over_applicative_via_select
     (Applicative : Preface_specs.APPLICATIVE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Applicative.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Applicative.t = struct
+    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
   include Applicative
-  include Select
-  include Branch_via_select (Applicative) (Select)
+  include Req
+  include Branch_via_select (Applicative) (Req)
 end
 
 module Core_over_applicative_via_branch
     (Applicative : Preface_specs.APPLICATIVE)
-    (Branch : Preface_specs.Selective.CORE_WITH_BRANCH
-                with type 'a t = 'a Applicative.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Applicative.t = struct
+    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) :
+  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
   include Applicative
-  include Branch
+  include Req
 
   include Select_via_branch (struct
     let pure = pure
 
-    include Branch
+    include Req
   end)
 end
 
@@ -155,10 +151,10 @@ end
 
 module Over_functor_via_select
     (Functor : Preface_specs.Functor.CORE)
-    (Select : Preface_specs.Selective.CORE_WITH_PURE_AND_SELECT
-                with type 'a t = 'a Functor.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Select.t = struct
-  module Core = Core_over_functor_via_select (Functor) (Select)
+    (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
+             with type 'a t = 'a Functor.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+  module Core = Core_over_functor_via_select (Functor) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
   module Syntax = Syntax (Core)
@@ -170,10 +166,10 @@ end
 
 module Over_functor_via_branch
     (Functor : Preface_specs.Functor.CORE)
-    (Branch : Preface_specs.Selective.CORE_WITH_PURE_AND_BRANCH
-                with type 'a t = 'a Functor.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Branch.t = struct
-  module Core = Core_over_functor_via_branch (Functor) (Branch)
+    (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
+             with type 'a t = 'a Functor.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+  module Core = Core_over_functor_via_branch (Functor) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
   module Syntax = Syntax (Core)
@@ -185,10 +181,9 @@ end
 
 module Over_applicative_via_select
     (Applicative : Preface_specs.APPLICATIVE)
-    (Select : Preface_specs.Selective.CORE_WITH_SELECT
-                with type 'a t = 'a Applicative.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Select.t = struct
-  module Core = Core_over_applicative_via_select (Applicative) (Select)
+    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+  module Core = Core_over_applicative_via_select (Applicative) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
   module Syntax = Syntax (Core)
@@ -200,10 +195,9 @@ end
 
 module Over_applicative_via_branch
     (Applicative : Preface_specs.APPLICATIVE)
-    (Branch : Preface_specs.Selective.CORE_WITH_BRANCH
-                with type 'a t = 'a Applicative.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Branch.t = struct
-  module Core = Core_over_applicative_via_branch (Applicative) (Branch)
+    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) :
+  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+  module Core = Core_over_applicative_via_branch (Applicative) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
   module Syntax = Syntax (Core)
@@ -214,7 +208,7 @@ module Over_applicative_via_branch
 end
 
 module Select_from_monad (Monad : Preface_specs.MONAD) :
-  Preface_specs.Selective.CORE_WITH_SELECT with type 'a t = 'a Monad.t = struct
+  Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Monad.t = struct
   type 'a t = 'a Monad.t
 
   let pure x = Monad.return x

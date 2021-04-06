@@ -7,8 +7,8 @@
     Standard way to build a [Contravariant Functor]. *)
 
 (** Incarnation of a [Contravariant] using [contramap]. *)
-module Via_contramap (Core : Preface_specs.Contravariant.CORE) :
-  Preface_specs.CONTRAVARIANT with type 'a t = 'a Core.t
+module Via_contramap (Req : Preface_specs.Contravariant.WITH_CONTRAMAP) :
+  Preface_specs.CONTRAVARIANT with type 'a t = 'a Req.t
 
 (** {2 Contravariant composition}
 
@@ -32,6 +32,10 @@ module Via
                    with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Contravariant.INFIX with type 'a t = 'a Operation.t) :
   Preface_specs.CONTRAVARIANT with type 'a t = 'a Infix.t
+
+(** Incarnation of [Contravariant.Core] using [contramap]. *)
+module Core (Req : Preface_specs.Contravariant.WITH_CONTRAMAP) :
+  Preface_specs.Contravariant.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of [Contravariant.Operation] using [Core]. *)
 module Operation (Core : Preface_specs.Contravariant.CORE) :

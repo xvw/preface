@@ -5,8 +5,8 @@
     Standard way to build a [Semigroup]. *)
 
 (** Incarnation of a [Semigroup] with [combine]. *)
-module Via_combine (Core : Preface_specs.Semigroup.CORE) :
-  Preface_specs.SEMIGROUP with type t = Core.t
+module Via_combine (Req : Preface_specs.Semigroup.WITH_COMBINE) :
+  Preface_specs.SEMIGROUP with type t = Req.t
 
 (** Incarnation of a [Semigroup] from an [Alt]. *)
 module From_alt (Alt : Preface_specs.ALT) (T : Preface_specs.Types.T0) :
@@ -36,6 +36,10 @@ module Via
     (Operation : Preface_specs.Semigroup.OPERATION with type t = Core.t)
     (Infix : Preface_specs.Semigroup.INFIX with type t = Operation.t) :
   Preface_specs.SEMIGROUP with type t = Infix.t
+
+(** Incarnation of a [Semigroup.Core] using [combine]. *)
+module Core (Req : Preface_specs.Semigroup.WITH_COMBINE) :
+  Preface_specs.Semigroup.CORE with type t = Req.t
 
 (** Incarnation of a [Semigroup.Operation] using [Core]. *)
 module Operation (Core : Preface_specs.Semigroup.CORE) :

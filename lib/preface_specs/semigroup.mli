@@ -1,21 +1,34 @@
-(** A [Semigroup] is a type [t] which provides an associative operation
+(** A [Semigroup] is a type [t] which provides a binary associative operation
     [combine] which lets you combine any two values of [t] into one. *)
+
+(** {2 Laws}
+
+    To ensure that the derived combiners work properly, the [combine] function
+    must comply with the following laws:
+
+    + [combine (combine a b) c = combine a (combine b c) ] *)
+
+(** {1 Minimal definition} *)
+
+(** The minimum definition of a [Semigroup]. It is by using the combinators of
+    this module that the other combinators will be derived. *)
+module type WITH_COMBINE = sig
+  type t
+  (** the type held by the [Semigroup]. *)
+
+  val combine : t -> t -> t
+  (** [combine x y] Combine two values ([x] and [y]) of [t] into one. *)
+end
 
 (** {1 Structure anatomy} *)
 
-(** Standard requirement *)
-module type CORE = sig
-  type t
-  (** A type [t] which is a [Semigroup]. *)
+module type CORE = WITH_COMBINE
+(** Basis operations.*)
 
-  val combine : t -> t -> t
-  (** Combine two values of [t] into one. *)
-end
-
-(** Operations *)
+(** Additional operations. *)
 module type OPERATION = sig
   type t
-  (** A type [t] which is a [Semigroup]. *)
+  (** the type held by the [Semigroup]. *)
 
   val times : int -> t -> t option
   (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
@@ -25,27 +38,44 @@ module type OPERATION = sig
   (** Reduce a [Nonempty_list.t] using [combine]. *)
 end
 
-(** Infix notation *)
+(** Infix operators. *)
 module type INFIX = sig
   type t
-  (** A type [t] which is a [Semigroup]. *)
+  (** the type held by the [Semigroup]. *)
 
   val ( <|> ) : t -> t -> t
   (** Infix version of {!val:CORE.combine} *)
 end
 
+(** {1 Complete API} *)
+
 (** The complete interface of a [Semigroup]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of a [Semigroup]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type t := t
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type t = t
 
+  (** {2 Infix operators inclusion} *)
+
   include INFIX with type t := t
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:http://hackage.haskell.org/package/base-4.14.0.0/docs/Data-Semigroup.html}
       Haskell's documentation of a Semigroup} *)

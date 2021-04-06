@@ -1,10 +1,39 @@
 (library
  (name preface_specs)
- (public_name preface.specs)
- (modules_without_implementation preface_specs types functor applicative
-   selective monad comonad traversable bifunctor free_applicative free_monad
-   freer_monad free_selective semigroup monoid foldable alt alternative
-   monad_plus contravariant category arrow arrow_zero arrow_alt arrow_plus
-   arrow_choice arrow_apply profunctor strong choice closed reader writer
-   state)
- (libraries preface.core either))
+ (package preface)
+ (modules_without_implementation
+  preface_specs
+  types
+  functor
+  applicative
+  selective
+  monad
+  comonad
+  traversable
+  bifunctor
+  free_applicative
+  free_monad
+  freer_monad
+  free_selective
+  semigroup
+  monoid
+  foldable
+  alt
+  alternative
+  monad_plus
+  contravariant
+  category
+  arrow
+  arrow_zero
+  arrow_alt
+  arrow_plus
+  arrow_choice
+  arrow_apply
+  profunctor
+  strong
+  choice
+  closed
+  reader
+  writer
+  state)
+ (libraries preface_core either))

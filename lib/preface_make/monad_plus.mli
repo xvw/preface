@@ -8,21 +8,19 @@
 
 (** Incarnation of a [Monad_plus] with standard requirement ([return], [bind],
     [neutral] and [combine]). *)
-module Via_bind (Core_with_bind : Preface_specs.Monad_plus.CORE_WITH_BIND) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_bind.t
+module Via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad_plus] with standard requirement ([return], [map],
     [join], [neutral] and [combine]). *)
-module Via_map_and_join
-    (Core_with_map_and_join : Preface_specs.Monad_plus.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_map_and_join.t
+module Via_map_and_join (Req : Preface_specs.Monad_plus.WITH_MAP_AND_JOIN) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad_plus] with standard requirement ([return],
     [compose_left_to_right], [neutral] and [combine]). *)
 module Via_kleisli_composition
-    (Core_with_kleisli_composition : Preface_specs.Monad_plus
-                                     .CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core_with_kleisli_composition.t
+    (Req : Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad_plus] over a [Monad] and an [Alternative].*)
 module Over_monad_and_alternative
@@ -33,9 +31,9 @@ module Over_monad_and_alternative
 (** Incarnation of a [Monad_plus] over a [Monad].*)
 module Over_monad
     (Monad : Preface_specs.MONAD)
-    (Core : Preface_specs.Monad_plus.CORE_WITH_NEUTRAL_AND_COMBINE
-              with type 'a t = 'a Monad.t) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a Core.t
+    (Req : Preface_specs.Monad_plus.WITH_NEUTRAL_AND_COMBINE
+             with type 'a t = 'a Monad.t) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad_plus] using an [Arrow_apply] (for Monad) and
     [Arrow_plus] (for Alternative) via [Arrow Monad] encoding.*)
@@ -68,20 +66,19 @@ module Via
 
 (** Incarnation of a [Monad_plus.Core] with standard requirement ([return],
     [bind], [neutral] and [combine]). *)
-module Core_via_bind (Core : Preface_specs.Monad_plus.CORE_WITH_BIND) :
-  Preface_specs.Monad_plus.CORE with type 'a t = 'a Core.t
+module Core_via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) :
+  Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad_plus.Core] with standard requirement ([return],
     [map], [join], [neutral] and [combine]). *)
-module Core_via_map_and_join
-    (Core : Preface_specs.Monad_plus.CORE_WITH_MAP_AND_JOIN) :
-  Preface_specs.Monad_plus.CORE with type 'a t = 'a Core.t
+module Core_via_map_and_join (Req : Preface_specs.Monad_plus.WITH_MAP_AND_JOIN) :
+  Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad_plus.Core] with standard requirement ([return],
     [compose_left_to_right], [neutral] and [combine]). *)
 module Core_via_kleisli_composition
-    (Core : Preface_specs.Monad_plus.CORE_WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.Monad_plus.CORE with type 'a t = 'a Core.t
+    (Req : Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION) :
+  Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t
 
 (** Incarnation of a [Monad_plus.Operation] with [Monad_plus.Core].*)
 module Operation (Core : Preface_specs.Monad_plus.CORE) :

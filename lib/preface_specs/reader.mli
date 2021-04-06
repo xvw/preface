@@ -1,5 +1,5 @@
-(** A [Reader] monad parametrized over an inner monad and an environment.
-    [Reader] is a monad transformer.*)
+(** A [Reader monad] parametrized over an inner {!module:Monad} and an
+    environment. [Reader] is a {e monad transformer}.*)
 
 (** {1 Structure anatomy} *)
 
@@ -28,13 +28,20 @@ module type CORE = sig
   (** Build a reader from a function. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
-(** The complete interface of a [Reader] monad. *)
+(** The complete interface of a [Reader] monad wich introduces the
+    {!module:Monad} API into the [Reader] API. *)
 module type API = sig
   include CORE
+  (** @closed *)
+
+  (** {1 Monad API} *)
 
   module Monad : Monad.API
 
+  (** {2 Monad API inclusion} *)
+
   include module type of Monad with type 'a t := 'a t
+  (** @closed *)
 end

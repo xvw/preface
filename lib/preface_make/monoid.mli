@@ -7,12 +7,13 @@
 (** Incarnation of a [Monoid] over a [Semigroup] with [neutral]. *)
 module Over_semigroup
     (S : Preface_specs.SEMIGROUP)
-    (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
+    (M : Preface_specs.Monoid.WITH_NEUTRAL with type t = S.t) :
   Preface_specs.MONOID with type t = S.t
 
 (** Incarnation of a [Monoid] with [combine] and [neutral]. *)
-module Via_combine_and_neutral (Core : Preface_specs.Monoid.CORE) :
-  Preface_specs.MONOID with type t = Core.t
+module Via_combine_and_neutral
+    (Req : Preface_specs.Monoid.WITH_NEUTRAL_AND_COMBINE) :
+  Preface_specs.MONOID with type t = Req.t
 
 (** Incarnation of a [Monoid] from an [Alternative]. *)
 module From_alternative
@@ -42,8 +43,12 @@ module Via
 (** Incarnation of a [Monoid.Core] over a [Semigroup] with [neutral]. *)
 module Core_over_semigroup
     (S : Preface_specs.SEMIGROUP)
-    (M : Preface_specs.Monoid.NEUTRAL with type t = S.t) :
+    (M : Preface_specs.Monoid.WITH_NEUTRAL with type t = S.t) :
   Preface_specs.Monoid.CORE with type t = M.t
+
+(** Incarnation of a [Monoid.Core] using [neutral] and [combine]. *)
+module Core (Req : Preface_specs.Monoid.WITH_NEUTRAL_AND_COMBINE) :
+  Preface_specs.Monoid.CORE with type t = Req.t
 
 (** Incarnation of a [Monoid.Operation] using [Monoid.Core]. *)
 module Operation (Core : Preface_specs.Monoid.CORE) :

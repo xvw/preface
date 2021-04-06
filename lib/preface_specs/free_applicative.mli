@@ -1,51 +1,68 @@
-(** A [Free_applicative] allows you to build an applicative from a given
-    functor. Such applicative is equiped with and additional function for
-    promoting values from the underlying functor into the free applicative and a
-    natural transformation in order to unwrapping the value from the free
-    applicative. *)
+(** A [Free applicative] allows you to build an {!module:Applicative} from a
+    given {!module:Functor}. *)
+
+(** Such {!module:Applicative} is equiped with and additional function for
+    [promoting] values from the underlying {!module:Functor} into the
+    [Free applicative] and a [Natural transformations] for transforming the
+    value of the [Free applicative] to an other {!module:Applicative} or to a
+    {!module:Monoid}. *)
+
+(** {2 Note about complexity}
+
+    Although free constructs are elegant, they introduce an execution cost due
+    to the recursive nature of defining the type of a [Free Applicative]. There
+    are {e cheaper} encodings but they are not, for the moment, available in
+    Preface. *)
 
 (** {1 Structure anatomy} *)
 
-(** Standard requirement. *)
+(** The [Free applicative] API without the {!module:Applicative} API. *)
 module type CORE = sig
   type 'a f
-  (** The type held by the [Functor]. *)
+  (** The type held by the {!module:Functor}. *)
 
-  (** The type held by the [Free_applicative]. *)
+  (** The type held by the [Free applicative]. *)
   type _ t =
     | Pure : 'a -> 'a t
     | Apply : ('a -> 'b) t * 'a f -> 'b t
 
   val promote : 'a f -> 'a t
-  (** Promote a value from the functor into the free applicative. *)
+  (** Promote a value from the {!module:Functor} into the [Free applicative]. *)
 
-  (** The natural transformation from a free applicative to an other
-      applicative. *)
+  (** The natural transformation from a [Free applicative] to an other
+      {!module:Applicative}. *)
   module To_applicative (Applicative : Applicative.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> 'a Applicative.t }
 
     val run : natural_transformation -> 'a t -> 'a Applicative.t
-    (** Run the natural transformation over the free applicative. *)
+    (** Run the natural transformation over the [Free applicative]. *)
   end
 
-  (** The natural transformation from a free applicative to a monoid. *)
+  (** The natural transformation from a [Free applicative] to a
+      {!module:Monoid}. *)
   module To_monoid (Monoid : Monoid.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
 
     val run : natural_transformation -> 'a t -> Monoid.t
-    (** Run the natural transformation over the free applicative. *)
+    (** Run the natural transformation over the [Free applicative]. *)
   end
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
-(** The complete interface of a [Free_applicative]. *)
+(** The complete interface of a [Free applicative]. *)
 module type API = sig
   include CORE
+  (** @inline *)
+
+  (** {1 Applicative API}
+
+      A [Free applicative] is also an {!module:Applicative}. *)
 
   include Applicative.API with type 'a t := 'a t
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:https://arxiv.org/pdf/1403.0749.pdf} Free Applicative Functors} *)

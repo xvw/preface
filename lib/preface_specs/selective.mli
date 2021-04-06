@@ -1,11 +1,36 @@
 (** A [Selective] (applicative functor) allows to declare effects statically and
     select which execute dynamically. It is an algebraic structure between
-    [Applicative] and [Monad]. *)
+    {!module:Applicative} and {!module:Monad}. A [Selective] is also an
+    {!module:Applicative}. *)
 
-(** {1 Structure anatomy} *)
+(** {2 Laws}
 
-(** Standard requirement with [select]. *)
-module type CORE_WITH_SELECT = sig
+    To have a predictable behaviour, the instance of [Selective] must obey some
+    laws.
+
+    + [x <*? pure id = Either.case id id <$> x]
+    + [pure x <*? (y *> z) = (pure x <*? y) *> (pure x <*? z)]
+    + [x <*? (y <*? z) = (f <$> x) <*? (g <$> y) <*? (h <$> z)]
+    + [f <$> select x y) = (select (Bifunctor.map_snd f <$> x) (((%) f) <$> y)]
+    + [(select (Bifunctor.map_fst f <$> x) y) = (select x ((%>) f) <$> y))]
+    + [(select x (f <$> y)) = (select (Bifunctor.map_fst (flip f) <$> x) ((|>) \
+     <$> y))]
+    + [(x <*? pure y) = (Either.case y id <$> x)]
+    + [(pure (Right x) <*? y) = pure x]
+    + [(pure (Left x) <*? y) = ((|>) x) <$> y]
+
+    {3 Laws for Rigid Selectives}
+
+    A [selective] is [Rigid] if [apply] can be defined in term of [select]
+
+    + [f <*> g = apply f g]
+    + [(x *> (y <*? z)) = ((x *> y) <*? z)] *)
+
+(** {1 Minimal definition} *)
+
+(** Minimal definition using [select] without {!module:Applicative}
+    requirements. *)
+module type WITH_SELECT = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
@@ -14,8 +39,9 @@ module type CORE_WITH_SELECT = sig
       [Right]. *)
 end
 
-(** Standard requirement with [branch]. *)
-module type CORE_WITH_BRANCH = sig
+(** Minimal definition using [branch] without {!module:Applicative}
+    requirements. *)
+module type WITH_BRANCH = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
@@ -24,44 +50,50 @@ module type CORE_WITH_BRANCH = sig
 end
 
 (** Standard requirement including [pure] and [select]. *)
-module type CORE_WITH_PURE_AND_SELECT = sig
-  include CORE_WITH_SELECT
+module type WITH_PURE_AND_SELECT = sig
+  include WITH_SELECT
+  (** @closed *)
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
 end
 
 (** Standard requirement including [pure] and [branch]. *)
-module type CORE_WITH_PURE_AND_BRANCH = sig
-  include CORE_WITH_BRANCH
+module type WITH_PURE_AND_BRANCH = sig
+  include WITH_BRANCH
+  (** @closed *)
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
 end
 
-(** Standard requirement including Applicative requirements. *)
-module type CORE = sig
-  include CORE_WITH_SELECT
+(** {1 Structure anatomy} *)
 
-  include CORE_WITH_BRANCH with type 'a t := 'a t
+(** Basis operation. *)
+module type CORE = sig
+  include WITH_SELECT
+  (** @closed *)
+
+  include WITH_BRANCH with type 'a t := 'a t
+  (** @closed *)
 
   include Applicative.CORE with type 'a t := 'a t
-  (** Each [Selective] is also an [Applicative]. *)
+  (** @closed *)
 end
 
-(** Operations. *)
+(** Additional operations. *)
 module type OPERATION = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
   include Applicative.OPERATION with type 'a t := 'a t
-  (** Each [Selective] is also an [Applicative]. *)
+  (** @closed *)
 
   val if_ : bool t -> 'a t -> 'a t -> 'a t
   (** Same of [branch] but using a [Boolean] as disjunction. *)
 
   val bind_bool : bool t -> (bool -> 'a t) -> 'a t
-  (** [Monad.bin] specialized for Boolean. *)
+  (** {!module:Monad} [bind] specialized for Boolean. *)
 
   val when_ : bool t -> unit t -> unit t
   (** Conditionnally perform an effect. *)
@@ -85,15 +117,16 @@ end
 (** Syntax extensions. *)
 module type SYNTAX = sig
   include Applicative.SYNTAX
+  (** @closed *)
 end
 
-(** Infix notations. *)
+(** Infix operators. *)
 module type INFIX = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
   include Applicative.INFIX with type 'a t := 'a t
-  (** Each [Selective] is also an [Applicative]. *)
+  (** @closed *)
 
   val ( <*? ) : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
   (** Infix version of {!val:CORE.select}. *)
@@ -105,24 +138,44 @@ module type INFIX = sig
   (** Infix version of {!val:CORE.and_}. *)
 end
 
-(** {1 API} *)
+(** {1 Complete API} *)
 
-(** The complete interface of a [Monad]. *)
+(** The complete interface of a [Selective]. *)
 module type API = sig
+  (** {1 Core functions}
+
+      Set of fundamental functions in the description of a [Selective]. *)
+
   include CORE
+  (** @closed *)
+
+  (** {1 Additional functions}
+
+      Additional functions, derived from fundamental functions. *)
 
   include OPERATION with type 'a t := 'a t
+  (** @closed *)
+
+  (** {1 Syntax} *)
 
   module Syntax : SYNTAX with type 'a t := 'a t
 
+  (** {2 Syntax inclusion} *)
+
   include module type of Syntax
+  (** @closed *)
+
+  (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
+  (** {2 Infix operators inclusion} *)
+
   include module type of Infix
+  (** @closed *)
 end
 
-(** {1 Bibliography}
+(** {1 Additional references}
 
     - {{:http://hackage.haskell.org/package/selective} Haskell's documentation
       of a Selective Application Functor}
