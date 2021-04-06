@@ -14,10 +14,10 @@
     + [map_fst  (f % g) = map_fst  f % map_snd  g]
     + [map_snd (f % g) = map_snd f % map_snd g]*)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal interface using [bimap]. *)
-module type CORE_WITH_BIMAP = sig
+module type WITH_BIMAP = sig
   type ('a, 'b) t
   (** The type held by the [Bifunctor]*)
 
@@ -26,7 +26,7 @@ module type CORE_WITH_BIMAP = sig
 end
 
 (** Minimal interface using [map_fst] and [map_snd]. *)
-module type CORE_WITH_MAP_FST_AND_MAP_SND = sig
+module type WITH_MAP_FST_AND_MAP_SND = sig
   type ('a, 'b) t
   (** The type held by the [Bifunctor]*)
 
@@ -37,13 +37,14 @@ module type CORE_WITH_MAP_FST_AND_MAP_SND = sig
   (** Mapping over the second argument. *)
 end
 
-(** The minimum definition of an [Bifunctor]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operations. *)
 module type CORE = sig
-  include CORE_WITH_BIMAP
+  include WITH_BIMAP
   (** @closed *)
 
-  include CORE_WITH_MAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
+  include WITH_MAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
   (** @closed *)
 end
 
