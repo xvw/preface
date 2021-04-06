@@ -1,4 +1,4 @@
-module Core_over_category_and_via_arrow_and_fst_and_apply
+module Core_over_category_and_via_arrow_and_fst
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_FST
              with type ('a, 'b) t = ('a, 'b) Category.t) :
@@ -8,7 +8,7 @@ module Core_over_category_and_via_arrow_and_fst_and_apply
   let apply = Req.apply
 end
 
-module Core_over_category_and_via_arrow_and_split_and_apply
+module Core_over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_SPLIT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
@@ -38,13 +38,12 @@ module Via
   module Infix = Infix
 end
 
-module Over_category_and_via_arrow_and_fst_and_apply
+module Over_category_and_via_arrow_and_fst
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_FST
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) Req.t = struct
-  module Core =
-    Core_over_category_and_via_arrow_and_fst_and_apply (Category) (Req)
+  module Core = Core_over_category_and_via_arrow_and_fst (Category) (Req)
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category) (Core) (Operation)
@@ -54,13 +53,12 @@ module Over_category_and_via_arrow_and_fst_and_apply
   include Infix
 end
 
-module Over_category_and_via_arrow_and_split_and_apply
+module Over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_apply.WITH_ARROW_AND_SPLIT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) Req.t = struct
-  module Core =
-    Core_over_category_and_via_arrow_and_split_and_apply (Category) (Req)
+  module Core = Core_over_category_and_via_arrow_and_split (Category) (Req)
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category) (Core) (Operation)
@@ -70,13 +68,13 @@ module Over_category_and_via_arrow_and_split_and_apply
   include Infix
 end
 
-module Over_arrow_with_apply
+module Over_arrow
     (Arrow : Preface_specs.ARROW)
     (Apply : Preface_specs.Arrow_apply.WITH_APPLY
                with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) Apply.t = struct
   module Core_aux =
-    Core_over_category_and_via_arrow_and_fst_and_apply
+    Core_over_category_and_via_arrow_and_fst
       (Arrow)
       (struct
         include Arrow
@@ -102,7 +100,7 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
   module Arr = Arrow.From_monad (Monad)
 
   include
-    Over_arrow_with_apply
+    Over_arrow
       (Arr)
       (struct
         type ('a, 'b) t = 'a -> 'b Monad.t

@@ -1,62 +1,97 @@
-(** Modules for building {!Preface_specs.MONAD_PLUS} modules.
+(** Building a {!module:Preface_specs.Monad_plus} *)
 
-    {1 Documentation} *)
+(** {1 Using the minimal definition} *)
 
-(** {2 Construction}
+(** {2 Using return, bind, neutral and combine}
 
-    Standard way to build a [Monad_plus]. *)
+    Build a {!module-type:Preface_specs.MONAD_PLUS} using
+    {!module-type:Preface_specs.Monad_plus.WITH_BIND}.
 
-(** Incarnation of a [Monad_plus] with standard requirement ([return], [bind],
-    [neutral] and [combine]). *)
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad_plus] with standard requirement ([return], [map],
-    [join], [neutral] and [combine]). *)
+(** {2 Using return, map, join, neutral and combine}
+
+    Build a {!module-type:Preface_specs.MONAD_PLUS} using
+    {!module-type:Preface_specs.Monad_plus.WITH_MAP_AND_JOIN}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_map_and_join (Req : Preface_specs.Monad_plus.WITH_MAP_AND_JOIN) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad_plus] with standard requirement ([return],
-    [compose_left_to_right], [neutral] and [combine]). *)
+(** {2 Using return, neutral, combine and the kleisli composition}
+
+    Build a {!module-type:Preface_specs.MONAD_PLUS} using
+    {!module-type:Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_kleisli_composition
     (Req : Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad_plus] over a [Monad] and an [Alternative].*)
+(** {2 Over a Monad and an Alternative}
+
+    Build a {!module-type:Preface_specs.MONAD_PLUS} over a
+    {!module-type:Preface_specs.MONAD} and an [neutral] and [combine] from an
+    {!module-type:Preface_specs.ALTERNATIVE}. *)
+
 module Over_monad_and_alternative
     (Monad : Preface_specs.MONAD)
     (Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a Monad.t) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Alternative.t
 
-(** Incarnation of a [Monad_plus] over a [Monad].*)
+(** {2 Over a Monad using neutral and combine}
+
+    Build a {!module-type:Preface_specs.MONAD_PLUS} over a
+    {!module-type:Preface_specs.MONAD} and using
+    {!module-type:Preface_specs.Monad_plus.WITH_NEUTRAL_AND_COMBINE}. *)
+
 module Over_monad
     (Monad : Preface_specs.MONAD)
     (Req : Preface_specs.Monad_plus.WITH_NEUTRAL_AND_COMBINE
              with type 'a t = 'a Monad.t) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad_plus] using an [Arrow_apply] (for Monad) and
-    [Arrow_plus] (for Alternative) via [Arrow Monad] encoding.*)
+(** {1 Monad plus Algebra}
+
+    Construction of {!module-type:Preface_specs.MONAD_PLUS} by combining them. *)
+
+(** {2 Product}
+
+    Construct the product of two {!module-type:Preface_specs.MONAD_PLUS}. *)
+
+module Product (F : Preface_specs.MONAD_PLUS) (G : Preface_specs.MONAD_PLUS) :
+  Preface_specs.MONAD_PLUS with type 'a t = 'a F.t * 'a G.t
+
+(** {1 From other abstraction} *)
+
+(** {2 From an Arrow Plus and Arrow Apply}
+
+    Produces an {!module-type:Preface_specs.MONAD_PLUS} from an [Arrow] which
+    has to be a {!module-type:Preface_specs.ARROW_PLUS} and a
+    {!module-type:Preface_specs.ARROW_APPLY}. *)
+
 module From_arrow_apply_and_arrow_plus
     (A : Preface_specs.ARROW_APPLY)
     (P : Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) A.t) :
   Preface_specs.MONAD_PLUS with type 'a t = (unit, 'a) P.t
 
-(** {2 Monad Plus composition}
+(** {1 Manual construction}
 
-    Some tools for composition between monads plus. *)
-
-(** Product of two Monads plus. *)
-module Product (F : Preface_specs.MONAD_PLUS) (G : Preface_specs.MONAD_PLUS) :
-  Preface_specs.MONAD_PLUS with type 'a t = 'a F.t * 'a G.t
-
-(** {2 Manual construction}
-
-    Advanced way to build a [Monad_plus], constructing and assembling a
-    component-by-component a monad plus. (In order to provide your own
+    Advanced way to build a {!module-type:Preface_specs.MONAD_PLUS},
+    constructing and assembling a component-by-component of
+    {!module-type:Preface_specs.MONAD_PLUS}. (In order to provide your own
     implementation for some features.) *)
 
-(** Incarnation of a [Monad_plus] using each components of a [Monad_plus]. *)
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Monad_plus.CORE)
     (Operation : Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t)
@@ -64,32 +99,30 @@ module Via
     (Syntax : Preface_specs.Monad_plus.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.MONAD_PLUS with type 'a t = 'a Core.t
 
-(** Incarnation of a [Monad_plus.Core] with standard requirement ([return],
-    [bind], [neutral] and [combine]). *)
+(** {2 Building Core} *)
+
 module Core_via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) :
   Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad_plus.Core] with standard requirement ([return],
-    [map], [join], [neutral] and [combine]). *)
 module Core_via_map_and_join (Req : Preface_specs.Monad_plus.WITH_MAP_AND_JOIN) :
   Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad_plus.Core] with standard requirement ([return],
-    [compose_left_to_right], [neutral] and [combine]). *)
 module Core_via_kleisli_composition
     (Req : Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION) :
   Preface_specs.Monad_plus.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad_plus.Operation] with [Monad_plus.Core].*)
+(** {2 Deriving Operation} *)
+
 module Operation (Core : Preface_specs.Monad_plus.CORE) :
   Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t
 
-(** Incarnation of a [Monad_plus.Syntax] with [Monad_plus.Core].*)
+(** {2 Deriving Syntax} *)
+
 module Syntax (Core : Preface_specs.Monad_plus.CORE) :
   Preface_specs.Monad_plus.SYNTAX with type 'a t = 'a Core.t
 
-(** Incarnation of a [Monad_plus.Infix] with [Monad_plus.Core] and
-    [Monad_plus.OPERATION].*)
+(** {2 Deriving Infix} *)
+
 module Infix
     (Core : Preface_specs.Monad_plus.CORE)
     (Operation : Preface_specs.Monad_plus.OPERATION with type 'a t = 'a Core.t) :

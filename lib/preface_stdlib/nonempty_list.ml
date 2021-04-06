@@ -21,7 +21,7 @@ module Functor = Preface_make.Functor.Via_map (struct
 end)
 
 module Alt =
-  Preface_make.Alt.Over_functor_via_combine
+  Preface_make.Alt.Over_functor
     (Functor)
     (struct
       type nonrec 'a t = 'a t

@@ -55,7 +55,7 @@ module Via_map_and_combine (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) :
   include Infix
 end
 
-module Over_functor_via_combine
+module Over_functor
     (Functor : Preface_specs.FUNCTOR)
     (Combine : Preface_specs.Alt.WITH_COMBINE with type 'a t = 'a Functor.t) :
   Preface_specs.ALT with type 'a t = 'a Combine.t = struct
@@ -73,7 +73,7 @@ end
 
 module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
   Preface_specs.ALT with type 'a t = 'a G.t F.t =
-  Over_functor_via_combine
+  Over_functor
     (Functor.Composition (F) (G))
        (struct
          type 'a t = 'a G.t F.t
@@ -83,7 +83,7 @@ module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
 
 module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
   Preface_specs.ALT with type 'a t = 'a F.t * 'a G.t =
-  Over_functor_via_combine
+  Over_functor
     (Functor.Product (F) (G))
        (struct
          type 'a t = 'a F.t * 'a G.t

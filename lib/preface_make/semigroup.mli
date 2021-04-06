@@ -1,50 +1,72 @@
-(** {1 Documentation} *)
+(** Building a {!module:Preface_specs.Semigroup} *)
 
-(** {2 Construction}
+(** {1 Using the minimal definition}
 
-    Standard way to build a [Semigroup]. *)
+    Build a {!module-type:Preface_specs.SEMIGROUP} using
+    {!module-type:Preface_specs.Semigroup.WITH_COMBINE}.
 
-(** Incarnation of a [Semigroup] with [combine]. *)
+    Standard method, using the minimal definition of a semigroup to derive its
+    full API. *)
+
 module Via_combine (Req : Preface_specs.Semigroup.WITH_COMBINE) :
   Preface_specs.SEMIGROUP with type t = Req.t
 
-(** Incarnation of a [Semigroup] from an [Alt]. *)
+(** {1 From other abstraction} *)
+
+(** {2 From an Alt}
+
+    Specialize an {!module-type:Preface_specs.ALT} into a
+    {!module-type:Preface_specs.SEMIGROUP}. *)
+
 module From_alt (Alt : Preface_specs.ALT) (T : Preface_specs.Types.T0) :
   Preface_specs.SEMIGROUP with type t = T.t Alt.t
 
-(** Incarnation of a [Semigroup] from an [Alternative]. *)
+(** {2 From an Alternative}
+
+    Specialize an {!module-type:Preface_specs.ALTERNATIVE} into a
+    {!module-type:Preface_specs.SEMIGROUP}. *)
+
 module From_alternative
     (Alternative : Preface_specs.ALTERNATIVE)
     (T : Preface_specs.Types.T0) :
   Preface_specs.SEMIGROUP with type t = T.t Alternative.t
 
-(** Incarnation of a [Semigroup] from a [Monad_plus]. *)
+(** {2 From a Monad plus}
+
+    Specialize an {!module-type:Preface_specs.MONAD_PLUS} into a
+    {!module-type:Preface_specs.SEMIGROUP}. *)
+
 module From_monad_plus
     (Monad_plus : Preface_specs.MONAD_PLUS)
     (T : Preface_specs.Types.T0) :
   Preface_specs.SEMIGROUP with type t = T.t Monad_plus.t
 
-(** {2 Manual construction}
+(** {1 Manual construction}
 
-    Advanced way to build a [Semigroup], constructing and assembling a
-    component-by-component a semigroup. (In order to provide your own
+    Advanced way to build a {!module-type:Preface_specs.SEMIGROUP}, constructing
+    and assembling a component-by-component of
+    {!module-type:Preface_specs.SEMIGROUP}. (In order to provide your own
     implementation for some features.) *)
 
-(** Incarnation of a [Semigroup] using each components of a [Semigroup]. *)
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Semigroup.CORE)
     (Operation : Preface_specs.Semigroup.OPERATION with type t = Core.t)
     (Infix : Preface_specs.Semigroup.INFIX with type t = Operation.t) :
   Preface_specs.SEMIGROUP with type t = Infix.t
 
-(** Incarnation of a [Semigroup.Core] using [combine]. *)
+(** {2 Building Core} *)
+
 module Core (Req : Preface_specs.Semigroup.WITH_COMBINE) :
   Preface_specs.Semigroup.CORE with type t = Req.t
 
-(** Incarnation of a [Semigroup.Operation] using [Core]. *)
+(** {2 Deriving Operation} *)
+
 module Operation (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.Semigroup.OPERATION with type t = Core.t
 
-(** Incarnation of a [Semigroup.Infix] using [Core]. *)
+(** {2 Deriving Infix} *)
+
 module Infix (Core : Preface_specs.Semigroup.CORE) :
   Preface_specs.Semigroup.INFIX with type t = Core.t

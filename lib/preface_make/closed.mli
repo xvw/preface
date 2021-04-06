@@ -1,60 +1,84 @@
-(** {1 Documentation} *)
+(** Building a {!module:Preface_specs.Closed} *)
 
-(** {2 Construction}
+(** {1 Using the minimal definition} *)
 
-    Standard way to build a [Closed Profunctor]. *)
+(** {2 Using dimap and closed}
 
-(** Incarnation of a [Closed Profunctor] with [dimap] and [closed]. *)
+    Build a {!module-type:Preface_specs.CLOSED} using
+    {!module-type:Preface_specs.Closed.WITH_DIMAP_AND_CLOSED}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_dimap_and_closed (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
   Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of a [Closed Profunctor] with [contramap_fst], [map_snd] and
-    [closed]. *)
+(** {2 Using contramap_fst, map_snd and closed}
+
+    Build a {!module-type:Preface_specs.CLOSED} using
+    {!module-type:Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_contramap_fst_and_map_snd_and_closed
     (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
   Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of a [Closed Profunctor] over a [Profunctor] with [closed]. *)
+(** {2 Using closed over a Profunctor}
+
+    Build a {!module-type:Preface_specs.CLOSED} over a
+    {!module-type:Preface_specs.PROFUNCTOR} using
+    {!module-type:Preface_specs.Closed.WITH_CLOSED}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_profunctor_via_closed
     (P : Preface_specs.Profunctor.CORE)
     (C : Preface_specs.Closed.WITH_CLOSED with type ('a, 'b) t = ('a, 'b) P.t) :
   Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) C.t
 
-(** {2 Closed Profunctors composition}
+(** {1 Closed Algebra}
 
-    Some tools for composition between Closed Profunctors. *)
+    Construction of {!module-type:Preface_specs.CLOSED} by combining them. *)
 
-(** Composition between two Closed Profunctors. *)
+(** {2 Composition}
+
+    Right-to-left composition of {!module-type:Preface_specs.CLOSED}.*)
+
 module Composition (F : Preface_specs.CLOSED) (G : Preface_specs.CLOSED) : sig
   type (_, _) t = Composed : (('a, 'b) F.t * ('b, 'c) G.t) -> ('a, 'c) t
 
   include Preface_specs.CLOSED with type ('a, 'b) t := ('a, 'b) t
 end
 
-(** {2 Manual construction}
+(** {1 Manual construction}
 
-    Advanced way to build a [Closed Profunctor], constructing and assembling a
-    component-by-component the closed profunctor. (In order to provide your own
+    Advanced way to build a {!module-type:Preface_specs.CLOSED}, constructing
+    and assembling a component-by-component of
+    {!module-type:Preface_specs.CLOSED}. (In order to provide your own
     implementation for some features.) *)
 
-(** Incarnation of a [Closed Profunctor] using each components of the
-    [Closed Profunctor]. *)
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Closed.CORE)
     (Operation : Preface_specs.Closed.OPERATION
                    with type ('a, 'b) t = ('a, 'b) Core.t) :
   Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Operation.t
 
-(** Incarnation of a [Closed.Core] with [dimap] and [closed]. *)
+(** {2 Building Core} *)
+
 module Core_via_dimap_and_closed
     (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
   Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of a [Closed.Core] with [contramap_fst], [map_snd] and [closed]. *)
 module Core_via_contramap_fst_and_map_snd_and_closed
     (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
   Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of a [Closed.Operation] with [Closed.Core]. *)
+(** {2 Deriving Operation} *)
+
 module Operation (Core : Preface_specs.Closed.CORE) :
   Preface_specs.Closed.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t

@@ -1,35 +1,46 @@
-(** Modules for building {!Preface_specs.FOLDABLE} modules. *)
+(** Building a {!module:Preface_specs.Foldable} *)
 
-(** {1 Tutorial}
+(** {1 Using the minimal definition} *)
 
-    A [Foldable] can be (easily) built defining [fold_map'] or [fold_right].
-    There is a small nuance between [fold_map'] and [fold_map] in order to deal
-    with first-class modules polymorphism. So the two first arguments of
-    [fold_map'] are [neutral] and [combine] from [Monoid].*)
+(** {2 Using fold_map}
 
-(** {1 Documentation} *)
+    Build a {!module-type:Preface_specs.FOLDABLE} using
+    {!module-type:Preface_specs.Foldable.WITH_FOLD_MAP}.
 
-(** {2 Construction}
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
 
-    Standard way to build a [Foldable]. *)
-
-(** Incarnation of a [Foldable] with [fold_map'] as requirement. *)
 module Via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
   Preface_specs.FOLDABLE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Foldable] with [fold_right] as requirement. *)
+(** {2 Using fold_right}
+
+    Build a {!module-type:Preface_specs.FOLDABLE} using
+    {!module-type:Preface_specs.Foldable.WITH_FOLD_RIGHT}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
   Preface_specs.FOLDABLE with type 'a t = 'a Req.t
 
-(** {2 Foldable composition}
+(** {1 Monad Algebra}
 
-    Some tools for composition between Foldables. *)
+    Construction of {!module-type:Preface_specs.FOLDABLE} by combining them. *)
 
-(** Right-to-left composition of Foldables.*)
+(** {2 Composition}
+
+    Right-to-left composition of {!module-type:Preface_specs.FOLDABLE}.*)
+
 module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
   Preface_specs.FOLDABLE with type 'a t = 'a G.t F.t
 
-(** Sum of two foldables. *)
+(** {2 Sum}
+
+    Sum of {!module-type:Preface_specs.FOLDABLE} using the technique described
+    in {{:http://www.cs.ru.nl/~W.Swierstra/Publications/DataTypesALaCarte.pdf}
+    Data types à la carte by W. Swierstra}.*)
+
 module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) : sig
   type 'a sum =
     | L of 'a F.t
@@ -38,30 +49,36 @@ module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) : sig
   include Preface_specs.FOLDABLE with type 'a t = 'a sum
 end
 
-(** Product of two Foldables. *)
+(** {2 Product}
+
+    Construct the product of two {!module-type:Preface_specs.FOLDABLE}. *)
+
 module Product (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
   Preface_specs.FOLDABLE with type 'a t = 'a F.t * 'a G.t
 
-(** {2 Manual construction}
+(** {1 Manual construction}
 
-    Advanced way to build a [Foldable], constructing and assembling a
-    component-by-component a foldable. (In order to provide your own
+    Advanced way to build a {!module-type:Preface_specs.FOLDABLE}, constructing
+    and assembling a component-by-component of
+    {!module-type:Preface_specs.FOLDABLE}. (In order to provide your own
     implementation for some features.) *)
 
-(** Incarnation of a [Foldable] using each components of a [Foldable]. *)
+(** {2 Grouping of all components} *)
+
 module Via
     (C : Preface_specs.Foldable.CORE)
     (O : Preface_specs.Foldable.OPERATION with type 'a t = 'a C.t) :
   Preface_specs.FOLDABLE with type 'a t = 'a O.t
 
-(** Incarnation of a [Foldable.CORE] with [fold_right] as requirement. *)
+(** {2 Building Core} *)
+
 module Core_via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
   Preface_specs.Foldable.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Foldable.CORE] with [fold_map'] as requirement. *)
 module Core_via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
   Preface_specs.Foldable.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Foldable.OPERATION] with [Foldable.CORE]. *)
+(** {2 Deriving Operation} *)
+
 module Operation (C : Preface_specs.Foldable.CORE) :
   Preface_specs.Foldable.OPERATION with type 'a t = 'a C.t

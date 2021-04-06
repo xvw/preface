@@ -1,31 +1,38 @@
-(** Modules for building {!Preface_specs.CONTRAVARIANT} modules.
+(** Building a {!module:Preface_specs.Contravariant} *)
 
-    {1 Documentation}
+(** {1 Using the minimal definition}
 
-    {2 Construction}
+    Build a {!module-type:Preface_specs.CONTRAVARIANT} using
+    {!module-type:Preface_specs.Contravariant.WITH_CONTRAMAP}.
 
-    Standard way to build a [Contravariant Functor]. *)
+    Standard method, using the minimal definition of a contravariant functor to
+    derive its full API. *)
 
-(** Incarnation of a [Contravariant] using [contramap]. *)
 module Via_contramap (Req : Preface_specs.Contravariant.WITH_CONTRAMAP) :
   Preface_specs.CONTRAVARIANT with type 'a t = 'a Req.t
 
+(** {1 Contravariant Algebra}
+
+    Construction of {!module-type:Preface_specs.CONTRAVARIANT} by combining
+    them. *)
+
 (** {2 Contravariant composition}
 
-    Some tools for composition between Contravariant functors. *)
+    Construction of {!module-type:Preface_specs.CONTRAVARIANT} by left-to-right
+    composition with {!module-type:Preface_specs.FUNCTOR}. *)
 
-(** Left-to-right composition of contravariant with functor.*)
 module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.CONTRAVARIANT) :
   Preface_specs.CONTRAVARIANT with type 'a t = 'a G.t F.t
 
-(** {2 Manual construction}
+(** {1 Manual construction}
 
-    Advanced way to build a [Contravariant], constructing and assembling a
-    component-by-component an arrow. (In order to provide your own
+    Advanced way to build a {!module-type:Preface_specs.CONTRAVARIANT},
+    constructing and assembling a component-by-component of
+    {!module-type:Preface_specs.CONTRAVARIANT}. (In order to provide your own
     implementation for some features.) *)
 
-(** Incarnation of an [Contravariant] using each components of a
-    [Contravariant]. *)
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Contravariant.CORE)
     (Operation : Preface_specs.Contravariant.OPERATION
@@ -33,15 +40,18 @@ module Via
     (Infix : Preface_specs.Contravariant.INFIX with type 'a t = 'a Operation.t) :
   Preface_specs.CONTRAVARIANT with type 'a t = 'a Infix.t
 
-(** Incarnation of [Contravariant.Core] using [contramap]. *)
+(** {2 Building Core} *)
+
 module Core (Req : Preface_specs.Contravariant.WITH_CONTRAMAP) :
   Preface_specs.Contravariant.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of [Contravariant.Operation] using [Core]. *)
+(** {2 Deriving Operation} *)
+
 module Operation (Core : Preface_specs.Contravariant.CORE) :
   Preface_specs.Contravariant.OPERATION with type 'a t = 'a Core.t
 
-(** Incarnation of [Contravariant.Infix] using [Core] and [Operation]. *)
+(** {2 Deriving Infix} *)
+
 module Infix
     (Core : Preface_specs.Contravariant.CORE)
     (Operation : Preface_specs.Contravariant.OPERATION

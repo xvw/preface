@@ -1,58 +1,90 @@
-(** Modules for building {!Preface_specs.ARROW_ALT} modules.
+(** Building a {!module:Preface_specs.Arrow_alt} *)
 
-    {1 Documentation}
+(** {1 Using the minimal definition} *)
 
-    {2 Construction}
+(** {2 Using combine over an Arrow}
 
-    Standard way to build an [Arrow_alt]. *)
+    Build an {!module-type:Preface_specs.ARROW_ALT} using
+    {!module-type:Preface_specs.Arrow_alt.WITH_COMBINE} over an
+    {!module-type:Preface_specs.ARROW}.
 
-(** Incarnation of an [Arrow_alt] over {!Preface_specs.ARROW}. *)
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_arrow
     (Arrow : Preface_specs.ARROW)
     (Req : Preface_specs.Arrow_alt.WITH_COMBINE
              with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_plus] from {!Preface_specs.ARROW_PLUS}. *)
-module From_arrow_plus (Plus : Preface_specs.ARROW_PLUS) :
-  Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) Plus.t
+(** {2 Using combine, arrow and fst over a Category}
 
-(** Incarnation of an [Arrow_alt] using a {!Preface_specs.CATEGORY}, [arrow],
-    [fst] and [combine]. *)
+    Build an {!module-type:Preface_specs.ARROW_ALT} using
+    {!module-type:Preface_specs.Arrow_alt.WITH_ARROW_AND_FST} over a
+    {!module-type:Preface_specs.CATEGORY}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_category_and_via_arrow_and_fst
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_alt.WITH_ARROW_AND_FST
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow] using a {!Preface_specs.CATEGORY}, [arrow],
-    [split] and [combine]. *)
+(** {2 Using combine, arrow and split over a Category}
+
+    Build an {!module-type:Preface_specs.ARROW_ALT} using
+    {!module-type:Preface_specs.Arrow_alt.WITH_ARROW_AND_SPLIT} over a
+    {!module-type:Preface_specs.CATEGORY}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_category_and_via_arrow_an_split
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_alt.WITH_ARROW_AND_SPLIT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_alt] using a [monad_plus] using the Kleisli
-    composition. *)
-module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
-  Preface_specs.ARROW_ALT with type ('a, 'b) t = 'a -> 'b Monad.t
+(** {1 Arrow Alt Algebra}
 
-(** {2 Arrow Alt composition}
+    Construction of {!module-type:Preface_specs.ARROW_ALT} by combining them. *)
 
-    Some tools for composition between arrows alt. *)
+(** {2 Product}
 
-(** Product of two Arrows alt. *)
+    Construct the product of two {!module-type:Preface_specs.ARROW_ALT}. *)
+
 module Product (F : Preface_specs.ARROW_ALT) (G : Preface_specs.ARROW_ALT) :
   Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
 
-(** {2 Manual construction}
+(** {1 From other abstraction} *)
 
-    Advanced way to build an [Arrow_alt], constructing and assembling a
-    component-by-component an arrow. (In order to provide your own
+(** {2 From an Arrow Plus}
+
+    Produces an {!module-type:Preface_specs.ARROW_ALT} from an
+    {!module-type:Preface_specs.ARROW_PLUS}. *)
+
+module From_arrow_plus (Plus : Preface_specs.ARROW_PLUS) :
+  Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) Plus.t
+
+(** {2 From a Monad Plus}
+
+    Produces an {!module-type:Preface_specs.ARROW_ALT} from a
+    {!module-type:Preface_specs.MONAD_PLUSD} (using the [Kleisli Arrow]). *)
+
+module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) :
+  Preface_specs.ARROW_ALT with type ('a, 'b) t = 'a -> 'b Monad.t
+
+(** {1 Manual construction}
+
+    Advanced way to build an {!module-type:Preface_specs.ARROW_ALT},
+    constructing and assembling a component-by-component of
+    {!module-type:Preface_specs.ARROW_ALT}. (In order to provide your own
     implementation for some features.) *)
 
-(** Incarnation of an [Arrow_alt] using each components of a [Arrow_alt]. *)
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Arrow_alt.CORE)
     (Operation : Preface_specs.Arrow_alt.OPERATION
@@ -63,33 +95,35 @@ module Via
                with type ('a, 'b) t = ('a, 'b) Alias.t) :
   Preface_specs.ARROW_ALT with type ('a, 'b) t = ('a, 'b) Infix.t
 
-(** Incarnation of [Arrow_alt.Core] using a [Category], [arrow], [fst] and
-    [combine]. *)
+(** {2 Building Core} *)
+
 module Core_over_category_and_via_arrow_and_fst
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_alt.WITH_ARROW_AND_FST
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_alt.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of [Arrow_alt.Core] using a [Category], [arrow] and [split]. *)
 module Core_over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_alt.WITH_ARROW_AND_SPLIT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_alt.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of [Arrow_alt.Operation] using a [Category] and [Core]. *)
+(** {2 Deriving Operation} *)
+
 module Operation_over_category
     (Category : Preface_specs.CATEGORY)
     (Core : Preface_specs.Arrow_alt.CORE
               with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_alt.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t
 
-(** Incarnation of [Arrow_alt.Alias] using [Operation]. *)
+(** {2 Deriving Alias} *)
+
 module Alias (Operation : Preface_specs.Arrow_alt.OPERATION) :
   Preface_specs.Arrow_alt.ALIAS with type ('a, 'b) t = ('a, 'b) Operation.t
 
-(** Incarnation of [Arrow_alt.Infix] using a [Category], [Core] and [Operation]. *)
+(** {2 Deriving Infix} *)
+
 module Infix_over_category
     (Category : Preface_specs.CATEGORY)
     (Core : Preface_specs.Arrow_alt.CORE
