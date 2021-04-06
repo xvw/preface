@@ -26,11 +26,11 @@
     + [f <*> g = apply f g]
     + [(x *> (y <*? z)) = ((x *> y) <*? z)] *)
 
-(** {1 Structure anatomy} *)
+(** {1 Minimal definition} *)
 
 (** Minimal definition using [select] without {!module:Applicative}
     requirements. *)
-module type CORE_WITH_SELECT = sig
+module type WITH_SELECT = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
@@ -41,7 +41,7 @@ end
 
 (** Minimal definition using [branch] without {!module:Applicative}
     requirements. *)
-module type CORE_WITH_BRANCH = sig
+module type WITH_BRANCH = sig
   type 'a t
   (** The type held by the [Selective]. *)
 
@@ -50,8 +50,8 @@ module type CORE_WITH_BRANCH = sig
 end
 
 (** Standard requirement including [pure] and [select]. *)
-module type CORE_WITH_PURE_AND_SELECT = sig
-  include CORE_WITH_SELECT
+module type WITH_PURE_AND_SELECT = sig
+  include WITH_SELECT
   (** @closed *)
 
   val pure : 'a -> 'a t
@@ -59,21 +59,22 @@ module type CORE_WITH_PURE_AND_SELECT = sig
 end
 
 (** Standard requirement including [pure] and [branch]. *)
-module type CORE_WITH_PURE_AND_BRANCH = sig
-  include CORE_WITH_BRANCH
+module type WITH_PURE_AND_BRANCH = sig
+  include WITH_BRANCH
   (** @closed *)
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
 end
 
-(** The minimum definition of a [Selective]. It is by using the combinators of
-    this module that the other combinators will be derived. *)
+(** {1 Structure anatomy} *)
+
+(** Basis operation. *)
 module type CORE = sig
-  include CORE_WITH_SELECT
+  include WITH_SELECT
   (** @closed *)
 
-  include CORE_WITH_BRANCH with type 'a t := 'a t
+  include WITH_BRANCH with type 'a t := 'a t
   (** @closed *)
 
   include Applicative.CORE with type 'a t := 'a t
