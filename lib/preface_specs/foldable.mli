@@ -30,10 +30,10 @@ end
 (** Basis operation. *)
 module type CORE = sig
   include WITH_FOLD_MAP
-  (** @closed *)
+  (** @inline *)
 
   include WITH_FOLD_RIGHT with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -67,19 +67,18 @@ end
 
 (** The complete interface of a [Foldable]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Foldable]. *)
+  type 'a t
+  (** The type held by the [Foldable]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

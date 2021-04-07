@@ -61,13 +61,13 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_MAP_AND_DUPLICATE
-  (** @closed *)
+  (** @inline *)
 
   include WITH_EXTEND with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_COKLEISLI_COMPOSITION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -89,7 +89,7 @@ module type OPERATION = sig
   (** Composing comonadic functions using Co-Kleisli Arrow (from right to left). *)
 
   include Functor.OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Syntax extensions. *)
@@ -136,41 +136,37 @@ module type INFIX = sig
   (** Discard the value of the second argument. *)
 
   include Functor.INFIX with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Complete API} *)
 
 (** The complete interface of a [Comonad]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Comonad]. *)
-  include CORE
-  (** @closed *)
+  type 'a t
+  (** The type held by the [Comonad]. *)
 
-  (** {1 Additional functions}
+  (** {1 Functions} *)
 
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
-
-  (** {1 Syntax} *)
-
-  module Syntax : SYNTAX with type 'a t := 'a t
-
-  (** {2 Syntax inclusion} *)
-
-  include module type of Syntax
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
-  (** {2 Infix operators inclusion} *)
-
   include module type of Infix
-  (** @closed *)
+  (** @inline *)
+
+  (** {1 Syntax} *)
+
+  module Syntax : SYNTAX with type 'a t := 'a t
+
+  include module type of Syntax
+  (** @inline *)
 end

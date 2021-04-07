@@ -17,18 +17,21 @@
     [Semigroup] with a neutral element. *)
 module type WITH_NEUTRAL = sig
   type t
-  (** A type [t] which is a [Monoid]. *)
+  (** the type held by the [Monoid]. *)
 
   val neutral : t
   (** The neutral element of the [Monoid]. *)
 end
 
 module type WITH_NEUTRAL_AND_COMBINE = sig
-  include Semigroup.CORE
+  type t
+  (** the type held by the [Monoid]. *)
+
+  include Semigroup.CORE with type t := t
   (** @inline *)
 
   include WITH_NEUTRAL with type t := t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -55,28 +58,25 @@ end
 
 (** The complete interface of a [Monoid]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Monoid]. *)
+  type t
+  (** the type held by the [Monoid]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type t := t
+  (** @inline *)
 
   include OPERATION with type t := t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type t = t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type t := t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

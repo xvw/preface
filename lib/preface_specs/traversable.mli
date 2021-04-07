@@ -43,10 +43,20 @@ end
 
 (** The complete interface of a [Traversable] *)
 module type API = sig
-  include CORE
-  (** @closed *)
+  (** {1 Types} *)
 
-  (** @closed *)
+  type 'a t
+  (** The type held by the [Traversable]. *)
+
+  type 'a iter
+  (** The iterable type held by the [Traversable]. *)
+
+  (** {1 Functions} *)
+
+  (** @inline *)
+  include CORE with type 'a t := 'a t and type 'a iter := 'a iter
+
+  (** @inline *)
   include OPERATION with type 'a t := 'a t and type 'a iter := 'a iter
 end
 

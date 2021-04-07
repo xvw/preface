@@ -1,10 +1,12 @@
-(** A [Free applicative] allows you to build an {!module:Preface_specs.Applicative} from a
-    given {!module:Preface_specs.Functor}. *)
+(** A [Free applicative] allows you to build an
+    {!module:Preface_specs.Applicative} from a given
+    {!module:Preface_specs.Functor}. *)
 
-(** Such {!module:Preface_specs.Applicative} is equiped with and additional function for
-    [promoting] values from the underlying {!module:Preface_specs.Functor} into the
-    [Free applicative] and a [Natural transformations] for transforming the
-    value of the [Free applicative] to an other {!module:Preface_specs.Applicative} or to a
+(** Such {!module:Preface_specs.Applicative} is equiped with and additional
+    function for [promoting] values from the underlying
+    {!module:Preface_specs.Functor} into the [Free applicative] and a
+    [Natural transformations] for transforming the value of the
+    [Free applicative] to an other {!module:Preface_specs.Applicative} or to a
     {!module:Preface_specs.Monoid}. *)
 
 (** {2 Note about complexity}
@@ -16,7 +18,8 @@
 
 (** {1 Structure anatomy} *)
 
-(** The [Free applicative] API without the {!module:Preface_specs.Applicative} API. *)
+(** The [Free applicative] API without the {!module:Preface_specs.Applicative}
+    API. *)
 module type CORE = sig
   type 'a f
   (** The type held by the {!module:Preface_specs.Functor}. *)
@@ -27,7 +30,8 @@ module type CORE = sig
     | Apply : ('a -> 'b) t * 'a f -> 'b t
 
   val promote : 'a f -> 'a t
-  (** Promote a value from the {!module:Preface_specs.Functor} into the [Free applicative]. *)
+  (** Promote a value from the {!module:Preface_specs.Functor} into the
+      [Free applicative]. *)
 
   (** The natural transformation from a [Free applicative] to an other
       {!module:Preface_specs.Applicative}. *)
@@ -60,7 +64,7 @@ module type API = sig
       A [Free applicative] is also an {!module:Preface_specs.Applicative}. *)
 
   include Applicative.API with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

@@ -1,14 +1,15 @@
-(** A [Freer monad] allows you to build a {!module:Preface_specs.Monad} from an arbitrary type
-    (with one type parameter). It offers the same capabilities as a
-    {!module:Preface_specs.Free_monad} but benefits from a lighter execution cost. *)
+(** A [Freer monad] allows you to build a {!module:Preface_specs.Monad} from an
+    arbitrary type (with one type parameter). It offers the same capabilities as
+    a {!module:Preface_specs.Free_monad} but benefits from a lighter execution
+    cost. *)
 
 (** {1 Structure anatomy} *)
 
 (** The [Freer Monad] API without the {!module:Preface_specs.Monad} API. *)
 module type CORE = sig
   type 'a f
-  (** The parametric type (which, unlike a {!module:Preface_specs.Free_monad} don't need to be
-      a {!module:Preface_specs.Functor}). *)
+  (** The parametric type (which, unlike a {!module:Preface_specs.Free_monad}
+      don't need to be a {!module:Preface_specs.Functor}). *)
 
   (** The type held by [Freer monad]. *)
   type _ t =
@@ -51,8 +52,6 @@ module type API = sig
 
   module Monad : Monad.API with type 'a t = 'a t
 
-  (** {2 Monad API inclusion} *)
-
   include module type of Monad with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end

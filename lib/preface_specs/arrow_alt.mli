@@ -24,19 +24,19 @@ end
 (** Minimal definition using [arrow], [fst] and [combine]. *)
 module type WITH_ARROW_AND_FST = sig
   include WITH_COMBINE
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [arrow], [split] and [combine]. *)
 module type WITH_ARROW_AND_SPLIT = sig
   include WITH_COMBINE
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -44,16 +44,16 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_COMBINE
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
 module type OPERATION = sig
   include Arrow.OPERATION
-  (** @closed *)
+  (** @inline *)
 
   val times : int -> ('a, 'b) t -> ('a, 'b) t option
   (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
@@ -69,7 +69,7 @@ module type ALIAS = Arrow.ALIAS
 (** Infix operators. *)
 module type INFIX = sig
   include Arrow.INFIX
-  (** @closed *)
+  (** @inline *)
 
   val ( <|> ) : ('a, 'b) t -> ('a, 'b) t -> ('a, 'b) t
   (** Infix version of {!val:CORE.combine} *)
@@ -79,36 +79,25 @@ end
 
 (** The complete interface of an [Arrow_alt]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Arrow_alt]. *)
+  type ('a, 'b) t
+  (** The type held by the [Arrow_alt]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
-
-  (** {1 Aliases}
-
-      Additional functions based on [Operation] mainly in order to be iso with
-      Haskell convention. *)
-
-  include ALIAS with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

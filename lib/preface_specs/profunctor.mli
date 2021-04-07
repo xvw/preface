@@ -41,11 +41,18 @@ end
 
 (** Basis operations. *)
 module type CORE = sig
-  include WITH_DIMAP
-  (** @closed *)
+  (** {1 Type} *)
+
+  type ('a, 'b) t
+  (** The type held by the [Profunctor]. *)
+
+  (** {1 Functions} *)
+
+  include WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Complete API} *)

@@ -28,10 +28,10 @@ module type WITH_DIMAP_AND_CLOSED = sig
   (** The type held by the [Closed Profunctor]. *)
 
   include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_CLOSED with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimum interface using [contramap_fst] and [map_snd] and [closed]. *)
@@ -41,10 +41,10 @@ module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED = sig
 
   include
     Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_CLOSED with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -55,10 +55,10 @@ module type CORE = sig
   (** The type held by the [Closed Profunctor]. *)
 
   include Profunctor.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_CLOSED with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -74,19 +74,18 @@ end
 
 (** The complete interface of a [Closed Profunctor]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Closed]. *)
+  type ('a, 'b) t
+  (** The type held by the [Closed Profunctor]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

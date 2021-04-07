@@ -55,35 +55,33 @@ module type INFIX = sig
   (** Infix version of {!val:Preface_specs.Functor.OPERATION.replace}. *)
 
   val ( $> ) : 'a t -> 'b -> 'b t
-  (** Flipped and infix version of {!val:Preface_specs.Functor.OPERATION.replace}. *)
+  (** Flipped and infix version of
+      {!val:Preface_specs.Functor.OPERATION.replace}. *)
 end
 
 (** {1 Complete API} *)
 
 (** The complete interface of a [Functor]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Functor]. *)
+  type 'a t
+  (** The type held by the [Functor]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
-  (** {2 Infix operators inclusion} *)
-
   include module type of Infix
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

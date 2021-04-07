@@ -1,10 +1,12 @@
-(** A [Free selective] allows you to build a {e rigid} {!module:Preface_specs.Selective} from
-    a given {!module:Preface_specs.Functor}. *)
+(** A [Free selective] allows you to build a {e rigid}
+    {!module:Preface_specs.Selective} from a given
+    {!module:Preface_specs.Functor}. *)
 
-(** Such {!module:Preface_specs.selective} is equiped with and additional function for
-    [promoting] values from the underlying {!module:Preface_specs.Functor} into the
-    [Free selective] and a [Natural transformations] for transforming the value
-    of the [Free selective] to an other {!module:Preface_specs.Selective} or to a
+(** Such {!module:Preface_specs.selective} is equiped with and additional
+    function for [promoting] values from the underlying
+    {!module:Preface_specs.Functor} into the [Free selective] and a
+    [Natural transformations] for transforming the value of the [Free selective]
+    to an other {!module:Preface_specs.Selective} or to a
     {!module:Preface_specs.Monoid}. *)
 
 (** {2 Note about complexity}
@@ -28,7 +30,8 @@ module type CORE = sig
     | Select : ('a, 'b) Either.t t * ('a -> 'b) f -> 'b t
 
   val promote : 'a f -> 'a t
-  (** Promote a value from the {!module:Preface_specs.Functor} into the [Free selective]. *)
+  (** Promote a value from the {!module:Preface_specs.Functor} into the
+      [Free selective]. *)
 
   (** The natural transformation from a [Free selective] to an other
       {!module:Preface_specs.Selective}. *)
@@ -39,7 +42,8 @@ module type CORE = sig
     (** Run the natural transformation over the [Free selective]. *)
   end
 
-  (** The natural transformation from a [Free selective] to a {!module:Preface_specs.Monoid}. *)
+  (** The natural transformation from a [Free selective] to a
+      {!module:Preface_specs.Monoid}. *)
   module To_monoid (Monoid : Monoid.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
 
@@ -60,7 +64,7 @@ module type API = sig
       A [Free selective] is also a {!module:Preface_specs.Selective}. *)
 
   include Selective.API with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

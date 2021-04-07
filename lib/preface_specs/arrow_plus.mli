@@ -1,7 +1,7 @@
-(**An [Arrow_plus] is the conjonction of an {!module:Arrow_zero} and
-   {!module:Arrow_alt}. An [Arrow_plus] is a kind of {!module:Monoid} in the
-   arrow hierarchy. And it also an {!module:Arrow_alt} and an
-   {!module:Arrow_zero} (which is also a {!module:Arrow}). *)
+(** An [Arrow_plus] is the conjonction of an {!module:Arrow_zero} and
+    {!module:Arrow_alt}. An [Arrow_plus] is a kind of {!module:Monoid} in the
+    arrow hierarchy. And it also an {!module:Arrow_alt} and an
+    {!module:Arrow_zero} (which is also a {!module:Arrow}). *)
 
 (** {2 Laws}
 
@@ -16,28 +16,28 @@
     requirement. *)
 module type WITH_COMBINE_AND_NEUTRAL = sig
   include Arrow_zero.WITH_NEUTRAL
-  (** @closed *)
+  (** @inline *)
 
   include Arrow_alt.WITH_COMBINE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** RMinimal definition using [arrow], [fst], [neutral] and [combine]. *)
 module type WITH_ARROW_AND_FST = sig
   include WITH_COMBINE_AND_NEUTRAL
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [arrow], [split], [neutral] and [combine]. *)
 module type WITH_ARROW_AND_SPLIT = sig
   include WITH_COMBINE_AND_NEUTRAL
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -45,16 +45,16 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_COMBINE_AND_NEUTRAL
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
 module type OPERATION = sig
   include Arrow_alt.OPERATION
-  (** @closed *)
+  (** @inline *)
 
   val reduce : ('a, 'b) t list -> ('a, 'b) t
   (** Reduce a [List.t] using [combine]. *)
@@ -70,36 +70,25 @@ module type INFIX = Arrow_alt.INFIX
 
 (** The complete interface of an [Arrow_plus]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Arrow_plus]. *)
+  type ('a, 'b) t
+  (** The type held by the [Arrow_plus]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
-
-  (** {1 Aliases}
-
-      Additional functions based on [Operation] mainly in order to be iso with
-      Haskell convention. *)
-
-  include ALIAS with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

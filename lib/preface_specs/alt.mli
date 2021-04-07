@@ -26,9 +26,10 @@ end
     module that the other combinators will be derived. *)
 module type WITH_COMBINE_AND_MAP = sig
   include WITH_COMBINE
+  (** @inline *)
 
   include Functor.WITH_MAP with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -49,7 +50,7 @@ module type OPERATION = sig
   (** Reduce a [Nonempty_list.t] using [combine]. *)
 
   include Functor.OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Infix operators. *)
@@ -61,35 +62,32 @@ module type INFIX = sig
   (** Infix version of {!val:CORE.combine} *)
 
   include Functor.INFIX with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Complete API} *)
 
 (** The complete interface of an [Alt]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Alt]. *)
+  type 'a t
+  (** The type held by the [Alt]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

@@ -43,10 +43,10 @@ module type WITH_DIMAP_AND_FST = sig
   (** The type held by the [Strong Profunctor]. *)
 
   include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal interface using [contramap_fst] and [map_snd] and [fst]. *)
@@ -56,10 +56,10 @@ module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_FST = sig
 
   include
     Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal interface using [dimap] and [snd]. *)
@@ -68,10 +68,10 @@ module type WITH_DIMAP_AND_SND = sig
   (** The type held by the [Strong Profunctor]. *)
 
   include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal interface using [contramap_fst] and [map_snd] and [snd]. *)
@@ -81,10 +81,10 @@ module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_SND = sig
 
   include
     Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -95,13 +95,13 @@ module type CORE = sig
   (** The type held by the [Strong Profunctor]. *)
 
   include Profunctor.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -120,19 +120,16 @@ end
 
 (** The complete interface of a [Strong Profunctor]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Strong]. *)
+  type ('a, 'b) t
+  (** The type held by the [Strong]. *)
 
-  include CORE
-  (** @closed *)
-
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** {1 Functions} *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

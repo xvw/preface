@@ -51,28 +51,23 @@ end
 
 (** The complete interface of a [Semigroup]. *)
 module type API = sig
-  (** {1 Core functions}
+  type t
+  (** the type held by the [Semigroup]. *)
 
-      Set of fundamental functions in the description of a [Semigroup]. *)
+  (** {1 Functions} *)
 
-  include CORE
-  (** @closed *)
-
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type t := t
+  (** @inline *)
 
   include OPERATION with type t := t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type t = t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type t := t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

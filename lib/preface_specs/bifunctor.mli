@@ -42,10 +42,10 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_BIMAP
-  (** @closed *)
+  (** @inline *)
 
   include WITH_MAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -66,19 +66,18 @@ end
 
 (** The complete interface of a [Bifunctor]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Bifunctor]. *)
+  type ('a, 'b) t
+  (** The type held by the [Bifunctor]*)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}
