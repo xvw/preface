@@ -1,4 +1,4 @@
 (library
  (name preface_make)
- (package preface)
- (libraries either preface_core preface_specs))
+ (public_name preface.make)
+ (libraries either preface_core preface.specs))
