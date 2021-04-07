@@ -26,6 +26,8 @@
     + [f <*> g = apply f g]
     + [(x *> (y <*? z)) = ((x *> y) <*? z)] *)
 
+open Preface_core.Shims
+
 (** {1 Minimal definition} *)
 
 (** Minimal definition using [select] without {!module:Applicative}

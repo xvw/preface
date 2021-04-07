@@ -1,11 +1,11 @@
-(** A [Free applicative] allows you to build an {!module:Applicative} from a
-    given {!module:Functor}. *)
+(** A [Free applicative] allows you to build an {!module:Preface_specs.Applicative} from a
+    given {!module:Preface_specs.Functor}. *)
 
-(** Such {!module:Applicative} is equiped with and additional function for
-    [promoting] values from the underlying {!module:Functor} into the
+(** Such {!module:Preface_specs.Applicative} is equiped with and additional function for
+    [promoting] values from the underlying {!module:Preface_specs.Functor} into the
     [Free applicative] and a [Natural transformations] for transforming the
-    value of the [Free applicative] to an other {!module:Applicative} or to a
-    {!module:Monoid}. *)
+    value of the [Free applicative] to an other {!module:Preface_specs.Applicative} or to a
+    {!module:Preface_specs.Monoid}. *)
 
 (** {2 Note about complexity}
 
@@ -16,10 +16,10 @@
 
 (** {1 Structure anatomy} *)
 
-(** The [Free applicative] API without the {!module:Applicative} API. *)
+(** The [Free applicative] API without the {!module:Preface_specs.Applicative} API. *)
 module type CORE = sig
   type 'a f
-  (** The type held by the {!module:Functor}. *)
+  (** The type held by the {!module:Preface_specs.Functor}. *)
 
   (** The type held by the [Free applicative]. *)
   type _ t =
@@ -27,10 +27,10 @@ module type CORE = sig
     | Apply : ('a -> 'b) t * 'a f -> 'b t
 
   val promote : 'a f -> 'a t
-  (** Promote a value from the {!module:Functor} into the [Free applicative]. *)
+  (** Promote a value from the {!module:Preface_specs.Functor} into the [Free applicative]. *)
 
   (** The natural transformation from a [Free applicative] to an other
-      {!module:Applicative}. *)
+      {!module:Preface_specs.Applicative}. *)
   module To_applicative (Applicative : Applicative.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> 'a Applicative.t }
 
@@ -39,7 +39,7 @@ module type CORE = sig
   end
 
   (** The natural transformation from a [Free applicative] to a
-      {!module:Monoid}. *)
+      {!module:Preface_specs.Monoid}. *)
   module To_monoid (Monoid : Monoid.CORE) : sig
     type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
 
@@ -57,7 +57,7 @@ module type API = sig
 
   (** {1 Applicative API}
 
-      A [Free applicative] is also an {!module:Applicative}. *)
+      A [Free applicative] is also an {!module:Preface_specs.Applicative}. *)
 
   include Applicative.API with type 'a t := 'a t
   (** @closed *)

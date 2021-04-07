@@ -14,6 +14,8 @@
     + [left f >>> arrow (Fun.id +++ g) = arrow (Fun.id +++ g) >>> left f]
     + [left (left f) >>> arrow assocsum = arrow assocsum >>> left f] *)
 
+open Preface_core.Shims
+
 (** {1 Minimal definition} *)
 
 (** Minimal definition using [left] operation without {!module:Arrow}. *)

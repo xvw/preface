@@ -89,10 +89,10 @@ module type OPERATION = sig
   (** Postcomposition with a function (the function should be pure). *)
 
   val pre_compose_right_to_left : ('b, 'c) t -> ('a -> 'b) -> ('a, 'c) t
-  (** Reversed version of {!val:pre_compose_left_to_right}. *)
+  (** Reversed version of {!val:Preface_specs.Arrow.OPERATION.pre_compose_left_to_right}. *)
 
   val post_compose_right_to_left : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
-  (** Reversed version of {!val:post_compose_left_to_right}. *)
+  (** Reversed version of {!val:Preface_specs.Arrow.OPERATION.post_compose_left_to_right}. *)
 end
 
 (** Aliases of some operations functions. *)
@@ -101,10 +101,10 @@ module type ALIAS = sig
   (** The type held by the [Arrow]. *)
 
   val pre_compose : ('a -> 'b) -> ('b, 'c) t -> ('a, 'c) t
-  (** Conveinent alias of {!val:OPERATION.pre_compose_left_to_right}. *)
+  (** Conveinent alias of {!val:Preface_specs.Arrow.OPERATION.pre_compose_left_to_right}. *)
 
   val post_compose : ('a, 'b) t -> ('b -> 'c) -> ('a, 'c) t
-  (** Conveinent alias of {!val:OPERATION.post_compose_left_to_right}. *)
+  (** Conveinent alias of {!val:Preface_specs.Arrow.OPERATION.post_compose_left_to_right}. *)
 end
 
 (** Infix operators. *)
@@ -116,22 +116,22 @@ module type INFIX = sig
   (** @closed *)
 
   val ( *** ) : ('a, 'b) t -> ('c, 'd) t -> ('a * 'c, 'b * 'd) t
-  (** Infix version of {!val:CORE.split}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.CORE.split}. *)
 
   val ( &&& ) : ('a, 'b) t -> ('a, 'c) t -> ('a, 'b * 'c) t
-  (** Infix version of {!val:OPERATION.fan_out}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.OPERATION.fan_out}. *)
 
   val ( ^>> ) : ('a -> 'b) -> ('b, 'c) t -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.pre_compose_left_to_right}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.OPERATION.pre_compose_left_to_right}. *)
 
   val ( >>^ ) : ('a, 'b) t -> ('b -> 'c) -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.post_compose_left_to_right}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.OPERATION.post_compose_left_to_right}. *)
 
   val ( <<^ ) : ('b, 'c) t -> ('a -> 'b) -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.post_compose_right_to_left}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.OPERATION.post_compose_right_to_left}. *)
 
   val ( ^<< ) : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.post_compose_right_to_left}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.OPERATION.post_compose_right_to_left}. *)
 end
 
 (** {1 Complete API} *)

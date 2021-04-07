@@ -17,13 +17,13 @@ val constant : 'a -> 'b -> 'a
 
 module Infix : sig
   val ( %> ) : ('a -> 'b) -> ('b -> 'c) -> 'a -> 'c
-  (** [(f %> g) x] is [g (f x)]. Alias for {!val:compose_left_to_right} *)
+  (** [(f %> g) x] is [g (f x)]. Alias for {!val:Preface_stdlib.Fun.compose_left_to_right} *)
 
   val ( <% ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
-  (** [(f <% g) x] is [f (g x)]. Alias for {!val:compose_right_to_left} *)
+  (** [(f <% g) x] is [f (g x)]. Alias for {!val:Preface_stdlib.Fun.compose_right_to_left} *)
 
   val ( % ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
-  (** [(f <% g) x] is [f (g x)]. Alias for {!val:compose_right_to_left} *)
+  (** [(f <% g) x] is [f (g x)]. Alias for {!val:Preface_stdlib.Fun.compose_right_to_left} *)
 end
 
 (** {1 Shadowing the [Stdlib]} *)
