@@ -2,4 +2,4 @@
  (name preface_make)
  (public_name preface.make)
  (modules_without_implementation preface_make)
- (libraries either preface_core preface.specs))
+ (libraries either preface.core preface.specs))
