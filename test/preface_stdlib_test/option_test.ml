@@ -15,7 +15,7 @@ let map_scenario_1 () =
 let map_scenario_2 () =
   let expected = None
   and computed =
-    Some 20 |> Functor.map succ |> constant None |> Functor.map (fun x -> x + 9)
+    Some 20 |> Functor.map succ |> const None |> Functor.map (fun x -> x + 9)
   in
   Alcotest.(check (option int)) "map_scenario_2" expected computed
 ;;

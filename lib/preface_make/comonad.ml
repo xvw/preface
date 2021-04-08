@@ -74,7 +74,7 @@ module Infix
 
   let ( <@@> ) a f = f <@> a
 
-  let ( <@ ) a = Core.(map @@ extract @@ map constant a)
+  let ( <@ ) a = Core.(map @@ extract @@ map const a)
 
   let ( @> ) a b = b <@ a
 end

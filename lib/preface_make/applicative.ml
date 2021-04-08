@@ -126,7 +126,7 @@ module From_arrow (A : Preface_specs.ARROW) :
   Preface_specs.APPLICATIVE with type 'a t = (unit, 'a) A.t = Via_apply (struct
   type 'a t = (unit, 'a) A.t
 
-  let pure x = A.arrow (constant x)
+  let pure x = A.arrow (const x)
 
   let uncurry f (x, y) = f x y
 

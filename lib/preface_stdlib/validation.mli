@@ -1,14 +1,9 @@
-(** Exposes [Validation.t], a kind of [Result.t] but where the [Applicative]
-    associates the error side with a [Semigroup] in order to accumulate errors.
-    See [Validate] in order to see a biased version of [Validation].
+(** Implementation for [Validation.t]. *)
 
-    {1 Capabilities}
-
-    - {!val:Bifunctor}
-    - {!val:Functor} where ['a] of [('a, 'b) t] is delayed
-    - {!val:Applicative} where ['a] of [('a, 'b) t] is delayed
-    - {!val:Selective} where ['a] of [('a, 'b) t] is delayed
-    - {!val:Monad} where ['a] of [('a, 'b) t] is delayed *)
+(** [Validation] is very similar to [Result], the main difference between the
+    two lies in the (delayed) implementation of
+    {!module-type:Preface_specs.APPLICATIVE} which allows, unlike Result, the
+    accumulation of errors. *)
 
 (** {1 Type} *)
 
@@ -18,27 +13,53 @@ type ('a, 'errors) t =
 
 (** {1 Implementation} *)
 
-module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
-(** {2 Bifunctor API} *)
+(** {2 Bifunctor} *)
 
-(** {2 Functor API} *)
+module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
+
+(** {2 Delayed implementation}
+
+    By setting the [error] type of [Validation.t] it is possible to get
+    implementations for abstractions on constructors of type with an arity of 1. *)
+
+(** {3 Functor} *)
+
 module Functor (T : Preface_specs.Types.T0) :
   Preface_specs.FUNCTOR with type 'a t = ('a, T.t) t
 
-(** {2 Applicative API} *)
+(** {3 Applicative}
+
+    [Validation.t] implements {!module-type:Preface_specs.APPLICATIVE} and
+    introduces an interface to define {!module-type:Preface_specs.TRAVERSABLE}
+    using [Validation] as an iterable structure.
+
+    As you can see, it is in the definition of the
+    {!module-type:Preface_specs.APPLICATIVE} that [Validation] differs from
+    [Result]. The ['errors] part must be a
+    {!module-type:Preface_specs.SEMIGROUP} to allow for the accumulation of
+    errors. *)
+
 module Applicative (Errors : Preface_specs.SEMIGROUP) :
   Preface_specs.Traversable.API_OVER_APPLICATIVE
     with type 'a t = ('a, Errors.t) t
 
-(** {2 Selective API} *)
+(** {3 Selective} *)
+
 module Selective (Errors : Preface_specs.SEMIGROUP) :
   Preface_specs.SELECTIVE with type 'a t = ('a, Errors.t) t
 
-(** {2 Monad API} *)
+(** {3 Monad}
+
+    [Validation.t] implements {!module-type:Preface_specs.MONAD} and introduces
+    an interface to define {!module-type:Preface_specs.TRAVERSABLE} using
+    [Validation] as an iterable structure. *)
+
 module Monad (T : Preface_specs.Types.T0) :
   Preface_specs.Traversable.API_OVER_MONAD with type 'a t = ('a, T.t) t
 
-(** {1 Helpers} *)
+(** {1 Addtional functions}
+
+    Additional functions to facilitate practical work with [Validation.t]. *)
 
 val valid : 'a -> ('a, 'b) t
 (** Wrap a value into [Valid].*)
@@ -54,7 +75,7 @@ val case : ('a -> 'c) -> ('b -> 'c) -> ('a, 'b) t -> 'c
 
 val equal :
   ('a -> 'a -> bool) -> ('b -> 'b -> bool) -> ('a, 'b) t -> ('a, 'b) t -> bool
-(** Equality. *)
+(** Equality between [Validation.t].*)
 
 val pp :
      (Format.formatter -> 'a -> unit)
@@ -62,4 +83,4 @@ val pp :
   -> Format.formatter
   -> ('a, 'b) t
   -> unit
-(** Pretty printing. *)
+(** Formatter for pretty-printing for [Validation.t]. *)

@@ -1,154 +1,61 @@
-(** Exposes [Validate.t]; a biaised version of [Validation.t] with the errors
-    fixed as a non empty list of exceptions.
+(** Implementation for [Try.t]. *)
 
-    - {!val:Functor}
-    - {!val:Applicative}
-    - {!val:Selective}
-    - {!val:Monad}
-
-    {1 Use cases}
-
-    [Validate] allows you to create validation pipelines that accumulate errors.
-    Unlike [Try], which performs sequential validations, [Validate] goes well
-    with the applicative composition.
-
-    {2 A Formlet example}
-
-    Formlet validation is a problem recognized as being complex. Fortunately, 20
-    years ago, a method drawing on application functors was highlighted in the
-    paper {{:http://homepages.inf.ed.ac.uk/slindley/papers/formlets-essence.pdf}
-    "The essence of Form Abstraction"}.
-
-    We suppose that a form contains several fields with which we associate
-    different validation rules:
-
-    - [age] must be positive;
-    - [firstname] must have at least 2 characters;
-    - [lastname] must have at least 2 characters;
-    - [checked_rules], the "do you accept the rules of the website", which must
-      be true.
-
-    {[
-      module Subscription_formlet = struct
-        type t = {
-            age : int
-          ; firstname : string
-          ; lastname : string
-          ; checked_rules : bool
-        }
-
-        let make age firstname lastname checked_rules =
-          { age; firstname; lastname; checked_rules }
-        ;;
-      end
-    ]}
-
-    We can now implement the validation functions and the corresponding
-    exceptions to error cases.
-
-    {[
-      module Subscription_formlet = struct
-        type t = {
-            age : int
-          ; firstname : string
-          ; lastname : string
-          ; checked_rules : bool
-        }
-
-        let make age firstname lastname checked_rules =
-          { age; firstname; lastname; checked_rules }
-        ;;
-
-        exception Invalid_age of int
-
-        exception Invalid_name of ([ `Firstname | `Lastname ] * string)
-
-        exception Unchecked_rules
-
-        let validate_age age =
-          if age >= 0
-          then Validate.valid age
-          else Validate.error (Invalid_age age)
-        ;;
-
-        let validate_name subject name =
-          if String.length name > 1
-          then Validate.valid name
-          else Validate.error (Invalid_name (subject, name))
-        ;;
-
-        let validate_rules checked =
-          if checked
-          then Validate.valid checked
-          else Validate.error Unchecked_rules
-        ;;
-      end
-    ]}
-
-    We can now use our [make] functions and our validation functions to validate
-    the creation of a subscription:
-
-    {[
-      let try_register age firstname lastname checked_rules =
-        let open Subscription_formlet in
-        let open Validate.Applicative.Infix in
-        make
-        <$> validate_age age
-        <*> validate_name `Firstname firstname
-        <*> validate_name `Lastname lastname
-        <*> validate_rules checked_rules
-      ;;
-    ]}
-
-    Here is some usage example, when everything is fine:
-
-    {[
-      try_register 10 "Xavier" "Van de Woestyne" true;;
-      # Valid
-        {Subscription_formlet.age = 10; firstname = "Xavier";
-         lastname = "Van de Woestyne"; checked_rules = true}
-    ]}
-
-    When the checkbox "Accept all the rules" is not checked!
-
-    {[
-      try_register 10 "Xavier" "Van de Woestyne" false;;
-      # Invalid [Subscription_formlet.Unchecked_rules]
-    ]}
-
-    When the checkbox "Accept all the rules" is not checked and the [age] is
-    negative!
-
-    {[
-      try_register (-5) "Xavier" "Van de Woestyne" false;;
-      # Invalid
-        [ Subscription_formlet.Invalid_age (-5)
-        ; Subscription_formlet.Unchecked_rules ]
-    ]}
-
-    The positive point of this approach is that it decorrelates the creation
-    function of the formlet and its validation functions. *)
+(** [Validate.t] is a biased version of [Validation] with the errors fixed as an
+    [Nonempty_list] of [exception]. *)
 
 (** {1 Type} *)
 
 type 'a t = ('a, exn Nonempty_list.t) Validation.t
 
+(** {2 About Validate}
+
+    Validate is a specialisation of [Validation], so the module does not
+    re-export the Validation constructors (they do not have the same arity) so
+    if you want to pattern match a [Validate] value you will have to use the
+    [Validation] constructors:
+
+    {[
+      match validated_value with
+      | Validation.Valid x -> x
+      | Validation.Invalid errors ->
+        Format.sprintf "Error: %a" (Nonempty_list.pp Exn.pp) errors
+    ]} *)
+
 (** {1 Implementation} *)
 
+(** {2 Functor} *)
+
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-(** {2 Functor API} *)
+
+(** {2 Applicative}
+
+    [Validate.t] implements {!module-type:Preface_specs.APPLICATIVE} and
+    introduces an interface to define {!module-type:Preface_specs.TRAVERSABLE}
+    using [Validate] as an iterable structure.
+
+    As you can see, it is in the definition of the
+    {!module-type:Preface_specs.APPLICATIVE} that [Validate] differs from [Try].
+    The ['errors] part must be a {!module-type:Preface_specs.SEMIGROUP} to allow
+    for the accumulation of errors. *)
 
 module Applicative :
   Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a t
-(** {2 Applicative API} *)
+
+(** {3 Selective} *)
 
 module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
-(** {2 Applicative API} *)
+
+(** {3 Monad}
+
+    [Validate.t] implements {!module-type:Preface_specs.MONAD} and introduces an
+    interface to define {!module-type:Preface_specs.TRAVERSABLE} using
+    [Validate] as an iterable structure. *)
 
 module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
-(** {2 Monad API} *)
 
-(** {1 Helpers} *)
+(** {1 Addtional functions}
+
+    Additional functions to facilitate practical work with [Validate.t]. *)
 
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)
@@ -169,7 +76,7 @@ val to_result : 'a t -> ('a, exn Nonempty_list.t) result
 (** Project a [Validate] into a [Result]. *)
 
 val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
-(** Equality.*)
+(** Equality between [Validate.t].*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
-(** Pretty printing. *)
+(** Formatter for pretty-printing for [Validate.t]. *)

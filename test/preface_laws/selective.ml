@@ -1,5 +1,6 @@
 open Preface_qcheck
-module Either = Preface_stdlib.Either
+module Either = Preface_core.Shims.Either
+module E = Preface_stdlib.Either
 
 let either l r = Arbitrary.either l r
 
@@ -95,7 +96,7 @@ Preface_qcheck.Make.Test (struct
 
   let right (x, y', z') =
     let f a = Either.map_right (fun x -> Either.Right x) a
-    and g x a = Either.Bifunctor.bimap (fun x -> (x, a)) (fun f -> f a) x
+    and g x a = E.Bifunctor.bimap (fun x -> (x, a)) (fun f -> f a) x
     and h x (a, b) = x a b in
     let y = F.(Either.map_right QCheck.Fn.apply <$> y') in
     let z = F.(QCheck.Fn.apply <$> z') in
@@ -141,7 +142,7 @@ Preface_qcheck.Make.Test (struct
     let f = QCheck.Fn.apply f'
     and y = F.map QCheck.Fn.apply y' in
     let open Preface_core.Fun in
-    F.(select (Either.Bifunctor.map_snd f <$> x) (( % ) f <$> y))
+    F.(select (E.Bifunctor.map_snd f <$> x) (( % ) f <$> y))
   ;;
 end)
 
@@ -176,7 +177,7 @@ Preface_qcheck.Make.Test (struct
   let left (f', x, y') =
     let f = QCheck.Fn.apply f'
     and y = F.map QCheck.Fn.apply y' in
-    F.(select (Either.Bifunctor.map_fst f <$> x) y)
+    F.(select (E.Bifunctor.map_fst f <$> x) y)
   ;;
 
   let right (f', x, y') =
@@ -222,7 +223,7 @@ Preface_qcheck.Make.Test (struct
   let right (f', x, y) =
     let f = QCheck.Fn.apply f' in
     let open Preface_core.Fun in
-    F.(select (Either.Bifunctor.map_fst (flip f) <$> x) (( |> ) <$> y))
+    F.(select (E.Bifunctor.map_fst (flip f) <$> x) (( |> ) <$> y))
   ;;
 end)
 

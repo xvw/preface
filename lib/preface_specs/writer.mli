@@ -53,7 +53,7 @@ module type API = sig
   include CORE
   (** @inline *)
 
-  (** {1 Monad API} *)
+  (** {1 Monad} *)
 
   module Monad : Monad.API
 

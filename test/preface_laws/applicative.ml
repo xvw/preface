@@ -180,7 +180,7 @@ Preface_qcheck.Make.Test (struct
 
   let left x = F.(x <* pure ())
 
-  let right x = F.(lift2 Preface_core.Fun.constant x (pure ()))
+  let right x = F.(lift2 Preface_core.Fun.const x (pure ()))
 end)
 
 module Preserve_functor_identity (A : Preface_specs.APPLICATIVE) =

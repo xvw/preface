@@ -5,7 +5,7 @@ module Req = struct
 
   let observable x y = Preface_qcheck.Observable.either x y
 
-  let equal x y = Preface_stdlib.Either.equal x y
+  let equal left right = Preface_stdlib.Either.equal left right
 end
 
 module Req_with_int = struct

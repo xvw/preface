@@ -1,45 +1,51 @@
-(** Exposes [Identity.t].
+(** Implementation for [Identity.t]. *)
 
-    This module is mainly used as a "proof of concept" and as a test tool.
+(** [Identity.t] is a trivial "type constructor" that allows you to lift an
+    arbitrary value into a context. The identity can be very useful for
+    validating implementations (by checking its laws) or for providing a fixed
+    implementation for transformers. *)
 
-    {1 Capabilities}
-
-    - {!val:Functor}
-    - {!val:Applicative}
-    - {!val:Selective}
-    - {!val:Monad}
-    - {!val:Comonad} *)
+(** {1 Type} *)
 
 type 'a t
-(** A wrapper around a value. *)
+(** An identity is defined as [type 'a t = 'a].*)
 
-(** {1 Implementation} *)
+(** {1 Implementation}
+
+    The set of concrete implementations for [Identity.t]. *)
+
+(** {2 Functor} *)
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-(** {2 Functor API} *)
+
+(** {2 Applicative} *)
 
 module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
-(** {2 Applicative API} *)
+
+(** {2 Selective} *)
 
 module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
-(** {2 Selective API} *)
+
+(** {2 Monad} *)
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
-(** {2 Monad API} *)
+
+(** {2 Comonad} *)
 
 module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
-(** {2 Comonad API} *)
 
-(** {1 Helpers} *)
+(** {1 Addtional functions}
+
+    Additional functions to facilitate practical work with [Identity.t]. *)
 
 val pure : 'a -> 'a t
-(** Create a value from ['a] to ['a t]. *)
+(** Create a value from ['a] to ['a Identity.t]. *)
 
 val extract : 'a t -> 'a
-(** Create a value from ['a t] to ['a]. *)
+(** Extract the value from an [Identity.t]. *)
 
 val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
-(** Equality.*)
+(** Equality between [Identity.t].*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
-(** Pretty printing. *)
+(** Formatter for pretty-printing for [Identity.t]. *)
