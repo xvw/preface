@@ -26,6 +26,8 @@
     + [f <*> g = apply f g]
     + [(x *> (y <*? z)) = ((x *> y) <*? z)] *)
 
+open Preface_core.Shims
+
 (** {1 Minimal definition} *)
 
 (** Minimal definition using [select] without {!module:Applicative}
@@ -52,7 +54,7 @@ end
 (** Standard requirement including [pure] and [select]. *)
 module type WITH_PURE_AND_SELECT = sig
   include WITH_SELECT
-  (** @closed *)
+  (** @inline *)
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
@@ -61,7 +63,7 @@ end
 (** Standard requirement including [pure] and [branch]. *)
 module type WITH_PURE_AND_BRANCH = sig
   include WITH_BRANCH
-  (** @closed *)
+  (** @inline *)
 
   val pure : 'a -> 'a t
   (** Create a new ['a t]. *)
@@ -72,13 +74,13 @@ end
 (** Basis operation. *)
 module type CORE = sig
   include WITH_SELECT
-  (** @closed *)
+  (** @inline *)
 
   include WITH_BRANCH with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   include Applicative.CORE with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -87,7 +89,7 @@ module type OPERATION = sig
   (** The type held by the [Selective]. *)
 
   include Applicative.OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   val if_ : bool t -> 'a t -> 'a t -> 'a t
   (** Same of [branch] but using a [Boolean] as disjunction. *)
@@ -117,7 +119,7 @@ end
 (** Syntax extensions. *)
 module type SYNTAX = sig
   include Applicative.SYNTAX
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Infix operators. *)
@@ -126,7 +128,7 @@ module type INFIX = sig
   (** The type held by the [Selective]. *)
 
   include Applicative.INFIX with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   val ( <*? ) : ('a, 'b) Either.t t -> ('a -> 'b) t -> 'b t
   (** Infix version of {!val:CORE.select}. *)
@@ -142,37 +144,32 @@ end
 
 (** The complete interface of a [Selective]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Selective]. *)
+  type 'a t
+  (** The type held by the [Selective]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
-
-  (** {1 Syntax} *)
-
-  module Syntax : SYNTAX with type 'a t := 'a t
-
-  (** {2 Syntax inclusion} *)
-
-  include module type of Syntax
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
-  (** {2 Infix operators inclusion} *)
-
   include module type of Infix
-  (** @closed *)
+  (** @inline *)
+
+  (** {1 Syntax} *)
+
+  module Syntax : SYNTAX with type 'a t := 'a t
+
+  include module type of Syntax
+  (** @inline *)
 end
 
 (** {1 Additional references}

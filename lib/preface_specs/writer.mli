@@ -51,14 +51,12 @@ end
     {!module:Monad} API into the [Writer] API. *)
 module type API = sig
   include CORE
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Monad API} *)
 
   module Monad : Monad.API
 
-  (** {2 Monad API inclusion} *)
-
   include module type of Monad with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end

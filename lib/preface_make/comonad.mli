@@ -1,119 +1,50 @@
-(** Modules for building [!Preface_specs.COMONAD] modules. *)
+(** Building a {!module:Preface_specs.Comonad} *)
 
-(** {1 Tutorial}
+(** {1 Using the minimal definition} *)
 
-    As with [Functor], [Applicative] and [Monad], [Comonad] allow multiple
-    pathes to build a [Comonad] module.
+(** {2 Using extract and extend}
 
-    {2 Basics}
+    Build a {!module-type:Preface_specs.COMONAD} using
+    {!module-type:Preface_specs.Comonad.WITH_EXTEND}.
 
-    As [Monad], [Comonad] offer several primitive ways to be built. These
-    different approaches lead to the same combiners. It's up to you to choose
-    the most flexible approach according to the context.
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
 
-    {3 Using [map] and [duplicate]}
+module Via_extend (Req : Preface_specs.Comonad.WITH_EXTEND) :
+  Preface_specs.COMONAD with type 'a t = 'a Req.t
 
-    Here's an example with the [Stream] module implementing [Comonad] using
-    [map] and [duplicate].
+(** {2 Using extract, map and duplicate}
 
-    {[
-      (* In: stream.ml *)
-      type 'a t = C of 'a * 'a t Lazy.t
+    Build a {!module-type:Preface_specs.COMONAD} using
+    {!module-type:Preface_specs.Comonad.WITH_MAP_AND_DUPLICATE}.
 
-      let stream a l = C (a, l)
-
-      module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
-        type 'a t = 'a t
-
-        let extract = function C (a, _) -> a
-
-        let rec duplicate = function
-          | C (a, s) -> C (C (a, s), lazy (duplicate @@ Lazy.force s))
-        ;;
-
-        let rec map f = function
-          | C (a, s) -> C (f a, lazy (map f @@ Lazy.force s))
-        ;;
-      end)
-    ]}
-    {[
-      (* In: stream.mli *)
-      type 'a t
-
-      val stream : 'a -> 'a t Lazy.t -> 'a t
-
-      module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
-    ]}
-
-    Now, your [Stream] module is handling a [Comonad] module and you'll be be
-    able to use features offered by a [Comonad]. For example:
-
-    {[
-      let natural =
-        let rec natural n = stream n (lazy (natural (n + 1))) in
-        natural 0
-      ;;
-
-      let natural_positive = increment <<= 1 + extract s
-    ]}
-
-    {3 Using [extend]}
-
-    Same [Stream] example using [extend].
-
-    {[
-      (* In: stream.ml *)
-      type 'a t = C of 'a * 'a t Lazy.t
-
-      let stream a l = C (a, l)
-
-      module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
-        type 'a t = 'a t
-
-        let extract = function C (a, _) -> a
-
-        let rec extend f = function
-          | C (_, s') as s -> C (f s, lazy (extend f @@ Lazy.force s'))
-        ;;
-      end)
-    ]}
-
-    {3 Using [compose_left_to_right]}
-
-    Same [Stream] example using [compose_left_to_right].
-
-    {[
-      (* In: stream.ml *)
-      type 'a t = C of 'a * 'a t Lazy.t
-
-      let stream a l = C (a, l)
-
-      module Comonad = Preface_make.Comonad.Via_map_and_duplicate (struct
-        type 'a t = 'a t
-
-        let extract = function C (a, _) -> a
-
-        let compose_left_to_right f g at =
-          let rec extend f = function
-            | C (_, s') as s -> C (f s, lazy (extend f @@ Lazy.force s'))
-          in
-          g @@ extend f at
-        ;;
-      end)
-    ]} *)
-
-(** {1 Construction of a [Comonad] module} *)
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
 
 module Via_map_and_duplicate
     (Req : Preface_specs.Comonad.WITH_MAP_AND_DUPLICATE) :
   Preface_specs.COMONAD with type 'a t = 'a Req.t
 
-module Via_extend (Req : Preface_specs.Comonad.WITH_EXTEND) :
-  Preface_specs.COMONAD with type 'a t = 'a Req.t
+(** {2 Using extract and the cokleisli composition}
+
+    Build a {!module-type:Preface_specs.COMONAD} using
+    {!module-type:Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
 
 module Via_cokleisli_composition
     (Req : Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION) :
   Preface_specs.COMONAD with type 'a t = 'a Req.t
+
+(** {1 Manual construction}
+
+    Advanced way to build a {!module-type:Preface_specs.COMONAD}, constructing
+    and assembling a component-by-component of
+    {!module-type:Preface_specs.COMONAD}. (In order to provide your own
+    implementation for some features.) *)
+
+(** {2 Grouping of all components} *)
 
 module Via
     (Core : Preface_specs.Comonad.CORE)
@@ -122,7 +53,7 @@ module Via
     (Infix : Preface_specs.Comonad.INFIX with type 'a t = 'a Core.t) :
   Preface_specs.COMONAD with type 'a t = 'a Core.t
 
-(** {1 Internal construction of a [Comonad] module} *)
+(** {2 Building Core} *)
 
 module Core_via_map_and_duplicate
     (Req : Preface_specs.Comonad.WITH_MAP_AND_DUPLICATE) :
@@ -135,8 +66,17 @@ module Core_via_cokleisli_composition
     (Req : Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION) :
   Preface_specs.Comonad.CORE with type 'a t = 'a Req.t
 
+(** {2 Deriving Operation} *)
+
 module Operation (Core : Preface_specs.Comonad.CORE) :
   Preface_specs.Comonad.OPERATION with type 'a t = 'a Core.t
+
+(** {2 Deriving Syntax} *)
+
+module Syntax (Core : Preface_specs.Comonad.CORE) :
+  Preface_specs.Comonad.SYNTAX with type 'a t = 'a Core.t
+
+(** {2 Deriving Infix} *)
 
 module Infix
     (Core : Preface_specs.Comonad.CORE)

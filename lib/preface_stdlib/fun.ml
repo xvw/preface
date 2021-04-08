@@ -60,7 +60,7 @@ module Arrow_choice =
     end)
 
 module Arrow_apply =
-  Preface_make.Arrow_apply.Over_arrow_with_apply
+  Preface_make.Arrow_apply.Over_arrow
     (Arrow)
     (struct
       type nonrec ('a, 'b) t = ('a, 'b) t

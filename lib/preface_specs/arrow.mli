@@ -31,7 +31,7 @@ end
 (** Minimal definition using [fst]. *)
 module type WITH_ARROW_AND_FST = sig
   include WITH_ARROW
-  (** @closed *)
+  (** @inline *)
 
   val fst : ('a, 'b) t -> ('a * 'd, 'b * 'd) t
   (** Send the first component of the input through the argument [Arrow], and
@@ -41,7 +41,7 @@ end
 (** Minimal definition using [split]. *)
 module type WITH_ARROW_AND_SPLIT = sig
   include WITH_ARROW
-  (** @closed *)
+  (** @inline *)
 
   val split : ('a, 'b) t -> ('c, 'd) t -> ('a * 'c, 'b * 'd) t
   (** Split the input between the two given [Arrows] and combine their output. *)
@@ -55,13 +55,13 @@ module type CORE = sig
   (** The type held by the [Arrow]. *)
 
   include Category.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -70,7 +70,7 @@ module type OPERATION = sig
   (** The type held by the [Arrow]. *)
 
   include Category.OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   val return : unit -> ('a, 'a) t
   (** Represent the identity [Arrow]. *)
@@ -89,10 +89,12 @@ module type OPERATION = sig
   (** Postcomposition with a function (the function should be pure). *)
 
   val pre_compose_right_to_left : ('b, 'c) t -> ('a -> 'b) -> ('a, 'c) t
-  (** Reversed version of {!val:pre_compose_left_to_right}. *)
+  (** Reversed version of
+      {!val:Preface_specs.Arrow.OPERATION.pre_compose_left_to_right}. *)
 
   val post_compose_right_to_left : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
-  (** Reversed version of {!val:post_compose_left_to_right}. *)
+  (** Reversed version of
+      {!val:Preface_specs.Arrow.OPERATION.post_compose_left_to_right}. *)
 end
 
 (** Aliases of some operations functions. *)
@@ -101,10 +103,12 @@ module type ALIAS = sig
   (** The type held by the [Arrow]. *)
 
   val pre_compose : ('a -> 'b) -> ('b, 'c) t -> ('a, 'c) t
-  (** Conveinent alias of {!val:OPERATION.pre_compose_left_to_right}. *)
+  (** Conveinent alias of
+      {!val:Preface_specs.Arrow.OPERATION.pre_compose_left_to_right}. *)
 
   val post_compose : ('a, 'b) t -> ('b -> 'c) -> ('a, 'c) t
-  (** Conveinent alias of {!val:OPERATION.post_compose_left_to_right}. *)
+  (** Conveinent alias of
+      {!val:Preface_specs.Arrow.OPERATION.post_compose_left_to_right}. *)
 end
 
 (** Infix operators. *)
@@ -113,61 +117,54 @@ module type INFIX = sig
   (** The type held by the [Arrow]. *)
 
   include Category.INFIX with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   val ( *** ) : ('a, 'b) t -> ('c, 'd) t -> ('a * 'c, 'b * 'd) t
-  (** Infix version of {!val:CORE.split}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.CORE.split}. *)
 
   val ( &&& ) : ('a, 'b) t -> ('a, 'c) t -> ('a, 'b * 'c) t
-  (** Infix version of {!val:OPERATION.fan_out}. *)
+  (** Infix version of {!val:Preface_specs.Arrow.OPERATION.fan_out}. *)
 
   val ( ^>> ) : ('a -> 'b) -> ('b, 'c) t -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.pre_compose_left_to_right}. *)
+  (** Infix version of
+      {!val:Preface_specs.Arrow.OPERATION.pre_compose_left_to_right}. *)
 
   val ( >>^ ) : ('a, 'b) t -> ('b -> 'c) -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.post_compose_left_to_right}. *)
+  (** Infix version of
+      {!val:Preface_specs.Arrow.OPERATION.post_compose_left_to_right}. *)
 
   val ( <<^ ) : ('b, 'c) t -> ('a -> 'b) -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.post_compose_right_to_left}. *)
+  (** Infix version of
+      {!val:Preface_specs.Arrow.OPERATION.post_compose_right_to_left}. *)
 
   val ( ^<< ) : ('b -> 'c) -> ('a, 'b) t -> ('a, 'c) t
-  (** Infix version of {!val:OPERATION.post_compose_right_to_left}. *)
+  (** Infix version of
+      {!val:Preface_specs.Arrow.OPERATION.post_compose_right_to_left}. *)
 end
 
 (** {1 Complete API} *)
 
 (** The complete interface of an [Arrow]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Arrow]. *)
+  type ('a, 'b) t
+  (** The type held by the [Arrow]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
-
-  (** {1 Aliases}
-
-      Additional functions based on [Operation] mainly in order to be iso with
-      Haskell convention. *)
-
-  include ALIAS with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

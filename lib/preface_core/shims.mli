@@ -4,6 +4,7 @@
 
 module Either : sig
   include module type of Either
+  (** @inline *)
 
   val case : ('a -> 'c) -> ('b -> 'c) -> ('a, 'b) t -> 'c
   (** [case f g x] conditionally perform [f] or [g] on [x]. *)

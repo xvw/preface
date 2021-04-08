@@ -74,28 +74,25 @@ end
 
 (** The complete interface of a [Category]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Category]. *)
+  type ('a, 'b) t
+  (** The type held by the [Category]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

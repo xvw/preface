@@ -57,29 +57,24 @@ end
 
 (** The complete interface of a [Contravariant Functor]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
+  type 'a t
+  (** The type held by the [Contravriant Functor]. *)
 
-      Set of fundamental functions in the description of a contravariant
-      functor. *)
+  (** {1 Functions} *)
 
-  include CORE
-  (** @closed *)
-
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
-  (** {2 Infix operators inclusion} *)
-
   include module type of Infix
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

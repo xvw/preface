@@ -1,87 +1,142 @@
-(** Modules for building {!Preface_specs.ARROW_CHOICE} modules.
+(** Building a {!module:Preface_specs.Arrow_choice} *)
 
-    {1 Documentation}
+(** {1 Using the minimal definition} *)
 
-    {2 Construction}
+(** {2 Using left over an Arrow}
 
-    Standard way to build an [Arrow_choice]. *)
+    Build an {!module-type:Preface_specs.ARROW_CHOICE} using
+    {!module-type:Preface_specs.Arrow_choice.WITH_LEFT} over an
+    {!module-type:Preface_specs.ARROW}.
 
-(** Incarnation of an [Arrow_choice] over {!Preface_specs.ARROW} and using
-    [left]. *)
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_arrow_with_left
     (Arrow : Preface_specs.ARROW)
     (Left : Preface_specs.Arrow_choice.WITH_LEFT
               with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Left.t
 
-(** Incarnation of an [Arrow_choice] over {!Preface_specs.ARROW} and using
-    [choose]. *)
+(** {2 Using choose over an Arrow}
+
+    Build an {!module-type:Preface_specs.ARROW_CHOICE} using
+    {!module-type:Preface_specs.Arrow_choice.WITH_CHOOSE} over an
+    {!module-type:Preface_specs.ARROW}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_arrow_with_choose
     (Arrow : Preface_specs.ARROW)
     (Choose : Preface_specs.Arrow_choice.WITH_CHOOSE
                 with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Choose.t
 
-(** Incarnation of an [Arrow_choice] over {!Preface_specs.ARROW} and using
-    [choose] and [left]. *)
+(** {2 Using left and choose over an Arrow}
+
+    Build an {!module-type:Preface_specs.ARROW_CHOICE} using
+    {!module-type:Preface_specs.Arrow_choice.WITH_LEFT_AND_CHOOSE} over an
+    {!module-type:Preface_specs.ARROW}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_arrow_with_left_and_choose
     (Arrow : Preface_specs.ARROW)
     (Choose_left : Preface_specs.Arrow_choice.WITH_LEFT_AND_CHOOSE
                      with type ('a, 'b) t = ('a, 'b) Arrow.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Choose_left.t
 
-(** Incarnation of an [Arrow_choice] over {!Preface_specs.CATEGORY} and using
-    [arrow], [fst] and [left]. *)
+(** {2 Using left, arrow and fst over a Category}
+
+    Build an {!module-type:Preface_specs.ARROW_CHOICE} using
+    {!module-type:Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_LEFT} over a
+    {!module-type:Preface_specs.CATEGORY}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_category_and_via_arrow_and_fst_and_left
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_LEFT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice] over {!Preface_specs.CATEGORY} and using
-    [arrow], [fst] and [choose]. *)
+(** {2 Using choose, arrow and fst over a Category}
+
+    Build an {!module-type:Preface_specs.ARROW_CHOICE} using
+    {!module-type:Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_CHOOSE} over
+    a {!module-type:Preface_specs.CATEGORY}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_category_and_via_arrow_and_fst_and_choose
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_CHOOSE
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice] over {!Preface_specs.CATEGORY} and using
-    [arrow], [split] and [left]. *)
+(** {2 Using left, arrow and split over a Category}
+
+    Build an {!module-type:Preface_specs.ARROW_CHOICE} using
+    {!module-type:Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_LEFT} over
+    a {!module-type:Preface_specs.CATEGORY}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_over_category_and_via_arrow_and_split_and_left
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_LEFT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice] over {!Preface_specs.CATEGORY} and using
-    [arrow], [split] and [choose]. *)
+(** {2 Using choose, arrow and split over a Category}
+
+    Build an {!module-type:Preface_specs.ARROW_CHOICE} using
+    {!module-type:Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_CHOOSE}
+    over a {!module-type:Preface_specs.CATEGORY}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Over_category_and_via_arrow_and_split_and_choose
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_CHOOSE
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice] using a [monad] using the Kleisli
-    composition. *)
-module From_monad (Monad : Preface_specs.Monad.CORE) :
-  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = 'a -> 'b Monad.t
+(** {1 Arrow Choice Algebra}
 
-(** {2 Arrow Choice composition}
+    Construction of {!module-type:Preface_specs.ARROW_CHOICE} by combining them. *)
 
-    Some tools for composition between arrows choice. *)
+(** {2 Product}
 
-(** Product of two Arrows choice. *)
+    Construct the product of two {!module-type:Preface_specs.ARROW_CHOICE}. *)
+
 module Product (F : Preface_specs.ARROW_CHOICE) (G : Preface_specs.ARROW_CHOICE) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
 
-(** {2 Manual construction}
+(** {1 From other abstraction} *)
 
-    Advanced way to build an [Arrow_choice], constructing and assembling a
-    component-by-component an arrow. (In order to provide your own
+(** {2 From a Monad}
+
+    Produces an {!module-type:Preface_specs.ARROW_CHOICE} from a
+    {!module-type:Preface_specs.MONAD} (using the [Kleisli Arrow]). *)
+
+module From_monad (Monad : Preface_specs.Monad.CORE) :
+  Preface_specs.ARROW_CHOICE with type ('a, 'b) t = 'a -> 'b Monad.t
+
+(** {1 Manual construction}
+
+    Advanced way to build an {!module-type:Preface_specs.ARROW_CHOICE},
+    constructing and assembling a component-by-component of
+    {!module-type:Preface_specs.ARROW_CHOICE}. (In order to provide your own
     implementation for some features.) *)
 
-(** Incarnation of an [Arrow_choice] using each components of a [Arrow_choice]. *)
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Arrow_choice.CORE)
     (Operation : Preface_specs.Arrow_choice.OPERATION
@@ -92,52 +147,47 @@ module Via
                with type ('a, 'b) t = ('a, 'b) Alias.t) :
   Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) Infix.t
 
-(** Incarnation of an [Arrow_choice.Core] over {!Preface_specs.CATEGORY} and
-    using [arrow], [fst] and [left]. *)
+(** {2 Building Core} *)
+
 module Core_over_category_and_via_arrow_and_fst_and_left
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_LEFT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice.Core] over {!Preface_specs.CATEGORY} and
-    using [arrow], [split] and [left]. *)
 module Core_over_category_and_via_arrow_and_split_and_left
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_LEFT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice.Core] over {!Preface_specs.CATEGORY} and
-    using [arrow], [fst] and [choose]. *)
 module Core_over_category_and_via_arrow_and_fst_and_choose
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_CHOOSE
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice.Core] over {!Preface_specs.CATEGORY} and
-    using [arrow], [split] and [choose]. *)
 module Core_over_category_and_via_arrow_and_split_and_choose
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_CHOOSE
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
-(** Incarnation of an [Arrow_choice.Operation] over {!Preface_specs.CATEGORY}
-    and [Core]. *)
+(** {2 Deriving Operation} *)
+
 module Operation_over_category
     (Category : Preface_specs.CATEGORY)
     (Core : Preface_specs.Arrow_choice.CORE
               with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t
 
-(** Incarnation of an [Arrow_choice.Alias] using [Operation]. *)
+(** {2 Deriving Alias} *)
+
 module Alias (Operation : Preface_specs.Arrow.OPERATION) :
   Preface_specs.Arrow.ALIAS with type ('a, 'b) t = ('a, 'b) Operation.t
 
-(** Incarnation of an [Arrow_choice.Infix] over {!Preface_specs.CATEGORY} and
-    [Core] and [Operation]. *)
+(** {2 Deriving Infix} *)
+
 module Infix_over_category
     (Category : Preface_specs.CATEGORY)
     (Core : Preface_specs.Arrow_choice.CORE

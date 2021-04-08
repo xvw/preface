@@ -11,16 +11,16 @@
 (** Minimal interfaces of [Alternative] without {!module:Monad}. *)
 module type WITH_NEUTRAL_AND_COMBINE = sig
   include Alternative.WITH_NEUTRAL_AND_COMBINE
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [neutral], [combine], [return], [map] and [join]. *)
 module type WITH_MAP_AND_JOIN = sig
   include Monad.WITH_MAP_AND_JOIN
-  (** @closed *)
+  (** @inline *)
 
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [neutral], [combine], [return],
@@ -34,10 +34,10 @@ end
 (** Minimal definition using [neutral], [combine], [return], [bind]. *)
 module type WITH_BIND = sig
   include Monad.WITH_BIND
-  (** @closed *)
+  (** @inline *)
 
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -45,19 +45,19 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include Monad.CORE
-  (** @closed *)
+  (** @inline *)
 
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
 module type OPERATION = sig
   include Monad.OPERATION
-  (** @closed *)
+  (** @inline *)
 
   include Alternative.ALTERNATIVE_OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 
   val filter : ('a -> bool) -> 'a t -> 'a t
   (** Filtering over [Monad_plus]. *)
@@ -66,7 +66,7 @@ end
 (** Infix operators. *)
 module type INFIX = sig
   include Monad.INFIX
-  (** @closed *)
+  (** @inline *)
 
   val ( <|> ) : 'a t -> 'a t -> 'a t
   (** Infix version of {!val:CORE.combine}. *)
@@ -75,42 +75,39 @@ end
 (** Syntax extensions *)
 module type SYNTAX = sig
   include Monad.SYNTAX
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Complete API} *)
 
 (** The complete interface of a [Monad_plus]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of a [Monad_plus]. *)
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
+
+  (** {1 Infix operators} *)
+
+  module Infix : INFIX with type 'a t := 'a t
+
+  include module type of Infix
+  (** @inline *)
 
   (** {1 Syntax} *)
 
   module Syntax : SYNTAX with type 'a t := 'a t
 
   include module type of Syntax
-  (** @closed *)
-
-  (** {1 Infix operators} *)
-
-  module Infix : INFIX with type 'a t := 'a t
-
-  (** {2 Infix operators inclusion} *)
-
-  include module type of Infix
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

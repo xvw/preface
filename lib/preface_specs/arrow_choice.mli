@@ -14,6 +14,8 @@
     + [left f >>> arrow (Fun.id +++ g) = arrow (Fun.id +++ g) >>> left f]
     + [left (left f) >>> arrow assocsum = arrow assocsum >>> left f] *)
 
+open Preface_core.Shims
+
 (** {1 Minimal definition} *)
 
 (** Minimal definition using [left] operation without {!module:Arrow}. *)
@@ -40,46 +42,46 @@ end
 (** Minimal definition using [choose] and [left] without {!module:Arrow}. *)
 module type WITH_LEFT_AND_CHOOSE = sig
   include WITH_LEFT
-  (** @closed *)
+  (** @inline *)
 
   include WITH_CHOOSE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [choose]. *)
 module type WITH_ARROW_AND_FST_AND_CHOOSE = sig
   include WITH_CHOOSE
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [left]. *)
 module type WITH_ARROW_AND_FST_AND_LEFT = sig
   include WITH_LEFT
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [choose]. *)
 module type WITH_ARROW_AND_SPLIT_AND_CHOOSE = sig
   include WITH_CHOOSE
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [arrow] and [fst] and [left]. *)
 module type WITH_ARROW_AND_SPLIT_AND_LEFT = sig
   include WITH_LEFT
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -87,19 +89,19 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_LEFT
-  (** @closed *)
+  (** @inline *)
 
   include WITH_CHOOSE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
 module type OPERATION = sig
   include Arrow.OPERATION
-  (** @closed *)
+  (** @inline *)
 
   val right : ('a, 'b) t -> (('c, 'a) Either.t, ('c, 'b) Either.t) t
   (** The mirror image of [left]. *)
@@ -114,7 +116,7 @@ module type ALIAS = Arrow.ALIAS
 (** Infix operators. *)
 module type INFIX = sig
   include Arrow.INFIX
-  (** @closed *)
+  (** @inline *)
 
   val ( +++ ) :
     ('a, 'b) t -> ('c, 'd) t -> (('a, 'c) Either.t, ('b, 'd) Either.t) t
@@ -128,36 +130,25 @@ end
 
 (** The complete interface of an [Arrow_choice]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Arrow_choice]. *)
+  type ('a, 'b) t
+  (** The type held by the [Arrow_choice]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
-
-  (** {1 Aliases}
-
-      Additional functions based on [Operation] mainly in order to be iso with
-      Haskell convention. *)
-
-  include ALIAS with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

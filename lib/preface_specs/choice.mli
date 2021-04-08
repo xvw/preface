@@ -16,6 +16,8 @@
     + [left % left = dimap assoc unassoc % left]
     + [left % left = dimap unassoc assoc % right] *)
 
+open Preface_core.Shims
+
 (** {1 Minimal definition} *)
 
 (** Minimal interface using [left] and without {!module:Profunctor}. *)
@@ -42,10 +44,10 @@ module type WITH_DIMAP_AND_LEFT = sig
   (** The type held by the [Choice Profunctor]. *)
 
   include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal interface using [contramap_fst] and [map_snd] and [left]. *)
@@ -55,10 +57,10 @@ module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_LEFT = sig
 
   include
     Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal interface using [dimap] and [right]. *)
@@ -67,10 +69,10 @@ module type WITH_DIMAP_AND_RIGHT = sig
   (** The type held by the [Choice Profunctor]. *)
 
   include Profunctor.WITH_DIMAP with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal interfaces using [contramap_fst] and [map_snd] and [right]. *)
@@ -80,10 +82,10 @@ module type WITH_CONTRAMAP_FST_AND_MAP_SND_AND_RIGHT = sig
 
   include
     Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -94,19 +96,29 @@ module type CORE = sig
   (** The type held by the [Choice Profunctor]. *)
 
   include Profunctor.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_LEFT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   include WITH_RIGHT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Complete API} *)
 
-module type API = CORE
 (** The complete interface of a [Choice Profunctor]. *)
+module type API = sig
+  (** {1 Type} *)
+
+  type ('a, 'b) t
+  (** The type held by the [Choice]. *)
+
+  (** {1 Functions} *)
+
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
+end
 
 (** {1 Additional references}
 

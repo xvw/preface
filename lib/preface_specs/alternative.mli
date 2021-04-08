@@ -17,7 +17,7 @@
 (** Minimal interfaces of [Alternative] without {!module:Applicative}. *)
 module type WITH_NEUTRAL_AND_COMBINE = sig
   include Alt.WITH_COMBINE
-  (** @closed *)
+  (** @inline *)
 
   val neutral : 'a t
   (** The neutral element of the [Alternative]. *)
@@ -26,10 +26,10 @@ end
 (** Minimal definition using [neutral], [combine], [pure], [map] and [product]. *)
 module type WITH_MAP_AND_PRODUCT = sig
   include Applicative.WITH_MAP_AND_PRODUCT
-  (** @closed *)
+  (** @inline *)
 
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [neutral], [combine], [pure] and [apply]. *)
@@ -44,16 +44,16 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_NEUTRAL_AND_COMBINE
-  (** @closed *)
+  (** @inline *)
 
   include Applicative.CORE with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Operation without {!module:Applicative}. *)
 module type ALTERNATIVE_OPERATION = sig
   include Alt.OPERATION
-  (** @closed *)
+  (** @inline *)
 
   val reduce : 'a t list -> 'a t
   (** Reduce a [List.t] using [combine]. *)
@@ -62,62 +62,57 @@ end
 (** Additional operations. *)
 module type OPERATION = sig
   include Applicative.OPERATION
-  (** @closed *)
+  (** @inline *)
 
   include ALTERNATIVE_OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Infix operators. *)
 module type INFIX = sig
   include Applicative.INFIX
-  (** @closed *)
+  (** @inline *)
 
   include Alt.INFIX with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Syntax extensions. *)
 module type SYNTAX = sig
   include Applicative.SYNTAX
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Complete API} *)
 
 (** The complete interface of an [Alternative]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Alternative]. *)
+  type 'a t
+  (** The type held by the [Alternative]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
-
-  (** {1 Syntax} *)
-
-  module Syntax : SYNTAX with type 'a t := 'a t
-
-  (** {2 Syntax inclusion} *)
-
-  include module type of Syntax
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
-  (** {2 Infix operators inclusion} *)
-
   include module type of Infix
-  (** @closed *)
+  (** @inline *)
+
+  (** {1 Syntax} *)
+
+  module Syntax : SYNTAX with type 'a t := 'a t
+
+  include module type of Syntax
+  (** @inline *)
 end
 
 (** {1 Additional references}

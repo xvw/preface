@@ -52,10 +52,10 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_APPLY
-  (** @closed *)
+  (** @inline *)
 
   include WITH_MAP_AND_PRODUCT with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Additional operations. *)
@@ -74,7 +74,7 @@ module type OPERATION = sig
       and ['c t] to ['d t]. *)
 
   include Functor.OPERATION with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Syntax extensions. *)
@@ -107,44 +107,39 @@ module type INFIX = sig
   (** Discard the value of the second argument. *)
 
   include Functor.INFIX with type 'a t := 'a t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Complete API} *)
 
 (** The complete interface of an [Applicative]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Applicative]. *)
+  type 'a t
+  (** The type held by the [Applicative]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type 'a t := 'a t
+  (** @inline *)
 
   include OPERATION with type 'a t := 'a t
-  (** @closed *)
-
-  (** {1 Syntax} *)
-
-  module Syntax : SYNTAX with type 'a t := 'a t
-
-  (** {2 Syntax inclusion} *)
-
-  include module type of Syntax
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type 'a t := 'a t
 
-  (** {2 Infix operators inclusion} *)
-
   include module type of Infix
-  (** @closed *)
+  (** @inline *)
+
+  (** {1 Syntax} *)
+
+  module Syntax : SYNTAX with type 'a t := 'a t
+
+  include module type of Syntax
+  (** @inline *)
 end
 
 (** {1 Additional references}

@@ -1,142 +1,41 @@
-(** Modules for building {!Preface_specs.FUNCTOR} modules. *)
+(** Building a {!module:Preface_specs.Functor} *)
 
-(** {1 Tutorial}
+(** {1 Using the minimal definition}
 
-    In order to be modular, [Preface] offers multiple way to build a
-    {!Preface_specs.FUNCTOR}. In many case, you just have to use the
-    parametrized module {!Make_via_map}, but in some particular cases, you want
-    to be able to write each component of a [Functor].
+    Build a {!module-type:Preface_specs.FUNCTOR} using
+    {!module-type:Preface_specs.Functor.WITH_MAP}.
 
-    {2 Basics}
+    Standard method, using the minimal definition of a functor to derive its
+    full API. *)
 
-    The most common way to build a [Functor] is to use the module {!Via_map}.
-    For example, here is the way to have a [Functor] module inside an [Option]
-    module:
-
-    {[
-      (* In: option.ml *)
-      module Functor = Preface_make.Functor.Via_map (struct
-        type 'a t = 'a option
-
-        let map f = function Some x -> Some (f x) | None -> None
-      end)
-    ]}
-    {[
-      (* In: option.mli *)
-      module Functor : Preface_specs.FUNCTOR with type 'a t = 'a option
-    ]}
-
-    Now, your [Option] module is handling a [Functor] module and you'll be able
-    to use features offered by a [Functor]. For example:
-
-    {[
-      let result =
-        let open Option.Functor.Infix in
-        Some 10 <$> (fun x -> x + 12) <$> (fun x -> x * 3) <$> (fun x -> x + 15)
-      ;;
-    ]}
-    {[ val result : int option = Some 81 ]}
-
-    {2 Advanced}
-
-    In the previous example, we used an approach that uses a minimal interface
-    to build all the functionality of a [functor]. Now, let's imagine that we
-    want to provide our own implementation for [replace]. To acheive that (an
-    avoiding the combinatorial explosion, exposing a lot of parametrized
-    modules) we can use the module {!Via}. For example, reimplement our
-    [Option.Functor] in an another way:
-
-    First, let's define our [Core] module.
-
-    {[
-      module Core : Preface_specs.Functor.CORE = struct
-        type 'a t = 'a option
-
-        let map f = function Some x -> Some (f x) | None -> None
-      end
-    ]}
-
-    Now, we can give a custom implementation of [Operation].
-
-    {[
-      module Operation : Preface_specs.Functor.OPERATION = struct
-        type 'a t = 'a option
-
-        let replace value = function Some x -> Some value | None -> None
-
-        let void x = replace () x
-      end
-    ]}
-
-    Since [Infix] are just infix shortcuts, We do not want to have to write the
-    module by hand, so we can use {!Infix}:
-
-    {[ module Infix = Preface_make.Functor.Infix (Core) (Operation) ]}
-
-    And now, we can just instanciate the [Functor]:
-
-    {[ module Functor = Preface.Functor.Via (Core) (Operation) (Infix) ]}
-
-    And in the [mli], same of the previous tutorial:
-
-    {[ module Functor : Preface_specs.FUNCTOR with type 'a t = 'a option ]}
-
-    This approach allow us to define multiple way to instanciate a [Functor]
-    without producing a lot of paramtrized modules.
-
-    {2 Conclusion}
-
-    [Preface] makes it possible to construct functors in several different ways.
-    However, in many cases, the simple approach is recommended. Use manual
-    construction only if it is really necessary. *)
-
-(** {1 Documentation} *)
-
-(** {2 Construction}
-
-    Standard way to build a [Functor]. *)
-
-(** Incarnation of a [Functor] with standard requirements ([map]).*)
 module Via_map (Req : Preface_specs.Functor.WITH_MAP) :
   Preface_specs.FUNCTOR with type 'a t = 'a Req.t
 
-(** Incarnation of a [Functor] using an [Arrow] via [Arrow Monad] encoding.*)
-module From_arrow (A : Preface_specs.ARROW) :
-  Preface_specs.FUNCTOR with type 'a t = (unit, 'a) A.t
+(** {1 Functor Algebra}
 
-(** Incarnation of a [Functor] using an [Applicative].*)
-module From_applicative (Applicative : Preface_specs.APPLICATIVE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Applicative.t
+    Construction of {!module-type:Preface_specs.FUNCTOR} by combining two other
+    {!module-type:Preface_specs.FUNCTOR}. *)
 
-(** Incarnation of a [Functor] using an [Alt].*)
-module From_alt (Alt : Preface_specs.ALT) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Alt.t
+(** {2 Composition}
 
-(** Incarnation of a [Functor] using a [Monad].*)
-module From_monad (Monad : Preface_specs.MONAD) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Monad.t
+    Right-to-left composition of {!module-type:Preface_specs.FUNCTOR}.*)
 
-(** Incarnation of a [Functor] using an [Alternative].*)
-module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Alternative.t
-
-(** Incarnation of a [Functor] using a [Monad plus].*)
-module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Monad_plus.t
-
-(** Incarnation of a [Functor] using a [Comonad].*)
-module From_comonad (Comonad : Preface_specs.COMONAD) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t
-
-(** {2 Functor composition}
-
-    Some tools for composition between functors. *)
-
-(** Right-to-left composition of functors.*)
 module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
   Preface_specs.FUNCTOR with type 'a t = 'a G.t F.t
 
-(** Sum of two functors. *)
+(** {2 Product}
+
+    Construct the product of two {!module-type:Preface_specs.FUNCTOR}. *)
+
+module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
+  Preface_specs.FUNCTOR with type 'a t = 'a F.t * 'a G.t
+
+(** {2 Sum}
+
+    Sum of {!module-type:Preface_specs.FUNCTOR} using the technique described in
+    {{:http://www.cs.ru.nl/~W.Swierstra/Publications/DataTypesALaCarte.pdf} Data
+    types à la carte by W. Swierstra}.*)
+
 module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) : sig
   type 'a sum =
     | L of 'a F.t
@@ -145,32 +44,91 @@ module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) : sig
   include Preface_specs.FUNCTOR with type 'a t = 'a sum
 end
 
-(** Product of two functors. *)
-module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
-  Preface_specs.FUNCTOR with type 'a t = 'a F.t * 'a G.t
+(** {1 From other abstraction} *)
 
-(** {2 Manual construction}
+(** {2 From an Arrow}
 
-    Advanced way to build a [Functor], constructing and assembling a
-    component-by-component functor. (In order to provide your own implementation
-    for some features.) *)
+    Specialize an {!module-type:Preface_specs.ARROW} into a
+    {!module-type:Preface_specs.FUNCTOR}. *)
 
-(** Incarnation of a [Functor] using each components of a [Functor]. *)
+module From_arrow (A : Preface_specs.ARROW) :
+  Preface_specs.FUNCTOR with type 'a t = (unit, 'a) A.t
+
+(** {2 From an Applicative}
+
+    Specialize an {!module-type:Preface_specs.APPLICATIVE} into a
+    {!module-type:Preface_specs.FUNCTOR}. *)
+
+module From_applicative (Applicative : Preface_specs.APPLICATIVE) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Applicative.t
+
+(** {2 From an Alt}
+
+    Specialize an {!module-type:Preface_specs.ALT} into a
+    {!module-type:Preface_specs.FUNCTOR}. *)
+
+module From_alt (Alt : Preface_specs.ALT) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Alt.t
+
+(** {2 From a Monad}
+
+    Specialize a {!module-type:Preface_specs.MONAD} into a
+    {!module-type:Preface_specs.FUNCTOR}. *)
+
+module From_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Monad.t
+
+(** {2 From an Alternative}
+
+    Specialize an {!module-type:Preface_specs.ALTERNATIVE} into a
+    {!module-type:Preface_specs.FUNCTOR}. *)
+
+module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Alternative.t
+
+(** {2 From a Monad plus}
+
+    Specialize a {!module-type:Preface_specs.MONAD_PLUS} into a
+    {!module-type:Preface_specs.FUNCTOR}. *)
+
+module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Monad_plus.t
+
+(** {2 From a Comonad}
+
+    Specialize a {!module-type:Preface_specs.COMONAD} into a
+    {!module-type:Preface_specs.FUNCTOR}. *)
+
+module From_comonad (Comonad : Preface_specs.COMONAD) :
+  Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t
+
+(** {1 Manual construction}
+
+    Advanced way to build a {!module-type:Preface_specs.FUNCTOR}, constructing
+    and assembling a component-by-component of
+    {!module-type:Preface_specs.FUNCTOR}. (In order to provide your own
+    implementation for some features.) *)
+
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 
-(** Incarnation of a [Functor.Core] with standard Requirements ([map]). *)
+(** {2 Building Core} *)
+
 module Core (Req : Preface_specs.Functor.WITH_MAP) :
   Preface_specs.Functor.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Functor.Operation] with standard Requirements ([map]). *)
+(** {2 Deriving Operation} *)
+
 module Operation (Core : Preface_specs.Functor.CORE) :
   Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t
 
-(** Incarnation of a [Functor.Infix] with functional API of a [Functor]. *)
+(** {2 Deriving Infix} *)
+
 module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :

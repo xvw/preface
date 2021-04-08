@@ -22,19 +22,19 @@ end
 (** Minimal definition using [arrow], [fst] and [neutral]. *)
 module type WITH_ARROW_AND_FST = sig
   include WITH_NEUTRAL
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_FST with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** Minimal definition using [arrow], [split] and [neutral]. *)
 module type WITH_ARROW_AND_SPLIT = sig
   include WITH_NEUTRAL
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.WITH_ARROW_AND_SPLIT with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -42,10 +42,10 @@ end
 (** Basis operations. *)
 module type CORE = sig
   include WITH_NEUTRAL
-  (** @closed *)
+  (** @inline *)
 
   include Arrow.CORE with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 module type OPERATION = Arrow.OPERATION
@@ -61,36 +61,25 @@ module type INFIX = Arrow.INFIX
 
 (** The complete interface of an [Arrow_zero]. *)
 module type API = sig
-  (** {1 Core functions}
+  (** {1 Type} *)
 
-      Set of fundamental functions in the description of an [Arrow]. *)
+  type ('a, 'b) t
+  (** The type held by the [Arrow_zero]. *)
 
-  include CORE
-  (** @closed *)
+  (** {1 Functions} *)
 
-  (** {1 Additional functions}
-
-      Additional functions, derived from fundamental functions. *)
+  include CORE with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 
   include OPERATION with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
-
-  (** {1 Aliases}
-
-      Additional functions based on [Operation] mainly in order to be iso with
-      Haskell convention. *)
-
-  include ALIAS with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 
   (** {1 Infix operators} *)
 
   module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
 
-  (** {2 Infix operators inclusion} *)
-
   include INFIX with type ('a, 'b) t := ('a, 'b) t
-  (** @closed *)
+  (** @inline *)
 end
 
 (** {1 Additional references}

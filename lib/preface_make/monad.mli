@@ -1,119 +1,78 @@
-(** Modules for building {!Preface_specs.MONAD} modules. *)
+(** Building a {!module:Preface_specs.Monad} *)
 
-(** {1 Tutorial}
+(** {1 Using the minimal definition} *)
 
-    As with [Functor] and [Applicative], a [Monad] allow multiple path to build
-    a [Monad] module.
+(** {2 Using return and bind}
 
-    {2 Basics}
+    Build a {!module-type:Preface_specs.MONAD} using
+    {!module-type:Preface_specs.Monad.WITH_BIND}.
 
-    As [Applicative], [Monad] offer several primitive ways to be built. These
-    different approaches lead to the same combiners. It's up to you to choose
-    the most flexible approach according to the context.
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
 
-    {3 Using [bind]}
-
-    This approach is by far the most popular. This is the default one used in
-    Haskell. Here's an example with our well-know [Option] module.
-
-    {[
-      (* In: option.ml *)
-      module Monad = Preface_make.Monad.Via_bind (struct
-        type 'a t = 'a option
-
-        let return x = Some x
-
-        let bind f = function Some x -> f x | None -> None
-      end)
-    ]}
-    {[
-      (* In: option.mli *)
-      module Monad : Preface_specs.MONAD with type 'a t = 'a option
-    ]}
-
-    Now, your [Option] module is handling a [Monad] module and you'll be be able
-    to use features offered by a [Monad]. For example:
-
-    {[
-      let operation =
-        let open Option.Monad.Infix in
-        return 45 >>= (fun x -> Some (x + 10)) >|= (fun x -> x + 20)
-      ;;
-    ]}
-
-    {3 Using [map] and [join]}
-
-    You can express a Monad using [map] and [join]. For example, let's try to
-    implement a [List] monad:
-
-    {[
-      (* In: list.ml *)
-      module Monad = Preface_make.Monad.Via_map_and_join (struct
-        type 'a t = 'a option
-
-        let return x = [ x ]
-
-        let map = Stdlib.List.map
-
-        let join = Stdlib.List.concat
-      end)
-    ]}
-    {[
-      (* In: list.mli *)
-      module Monad : Preface_specs.MONAD with type 'a t = 'a list
-    ]}
-
-    {2 Advanced}
-
-    As you can see in the documentation, you can express a monad using the
-    [Kleisli composition] and exactly like [Functor] and [Applicative], you can
-    build a monad step by step, offering your own implementation for each
-    component. *)
-
-(** {1 Documentation} *)
-
-(** {1 Construction}
-
-    Standard way to build a [Monad]. *)
-
-(** Incarnation of a [Monad] with standard requirement ([return] and [bind]). *)
 module Via_bind (Req : Preface_specs.Monad.WITH_BIND) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad] with map and join requirement ([return], [join] and
-    [map]). *)
+(** {2 Using return, map and join}
+
+    Build a {!module-type:Preface_specs.MONAD} using
+    {!module-type:Preface_specs.Monad.WITH_MAP_AND_JOIN}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad] with kleisli composition requirement ([return] and
-    [compose_left_to_right]). *)
+(** {2 Using return and the kleisli composition}
+
+    Build a {!module-type:Preface_specs.MONAD} using
+    {!module-type:Preface_specs.Monad.WITH_KLEISLI_COMPOSITION}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
 module Via_kleisli_composition
     (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad] using a [Monad_plus].*)
-module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
-  Preface_specs.MONAD with type 'a t = 'a Monad_plus.t
+(** {1 Monad Algebra}
 
-(** Incarnation of a [Monad] using an [Arrow_apply] via [Arrow Monad] encoding.*)
-module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
-  Preface_specs.MONAD with type 'a t = (unit, 'a) A.t
+    Construction of {!module-type:Preface_specs.MONAD} by combining them. *)
 
-(** {2 Monad composition}
+(** {2 Product}
 
-    Some tools for composition between monads. *)
+    Construct the product of two {!module-type:Preface_specs.MONAD}. *)
 
-(** Product of two Monads. *)
 module Product (F : Preface_specs.MONAD) (G : Preface_specs.MONAD) :
   Preface_specs.MONAD with type 'a t = 'a F.t * 'a G.t
 
-(** {2 Manual construction}
+(** {1 From other abstraction} *)
 
-    Advanced way to build a [Monad], constructing and assembling a
-    component-by-component a monad. (In order to provide your own implementation
-    for some features.) *)
+(** {2 From a Monad Plus}
 
-(** Incarnation of a [Monad] using each components of a [Monad].*)
+    Produces a {!module-type:Preface_specs.MONAD} from a
+    {!module-type:Preface_specs.MONAD_PLUS}. *)
+
+module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
+  Preface_specs.MONAD with type 'a t = 'a Monad_plus.t
+
+(** {2 From an Arrow Apply}
+
+    Produces a {!module-type:Preface_specs.MONAD} from an
+    {!module-type:Preface_specs.ARROW_APPLY}. *)
+
+module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
+  Preface_specs.MONAD with type 'a t = (unit, 'a) A.t
+
+(** {1 Manual construction}
+
+    Advanced way to build a {!module-type:Preface_specs.MONAD}, constructing and
+    assembling a component-by-component of {!module-type:Preface_specs.MONAD}.
+    (In order to provide your own implementation for some features.) *)
+
+(** {2 Grouping of all components} *)
+
 module Via
     (Core : Preface_specs.Monad.CORE)
     (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t)
@@ -121,31 +80,30 @@ module Via
     (Syntax : Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.MONAD with type 'a t = 'a Core.t
 
-(** Incarnation of a [Monad.Core] with standard requirement ([return] and
-    [bind]). *)
+(** {2 Building Core} *)
+
 module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad.Core] with map and join requirement ([return],
-    [join] and [map]). *)
 module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad.Core] with kleisli composition requirement ([return]
-    and [compose_left_to_right]). *)
 module Core_via_kleisli_composition
     (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
-(** Incarnation of a [Monad.Operation] with [Monad.Core].*)
+(** {2 Deriving Operation} *)
+
 module Operation (Core : Preface_specs.Monad.CORE) :
   Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t
 
-(** Incarnation of a [Monad.Syntax] with [Monad.Core].*)
+(** {2 Deriving Syntax} *)
+
 module Syntax (Core : Preface_specs.Monad.CORE) :
   Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t
 
-(** Incarnation of a [Monad.Infix] with [Monad.Core] and [Monad.OPERATION].*)
+(** {2 Deriving Infix} *)
+
 module Infix
     (Core : Preface_specs.Monad.CORE)
     (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t) :
