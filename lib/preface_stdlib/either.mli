@@ -1,41 +1,63 @@
-(** Exposes [Either.t]
+(** Implementation for [Either.t]. *)
 
-    {1 Capabilities}
+(** [Either.t] is the simplest sum type. In addition to allowing the generic
+    description of sum types, it allows the description of a disjunction, for
+    example to generalise a conditional branching. *)
 
-    - {!val:Bifunctor}
-    - {!val:Functor} where ['a] of [('a, 'b) t] is delayed
-    - {!val:Applicative} where ['a] of [('a, 'b) t] is delayed
-    - {!val:Monad} where ['a] of [('a, 'b) t] is delayed *)
+(** {1 Type} *)
 
-include module type of Preface_core.Shims.Either
+type ('a, 'b) t = ('a, 'b) Preface_core.Shims.Either.t =
+  | Left of 'a
+  | Right of 'b
 
-(** {1 Implementation} *)
+(** {1 Implementation}
+
+    The set of concrete implementations for [Either.t]. *)
+
+(** {2 Bifunctor} *)
 
 module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
-(** {2 Bifunctor API} *)
 
-(** {2 Functor API} *)
+(** {2 Delayed implementation}
+
+    By setting the [left] type of [Either.t] it is possible to get
+    implementations for abstractions on constructors of type with an arity of 1. *)
+
+(** {3 Functor} *)
+
 module Functor (T : Preface_specs.Types.T0) :
   Preface_specs.FUNCTOR with type 'a t = (T.t, 'a) Bifunctor.t
 
-(** {2 Applicative API} *)
+(** {3 Applicative}
+
+    [Either.t] implements {!module-type:Preface_specs.APPLICATIVE} and
+    introduces an interface to define {!module-type:Preface_specs.TRAVERSABLE}
+    using [Either] as an iterable structure. *)
+
 module Applicative (T : Preface_specs.Types.T0) :
   Preface_specs.Traversable.API_OVER_APPLICATIVE
     with type 'a t = (T.t, 'a) Bifunctor.t
 
-(** {2 Monad API} *)
+(** {3 Monad}
+
+    [Either.t] implements {!module-type:Preface_specs.MONAD} and introduces an
+    interface to define {!module-type:Preface_specs.TRAVERSABLE} using [Either]
+    as an iterable structure. *)
+
 module Monad (T : Preface_specs.Types.T0) :
   Preface_specs.Traversable.API_OVER_MONAD
     with type 'a t = (T.t, 'a) Bifunctor.t
 
-(** {1 Helpers} *)
+(** {1 Addtional functions}
+
+    Additional functions to facilitate practical work with [Either.t]. *)
 
 val pure : 'b -> ('a, 'b) t
-(** Create a value from ['b] to [('a, 'b) t]. *)
+(** Create a value from ['b] to [('a, 'b) t], a value wrapped in [Right]. *)
 
 val equal :
   ('a -> 'a -> bool) -> ('b -> 'b -> bool) -> ('a, 'b) t -> ('a, 'b) t -> bool
-(** Equality. *)
+(** Equality between [Either.t].*)
 
 val pp :
      (Format.formatter -> 'a -> unit)
@@ -43,4 +65,4 @@ val pp :
   -> Format.formatter
   -> ('a, 'b) t
   -> unit
-(** Pretty printing. *)
+(** Formatter for pretty-printing for [Either.t]. *)

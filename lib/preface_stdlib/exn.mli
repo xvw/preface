@@ -10,15 +10,17 @@ type t = exn
     Built-in exceptions. *)
 
 exception Negative_position of int
-(** Occure when an integer should be positive. *)
+(** Occurs when an integer should be positive. *)
 
-(** {1 Helpers} *)
+(** {1 Addtional functions}
 
-val check_position : int -> int Try.t
+    Additional functions to facilitate practical work with [Exn.t]. *)
+
+val check_position : int -> (int, t) result
 (** Check if a position is positive. *)
 
 val equal : t -> t -> bool
-(** Equality.*)
+(** Equality between [Exn.t].*)
 
 val pp : Format.formatter -> t -> unit
-(** Pretty printing. *)
+(** Formatter for pretty-printing for [Exn.t]. *)

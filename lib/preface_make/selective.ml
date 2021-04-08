@@ -87,7 +87,7 @@ module Operation (Core : Preface_specs.Selective.CORE) :
     let open Core in
     branch
       (map (fun b -> Either.(if b then left () else right ())) predicate)
-      (map constant if_true) (map constant unless)
+      (map const if_true) (map const unless)
   ;;
 
   let bind_bool x f = if_ x (f false) (f true)

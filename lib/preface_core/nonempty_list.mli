@@ -1,13 +1,9 @@
 (** A Non empty list. The module allows to deal with non-empty list. Lists where
     the minimum size is one.*)
 
-(** {1 Types} *)
-
 type 'a t =
   | Last of 'a
   | ( :: ) of ('a * 'a t)
-
-(** {1 API} *)
 
 val create : 'a -> 'a t
 (** [create x] create a new non-empty list with [x]. *)
@@ -42,8 +38,6 @@ val rev_append : 'a t -> 'a t -> 'a t
 val flatten : 'a t t -> 'a t
 (** Concat a non-empty list of non-empty list *)
 
-(** {2 Iterator} *)
-
 val iter : ('a -> unit) -> 'a t -> unit
 (** {!val:List.iter} for non-empty list. *)
 
@@ -65,10 +59,8 @@ val fold_left : ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a
 val fold_right : ('a -> 'b -> 'b) -> 'a t -> 'b -> 'b
 (** {!val:List.fold_right} for non-empty list. *)
 
-(** {2 Helpers} *)
-
 val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
-(** Equality. *)
+(** Equality between [Nonempty_list.t].*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
-(** Pretty printing. *)
+(** Formatter for pretty-printing for [Nonempty_list.t]. *)

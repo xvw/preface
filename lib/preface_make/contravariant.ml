@@ -8,7 +8,7 @@ module Operation (Core : Preface_specs.Contravariant.CORE) :
   Preface_specs.Contravariant.OPERATION with type 'a t = 'a Core.t = struct
   type 'a t = 'a Core.t
 
-  let replace x c = (Core.contramap % constant) x c
+  let replace x c = (Core.contramap % const) x c
 end
 
 module Infix

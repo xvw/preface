@@ -1,56 +1,7 @@
-(** Exposes [Try.t], a biased version of [Result.t] with the error fixed as an
-    exception.
+(** Implementation for [Try.t]. *)
 
-    {1 Capabilities}
-
-    - {!val:Functor}
-    - {!val:Applicative}
-    - {!val:Monad}
-
-    {1 Use cases}
-
-    [Try] allows you to create sequential validation pipelines. Unlike
-    [Validation] errors are not accumulate. The pipelines returns [Ok result] or
-    [Error first_error_occured]. [Try] goes well with monadic composition.
-
-    {2 Sequential pipelining}
-
-    [Try] is usually useful when a collection of functions can fail and we would
-    like to sequence them. For example :
-
-    {[
-      exception Invalid_age of int
-
-      exception Invalid_name of string
-
-      let validate_age age = if age >= 0 then Ok age else Error (Invalid_age age)
-
-      let validate_name name =
-        if String.length name >= 2 then Ok name else Error (Invalid_name name)
-      ;;
-    ]}
-
-    We want, if the age is valid, to verify that the name is valid, and if the
-    name is also valid, to produce the following couple: [age, name].
-
-    {[
-      let result in_age in_name =
-        let open Preface.Try.Monad.Infix in
-        validate_age in_age
-        >>= (fun age -> validate_name in_name >|= (fun name -> (age, name)))
-      ;;
-    ]}
-
-    Or using the let operators:
-
-    {[
-      let result in_age in_name =
-        let open Preface.Try.Monad.Syntax in
-        let* age = validate_age in_age in
-        let+ name = validate_name in_name in
-        (age, name)
-      ;;
-    ]} *)
+(** [Try.t] is a biased version of [Result] with the error fixed as an
+    [exception]. *)
 
 (** {1 Type} *)
 
@@ -58,17 +9,30 @@ type 'a t = ('a, exn) result
 
 (** {1 Implementation} *)
 
+(** {2 Functor} *)
+
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
-(** {2 Functor API} *)
+
+(** {2 Applicative}
+
+    [Try.t] implements {!module-type:Preface_specs.APPLICATIVE} and introduces
+    an interface to define {!module-type:Preface_specs.TRAVERSABLE} using [Try]
+    as an iterable structure. *)
 
 module Applicative :
   Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a t
-(** {2 Applicative API} *)
+
+(** {2 Monad}
+
+    [Try.t] implements {!module-type:Preface_specs.MONAD} and introduces an
+    interface to define {!module-type:Preface_specs.TRAVERSABLE} using [Try] as
+    an iterable structure. *)
 
 module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
-(** {2 Monad API} *)
 
-(** {1 Helpers} *)
+(** {1 Addtional functions}
+
+    Additional functions to facilitate practical work with [Result.t]. *)
 
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)
@@ -92,7 +56,7 @@ val to_validation : 'a t -> ('a, exn Nonempty_list.t) Validation.t
 (** Project a [Try] into a [Validation]. *)
 
 val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
-(** Equality.*)
+(** Equality between [Try.t].*)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
-(** Pretty printing. *)
+(** Formatter for pretty-printing for [Try.t]. *)

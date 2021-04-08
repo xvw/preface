@@ -12,6 +12,8 @@ module Either = Preface_stdlib.Either
 
 let tuple_eq f g (a, b) (a', b') = f a a' && g b b'
 
+let either_eq left right = Preface_core.Shims.Either.equal ~left ~right
+
 let either l r = Preface_qcheck.Arbitrary.either l r
 
 let pro_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -465,7 +467,7 @@ let choice_left_defined_by_right (module P : Preface_qcheck.Sample.PACKAGE)
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      Either.equal P.B.equal P.C.equal (left value) (right value) )
+      either_eq P.B.equal P.C.equal (left value) (right value) )
 ;;
 
 let choice_right_defined_by_left (module P : Preface_qcheck.Sample.PACKAGE)
@@ -480,7 +482,7 @@ let choice_right_defined_by_left (module P : Preface_qcheck.Sample.PACKAGE)
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      Either.equal P.C.equal P.B.equal (left value) (right value) )
+      either_eq P.C.equal P.B.equal (left value) (right value) )
 ;;
 
 let choice_map_snd_left (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -490,7 +492,7 @@ let choice_map_snd_left (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      Either.equal P.B.equal P.C.equal (left value) (right value) )
+      either_eq P.B.equal P.C.equal (left value) (right value) )
 ;;
 
 let choice_map_snd_right (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -500,7 +502,7 @@ let choice_map_snd_right (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      Either.equal P.C.equal P.B.equal (left value) (right value) )
+      either_eq P.C.equal P.B.equal (left value) (right value) )
 ;;
 
 let choice_contramp_fst_right (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -516,7 +518,7 @@ let choice_contramp_fst_right (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let c = Fn.apply c' in
       let (left, right) = test f c in
-      Either.equal P.D.equal P.B.equal (left value) (right value) )
+      either_eq P.D.equal P.B.equal (left value) (right value) )
 ;;
 
 let choice_contramp_fst_left (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -532,7 +534,7 @@ let choice_contramp_fst_left (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Fn.apply f' in
       let c = Fn.apply c' in
       let (left, right) = test f c in
-      Either.equal P.B.equal P.D.equal (left value) (right value) )
+      either_eq P.B.equal P.D.equal (left value) (right value) )
 ;;
 
 let choice_left_left (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -546,8 +548,8 @@ let choice_left_left (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      Either.equal
-        (Either.equal P.B.equal P.C.equal)
+      either_eq
+        (either_eq P.B.equal P.C.equal)
         P.D.equal (left value) (right value) )
 ;;
 
@@ -562,8 +564,8 @@ let choice_right_right (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      Either.equal P.C.equal
-        (Either.equal P.D.equal P.B.equal)
+      either_eq P.C.equal
+        (either_eq P.D.equal P.B.equal)
         (left value) (right value) )
 ;;
 
@@ -1044,7 +1046,7 @@ let arrow_choice_law8 (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Fn.apply f' in
       let (left, right) = test f in
-      Either.equal P.B.equal P.C.equal (left value) (right value) )
+      either_eq P.B.equal P.C.equal (left value) (right value) )
 ;;
 
 let arrow_choice_law9 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -1060,7 +1062,7 @@ let arrow_choice_law9 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Preface_stdlib.Fun.Arrow_choice.arrow (Fn.apply f') in
       let g = Preface_stdlib.Fun.Arrow_choice.arrow (Fn.apply g') in
       let (left, right) = test f g in
-      Either.equal P.C.equal P.D.equal (left value) (right value) )
+      either_eq P.C.equal P.D.equal (left value) (right value) )
 ;;
 
 let arrow_choice_law10 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -1070,7 +1072,7 @@ let arrow_choice_law10 (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Preface_stdlib.Fun.Arrow_choice.arrow (Fn.apply f') in
       let (left, right) = test f in
-      Either.equal P.B.equal P.C.equal (left value) (right value) )
+      either_eq P.B.equal P.C.equal (left value) (right value) )
 ;;
 
 let arrow_choice_law11 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -1086,7 +1088,7 @@ let arrow_choice_law11 (module P : Preface_qcheck.Sample.PACKAGE) count =
       let f = Preface_stdlib.Fun.Arrow_choice.arrow (Fn.apply f') in
       let g = Fn.apply g' in
       let (left, right) = test f g in
-      Either.equal P.B.equal P.D.equal (left value) (right value) )
+      either_eq P.B.equal P.D.equal (left value) (right value) )
 ;;
 
 let arrow_choice_law12 (module P : Preface_qcheck.Sample.PACKAGE) count =
@@ -1100,8 +1102,8 @@ let arrow_choice_law12 (module P : Preface_qcheck.Sample.PACKAGE) count =
   Test.make ~name ~count arbitrary (fun (f', value) ->
       let f = Preface_stdlib.Fun.Arrow_choice.arrow (Fn.apply f') in
       let (left, right) = test f in
-      Either.equal P.B.equal
-        (Either.equal P.C.equal P.D.equal)
+      either_eq P.B.equal
+        (either_eq P.C.equal P.D.equal)
         (left value) (right value) )
 ;;
 

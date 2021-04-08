@@ -1,8 +1,6 @@
-(** Exposes [Predicate.t], a function from ['a] to [bool].
+(** Implementation for [Predicate.t]. *)
 
-    {1 Capabilities}
-
-    - {!val:Contravariant} *)
+(** A [Predicate] is just a function from ['a] to [bool]. *)
 
 (** {1 Type} *)
 
@@ -10,10 +8,13 @@ type 'a t = 'a -> bool
 
 (** {1 Implementation} *)
 
-module Contravariant : Preface_specs.CONTRAVARIANT with type 'a t = 'a t
-(** {2 Contravariant API} *)
+(** {2 Contravariant} *)
 
-(** {1 Predicate modification} *)
+module Contravariant : Preface_specs.CONTRAVARIANT with type 'a t = 'a t
+
+(** {1 Addtional functions}
+
+    Additional functions to facilitate practical work with [Predicate.t]. *)
 
 val negate : 'a t -> 'a t
 (** negate the predicate. *)
@@ -30,7 +31,7 @@ val and_ : 'a t -> 'a t -> 'a t
 val or_ : 'a t -> 'a t -> 'a t
 (** Compose two predicates (using or). *)
 
-(** {1 Infix} *)
+(** {2 infix operators} *)
 
 module Infix : sig
   val ( && ) : 'a t -> 'a t -> 'a t
@@ -44,3 +45,4 @@ module Infix : sig
 end
 
 include module type of Infix
+(** @inline *)

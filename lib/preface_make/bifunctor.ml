@@ -22,9 +22,9 @@ module Operation (Core : Preface_specs.Bifunctor.CORE) :
 struct
   type ('a, 'b) t = ('a, 'b) Core.t
 
-  let replace_fst value x = Core.map_fst (constant value) x
+  let replace_fst value x = Core.map_fst (const value) x
 
-  let replace_snd value x = Core.map_snd (constant value) x
+  let replace_snd value x = Core.map_snd (const value) x
 end
 
 module Via

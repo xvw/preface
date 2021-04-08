@@ -1,4 +1,4 @@
-module Either = Preface.Either
+module Either = Preface_core.Shims.Either
 open Preface.Identity
 
 let identity a = Alcotest.testable (pp (Alcotest.pp a)) (equal ( = ))

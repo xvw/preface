@@ -25,7 +25,7 @@ module Core_via_kleisli_composition
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t = struct
   include Req
 
-  let bind f m = (compose_left_to_right (constant m) f) ()
+  let bind f m = (compose_left_to_right (const m) f) ()
 
   let join m = bind id m
 
@@ -143,7 +143,7 @@ module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
   Preface_specs.MONAD with type 'a t = (unit, 'a) A.t = Via_bind (struct
   type 'a t = (unit, 'a) A.t
 
-  let return x = A.arrow (constant x)
+  let return x = A.arrow (const x)
 
   let bind f x = A.(x >>> arrow (fun x -> (f x, ())) >>> apply)
 end)

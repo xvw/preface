@@ -1,13 +1,11 @@
-(** {2 Identity}
-
-    Identity is simply described as [type 'a t = 'a]. And is quite handy when
-    functions/functors need to act on monads (e.g. [State], [Writer] and
-    [Reader]), it allows to turn any type, arbitrarily, into a monad. *)
-
-module Identity = Identity
+(** *)
+(* Empty comment because, currently, synospsis are not properly 
+   handled when a module is included in another one. 
+*)
 
 (** {2 Common datatypes} *)
 
+module Identity = Identity
 module Option = Option
 module Either = Either
 module Pair = Pair
@@ -20,11 +18,11 @@ module Stream = Stream
 
 (** {2 Error handling} *)
 
+module Exn = Exn
 module Result = Result
 module Validation = Validation
 module Try = Try
 module Validate = Validate
-module Exn = Exn
 
 (** {2 Functions} *)
 
