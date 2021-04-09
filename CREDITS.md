@@ -36,7 +36,6 @@ of the project.  Here is a list of our dependancies:
   properties based testing (coupled with Alcotest)
 - [Either](https://github.com/mirage/either) - for having an
   `Either.t` before OCaml `4.12`
-- [mdx](https://github.com/realworldocaml/mdx) - for guide as tests
 
 
 ## Used tools
@@ -51,6 +50,7 @@ ecosystem:
   standards.
 - [Odoc](https://github.com/ocaml/odoc) - as a documentation
   generator.
+- [mdx](https://github.com/realworldocaml/mdx) - for guide as tests
 
 In addition, we use [Merlin](https://github.com/ocaml/merlin) and
 [Tuareg](https://github.com/ocaml/tuareg) or [OCaml
