@@ -5,4 +5,4 @@
 
 - [Understanding the breakdown of Preface modules by instantiating
   monade for Option](option_instantiation.md)
-
+- [Using Freer to handle effects](freer_effect_handling.md)

@@ -104,7 +104,7 @@ useful for the greatest number of people!
 |`Continuation`|A continuation that can't be delimited| `Functor`, `Applicative`, `Monad`|
 |`Either`| Represent a disjunction between `left` and `right`|`Bifunctor` and can be specialised for the `left` part; `Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
 |`Fun`| Function `'a -> 'b`| `Profunctor`, `Strong`, `Choice`, `Closed`, `Category`, `Arrow`, `Arrow_choice`, `Arrow_apply`|
-|`Identity`|A trivial type constructor, `typa 'a t = 'a`| `Functor`, `Applicative`, `Selective`, `Monad`, `Comonad` |
+|`Identity`|A trivial type constructor, `type 'a t = 'a`| `Functor`, `Applicative`, `Selective`, `Monad`, `Comonad` |
 |`List`| The standard list of OCaml| `Foldable`, `Functor`, `Applicative`, `Alternative`, `Selective`, `Monad`, `Nonad_plus`, `Traversable` through Applicative or Monad, `Monoid` (where the inner type must be fixed)|
 |`Nonempty_list`| A list with, at least, one element| `Foldable`, `Functor`, `Alt`, `Applicative`, `Selective`, `Monad`, `Comonad`, `Traversable` through Applicative or Monad, `Semigroup` (where the inner type must be fixed)|
 |`Option`|Deal with absence of values| `Foldable`, `Functor`, `Applicative`, `Alternative`, `Monad`, `Monad_plus`, `Traversable` through Applicative of Monad, `Monoid` (where the inner type must be fixed)|
