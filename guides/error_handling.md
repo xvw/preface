@@ -17,7 +17,7 @@ to describe computations that can potentially fail:
 - [Result](https://ocaml-preface.github.io/preface/Preface_stdlib/Result/index.html)
   `Result` is a type that describes **sequential error validation** quite
   well. In a pipeline of failable computing, as soon as a function
-  fails, the calculation is interrupted.
+  fails, the computation is interrupted.
 - [Either](https://ocaml-preface.github.io/preface/Preface_stdlib/Either/index.html)
   `Either` is strictly equivalent to `Result` (`('a, 'b) Either.t =
   ('b, 'a) Result.t`). But its constructors carry less meaning, in the
@@ -80,7 +80,7 @@ to use `bind` and `map` to chain operations:
 val result : int Preface.Try.Monad.t = Ok 11
 ```
 
-We could also perform a calculation that could fail... by dividing by
+We could also perform a computation that could fail... by dividing by
 zero!
 
 ```ocaml
@@ -182,9 +182,10 @@ let check_email email =
   | _ -> error (Invalid_email email)
 ```
 
-The `Validate.error` function wraps an exception in a non-empty list
-and wraps that non-empty list in the `invalid` part of a validation
-(remember, `Validate` is just a skewed version of `Validation`).
+The `error` function (located in the module `Validate`) wraps an
+exception in a non-empty list and wraps that non-empty list in the
+`invalid` part of a validation (remember, `Validate` is just a skewed
+version of `Validation`).
 
 Now, using the `Validate` applicative combiners, we can apply parallel
 validation:
@@ -208,7 +209,7 @@ Preface_stdlib__.Validation.Valid
 ```
 
 Great, it works perfectly when our user is valid! Let's try it now
-... with a bad email address:
+with an invalid  email address:
 
 ```ocaml
 # create_user "xvw" 31 "xaviervdwgmail.com" ;;
@@ -226,19 +227,15 @@ Preface_stdlib__.Validation.Invalid
  [Nickname_to_short "x"  Invalid_age (-23)  Invalid_email "abademail"]
 ```
 
-Well, our output is not very readable, but all errors are well
-collected! Well, as generally, when writing software, we rarely just
-read the output with the default formatters, the lack of readability
-of the output is not dramatic (yes, the standard Preface library
-offers a pretty-printer for `Validate`).
+Perfect, all errors are well collected! 
 
-### How to deal with a bunch of user
+### How to handle the validation of a group of users?
 
-Sometimes, only validate (sequentially or in parallel) a single entry,
-and one would like to be able to validate, for example, a list of
-users! For that, we would like to go, for example from `(user
-Validate.t) list` to `(user list) Validate.t`. For this task, we can
-use the [`Traversable` module found in
+Sometimes we would like to reuse the user validation function for a
+list of users (or for any collection of users). For that, we would
+like to go, for example from `(user Validate.t) list` to `(user list)
+Validate.t`. For this task, we can use the [`Traversable` module which
+is in
 List](https://ocaml-preface.github.io/preface/Preface_stdlib/List/Applicative/Traversable/index.html)!
 
 First, let's build a module that allows **traversing** a list of
@@ -251,7 +248,7 @@ module Validated_list =
 ```
 
 Now we can use, for example, the `sequence` function whose type is:
-`'a Validate.t list -> 'a list Validate,t` which seems to be exactly
+`'a Validate.t list -> 'a list Validate.t` which seems to be exactly
 what we were looking for:
 
 ```ocaml
@@ -298,23 +295,24 @@ users. All errors are at the same level.
 
 ## Let's go further, derive a canonical representation of validable data 
 
-Since we are able to easily validate data, as we have seen previously,
-are we able to derive a "canonical" representation of a validation
-flow? For example, deriving the HTML **formlet** of a validation pipeline?
-To summarize what we want to do: 
+We are able to validate (sequentially or in parallel) structured
+data. Wouldn't it be nice to be able to derive an arbitrary (or
+canonical) representation from a validation function, for example,
+from an user-validation, deriving an HTML form (a **formlet**) for
+filling an user?  To sum up, we want:
 
-- We would like a DSL to describe arbitrary validation pipelines
-- We would like this DSL to be able to be converted to a validation
+- a DSL for describing arbitrary validation pipelines
+- be able to perform the validation described by the DSL
   function
-- We would like to be able to derive a program described in our DSL
-  into an HTML form
+- be able to derive a representation to an arbitrary representation
+  (ie: an HTML form)
   
 This part of the guide is a fairly loose interpretation of the
 technique described in [The Essence of Form
 Abstraction](https://homepages.inf.ed.ac.uk/slindley/papers/formlets-essence.pdf)
 by E. Cooper, S. Lindley, P. Wadler and J. Yallop.
 
-First, we need something to characterize a form: 
+First, we need something to characterise a form: 
 
 ```ocaml
 type form_type = 
