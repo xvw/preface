@@ -18,12 +18,8 @@ to describe computations that can potentially fail:
   `Result` is a type that describes **sequential error validation** quite
   well. In a pipeline of failable computing, as soon as a function
   fails, the computation is interrupted.
-- [Either](https://ocaml-preface.github.io/preface/Preface_stdlib/Either/index.html)
-  `Either` is strictly equivalent to `Result` (`('a, 'b) Either.t =
-  ('b, 'a) Result.t`). But its constructors carry less meaning, in the
-  context of error handling, so we will not use them in this guide.
 - [Try](https://ocaml-preface.github.io/preface/Preface_stdlib/Try/index.html)
-  As `Result` is parameterized by two types, `Try` is a biased version
+  As `Result` is parameterized by two types, `Try` is a specialised version
   of `Result`. Its error type is set to be an exception (`'a Try.t =
   ('a, exn) Result.t`).
 - [Validation](https://ocaml-preface.github.io/preface/Preface_stdlib/Validation/index.html)
@@ -32,17 +28,23 @@ to describe computations that can potentially fail:
   accumulated.
 - [Validate](https://ocaml-preface.github.io/preface/Preface_stdlib/Validate/index.html)
   As `Validation` is parameterized by two types, `Validate` is a
-  biased version of `Validation`. Its error type is set to be a
+  specialised version of `Validation`. Its error type is set to be a
   non-empty list of exception, because if there is an error, then at
   least one error has occurred. So it wouldn't make sense to have a
   normal list of errors. (`'a Validate.t = ('a, exn Nonempty_list.t)
   Validation.t`).
+  
+There is also
+[Either](https://ocaml-preface.github.io/preface/Preface_stdlib/Either/index.html)
+which is strictly equivalent to `Result` (`('a, 'b) Either.t = ('b,
+'a) Result.t`). But its constructors carry less meaning, in the
+context of error handling, so we will not use them in this guide.
 
 As exceptions are an open sum type, they are comfortable for declaring
-errors on the fly. However, to ensure completeness of error handling,
+errors by necessity. However, to ensure completeness of error handling,
 you might want to handle your own error list, hence the presence of
-unbiased versions of `Result` and `Validation`. To simplify the
-content of this guide, we will only use the biased versions (`Try` and
+generalised versions of `Result` and `Validation`. To simplify the
+content of this guide, we will only use the specialised versions (`Try` and
 `Validate`) but bear in mind that you can specialise `Result` and
 `Validation` yourself to describe your own error format. The only
 constraint is that `Validation` errors must be
@@ -122,7 +124,7 @@ you want to see more scenarios.
 
 ## Parallel validation
 
-But sometimes sequential validation can be an anti-pattern. For
+But sometimes sequential validation can be a dakr-pattern. For
 example, let's imagine that we want to validate that a user's
 information is correct in order to create him in the database:
 
@@ -224,7 +226,7 @@ Great! Now let's try it with ANYTHING that doesn't follow the rules!
 # create_user "x" (-23) "abademail" ;;
 - : user Preface_stdlib.Validate.Selective.t =
 Preface_stdlib__.Validation.Invalid
- [Nickname_to_short "x"  Invalid_age (-23)  Invalid_email "abademail"]
+ [Nickname_to_short "x"; Invalid_age (-23); Invalid_email "abademail"]
 ```
 
 Perfect, all errors are well collected! 
@@ -273,7 +275,7 @@ anymore! What if we create invalid users?
   ] |> Validated_list.sequence
 - : user list Validated_list.t =
 Preface_stdlib__.Validation.Invalid
- [Invalid_age (-32)  Invalid_email "zaviervdwgmail.com"]
+ [Invalid_age (-32); Invalid_email "zaviervdwgmail.com"]
 ```
 
 Excellent, we have an invalid result with all the errors that occurred
@@ -281,13 +283,14 @@ in the list!
 
 ## A first conclusion
 
-`Result` and `Validation` (or their biased `Try` and` Validate`
+`Result` and `Validation` (or their specialised `Try` and` Validate`
 versions) allow dealing with, respectively, **sequential validation**
 and **parallel validation**. Naturally, parallel validation goes
 better with monadic processing while parallel validation goes better
-with applicative processing.
+with applicative processing. And the responsibility is left to the
+user to choose sequential or parallel validation or a mixture of both,
 
-Non-biased versions are still very useful because sometimes choosing
+More general versions are still very useful because sometimes choosing
 errors (such as exceptions or a non-empty list of exceptions) is not
 enough to describe the errors correctly. For example, in our last
 example, it is not possible to know exactly which are the invalid
@@ -544,9 +547,9 @@ filled in any values in the form:
 # run_registration [];;
 - : Registration.t Validated_list.t =
 Preface_stdlib__.Validation.Invalid
- [Missing_field "checked_rules"  Missing_field "password"
-  Missing_field "email"  Missing_field "age"  Missing_field "nickname"
-  Missing_field "name"]
+ [Missing_field "checked_rules"; Missing_field "password";
+ Missing_field "email"; Missing_field "age"; Missing_field "nickname";
+ Missing_field "name"]
 ```
 
 Everything seems to work, the function sends us back although it is
@@ -579,7 +582,7 @@ Yes, the error is correctly reported! Let's try one last case to make sure every
   ];;
 - : Registration.t Validated_list.t =
 Preface_stdlib__.Validation.Invalid
- [Unchecked_bool  Int_lower (4, 7)  String_to_short ("X", 2)]
+ [Unchecked_bool; Int_lower (4, 7); String_to_short ("X", 2)]
 ```
 
 Great, everything seems to work when you make mistakes. Now let's try

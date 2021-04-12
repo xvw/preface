@@ -132,7 +132,7 @@ let equal f a b =
 ;;
 
 let pp pp' formater list =
-  let pp_sep ppf () = Format.fprintf ppf "@; " in
+  let pp_sep ppf () = Format.fprintf ppf ";@ " in
   Format.(
     fprintf formater "@[[%a]@]" (pp_print_list ~pp_sep pp') (to_list list))
 ;;
