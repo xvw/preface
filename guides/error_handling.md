@@ -285,7 +285,7 @@ in the list!
 
 `Result` and `Validation` (or their specialised `Try` and` Validate`
 versions) allow dealing with, respectively, **sequential validation**
-and **parallel validation**. Naturally, parallel validation goes
+and **parallel validation**. Naturally, sequential validation goes
 better with monadic processing while parallel validation goes better
 with applicative processing. And the responsibility is left to the
 user to choose sequential or parallel validation or a mixture of both,
