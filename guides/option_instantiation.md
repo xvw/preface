@@ -2,7 +2,7 @@
 # #require "preface"
 ```
 
-# Understanding the breakdown of Preface modules by instantiating monade for Option
+# Understanding the breakdown of Preface modules by instantiating monad for Option
 
 As mentioned
 [here](https://github.com/xvw/preface#some-design-choices), Preface
