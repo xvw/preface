@@ -35,5 +35,6 @@
   closed
   reader
   writer
-  state)
+  state
+  store)
  (libraries preface_core either))

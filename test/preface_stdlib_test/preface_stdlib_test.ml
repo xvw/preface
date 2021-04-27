@@ -10,5 +10,6 @@ let () =
     @ Stream_test.cases
     @ Try_test.cases
     @ Pair_test.cases
-    @ Predicate_test.cases )
+    @ Predicate_test.cases
+    @ Store_test.cases )
 ;;
