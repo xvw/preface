@@ -37,6 +37,7 @@ graph {
         Monad -- Writer;
 
         Comonad -- Store;
+        Comonad -- Env;
 
         Applicative -- Traversable;
         Monad -- Traversable;

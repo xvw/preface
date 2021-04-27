@@ -40,6 +40,7 @@ module Reader = Reader
 module Writer = Writer
 module State = State
 module Store = Store
+module Env = Env
 
 (** {2 Static Analysis}
 

@@ -11,5 +11,6 @@ let () =
     @ Try_test.cases
     @ Pair_test.cases
     @ Predicate_test.cases
-    @ Store_test.cases )
+    @ Store_test.cases
+    @ Env_test.cases )
 ;;

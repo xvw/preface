@@ -79,6 +79,7 @@ module State = State
 (** {2 Comonad Transformers} *)
 
 module Store = Store
+module Env = Env
 
 (** {1 Free constructions} *)
 

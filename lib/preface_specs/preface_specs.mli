@@ -63,6 +63,7 @@ module State = State
 (** {2 Comonad Transformers} *)
 
 module Store = Store
+module Env = Env
 
 (** {1 Free constructions} *)
 
@@ -142,6 +143,8 @@ module type WRITER = Writer.API
 module type STATE = State.API
 
 module type STORE = Store.API
+
+module type ENV = Env.API
 
 (** {1 Types}
 

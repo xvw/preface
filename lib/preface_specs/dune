@@ -36,5 +36,6 @@
   reader
   writer
   state
-  store)
+  store
+  env)
  (libraries preface_core either))
