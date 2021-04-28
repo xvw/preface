@@ -8,6 +8,8 @@ struct
 
   type 'a t = state -> ('a * state) monad
 
+  let upper m s = M.bind (fun a -> M.return (a, s)) m
+
   let state f x = M.return (f x)
 
   let eval m s = M.map fst (m s)

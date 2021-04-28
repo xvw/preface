@@ -15,6 +15,9 @@ module type CORE = sig
   type 'a t = env -> 'a monad
   (** The type held by the reader monad.*)
 
+  (** @inline *)
+  include Monad.TRANSFORMER with type 'a t := 'a t and type 'a monad := 'a monad
+
   val run : 'a t -> env -> 'a monad
   (** Run the reader and extract the value. *)
 

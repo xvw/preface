@@ -181,6 +181,24 @@ module type API = sig
   (** @inline *)
 end
 
+(** {1 Additional interfaces} *)
+
+(** {2 Transformer}
+
+    A standard representation of a monad transformer. (It is likely that not all
+    transformers respect this interface) *)
+
+module type TRANSFORMER = sig
+  type 'a monad
+  (** The inner monad. *)
+
+  type 'a t
+  (** The type held by the monad transformer.*)
+
+  val upper : 'a monad -> 'a t
+  (** promote monad into the transformation. *)
+end
+
 (** {1 Additional references}
 
     - {{:http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Monad.html}

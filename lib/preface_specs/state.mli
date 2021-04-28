@@ -12,6 +12,9 @@ module type CORE = sig
   type 'a t = state -> ('a * state) monad
   (** The type held by the state monad.*)
 
+  (** @inline *)
+  include Monad.TRANSFORMER with type 'a t := 'a t and type 'a monad := 'a monad
+
   val eval : 'a t -> state -> 'a monad
   (** Unwrap the state computation and extract the current value.*)
 

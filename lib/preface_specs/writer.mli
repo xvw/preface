@@ -15,6 +15,9 @@ module type CORE = sig
   type 'a t = ('a * tape) monad
   (** The type held by the writer monad.*)
 
+  (** @inline *)
+  include Monad.TRANSFORMER with type 'a t := 'a t and type 'a monad := 'a monad
+
   val writer : 'a * tape -> 'a t
   (** Construct a writer computation from a (result, output) pair. *)
 

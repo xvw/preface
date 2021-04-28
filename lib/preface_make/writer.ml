@@ -8,6 +8,8 @@ struct
 
   type 'a t = ('a * tape) monad
 
+  let upper m = Monad.bind (fun a -> Monad.return (a, Tape.neutral)) m
+
   let writer (x, t) = Monad.return (x, t)
 
   let run writer_m = writer_m
