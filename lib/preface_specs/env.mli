@@ -13,6 +13,10 @@ module type CORE = sig
   type 'a t = env * 'a comonad
   (** The type held by the env comonad.*)
 
+  (** @inline *)
+  include
+    Comonad.TRANSFORMER with type 'a t := 'a t and type 'a comonad := 'a comonad
+
   val run : 'a t -> env * 'a comonad
   (** Unwrap the env computation. *)
 

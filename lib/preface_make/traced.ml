@@ -10,6 +10,8 @@ struct
 
   let run f = f
 
+  let lower f = (C.map (fun g -> g Tape.neutral)) f
+
   let trace t f = (C.extract f) t
 
   let traces f g = trace (f ((C.extract g) Tape.neutral)) g

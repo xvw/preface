@@ -170,3 +170,21 @@ module type API = sig
   include module type of Syntax
   (** @inline *)
 end
+
+(** {1 Additional interfaces} *)
+
+(** {2 Transformer}
+
+    A standard representation of a comonad transformer. (It is likely that not
+    all transformers respect this interface) *)
+
+module type TRANSFORMER = sig
+  type 'a comonad
+  (** The inner comonad. *)
+
+  type 'a t
+  (** The type held by the comonad transformer.*)
+
+  val lower : 'a t -> 'a comonad
+  (** get the underlying comonad. *)
+end

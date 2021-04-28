@@ -13,6 +13,10 @@ module type CORE = sig
   type 'a t = (tape -> 'a) comonad
   (** The type held by the traced comonad.*)
 
+  (** @inline *)
+  include
+    Comonad.TRANSFORMER with type 'a t := 'a t and type 'a comonad := 'a comonad
+
   val run : 'a t -> (tape -> 'a) comonad
   (** Unwrap the traced computation. *)
 

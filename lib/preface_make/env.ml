@@ -6,6 +6,8 @@ struct
 
   type 'a comonad = 'a C.t
 
+  let lower (_, c) = c
+
   type 'a t = env * 'a comonad
 
   let run (e, c) = (e, c)

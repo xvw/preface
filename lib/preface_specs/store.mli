@@ -13,6 +13,10 @@ module type CORE = sig
   type 'a t = (store -> 'a) comonad * store
   (** The type held by the store comonad.*)
 
+  (** @inline *)
+  include
+    Comonad.TRANSFORMER with type 'a t := 'a t and type 'a comonad := 'a comonad
+
   val run : 'a t -> (store -> 'a) comonad * store
   (** Unwrap the store computation. *)
 

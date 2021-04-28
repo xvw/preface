@@ -6,6 +6,8 @@ struct
 
   type 'a comonad = 'a C.t
 
+  let lower (f, s) = C.map (fun g -> g s) f
+
   type 'a t = (store -> 'a) comonad * store
 
   let run (f, s) = (f, s)
