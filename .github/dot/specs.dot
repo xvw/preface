@@ -38,6 +38,7 @@ graph {
 
         Comonad -- Store;
         Comonad -- Env;
+        Comonad -- Traced;
 
         Applicative -- Traversable;
         Monad -- Traversable;

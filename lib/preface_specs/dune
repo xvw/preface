@@ -37,5 +37,6 @@
   writer
   state
   store
-  env)
+  env
+  traced)
  (libraries preface_core either))

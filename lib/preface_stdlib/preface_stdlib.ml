@@ -41,6 +41,7 @@ module Writer = Writer
 module State = State
 module Store = Store
 module Env = Env
+module Traced = Traced
 
 (** {2 Static Analysis}
 

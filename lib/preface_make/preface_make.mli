@@ -80,6 +80,7 @@ module State = State
 
 module Store = Store
 module Env = Env
+module Traced = Traced
 
 (** {1 Free constructions} *)
 

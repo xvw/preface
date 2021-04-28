@@ -64,6 +64,7 @@ module State = State
 
 module Store = Store
 module Env = Env
+module Traced = Traced
 
 (** {1 Free constructions} *)
 
@@ -145,6 +146,8 @@ module type STATE = State.API
 module type STORE = Store.API
 
 module type ENV = Env.API
+
+module type TRACED = Traced.API
 
 (** {1 Types}
 
