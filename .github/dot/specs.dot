@@ -36,6 +36,10 @@ graph {
         Monad -- Reader;
         Monad -- Writer;
 
+        Comonad -- Store;
+        Comonad -- Env;
+        Comonad -- Traced;
+
         Applicative -- Traversable;
         Monad -- Traversable;
 

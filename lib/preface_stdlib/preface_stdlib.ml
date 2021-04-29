@@ -30,15 +30,18 @@ module Fun = Fun
 module Predicate = Predicate
 module Continuation = Continuation
 
-(** {2 Common effects}
+(** {2 Transformers over identity}
 
-    [State], [Writer] and [Reader] are defined in [Specs/Make] as monad
-    transformers. In [Stdlib] these are concretised using [Identity] as inner
-    monad. *)
+    There are some (monad or comonad) transformers defined in [Spec/Make]. In
+    [Stdlib] these are some concretised version using [Identity] as inner monad
+    or comonad. *)
 
 module Reader = Reader
 module Writer = Writer
 module State = State
+module Store = Store
+module Env = Env
+module Traced = Traced
 
 (** {2 Static Analysis}
 

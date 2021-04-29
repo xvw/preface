@@ -35,5 +35,8 @@
   closed
   reader
   writer
-  state)
+  state
+  store
+  env
+  traced)
  (libraries preface_core either))

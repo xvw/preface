@@ -68,11 +68,19 @@ module Arrow_plus = Arrow_plus
 module Arrow_choice = Arrow_choice
 module Arrow_apply = Arrow_apply
 
-(** {1 Monad transformers} *)
+(** {1 Transformers} *)
+
+(** {2 Monad Transformers} *)
 
 module Reader = Reader
 module Writer = Writer
 module State = State
+
+(** {2 Comonad Transformers} *)
+
+module Store = Store
+module Env = Env
+module Traced = Traced
 
 (** {1 Free constructions} *)
 

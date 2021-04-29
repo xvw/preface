@@ -8,6 +8,8 @@ struct
 
   type 'a t = env -> 'a monad
 
+  let upper m _ = m
+
   let run reader_m env = reader_m env
 
   let ask = Monad.return

@@ -102,6 +102,7 @@ useful for the greatest number of people!
 |`Approximation.Over`| A generalization of `Const` (the phantom monoid) for over approximation  | `Applicative`, `Selective`|
 | `Approximation.Under` | Same of `Over` but for under approximation | `Applicative`, `Selective` |
 |`Continuation`|A continuation that can't be delimited| `Functor`, `Applicative`, `Monad`|
+| `Env` | The env comonad using `Identity`as inner monad| `Functor`, `Comonad`|
 |`Either`| Represent a disjunction between `left` and `right`|`Bifunctor` and can be specialised for the `left` part; `Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
 |`Fun`| Function `'a -> 'b`| `Profunctor`, `Strong`, `Choice`, `Closed`, `Category`, `Arrow`, `Arrow_choice`, `Arrow_apply`|
 |`Identity`|A trivial type constructor, `type 'a t = 'a`| `Functor`, `Applicative`, `Selective`, `Monad`, `Comonad` |
@@ -112,7 +113,9 @@ useful for the greatest number of people!
 |`Reader`| The reader monad using `Identity` as inner monad| `Functor`, `Applicative`, `Monad` |
 |`Result`| Deal with `Ok` or `Error` values|`Bifunctor` and can be specialised for the `error` part; `Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
 |`State`| The state monad using `Identity` as inner monad| `Functor`, `Applicative`, `Monad` |
+| `Store` | The store comonad using `Identity`as inner monad| `Functor`, `Comonad`|
 |`Stream`|Infinite list|`Functor`, `Applicative`, `Monad`, `Comonad`|
+| `Traced` | The traced comonad using `Identity`as inner monad| `Functor`, `Comonad`|
 |`Try`| A biased version of `Result` with `exception` as the error part|`Functor`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad|
 |`Pair`| A pair `'a * 'b`|`Bifunctor`|
 |`Validate`|A biased version of `Validation` with `exception Nonempty_list` as `invalid` part| `Functor`, `Applicative`, `Selective`, `Monad`, `Traversable` through Applicative and Monad|
