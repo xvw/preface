@@ -18,6 +18,40 @@
 
 (** {1 Structure anatomy} *)
 
+(** The natural transformation for [Free Applicative] to [Applicative]. *)
+module type TO_APPLICATIVE = sig
+  type 'a t
+  (** The type held by the [Free applicative]. *)
+
+  type 'a f
+  (** The type held by the {!module:Preface_specs.Functor}. *)
+
+  type 'a applicative
+  (** The type held by the [Applicative]. *)
+
+  type natural_transformation = { transform : 'a. 'a f -> 'a applicative }
+
+  val run : natural_transformation -> 'a t -> 'a applicative
+  (** Run the natural transformation over the [Free applicative]. *)
+end
+
+(** The natural transformation for [Free Applicative] to [Monoid]. *)
+module type TO_MONOID = sig
+  type 'a t
+  (** The type held by the [Free applicative]. *)
+
+  type 'a f
+  (** The type held by the {!module:Preface_specs.Functor}. *)
+
+  type monoid
+  (** The type held by the [Monoid]. *)
+
+  type natural_transformation = { transform : 'a. 'a f -> monoid }
+
+  val run : natural_transformation -> 'a t -> monoid
+  (** Run the natural transformation over the [Free applicative]. *)
+end
+
 (** The [Free applicative] API without the {!module:Preface_specs.Applicative}
     API. *)
 module type CORE = sig
@@ -35,21 +69,19 @@ module type CORE = sig
 
   (** The natural transformation from a [Free applicative] to an other
       {!module:Preface_specs.Applicative}. *)
-  module To_applicative (Applicative : Applicative.CORE) : sig
-    type natural_transformation = { transform : 'a. 'a f -> 'a Applicative.t }
-
-    val run : natural_transformation -> 'a t -> 'a Applicative.t
-    (** Run the natural transformation over the [Free applicative]. *)
-  end
+  module To_applicative (Applicative : Applicative.CORE) :
+    TO_APPLICATIVE
+      with type 'a t := 'a t
+       and type 'a f := 'a f
+       and type 'a applicative := 'a Applicative.t
 
   (** The natural transformation from a [Free applicative] to a
       {!module:Preface_specs.Monoid}. *)
-  module To_monoid (Monoid : Monoid.CORE) : sig
-    type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
-
-    val run : natural_transformation -> 'a t -> Monoid.t
-    (** Run the natural transformation over the [Free applicative]. *)
-  end
+  module To_monoid (Monoid : Monoid.CORE) :
+    TO_MONOID
+      with type 'a t := 'a t
+       and type 'a f := 'a f
+       and type monoid := Monoid.t
 end
 
 (** {1 Complete API} *)
