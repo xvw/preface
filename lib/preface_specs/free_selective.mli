@@ -18,6 +18,40 @@
 
 (** {1 Structure anatomy} *)
 
+(** The natural transformation for [Free Selective] to [Selective]. *)
+module type TO_SELECTIVE = sig
+  type 'a t
+  (** The type held by the [Free Selective]. *)
+
+  type 'a f
+  (** The type held by the {!module:Preface_specs.Functor}. *)
+
+  type 'a selective
+  (** The type held by the [Selective]. *)
+
+  type natural_transformation = { transform : 'a. 'a f -> 'a selective }
+
+  val run : natural_transformation -> 'a t -> 'a selective
+  (** Run the natural transformation over the [Free selective]. *)
+end
+
+(** The natural transformation for [Free Selective] to [Monoid]. *)
+module type TO_MONOID = sig
+  type 'a t
+  (** The type held by the [Free selective]. *)
+
+  type 'a f
+  (** The type held by the {!module:Preface_specs.Functor}. *)
+
+  type monoid
+  (** The type held by the [Monoid]. *)
+
+  type natural_transformation = { transform : 'a. 'a f -> monoid }
+
+  val run : natural_transformation -> 'a t -> monoid
+  (** Run the natural transformation over the [Free applicative]. *)
+end
+
 (** The [Free selective] API without the {!module:Preface_specs.Selective} API. *)
 module type CORE = sig
   type 'a f
@@ -35,21 +69,19 @@ module type CORE = sig
 
   (** The natural transformation from a [Free selective] to an other
       {!module:Preface_specs.Selective}. *)
-  module To_selective (Selective : Selective.CORE) : sig
-    type natural_transformation = { transform : 'a. 'a f -> 'a Selective.t }
-
-    val run : natural_transformation -> 'a t -> 'a Selective.t
-    (** Run the natural transformation over the [Free selective]. *)
-  end
+  module To_selective (Selective : Selective.CORE) :
+    TO_SELECTIVE
+      with type 'a t := 'a t
+       and type 'a f := 'a f
+       and type 'a selective := 'a Selective.t
 
   (** The natural transformation from a [Free selective] to a
       {!module:Preface_specs.Monoid}. *)
-  module To_monoid (Monoid : Monoid.CORE) : sig
-    type natural_transformation = { transform : 'a. 'a f -> Monoid.t }
-
-    val run : natural_transformation -> 'a t -> Monoid.t
-    (** Run the natural transformation over the [Free selective]. *)
-  end
+  module To_monoid (Monoid : Monoid.CORE) :
+    TO_MONOID
+      with type 'a t := 'a t
+       and type 'a f := 'a f
+       and type monoid := Monoid.t
 end
 
 (** {1 Complete API} *)
