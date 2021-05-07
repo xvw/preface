@@ -1,0 +1,27 @@
+{
+    "name": "preface",
+    "version": "0.0.1",
+    "description": "Preface is a library dedicated to functional programming in OCaml.(Named in reference of Prelude)",
+    "license": "MIT",
+    "scripts": {
+        "test": "make test",
+        "clean": "make clean",
+        "fmt":"make fmt",
+        "doc": "make doc"
+    },
+    "esy": {
+        "build": "dune build -p #{self.name}"
+    },
+    "dependencies": {
+        "ocaml": ">=4.8",
+        "@opam/dune" : ">= 2.7.1",
+        "@opam/either":"*"
+    },
+    "devDependencies": {
+        "@opam/alcotest" : "*",
+        "@opam/qcheck-core": "*",
+        "@opam/qcheck-alcotest": "*",
+        "@opam/mdx": "*",
+        "@opam/odoc" : "*"
+    }
+}
