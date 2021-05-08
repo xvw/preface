@@ -4,10 +4,10 @@
     "description": "Preface is a library dedicated to functional programming in OCaml.(Named in reference of Prelude)",
     "license": "MIT",
     "scripts": {
-        "test": "make test",
-        "clean": "make clean",
-        "fmt":"make fmt",
-        "doc": "make doc"
+        "test": "dune runtest --no-buffer -j 1",
+        "clean": "dune clean",
+        "fmt":"dune build @fmt --auto-promote",
+        "doc": "dune build @doc"
     },
     "esy": {
         "build": "dune build -p #{self.name}"
