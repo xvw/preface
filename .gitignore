@@ -9,3 +9,4 @@ _tests/
 .merlin
 node_modules
 _esy
+esy.lock
