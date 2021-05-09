@@ -69,7 +69,7 @@ The library can also be installed with [esy](esy.sh) using a resolution in your 
       "@opam/preface":"*"
     },
     "resolutions": {
-        "@opam/preface":"xvw/preface#e02e1bb"
+        "@opam/preface":"xvw/preface#<commit>"
     },
 ...
 ```
