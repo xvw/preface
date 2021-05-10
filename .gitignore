@@ -7,3 +7,6 @@ _build
 *.install
 _tests/
 .merlin
+node_modules
+_esy
+esy.lock

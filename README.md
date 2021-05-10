@@ -37,6 +37,8 @@ maintainers) think that Preface can be useful for a few things:
 
 ## Installation
 
+### OPAM pin
+
 At the moment, Preface is not yet available on
 [OPAM](https://opam.ocaml.org). However, the library can be installed
 using the "pin" mechanism, by adding these two lines in the OPAM
@@ -55,6 +57,24 @@ pin-depends: [
 ]
 ...
 ```
+
+### Esy resolution
+
+The library can also be installed with [esy](esy.sh) using a resolution in your `package.json` file :
+
+```json
+...
+    "dependencies": {
+      ...
+      "@opam/preface":"*"
+    },
+    "resolutions": {
+        "@opam/preface":"xvw/preface#<commit>"
+    },
+...
+```
+
+The pattern of the resolution is `xvw/preface#<commit>` where `<commit>` is mandatory and [should point to a specific commit](https://esy.sh/docs/en/using-repo-sources-workflow.html#with-esy-packages).
 
 ## Library anatomy
 
