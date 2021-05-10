@@ -3,7 +3,28 @@ on:
   - pull_request
 
 jobs:
-  build:
+  build_esy:
+    name: Test esy build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install esy
+        run: npm install esy
+
+      - name: Execute esy install
+        run: npx esy install
+
+      - name: Execute esy build
+        run: npx esy build
+
+  build_opam:
+    name: Test opam build & run tests
     strategy:
       fail-fast: false
       matrix:
