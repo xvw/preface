@@ -35,9 +35,9 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
         Apply (gs, x)
    ;;
 
-   let product a b = apply (apply (Pure (fun x y -> (x, y))) a) b
+    let product a b = apply (apply (Pure (fun x y -> (x, y))) a) b
 
-   let lift2 f x y = apply (map f x) y
+    let lift2 f x y = apply (map f x) y
   end
 
   module Operation = Applicative.Operation (Core)
