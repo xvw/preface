@@ -25,6 +25,17 @@ module Via_map_and_product
     (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
 
+(** {2 Using pure, lift2, neutral and combine}
+
+    Build a {!module-type:Preface_specs.ALTERNATIVE} using
+    {!module-type:Preface_specs.Alternative.WITH_LIFT2}.
+
+    Other standard method, using the minimal definition of an alt to derive its
+    full API. *)
+
+module Via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
+
 (** {2 Over an applicative}
 
     Build a {!module-type:Preface_specs.ALTERNATIVE} over an
@@ -93,6 +104,9 @@ module Core_via_map_and_product
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
 module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
+  Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
+
+module Core_via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
 (** {2 Deriving Operation} *)

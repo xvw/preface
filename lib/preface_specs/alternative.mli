@@ -39,6 +39,13 @@ module type WITH_APPLY = sig
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 
+(** Minimal definition using [neutral], [combine], [pure] and [lift2]. *)
+module type WITH_LIFT2 = sig
+  include Applicative.WITH_LIFT2
+
+  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+end
+
 (** {1 Structure anatomy} *)
 
 (** Basis operations. *)

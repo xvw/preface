@@ -6,11 +6,26 @@ module Core_via_map_and_product
   include Req
 
   let apply f a = map (fun (f, a) -> f a) @@ product f a
+
+  let lift2 f x y = apply (map f x) y
 end
 
 module Core_via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Req.t = struct
   include Req
+
+  let map f a = apply (pure f) a
+
+  let product a b = apply (apply (pure (fun a b -> (a, b))) a) b
+
+  let lift2 f x y = apply (map f x) y
+end
+
+module Core_via_lift2 (Req : Preface_specs.Applicative.WITH_LIFT2) :
+  Preface_specs.Applicative.CORE with type 'a t = 'a Req.t = struct
+  include Req
+
+  let apply f a = lift2 (fun x -> x) f a
 
   let map f a = apply (pure f) a
 
@@ -22,8 +37,6 @@ module Operation (Core : Preface_specs.Applicative.CORE) :
   include Functor.Operation (Core)
 
   let lift = Core.map
-
-  let lift2 f a = Core.(apply @@ apply (pure f) a)
 
   let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
 end
@@ -45,11 +58,11 @@ module Infix
 
   let ( <*> ) = Core.apply
 
-  let ( <**> ) a b = Operation.lift2 (fun x f -> f x) a b
+  let ( <**> ) a b = Core.lift2 (fun x f -> f x) a b
 
-  let ( *> ) a b = Operation.lift2 (fun _x y -> y) a b
+  let ( *> ) a b = Core.lift2 (fun _x y -> y) a b
 
-  let ( <* ) a b = Operation.lift2 const a b
+  let ( <* ) a b = Core.lift2 const a b
 end
 
 module Via
@@ -82,6 +95,18 @@ end
 module Via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Req.t = struct
   module Core = Core_via_apply (Req)
+  module Operation = Operation (Core)
+  module Syntax = Syntax (Core)
+  module Infix = Infix (Core) (Operation)
+  include Core
+  include Operation
+  include Syntax
+  include Infix
+end
+
+module Via_lift2 (Req : Preface_specs.Applicative.WITH_LIFT2) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Req.t = struct
+  module Core = Core_via_lift2 (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)

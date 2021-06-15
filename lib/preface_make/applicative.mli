@@ -25,6 +25,17 @@ module Via_map_and_product
     (Req : Preface_specs.Applicative.WITH_MAP_AND_PRODUCT) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
 
+(** {2 Using pure and lift2}
+
+    Build a {!module-type:Preface_specs.APPLICATIVE} using
+    {!module-type:Preface_specs.Applicative.WITH_LIFT2}.
+
+    Other standard method, using the minimal definition of an alt to derive its
+    full API. *)
+
+module Via_lift2 (Req : Preface_specs.Applicative.WITH_LIFT2) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
+
 (** {1 Applicative Algebra}
 
     Construction of {!module-type:Preface_specs.APPLICATIVE} by combining them. *)
@@ -109,6 +120,9 @@ module Core_via_map_and_product
   Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
 
 module Core_via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
+  Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
+
+module Core_via_lift2 (Req : Preface_specs.Applicative.WITH_LIFT2) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
 
 (** {2 Deriving Operation} *)

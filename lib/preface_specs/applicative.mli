@@ -47,6 +47,18 @@ module type WITH_APPLY = sig
   (** [Applicative] functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 end
 
+(** Minimal interface using [lift2]. *)
+module type WITH_LIFT2 = sig
+  type 'a t
+  (** The type held by the [Applicative]. *)
+
+  val pure : 'a -> 'a t
+  (** Lift a value from ['a] into a new ['a t]. *)
+
+  val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
+  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
+end
+
 (** {1 Structure anatomy} *)
 
 (** Basis operations. *)
@@ -55,6 +67,9 @@ module type CORE = sig
   (** @inline *)
 
   include WITH_MAP_AND_PRODUCT with type 'a t := 'a t
+  (** @inline *)
+
+  include WITH_LIFT2 with type 'a t := 'a t
   (** @inline *)
 end
 
@@ -65,9 +80,6 @@ module type OPERATION = sig
 
   val lift : ('a -> 'b) -> 'a t -> 'b t
   (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
-
-  val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
-  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
 
   val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
   (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]

@@ -17,6 +17,15 @@ module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
   let neutral = Req.neutral
 end
 
+module Core_via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
+  Preface_specs.Alternative.CORE with type 'a t = 'a Req.t = struct
+  include Applicative.Core_via_lift2 (Req)
+
+  let combine = Req.combine
+
+  let neutral = Req.neutral
+end
+
 let reduce' combine neutral list = List.fold_left combine neutral list
 
 module Operation (Core : Preface_specs.Alternative.CORE) :
@@ -69,6 +78,18 @@ end
 module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t = struct
   module Core = Core_via_apply (Req)
+  module Operation = Operation (Core)
+  module Syntax = Syntax (Core)
+  module Infix = Infix (Core) (Operation)
+  include Core
+  include Operation
+  include Syntax
+  include Infix
+end
+
+module Via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
+  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t = struct
+  module Core = Core_via_lift2 (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
