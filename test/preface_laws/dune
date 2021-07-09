@@ -1,5 +1,5 @@
 (library
- (name preface_laws)
+ (name preface_laws_pbt)
  (synopsis "Encoding laws as a set of tests")
  (modules
   aliases
@@ -55,4 +55,4 @@
   pair
   predicate
   preface_laws_suite)
- (libraries preface_qcheck preface_stdlib alcotest preface_laws))
+ (libraries preface_qcheck preface_stdlib alcotest preface_laws_pbt))

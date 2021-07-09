@@ -7,31 +7,31 @@ module Req = struct
 end
 
 module Functor =
-  Preface_laws.Functor.Cases (Preface_stdlib.Nonempty_list.Functor) (Req)
+  Preface_laws_pbt.Functor.Cases (Preface_stdlib.Nonempty_list.Functor) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Applicative =
-  Preface_laws.Applicative.Cases
+  Preface_laws_pbt.Applicative.Cases
     (Preface_stdlib.Nonempty_list.Applicative)
     (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Selective =
-  Preface_laws.Selective.Rigid_cases
+  Preface_laws_pbt.Selective.Rigid_cases
     (Preface_stdlib.Nonempty_list.Selective)
     (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad =
-  Preface_laws.Monad.Cases (Preface_stdlib.Nonempty_list.Monad) (Req)
+  Preface_laws_pbt.Monad.Cases (Preface_stdlib.Nonempty_list.Monad) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Alt =
-  Preface_laws.Alt.Semigroup_cases (Preface_stdlib.Nonempty_list.Alt) (Req)
+  Preface_laws_pbt.Alt.Semigroup_cases (Preface_stdlib.Nonempty_list.Alt) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Comonad =
-  Preface_laws.Comonad.Cases (Preface_stdlib.Nonempty_list.Comonad) (Req)
+  Preface_laws_pbt.Comonad.Cases (Preface_stdlib.Nonempty_list.Comonad) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 let cases n =

@@ -7,39 +7,39 @@ module Req = struct
 end
 
 module Functor =
-  Preface_laws.Functor.Cases (Preface_stdlib.List.Functor) (Req)
+  Preface_laws_pbt.Functor.Cases (Preface_stdlib.List.Functor) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Applicative =
-  Preface_laws.Applicative.Cases (Preface_stdlib.List.Applicative) (Req)
+  Preface_laws_pbt.Applicative.Cases (Preface_stdlib.List.Applicative) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Selective =
-  Preface_laws.Selective.Rigid_cases (Preface_stdlib.List.Selective) (Req)
+  Preface_laws_pbt.Selective.Rigid_cases (Preface_stdlib.List.Selective) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Alternative =
-  Preface_laws.Alternative.Cases (Preface_stdlib.List.Alternative) (Req)
+  Preface_laws_pbt.Alternative.Cases (Preface_stdlib.List.Alternative) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad =
-  Preface_laws.Monad.Cases (Preface_stdlib.List.Monad) (Req)
+  Preface_laws_pbt.Monad.Cases (Preface_stdlib.List.Monad) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad_plus_monoidal =
-  Preface_laws.Monad_plus.Cases_for_monoidal
+  Preface_laws_pbt.Monad_plus.Cases_for_monoidal
     (Preface_stdlib.List.Monad_plus)
     (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad_plus_left_distribution =
-  Preface_laws.Monad_plus.Cases_for_bind_left_distributivity
+  Preface_laws_pbt.Monad_plus.Cases_for_bind_left_distributivity
     (Preface_stdlib.List.Monad_plus)
     (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad_plus_left_absorption =
-  Preface_laws.Monad_plus.Cases_for_left_absorption
+  Preface_laws_pbt.Monad_plus.Cases_for_left_absorption
     (Preface_stdlib.List.Monad_plus)
     (Req)
     (Preface_qcheck.Sample.Pack1)

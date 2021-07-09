@@ -60,19 +60,19 @@ module String_monoid =
     end)
 
 module Sum_semigroup_cases =
-  Preface_laws.Semigroup.Cases (Sum_semigroup) (Int_req)
+  Preface_laws_pbt.Semigroup.Cases (Sum_semigroup) (Int_req)
 
 module Prod_semigroup_cases =
-  Preface_laws.Semigroup.Cases (Prod_semigroup) (Int_req)
+  Preface_laws_pbt.Semigroup.Cases (Prod_semigroup) (Int_req)
 
 module String_semigroup_cases =
-  Preface_laws.Semigroup.Cases (String_semigroup) (String_req)
+  Preface_laws_pbt.Semigroup.Cases (String_semigroup) (String_req)
 
-module Sum_monoid_cases = Preface_laws.Monoid.Cases (Sum_monoid) (Int_req)
-module Prod_monoid_cases = Preface_laws.Monoid.Cases (Prod_monoid) (Int_req)
+module Sum_monoid_cases = Preface_laws_pbt.Monoid.Cases (Sum_monoid) (Int_req)
+module Prod_monoid_cases = Preface_laws_pbt.Monoid.Cases (Prod_monoid) (Int_req)
 
 module String_monoid_cases =
-  Preface_laws.Monoid.Cases (String_monoid) (String_req)
+  Preface_laws_pbt.Monoid.Cases (String_monoid) (String_req)
 
 let cases n =
   [

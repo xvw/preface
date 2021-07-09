@@ -7,7 +7,7 @@ module Req = struct
 end
 
 module Bifunctor =
-  Preface_laws.Bifunctor.Cases (Preface_stdlib.Pair.Bifunctor) (Req)
+  Preface_laws_pbt.Bifunctor.Cases (Preface_stdlib.Pair.Bifunctor) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 let cases n = [ ("Pair Bifunctor Laws", Bifunctor.cases n) ]

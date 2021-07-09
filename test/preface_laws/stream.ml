@@ -12,19 +12,19 @@ module Req = struct
 end
 
 module Functor =
-  Preface_laws.Functor.Cases (Preface_stdlib.Stream.Functor) (Req)
+  Preface_laws_pbt.Functor.Cases (Preface_stdlib.Stream.Functor) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Applicative =
-  Preface_laws.Applicative.Cases (Preface_stdlib.Stream.Applicative) (Req)
+  Preface_laws_pbt.Applicative.Cases (Preface_stdlib.Stream.Applicative) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad =
-  Preface_laws.Monad.Cases (Preface_stdlib.Stream.Monad) (Req)
+  Preface_laws_pbt.Monad.Cases (Preface_stdlib.Stream.Monad) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Comonad =
-  Preface_laws.Comonad.Cases (Preface_stdlib.Stream.Comonad) (Req)
+  Preface_laws_pbt.Comonad.Cases (Preface_stdlib.Stream.Comonad) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 let cases n =

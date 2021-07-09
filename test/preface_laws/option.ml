@@ -7,19 +7,19 @@ module Req = struct
 end
 
 module Functor =
-  Preface_laws.Functor.Cases (Preface_stdlib.Option.Functor) (Req)
+  Preface_laws_pbt.Functor.Cases (Preface_stdlib.Option.Functor) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Applicative =
-  Preface_laws.Applicative.Cases (Preface_stdlib.Option.Applicative) (Req)
+  Preface_laws_pbt.Applicative.Cases (Preface_stdlib.Option.Applicative) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad =
-  Preface_laws.Monad.Cases (Preface_stdlib.Option.Monad) (Req)
+  Preface_laws_pbt.Monad.Cases (Preface_stdlib.Option.Monad) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Alternative =
-  Preface_laws.Alternative.Cases (Preface_stdlib.Option.Alternative) (Req)
+  Preface_laws_pbt.Alternative.Cases (Preface_stdlib.Option.Alternative) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Selective =

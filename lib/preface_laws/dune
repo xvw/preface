@@ -1,0 +1,4 @@
+(library
+ (name preface_laws)
+ (public_name preface.laws)
+ (libraries either preface.core preface.specs))

@@ -1,16 +1,18 @@
-module Category = Preface_laws.Category.Laws (Preface_stdlib.Fun.Category)
-module Arrow = Preface_laws.Arrow.Laws (Preface_stdlib.Fun.Arrow)
+module Category = Preface_laws_pbt.Category.Laws (Preface_stdlib.Fun.Category)
+module Arrow = Preface_laws_pbt.Arrow.Laws (Preface_stdlib.Fun.Arrow)
 
 module Arrow_choice =
-  Preface_laws.Arrow_choice.Laws (Preface_stdlib.Fun.Arrow_choice)
+  Preface_laws_pbt.Arrow_choice.Laws (Preface_stdlib.Fun.Arrow_choice)
 
 module Arrow_apply =
-  Preface_laws.Arrow_apply.Laws (Preface_stdlib.Fun.Arrow_apply)
+  Preface_laws_pbt.Arrow_apply.Laws (Preface_stdlib.Fun.Arrow_apply)
 
-module Profunctor = Preface_laws.Profunctor.Laws (Preface_stdlib.Fun.Profunctor)
-module Strong = Preface_laws.Strong.Laws (Preface_stdlib.Fun.Strong)
-module Choice = Preface_laws.Choice.Laws (Preface_stdlib.Fun.Choice)
-module Closed = Preface_laws.Closed.Laws (Preface_stdlib.Fun.Closed)
+module Profunctor =
+  Preface_laws_pbt.Profunctor.Laws (Preface_stdlib.Fun.Profunctor)
+
+module Strong = Preface_laws_pbt.Strong.Laws (Preface_stdlib.Fun.Strong)
+module Choice = Preface_laws_pbt.Choice.Laws (Preface_stdlib.Fun.Choice)
+module Closed = Preface_laws_pbt.Closed.Laws (Preface_stdlib.Fun.Closed)
 module Either = Preface_stdlib.Either
 
 let tuple_eq f g (a, b) (a', b') = f a a' && g b b'
@@ -1304,22 +1306,22 @@ module Req = struct
 end
 
 module Functor =
-  Preface_laws.Functor.Cases
+  Preface_laws_pbt.Functor.Cases
     (Preface_make.Functor.From_arrow (Preface_stdlib.Fun.Arrow)) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Applicative =
-  Preface_laws.Applicative.Cases
+  Preface_laws_pbt.Applicative.Cases
     (Preface_make.Applicative.From_arrow (Preface_stdlib.Fun.Arrow)) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad =
-  Preface_laws.Monad.Cases
+  Preface_laws_pbt.Monad.Cases
     (Preface_make.Monad.From_arrow_apply (Preface_stdlib.Fun.Arrow_apply)) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Selective =
-  Preface_laws.Selective.Cases
+  Preface_laws_pbt.Selective.Cases
     (Preface_make.Selective.From_arrow_choice
        (Preface_stdlib.Fun.Arrow_choice))
        (Req)
