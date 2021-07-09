@@ -12,6 +12,10 @@ type 'a t = 'a -> bool
 
 module Contravariant : Preface_specs.CONTRAVARIANT with type 'a t = 'a t
 
+(** {2 Divisible} *)
+
+module Divisible : Preface_specs.DIVISIBLE with type 'a t = 'a t
+
 (** {1 Addtional functions}
 
     Additional functions to facilitate practical work with [Predicate.t]. *)
