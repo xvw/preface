@@ -3,7 +3,7 @@
     {{:../Preface/index.html#concepts,-naming-and-terminology} go to the
     homepage}.
 
-    {%html:  
+    {%html:
       <center>
         <a href="../../images/specs.svg"><img
           style="width:90%; margin: 10% 5%;"
@@ -20,7 +20,6 @@ module Monoid = Monoid
 (** {1 Functor hierarchy} *)
 
 module Functor = Functor
-module Contravariant = Contravariant
 module Alt = Alt
 module Applicative = Applicative
 module Alternative = Alternative
@@ -30,6 +29,11 @@ module Monad_plus = Monad_plus
 module Comonad = Comonad
 module Foldable = Foldable
 module Traversable = Traversable
+
+(** {1 Contravariant functor hierarchy} *)
+
+module Contravariant = Contravariant
+module Divisible = Divisible
 
 (** {1 Bifunctor hierarchy} *)
 
@@ -122,6 +126,8 @@ module type FREE_MONAD = Free_monad.API
 module type FREER_MONAD = Freer_monad.API
 
 module type CONTRAVARIANT = Contravariant.API
+
+module type DIVISBLE = Divisible.API
 
 module type CATEGORY = Category.API
 
