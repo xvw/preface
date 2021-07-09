@@ -8,24 +8,23 @@
 Error handling, in a functional style, is often very well
 understood. However, Preface describes several modules for handling
 errors. In this guide, we propose to show you how to take advantage of
-them to functionally manage computation that may fail.
+them to functionally manage computations that may fail.
 
 The standard Preface library exposes [several
 modules](https://ocaml-preface.github.io/preface/Preface/index.html#error-handling)
 to describe computations that can potentially fail:
 
-- [Result](https://ocaml-preface.github.io/preface/Preface_stdlib/Result/index.html)
-  `Result` is a type that describes **sequential error validation** quite
-  well. In a pipeline of failable computing, as soon as a function
+- [Result](https://ocaml-preface.github.io/preface/Preface_stdlib/Result/index.html):
+  a type describing **sequential error validations**.
+  In a pipeline of failable computing, as soon as a function
   fails, the computation is interrupted.
-- [Try](https://ocaml-preface.github.io/preface/Preface_stdlib/Try/index.html)
+- [Try](https://ocaml-preface.github.io/preface/Preface_stdlib/Try/index.html):
   As `Result` is parameterized by two types, `Try` is a specialised version
   of `Result`. Its error type is set to be an exception (`'a Try.t = ('a, exn) Result.t`).
-- [Validation](https://ocaml-preface.github.io/preface/Preface_stdlib/Validation/index.html)
-  `Validation` is a type that describes **parallel error validation**
-  quite well. In a failable computing pipeline, all errors can be
+- [Validation](https://ocaml-preface.github.io/preface/Preface_stdlib/Validation/index.html):
+  a type describing **parallel error validations**. In a failable computing pipeline, all errors can be
   accumulated.
-- [Validate](https://ocaml-preface.github.io/preface/Preface_stdlib/Validate/index.html)
+- [Validate](https://ocaml-preface.github.io/preface/Preface_stdlib/Validate/index.html):
   As `Validation` is parameterized by two types, `Validate` is a
   specialised version of `Validation`. Its error type is set to be a
   non-empty list of exception, because if there is an error, then at
@@ -53,8 +52,8 @@ Sequential validation is the literal transformation of impure
 functions (which may throw exceptions) into pure functions. We wrap
 the result in `Ok` if it is valid or wrap the error in `Error` if it
 is invalid. For example, let's implement a safe version of
-`divide`. So a version that invalidates the result if the divisor is
-equal to zero:
+`divide` invalidating the result if the divisor is
+equal to `0`:
 
 ```ocaml
 exception Division_by_zero
@@ -95,7 +94,7 @@ val failed : int Preface.Try.Monad.t = Error Division_by_zero
 ```
 
 And as with all monads, one can of course take advantage of
-`let-operators` to describe programs that approach the direct style,
+`let-operators` to describe programs that approach the direct style.
 Here is the first example using the syntactic versions of `bind` and
 `map`:
 
@@ -112,7 +111,7 @@ val result : int Preface.Try.Monad.t = Ok 11
 ```
 
 This pattern makes it possible to model quite complex error cases,
-provided that the validation is sequential. There is an extremely
+provided the validation is sequential. There is an extremely
 pedagogical presentation by Scott Wlaschin on this approach, [Railway
 oriented programming: Error handling in functional
 languages](https://vimeo.com/113707214), and I suggest you watch it if
@@ -120,9 +119,9 @@ you want to see more scenarios.
 
 ## Parallel validation
 
-But sometimes sequential validation can be a dakr-pattern. For
-example, let's imagine that we want to validate that a user's
-information is correct in order to create him in the database:
+But sometimes sequential validation can be a dark-pattern. For
+example, let's imagine that we want to validate user
+information before creating them in database:
 
 ```ocaml
 type user = {
@@ -147,7 +146,7 @@ Sequential validation would mean going back and forth between input
 and validation! Ah, my nickname is too short, let's enlarge it! What,
 my e-mail is not valid... **rah**. That can be really annoying! In
 this example, we would like all errors to be collected, so that the
-user knows right away what changes he or she needs to make (for
+user knows right away what changes they need to make (for
 example, finding a longer nickname and lying about age).
 
 This approach is only possible because each field does not depend on
@@ -245,7 +244,7 @@ module Validated_list =
 ```
 
 Now we can use, for example, the `sequence` function whose type is:
-`'a Validate.t list -> 'a list Validate.t` which seems to be exactly
+`'a Validate.t list -> 'a list Validate.t` which is exactly
 what we were looking for:
 
 ```ocaml
@@ -297,12 +296,12 @@ We are able to validate (sequentially or in parallel) structured
 data. Wouldn't it be nice to be able to derive an arbitrary (or
 canonical) representation from a validation function, for example,
 from an user-validation, deriving an HTML form (a **formlet**) for
-filling an user? To sum up, we want:
+filling a user? To sum up, we want:
 
 - a DSL for describing arbitrary validation pipelines
-- be able to perform the validation described by the DSL
+- the ability to perform the validation described by the DSL
   function
-- be able to derive a representation to an arbitrary representation
+- the ability to derive a representation to an arbitrary representation
   (ie: an HTML form)
 
 This part of the guide is a fairly loose interpretation of the
@@ -334,8 +333,8 @@ type 'a field = {
 }
 ```
 
-Now, we can define some combinators to describe validable fields,
-first, let's define a validator that can validate that a string is
+Now, we can define some combinators to describe validable fields.
+First, let's define a validator that can validate a string is
 indeed an integer with a potential bound:
 
 ```ocaml
@@ -372,7 +371,7 @@ let validate_string ?min ?max str =
   else valid str
 ```
 
-We can get our old (a little weak) email validation function:
+We can get our old (weak) email validation function:
 
 ```ocaml
 let validate_email email =
@@ -499,7 +498,7 @@ end
 ```
 
 Now we assume that the data to be validated comes from an HTTP
-request, the HTTP variables could be stored in a simple `"key" => "values"` associative list:
+request, the HTTP variables could be stored in a simple `"key" => "values"` association list:
 
 ```ocaml
 exception Missing_field of string
@@ -546,8 +545,8 @@ Preface_stdlib__.Validation.Invalid
  Missing_field "name"]
 ```
 
-Everything seems to work, the function sends us back although it is
-missing all the fields! Now let's try a slightly more tricky
+Everything seems to work, the function replies that all fields are missing!
+Now let's try a slightly trickier
 example. Let's only fill in the email address incorrectly:
 
 ```ocaml
