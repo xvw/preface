@@ -127,7 +127,7 @@ module type FREER_MONAD = Freer_monad.API
 
 module type CONTRAVARIANT = Contravariant.API
 
-module type DIVISBLE = Divisible.API
+module type DIVISIBLE = Divisible.API
 
 module type CATEGORY = Category.API
 

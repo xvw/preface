@@ -13,7 +13,7 @@
 
 module Via_divide_and_conquer
     (Req : Preface_specs.Divisible.WITH_DIVIDE_AND_CONQUER) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Req.t
+  Preface_specs.DIVISIBLE with type 'a t = 'a Req.t
 
 (** {2 Using divide, conquer and contramap}
 
@@ -25,7 +25,7 @@ module Via_divide_and_conquer
 
 module Via_contramap_and_divide_and_conquer
     (Req : Preface_specs.Divisible.WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Req.t
+  Preface_specs.DIVISIBLE with type 'a t = 'a Req.t
 
 (** {1 Over Contravariant functor}
 
@@ -36,7 +36,7 @@ module Over_contravariant
     (Contravariant : Preface_specs.Contravariant.CORE)
     (Req : Preface_specs.Divisible.WITH_DIVIDE_AND_CONQUER
              with type 'a t = 'a Contravariant.t) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Req.t
+  Preface_specs.DIVISIBLE with type 'a t = 'a Req.t
 
 (** {1 Manual construction}
 
@@ -51,7 +51,7 @@ module Via
     (Core : Preface_specs.Divisible.CORE)
     (Operation : Preface_specs.Divisible.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Divisible.INFIX with type 'a t = 'a Operation.t) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Infix.t
+  Preface_specs.DIVISIBLE with type 'a t = 'a Infix.t
 
 (** {2 Building Core} *)
 

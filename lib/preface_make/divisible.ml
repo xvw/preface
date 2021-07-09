@@ -28,7 +28,7 @@ module Via
     (Core : Preface_specs.Divisible.CORE)
     (Operation : Preface_specs.Divisible.OPERATION with type 'a t = 'a Core.t)
     (Infix : Preface_specs.Divisible.INFIX with type 'a t = 'a Operation.t) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Infix.t = struct
+  Preface_specs.DIVISIBLE with type 'a t = 'a Infix.t = struct
   include Core
   include Operation
   include Infix
@@ -37,7 +37,7 @@ end
 
 module Via_divide_and_conquer
     (Req : Preface_specs.Divisible.WITH_DIVIDE_AND_CONQUER) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Req.t = struct
+  Preface_specs.DIVISIBLE with type 'a t = 'a Req.t = struct
   module Core = Core_via_divide_and_conquer (Req)
   include Core
   module Operation = Operation (Core)
@@ -48,7 +48,7 @@ end
 
 module Via_contramap_and_divide_and_conquer
     (Req : Preface_specs.Divisible.WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Req.t = struct
+  Preface_specs.DIVISIBLE with type 'a t = 'a Req.t = struct
   module Core = Core_via_contramap_and_divide_and_conquer (Req)
   include Core
   module Operation = Operation (Core)
@@ -61,7 +61,7 @@ module Over_contravariant
     (Contravariant : Preface_specs.Contravariant.CORE)
     (Req : Preface_specs.Divisible.WITH_DIVIDE_AND_CONQUER
              with type 'a t = 'a Contravariant.t) :
-  Preface_specs.DIVISBLE with type 'a t = 'a Req.t =
+  Preface_specs.DIVISIBLE with type 'a t = 'a Req.t =
 Via_contramap_and_divide_and_conquer (struct
   include Req
 
