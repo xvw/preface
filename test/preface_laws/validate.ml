@@ -11,7 +11,7 @@ module Functor =
     (Preface_qcheck.Sample.Pack1)
 
 module Alt =
-  Preface_laws.Alt.Semigroup_cases (Preface_stdlib.Validate.Alt) (Req)
+  Preface_laws_pbt.Alt.Semigroup_cases (Preface_stdlib.Validate.Alt) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Applicative =

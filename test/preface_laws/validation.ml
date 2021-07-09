@@ -35,7 +35,7 @@ module Functor =
     (Preface_qcheck.Sample.Pack1)
 
 module Alt =
-  Preface_laws.Alt.Semigroup_cases
+  Preface_laws_pbt.Alt.Semigroup_cases
     (Preface_stdlib.Validation.Alt (Error)) (Req_with_exn)
     (Preface_qcheck.Sample.Pack1)
 

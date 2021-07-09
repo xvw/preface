@@ -458,7 +458,8 @@ let choice_snd_param (module P : Preface_qcheck.Sample.PACKAGE) count =
       P.B.equal (left value) (right value) )
 ;;
 
-let choice_left_defined_by_right (module P : Preface_qcheck.Sample.PACKAGE)
+let choice_left_defined_by_right
+    (module P : Preface_qcheck.Sample.PACKAGE)
     count =
   let open QCheck in
   let arbitrary =
@@ -473,7 +474,8 @@ let choice_left_defined_by_right (module P : Preface_qcheck.Sample.PACKAGE)
       either_eq P.B.equal P.C.equal (left value) (right value) )
 ;;
 
-let choice_right_defined_by_left (module P : Preface_qcheck.Sample.PACKAGE)
+let choice_right_defined_by_left
+    (module P : Preface_qcheck.Sample.PACKAGE)
     count =
   let open QCheck in
   let arbitrary =

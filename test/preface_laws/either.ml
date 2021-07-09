@@ -20,7 +20,7 @@ module Functor =
     (Preface_qcheck.Sample.Pack1)
 
 module Alt =
-  Preface_laws.Alt.Semigroup_cases
+  Preface_laws_pbt.Alt.Semigroup_cases
     (Preface_stdlib.Either.Alt (Int)) (Req_with_int)
     (Preface_qcheck.Sample.Pack1)
 
@@ -30,7 +30,7 @@ module Applicative =
     (Preface_qcheck.Sample.Pack1)
 
 module Selective =
-  Preface_laws.Selective.Cases
+  Preface_laws_pbt.Selective.Cases
     (Preface_stdlib.Either.Selective (Int)) (Req_with_int)
     (Preface_qcheck.Sample.Pack1)
 

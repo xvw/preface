@@ -5,7 +5,7 @@ max-indent = 68
 assignment-operator = begin-line
 
 break-cases = fit
-break-fun-decl = wrap
+break-fun-decl = fit-or-vertical
 break-fun-sig = fit-or-vertical
 break-infix = fit-or-vertical
 break-infix-before-func = true

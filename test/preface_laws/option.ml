@@ -23,7 +23,7 @@ module Alternative =
     (Preface_qcheck.Sample.Pack1)
 
 module Selective =
-  Preface_laws.Selective.Rigid_cases (Preface_stdlib.Option.Selective) (Req)
+  Preface_laws_pbt.Selective.Rigid_cases (Preface_stdlib.Option.Selective) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 let cases n =

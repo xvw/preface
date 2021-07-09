@@ -11,7 +11,7 @@ module Functor =
     (Preface_qcheck.Sample.Pack1)
 
 module Alt =
-  Preface_laws.Alt.Semigroup_cases (Preface_stdlib.Try.Alt) (Req)
+  Preface_laws_pbt.Alt.Semigroup_cases (Preface_stdlib.Try.Alt) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Applicative =
@@ -19,7 +19,7 @@ module Applicative =
     (Preface_qcheck.Sample.Pack1)
 
 module Selective =
-  Preface_laws.Selective.Cases (Preface_stdlib.Try.Selective) (Req)
+  Preface_laws_pbt.Selective.Cases (Preface_stdlib.Try.Selective) (Req)
     (Preface_qcheck.Sample.Pack1)
 
 module Monad =
