@@ -1,4 +1,4 @@
-(** The library is divided into 3 parts (in the user area) which serve
+(** The library is divided into 4 parts (in the user area) which serve
     complementary purposes.*)
 
 (** {%html:
@@ -8,8 +8,8 @@
       <strong style="font-weight: 900;">Preface.Specs</strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
-      Contains all the interfaces of the available abstractions. 
-      The specifications resemble the <code>_intf</code> suffixed 
+      Contains all the interfaces of the available abstractions.
+      The specifications resemble the <code>_intf</code> suffixed
       signatures found in other libraries in the OCaml ecosystem.
     </td>
   </tr>
@@ -18,10 +18,10 @@
       <strong style="font-weight: 900;">Preface.Make</strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
-      Contains the set of <i>functors</i> (in the ML sense of the term) 
-      for concretising abstractions. Schematically, a module in 
-      <code>Preface.Make</code> takes a module (or modules) respecting a 
-      signature described in <code>Preface.Specs</code> to produce a 
+      Contains the set of <i>functors</i> (in the ML sense of the term)
+      for concretising abstractions. Schematically, a module in
+      <code>Preface.Make</code> takes a module (or modules) respecting a
+      signature described in <code>Preface.Specs</code> to produce a
       complete signature (also described in <code>Preface.Specs</code>).
     </td>
   </tr>
@@ -30,11 +30,19 @@
       <strong style="font-weight: 900;">Preface</strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
-      Contains concrete implementations, constructs that implement 
-      abstractions described in <code>Preface.Specs</code> by means of 
-      the functors present in <code>Preface.Make</code>. 
-      This library is, at least, an example of the use of 
+      Contains concrete implementations, constructs that implement
+      abstractions described in <code>Preface.Specs</code> by means of
+      the functors present in <code>Preface.Make</code>.
+      This library is, at least, an example of the use of
       <code>Specs</code> and <code>Make</code>.
+    </td>
+  </tr>
+ <tr>
+    <td style="border:1px solid #d5d5d5; padding: 6px;">
+      <strong style="font-weight: 900;">Preface.Laws</strong>
+    </td>
+    <td style="border:1px solid #d5d5d5; padding: 6px;">
+      Functors to generate laws for a given abstraction.
     </td>
   </tr>
 </table>
@@ -117,9 +125,9 @@ module Make = Preface_make
       <strong style="font-weight: 900;"><code>Core</code></strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
-        This module describes all the fundamental operations. For example, 
-       for a monad, we would find <code>return<code>, <code>map</code>, 
-       <code>bind</code>, <code>join</code> and 
+        This module describes all the fundamental operations. For example,
+       for a monad, we would find <code>return<code>, <code>map</code>,
+       <code>bind</code>, <code>join</code> and
        <code>compose_left_to_right</code>
     </td>
   </tr>
@@ -128,7 +136,7 @@ module Make = Preface_make
       <strong style="font-weight: 900;"><code>Operation</code></strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
-        The module contains the set of operations that can be described 
+        The module contains the set of operations that can be described
         using the <code>Core</code> functions.
     </td>
   </tr>
@@ -137,7 +145,7 @@ module Make = Preface_make
       <strong style="font-weight: 900;"><code>Infix</code></strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
-        The module contains infix operators built on top of the 
+        The module contains infix operators built on top of the
         <code>Core</code> and <code>Operation</code>.
     </td>
   </tr>
@@ -146,8 +154,8 @@ module Make = Preface_make
       <strong style="font-weight: 900;"><code>Syntax</code></strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
-        The module contains the <code>let</code> operators (such as 
-        <code>let*</code> and <code>let+</code> for example), built with 
+        The module contains the <code>let</code> operators (such as
+        <code>let*</code> and <code>let+</code> for example), built with
         the <code>Core</code> and <code>Operation</code> functions.
     </td>
   </tr>
@@ -164,7 +172,7 @@ module Make = Preface_make
     the abstraction. Or use the {e Happy Path}, which generally offers a similar
     approach to functors which builds [Core] but builds the whole abstraction.
 
-    {%html:  
+    {%html:
       <center>
         <img
           style="width:75%; margin: 8%;"
@@ -194,3 +202,12 @@ module Make = Preface_make
 
 include Preface_stdlib
 (** @inline *)
+
+(** {1 Laws}
+
+    Many of the abstractions presented in [Preface] are governed by laws, to
+    ensure the proper functioning of other derived operations. This library
+    provides functors to generate implemented laws for a concretization of an
+    abstraction. *)
+
+module Laws = Preface_laws
