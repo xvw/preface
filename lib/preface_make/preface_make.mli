@@ -36,7 +36,6 @@ module Monoid = Monoid
 (** {1 Functor hierarchy} *)
 
 module Functor = Functor
-module Contravariant = Contravariant
 module Alt = Alt
 module Applicative = Applicative
 module Alternative = Alternative
@@ -46,6 +45,11 @@ module Monad_plus = Monad_plus
 module Comonad = Comonad
 module Foldable = Foldable
 module Traversable = Traversable
+
+(** {1 Contravariant hierarchy} *)
+
+module Contravariant = Contravariant
+module Divisible = Divisible
 
 (** {1 Bifunctor hierarchy} *)
 

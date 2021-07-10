@@ -22,6 +22,7 @@
   alternative
   monad_plus
   contravariant
+  divisible
   category
   arrow
   arrow_zero
