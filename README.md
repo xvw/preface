@@ -233,9 +233,9 @@ naming follows this convention: `Over_name (Req)`, ie
 
 ## Projects using Preface
 
-| Project name | Description                                                                                                                     | Links                                                      |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Wordpress    | Wordpress is a static blog generator that essentially takes advantage of Preface's `Freer`, `Result`, `Validation` and `Arrow`. | [Github repository](https://github.com/xhtmlboi/wordpress) |
+| Project name | Description                                                                                                                  | Links                                                   |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **YOCaml**   | YOCaml is a static blog generator that essentially takes advantage of Preface's `Freer`, `Result`, `Validation` and `Arrow`. | [Github repository](https://github.com/xhtmlboi/yocaml) |
 
 You use Preface for one of your projects and you want to be in this
 list? Don't hesitate to open a PR or fill an issue, we'd love to hear
