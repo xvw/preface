@@ -19,6 +19,16 @@ Preface_make.Functor.Via_map (struct
   let map f x = Bifunctor.bimap f id x
 end)
 
+module Alt (T : Preface_specs.Types.T0) =
+  Preface_make.Alt.Over_functor
+    (Functor
+       (T))
+       (struct
+         type nonrec 'a t = ('a, T.t) t
+
+         let combine x y = (match (x, y) with (Error _, a) -> a | (a, _) -> a)
+       end)
+
 let traverse_aux pure map f = function
   | Error x -> pure (Error x)
   | Ok x -> map (fun x -> Ok x) (f x)
@@ -73,6 +83,13 @@ module Monad (T : Preface_specs.Types.T0) = struct
 
   include Preface_make.Traversable.Join_with_monad (M) (T)
 end
+
+module Foldable (T : Preface_specs.Types.T0) =
+Preface_make.Foldable.Via_fold_right (struct
+  type nonrec 'a t = ('a, T.t) t
+
+  let fold_right f x acc = (match x with Error _ -> acc | Ok v -> f v acc)
+end)
 
 let equal f g left right =
   match (left, right) with

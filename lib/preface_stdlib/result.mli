@@ -26,6 +26,11 @@ module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
 module Functor (T : Preface_specs.Types.T0) :
   Preface_specs.FUNCTOR with type 'a t = ('a, T.t) Bifunctor.t
 
+(** {3 Alt} *)
+
+module Alt (T : Preface_specs.Types.T0) :
+  Preface_specs.ALT with type 'a t = ('a, T.t) Bifunctor.t
+
 (** {3 Applicative}
 
     [Result.t] implements {!module-type:Preface_specs.APPLICATIVE} and
@@ -45,6 +50,11 @@ module Applicative (T : Preface_specs.Types.T0) :
 module Monad (T : Preface_specs.Types.T0) :
   Preface_specs.Traversable.API_OVER_MONAD
     with type 'a t = ('a, T.t) Bifunctor.t
+
+(** {3 Foldable} *)
+
+module Foldable (T : Preface_specs.Types.T0) :
+  Preface_specs.FOLDABLE with type 'a t = ('a, T.t) Bifunctor.t
 
 (** {1 Addtional functions}
 
