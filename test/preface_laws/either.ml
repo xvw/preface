@@ -22,6 +22,10 @@ module Functor =
   Preface_laws.Functor.Cases
     (Preface_stdlib.Either.Functor (Int)) (Req_with_int)
     (Preface_qcheck.Sample.Pack1)
+module Alt =
+  Preface_laws.Alt.Semigroup_cases
+    (Preface_stdlib.Either.Alt (Int)) (Req_with_int)
+    (Preface_qcheck.Sample.Pack1)
 module Applicative =
   Preface_laws.Applicative.Cases
     (Preface_stdlib.Either.Applicative (Int)) (Req_with_int)
@@ -37,6 +41,7 @@ module Bifunctor =
 let cases n =
   [
     ("Either (with int as Left part) Functor Laws", Functor.cases n)
+  ; ("Either (with int as Left part) Alt Semigroup Laws", Alt.cases n)
   ; ("Either (with int as Left part) Applicative Laws", Applicative.cases n)
   ; ("Either (with int as left part) Monad Laws", Monad.cases n)
   ; ("Either Bifunctor Laws", Bifunctor.cases n)

@@ -35,6 +35,10 @@ module Functor =
   Preface_laws.Functor.Cases
     (Preface_stdlib.Validation.Functor (Error)) (Req_with_exn)
     (Preface_qcheck.Sample.Pack1)
+module Alt =
+  Preface_laws.Alt.Semigroup_cases
+    (Preface_stdlib.Validation.Alt (Error)) (Req_with_exn)
+    (Preface_qcheck.Sample.Pack1)
 module Applicative =
   Preface_laws.Applicative.Cases
     (Preface_stdlib.Validation.Applicative (Error)) (Req_with_exn)
@@ -55,13 +59,14 @@ let cases n =
   [
     ( "Validation (with error nonempty list as Error part) Functor Laws"
     , Functor.cases n )
+  ; ( "Validation (with error nonempty list as Error part) Alt Semigroup Laws"
+    , Alt.cases n )
   ; ( "Validation (with error nonempty list as Error part) Applicative Laws"
     , Applicative.cases n )
   ; ( "Validation (with error nonempty list as Error part) Monad Laws"
     , Monad.cases n )
   ; ("Validation Bifunctor Laws", Bifunctor.cases n)
-  ; ( "Validation Selective (with error nonempty list as Error part) Monad \
-       Laws) Laws"
+  ; ( "Validation Selective (with error nonempty list as Error part) Laws"
     , Selective.cases n )
   ]
 ;;
