@@ -1,6 +1,6 @@
-(* Implementation of Validation's test from: 
+(* Implementation of Validation's test from:
 
-   https://github.com/snowleopard/selective/blob/master/examples/Validation.hs 
+   https://github.com/snowleopard/selective/blob/master/examples/Validation.hs
 *)
 
 module Shape = struct

@@ -1,7 +1,7 @@
-(* 
-   Tutorial extracted from [The Arrow Tutorial]:
-   https://en.wikibooks.org/wiki/Haskell/Arrow_tutorial 
- *)
+(*
+    Tutorial extracted from [The Arrow Tutorial]:
+    https://en.wikibooks.org/wiki/Haskell/Arrow_tutorial
+*)
 
 (* Some helper *)
 let uncurry f (x, y) = f x y

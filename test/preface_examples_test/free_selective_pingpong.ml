@@ -1,5 +1,5 @@
-(* Example taken from 
-   [https://github.com/snowleopard/selective/blob/master/examples/Teletype/Rigid.hs] 
+(* Example taken from
+   [https://github.com/snowleopard/selective/blob/master/examples/Teletype/Rigid.hs]
 *)
 
 type 'a t =
