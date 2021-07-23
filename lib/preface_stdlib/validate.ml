@@ -8,17 +8,13 @@ let invalid = Validation.invalid
 
 let error err = invalid (Nonempty_list.create err)
 
-module Functor = Validation.Functor (struct
-  type t = exn Nonempty_list.t
-end)
-
 module Exn_list = Preface_make.Semigroup.From_alt (Nonempty_list.Alt) (Exn)
+module Functor = Validation.Functor (Exn_list)
+module Alt = Validation.Alt (Exn_list)
 module Applicative = Validation.Applicative (Exn_list)
 module Selective = Validation.Selective (Exn_list)
-
-module Monad = Validation.Monad (struct
-  type t = exn Nonempty_list.t
-end)
+module Monad = Validation.Monad (Exn_list)
+module Foldable = Validation.Foldable (Exn_list)
 
 let case = Validation.case
 
