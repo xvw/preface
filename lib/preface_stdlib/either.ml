@@ -21,6 +21,16 @@ let traverse_aux pure map f = function
   | Right x -> map right (f x)
 ;;
 
+module Alt (T : Preface_specs.Types.T0) =
+  Preface_make.Alt.Over_functor
+    (Functor
+       (T))
+       (struct
+         type nonrec 'a t = (T.t, 'a) t
+
+         let combine x y = (match (x, y) with (Left _, a) -> a | (a, _) -> a)
+       end)
+
 module Applicative (T : Preface_specs.Types.T0) = struct
   module A = Preface_make.Applicative.Via_apply (struct
     module F = Functor (T)
@@ -70,6 +80,13 @@ module Monad (T : Preface_specs.Types.T0) = struct
 
   include Preface_make.Traversable.Join_with_monad (M) (T)
 end
+
+module Foldable (T : Preface_specs.Types.T0) =
+Preface_make.Foldable.Via_fold_right (struct
+  type nonrec 'a t = (T.t, 'a) t
+
+  let fold_right f x acc = (match x with Left _ -> acc | Right v -> f v acc)
+end)
 
 let equal f g left right =
   match (left, right) with
