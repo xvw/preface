@@ -13,6 +13,10 @@ type 'a t = ('a, exn) result
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 
+(** {2 Alt} *)
+
+module Alt : Preface_specs.ALT with type 'a t = 'a t
+
 (** {2 Applicative}
 
     [Try.t] implements {!module-type:Preface_specs.APPLICATIVE} and introduces
@@ -30,9 +34,13 @@ module Applicative :
 
 module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
 
+(** {2 Foldable} *)
+
+module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
+
 (** {1 Addtional functions}
 
-    Additional functions to facilitate practical work with [Result.t]. *)
+    Additional functions to facilitate practical work with [Try.t]. *)
 
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)

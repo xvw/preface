@@ -28,6 +28,20 @@ let traverse_aux pure map f = function
   | Valid x -> map (fun x -> Valid x) (f x)
 ;;
 
+module Alt (Errors : Preface_specs.SEMIGROUP) =
+  Preface_make.Alt.Over_functor
+    (Functor
+       (Errors))
+       (struct
+         type nonrec 'a t = ('a, Errors.t) t
+
+         let combine a b =
+           match (a, b) with
+           | (Invalid _, result) -> result
+           | (Valid x, _) -> Valid x
+         ;;
+       end)
+
 module Applicative (Errors : Preface_specs.SEMIGROUP) = struct
   module A = Preface_make.Applicative.Via_apply (struct
     type nonrec 'a t = ('a, Errors.t) t
@@ -99,6 +113,15 @@ module Monad (T : Preface_specs.Types.T0) = struct
 
   include Preface_make.Traversable.Join_with_monad (M) (T)
 end
+
+module Foldable (T : Preface_specs.Types.T0) =
+Preface_make.Foldable.Via_fold_right (struct
+  type nonrec 'a t = ('a, T.t) t
+
+  let fold_right f validation x =
+    (match validation with Valid r -> f r x | Invalid _ -> x)
+  ;;
+end)
 
 let equal f g left right =
   match (left, right) with

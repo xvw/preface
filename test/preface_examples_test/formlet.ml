@@ -136,9 +136,9 @@ let validation_formlet_invalid4 () =
       (let open Formlet in
       let open Nel in
       Invalid_age (-5)
-      ::
-      Invalid_name ("firstname", "")
-      :: Invalid_name ("lastname", "-") :: create Unchecked_rules)
+      :: Invalid_name ("firstname", "")
+      :: Invalid_name ("lastname", "-")
+      :: create Unchecked_rules)
   and computed =
     let open Applicative.Infix in
     let open Formlet in

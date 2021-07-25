@@ -27,6 +27,11 @@ module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
 module Functor (T : Preface_specs.Types.T0) :
   Preface_specs.FUNCTOR with type 'a t = ('a, T.t) t
 
+(** {3 Alt} *)
+
+module Alt (Errors : Preface_specs.SEMIGROUP) :
+  Preface_specs.ALT with type 'a t = ('a, Errors.t) t
+
 (** {3 Applicative}
 
     [Validation.t] implements {!module-type:Preface_specs.APPLICATIVE} and
@@ -56,6 +61,11 @@ module Selective (Errors : Preface_specs.SEMIGROUP) :
 
 module Monad (T : Preface_specs.Types.T0) :
   Preface_specs.Traversable.API_OVER_MONAD with type 'a t = ('a, T.t) t
+
+(** {3 Foldable} *)
+
+module Foldable (T : Preface_specs.Types.T0) :
+  Preface_specs.FOLDABLE with type 'a t = ('a, T.t) t
 
 (** {1 Addtional functions}
 

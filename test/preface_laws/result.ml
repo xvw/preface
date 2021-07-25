@@ -22,6 +22,10 @@ module Functor =
   Preface_laws.Functor.Cases
     (Preface_stdlib.Result.Functor (Int)) (Req_with_int)
     (Preface_qcheck.Sample.Pack1)
+module Alt =
+  Preface_laws.Alt.Semigroup_cases
+    (Preface_stdlib.Result.Alt (Int)) (Req_with_int)
+    (Preface_qcheck.Sample.Pack1)
 module Applicative =
   Preface_laws.Applicative.Cases
     (Preface_stdlib.Result.Applicative (Int)) (Req_with_int)
@@ -37,6 +41,7 @@ module Bifunctor =
 let cases n =
   [
     ("Result (with int as Error part) Functor Laws", Functor.cases n)
+  ; ("Result (with int as Error part) Alt semigroup Laws", Functor.cases n)
   ; ("Result (with int as Error part) Applicative Laws", Applicative.cases n)
   ; ("Result (with int as Error part) Monad Laws", Monad.cases n)
   ; ("Result Bifunctor Laws", Bifunctor.cases n)

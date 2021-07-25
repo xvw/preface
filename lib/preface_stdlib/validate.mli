@@ -27,6 +27,10 @@ type 'a t = ('a, exn Nonempty_list.t) Validation.t
 
 module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 
+(** {2 Alt} *)
+
+module Alt : Preface_specs.ALT with type 'a t = 'a t
+
 (** {2 Applicative}
 
     [Validate.t] implements {!module-type:Preface_specs.APPLICATIVE} and
@@ -52,6 +56,10 @@ module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
     [Validate] as an iterable structure. *)
 
 module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
+
+(** {2 Foldable} *)
+
+module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 
 (** {1 Addtional functions}
 

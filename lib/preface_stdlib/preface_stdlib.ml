@@ -1,6 +1,6 @@
 (** *)
-(* Empty comment because, currently, synospsis are not properly 
-   handled when a module is included in another one. 
+(* Empty comment because, currently, synospsis are not properly
+   handled when a module is included in another one.
 *)
 
 (** {2 Common datatypes} *)
