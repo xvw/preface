@@ -1,5 +1,3 @@
-## dev (Unreleased)
-
 ## v0.1.0 (August 2021)
 
 - First release (`v0.1.0`) by
