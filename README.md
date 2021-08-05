@@ -36,12 +36,14 @@ maintainers) think that Preface can be useful for a few things:
 
 ## Installation
 
+The package is available on OPAM, `opam install preface` should be enough. (And
+by describing, of course, OPAM in your project OPAM file and linking it to your
+project in the standard way proposed by your build-system.)
+
 ### OPAM pin
 
-At the moment, Preface is not yet available on
-[OPAM](https://opam.ocaml.org). However, the library can be installed
-using the "pin" mechanism, by adding these two lines in the OPAM
-description:
+If you would like to use the latest version of Preface (under development) you
+can use the [pin mechanism](https://opam.ocaml.org/doc/Usage.html#opam-pin).
 
 ```
 ...
