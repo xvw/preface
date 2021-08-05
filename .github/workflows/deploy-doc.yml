@@ -2,7 +2,7 @@ name: Preface deploy documentation
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
