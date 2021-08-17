@@ -1,5 +1,7 @@
 ## dev (Unreleased)
 
+- Add `Selective` for `Free monad` and `Freer monad` [**@xvw**](https://github.com/xvw)
+
 ## v0.1.0 (August 2021)
 
 - First release (`v0.1.0`) by [**@d-plaindoux**](https://github.com/d-plaindoux), [**@gr-im**](https://github.com/gr-im), [**@xhtmlboi**](https://github.com/xhtmlboi) and [**@xvw**](https://github.com/xvw)
