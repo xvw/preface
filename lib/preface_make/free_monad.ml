@@ -49,9 +49,25 @@ module Via_map (F : Preface_specs.Functor.CORE) = struct
     ;;
   end)
 
+  module Selective =
+    Selective.Over_applicative_via_select
+      (Applicative)
+      (struct
+        type nonrec 'a t = 'a t
+
+        let select either f =
+          let open Monad in
+          either
+          >>= Either.fold
+                ~left:Applicative.((fun a -> ( |> ) a <$> f))
+                ~right:Applicative.pure
+        ;;
+      end)
+
   include (Monad : Preface_specs.MONAD with type 'a t := 'a t)
 end
 
 module Over_functor (A : Preface_specs.FUNCTOR) = Via_map (A)
 module Over_applicative (A : Preface_specs.APPLICATIVE) = Via_map (A)
+module Over_selective (A : Preface_specs.SELECTIVE) = Via_map (A)
 module Over_monad (A : Preface_specs.MONAD) = Via_map (A)
