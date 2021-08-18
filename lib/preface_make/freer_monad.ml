@@ -58,17 +58,7 @@ module Over (Type : Preface_specs.Types.T1) = struct
   module Selective =
     Selective.Over_applicative_via_select
       (Applicative)
-      (struct
-        type nonrec 'a t = 'a t
-
-        let select either f =
-          let open Monad in
-          either
-          >>= Either.fold
-                ~left:Applicative.((fun a -> ( |> ) a <$> f))
-                ~right:Applicative.pure
-        ;;
-      end)
+      (Selective.Select_from_monad (Monad))
 
   include (Monad : Preface_specs.MONAD with type 'a t := 'a t)
 end
