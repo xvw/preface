@@ -55,5 +55,10 @@ module Over (Type : Preface_specs.Types.T1) = struct
     ;;
   end)
 
+  module Selective =
+    Selective.Over_applicative_via_select
+      (Applicative)
+      (Selective.Select_from_monad (Monad))
+
   include (Monad : Preface_specs.MONAD with type 'a t := 'a t)
 end

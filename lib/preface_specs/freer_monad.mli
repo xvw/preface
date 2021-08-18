@@ -46,6 +46,12 @@ module type API = sig
 
   module Applicative : Applicative.API with type 'a t = 'a t
 
+  (** {1 Selective API}
+
+      A [Freer monad] is also an {!module:Preface_specs.Selective}. *)
+
+  module Selective : Selective.API with type 'a t = 'a t
+
   (** {1 Monad API}
 
       A [Freer monad] is also (obviously) a {!module:Preface_specs.Monad}. *)
