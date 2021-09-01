@@ -166,7 +166,7 @@ module Make = Preface_make
       <center>
         <img
           style="width:75%; margin: 8%;"
-          src="../../images/cut.svg"
+          src="https://ocaml-preface.github.io/images/cut.svg"
           alt="Module cutting"
         >
       </center> %} *)

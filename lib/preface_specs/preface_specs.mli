@@ -5,9 +5,9 @@
 
     {%html:
       <center>
-        <a href="../../images/specs.svg"><img
+        <a href="https://ocaml-preface.github.io/images/specs.svg"><img
           style="width:90%; margin: 10% 5%;"
-          src="../../images/specs.svg"
+          src="https://ocaml-preface.github.io/images/specs.svg"
           alt="Abstraction hierarchy"
         ></a>
       </center>%} *)
