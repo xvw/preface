@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Use absolute URLs for image in documentation (in order to fit with the new version of OCaml.org) [**@xvw**](https://github.com/xvw)
 - Add `Selective` for `Free monad` and `Freer monad` [**@xvw**](https://github.com/xvw)
 
 ## v0.1.0 (August 2021)

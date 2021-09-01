@@ -99,7 +99,7 @@ can see, the diagram is heavily inspired by the
 [Haskell](https://haskell.org) community's
 [Typeclassopedia](https://wiki.haskell.org/Typeclassopedia).
 
-<p align="center"><img src=".github/figures/specs.svg" alt="typeclassopedia"></p>
+<p align="center"><img src="https://ocaml-preface.github.io/images/specs.svg" alt="typeclassopedia"></p>
 
 Obviously, the set of useful abstractions is still far from being
 present in Preface. One can deplore the absence, for example, of
@@ -220,7 +220,7 @@ but builds the whole abstraction.
 Here is an example of the canonical flow of concretisation of an
 abstraction:
 
-<p align="center"><img src=".github/figures/cut.svg" alt="module hierarchy"></p>
+<p align="center"><img src="https://ocaml-preface.github.io/images/cut.svg" alt="module hierarchy"></p>
 
 Although it is likely that the use of the _Happy Path_ covers a very
 large part of the use cases and that it is not necessary to concretise
