@@ -162,6 +162,8 @@ let cases =
       ; test_case "Sequential validation 4" `Quick sequential_validation_4
       ; test_case "Sequential computing 1" `Quick sequential_computing_1
       ; test_case "Sequential computing 2" `Quick sequential_computing_2
+      ; test_case "Fold_map over values" `Quick fold_map_over_values
+      ; test_case "Fold_map over empty" `Quick fold_map_over_empty
       ] )
   ]
 ;;

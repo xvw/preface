@@ -6,19 +6,10 @@ type 'a t =
   | Read of (string -> 'a)
   | Write of (string * 'a)
 
-let equal a b =
-  match (a, b) with
-  | (Read _, Read _) -> true
-  | (Write (x, ()), Write (y, ())) -> String.equal x y
-  | _ -> false
-;;
-
 let pp ppf = function
   | Read _ -> Format.fprintf ppf "[Read]"
   | Write (s, _) -> Format.fprintf ppf "[Write %s]" s
 ;;
-
-let testable = Alcotest.testable pp equal
 
 type 'a io =
   | IORead : string io
