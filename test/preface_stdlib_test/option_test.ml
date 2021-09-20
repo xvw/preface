@@ -145,6 +145,55 @@ let fold_map_over_empty () =
   Alcotest.(check int) "fold_map with success" expected computed
 ;;
 
+let if_over_valid_predicate () =
+  let open Preface_stdlib.Option in
+  let expected = Some 4
+  and computed = if_ (Int.equal 4) 4 in
+  Alcotest.(check (option int)) "should be equal" expected computed
+;;
+
+let if_over_invalid_predicate () =
+  let open Preface_stdlib.Option in
+  let expected = None
+  and computed = if_ (Int.equal 5) 4 in
+  Alcotest.(check (option int)) "should be equal" expected computed
+;;
+
+let unless_over_valid_predicate () =
+  let open Preface_stdlib.Option in
+  let expected = Some 4
+  and computed = unless (Int.equal 5) 4 in
+  Alcotest.(check (option int)) "should be equal" expected computed
+;;
+
+let unless_over_invalid_predicate () =
+  let open Preface_stdlib.Option in
+  let expected = None
+  and computed = unless (Int.equal 4) 4 in
+  Alcotest.(check (option int)) "should be equal" expected computed
+;;
+
+let or_with_valid_first_value () =
+  let open Preface_stdlib.Option in
+  let expected = Some 4
+  and computed = or_ (Some 4) (Some 5) in
+  Alcotest.(check (option int)) "should be equal" expected computed
+;;
+
+let or_with_valid_snd_value () =
+  let open Preface_stdlib.Option in
+  let expected = Some 5
+  and computed = or_ None (Some 5) in
+  Alcotest.(check (option int)) "should be equal" expected computed
+;;
+
+let or_with_invalid_on_both () =
+  let open Preface_stdlib.Option in
+  let expected = None
+  and computed = or_ None None in
+  Alcotest.(check (option int)) "should be equal" expected computed
+;;
+
 let cases =
   let open Alcotest in
   [
@@ -164,6 +213,15 @@ let cases =
       ; test_case "Sequential computing 2" `Quick sequential_computing_2
       ; test_case "Fold_map over values" `Quick fold_map_over_values
       ; test_case "Fold_map over empty" `Quick fold_map_over_empty
+      ; test_case "If over valid predicate" `Quick if_over_valid_predicate
+      ; test_case "If over invalid predicate" `Quick if_over_invalid_predicate
+      ; test_case "Unless over valid predicate" `Quick
+          unless_over_valid_predicate
+      ; test_case "Unless over invalid predicate" `Quick
+          unless_over_invalid_predicate
+      ; test_case "Or with a first valid value" `Quick or_with_valid_first_value
+      ; test_case "Or with a second valid value" `Quick or_with_valid_snd_value
+      ; test_case "Or with invalid on both" `Quick or_with_invalid_on_both
       ] )
   ]
 ;;

@@ -67,3 +67,19 @@ val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
 (** Formatter for pretty-printing for [Option.t]. *)
+
+(** {2 Producing Option}*)
+
+val if_ : 'a Predicate.t -> 'a -> 'a t
+(** [is_ p x] produces [Some x] if [p x] is [true], otherwise, it produces
+    [None]. *)
+
+val unless : 'a Predicate.t -> 'a -> 'a t
+(** [is_ p x] produces [Some x] if [p x] is [false], otherwise, it produces
+    [None]. *)
+
+(** {2 Composing Option}*)
+
+val or_ : 'a t -> 'a t -> 'a t
+(** [or_ a b] returns [a] if [a] is [Some x] else it returns [b]. Equivalent to
+    [Alternative.combine]. *)

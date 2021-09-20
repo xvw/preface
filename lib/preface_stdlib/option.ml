@@ -97,3 +97,9 @@ let pp pp' formater = function
   | None -> Format.fprintf formater "None"
   | Some x -> Format.fprintf formater "Some (%a)" pp' x
 ;;
+
+let if_ p value = if p value then Some value else None
+
+let unless p = if_ (Predicate.negate p)
+
+let or_ a b = (match a with Some x -> Some x | None -> b)
