@@ -24,6 +24,8 @@ val continuation : 'a t -> 'a Preface_stdlib.Continuation.t t
 
 val nonempty_list : 'a t -> 'a Preface_stdlib.Nonempty_list.t t
 
+val seq : 'a t -> 'a Preface_stdlib.Seq.t t
+
 val validation : 'a t -> 'b t -> ('a, 'b) Preface_stdlib.Validation.t t
 
 val validate : 'a t -> 'a Preface_stdlib.Validate.t t
