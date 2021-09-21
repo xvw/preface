@@ -159,4 +159,4 @@ val triple : 'a t -> 'b t -> 'c t -> ('a * 'b * 'c) t
 
 val quad : 'a t -> 'b t -> 'c t -> 'd t -> ('a * 'b * 'c * 'd) t
 
-val option : 'a t -> 'a option t
+val option : ?ratio:float -> 'a t -> 'a option t

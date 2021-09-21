@@ -25,7 +25,7 @@ let small_nonempty_list g s = nonempty_list_size small_nat g s
 
 let seq_size size gen st =
   let init = Preface_stdlib.Seq.pure (gen st) in
-  fold (fun acc _ -> Seq.cons (gen st) acc) init (size st)
+  fold (fun acc _ -> Preface_stdlib.Seq.cons (gen st) acc) init (size st)
 ;;
 
 let seq g s = seq_size nat g s

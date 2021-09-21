@@ -4,9 +4,15 @@ type 'a t = 'a S.t
 
 let pure x = S.return x
 
+let cons x xs () = S.Cons (x, xs)
+
+let rec append l r () =
+  (match l () with S.Nil -> r () | S.Cons (x, xs) -> S.Cons (x, append xs r))
+;;
+
 let rev seq =
   let rec aux acc seq =
-    (match seq () with S.Nil -> acc | S.Cons (x, xs) -> aux (S.cons x acc) xs)
+    (match seq () with S.Nil -> acc | S.Cons (x, xs) -> aux (cons x acc) xs)
   in
   aux S.empty seq
 ;;
@@ -31,7 +37,7 @@ module Alternative = Preface_make.Alternative.Via_apply (struct
 
   let neutral = S.empty
 
-  let combine l r = S.append l r
+  let combine l r = append l r
 end)
 
 module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
@@ -47,7 +53,7 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
         let rec traverse acc seq =
           match seq () with
           | S.Nil -> rev <$> acc
-          | S.Cons (x, xs) -> traverse (A.lift2 S.cons (f x) acc) xs
+          | S.Cons (x, xs) -> traverse (A.lift2 cons (f x) acc) xs
         in
 
         traverse (A.pure S.empty) seq
@@ -83,7 +89,7 @@ module Monad_plus = Preface_make.Monad_plus.Via_bind (struct
 
   let neutral = S.empty
 
-  let combine l r = S.append l r
+  let combine l r = append l r
 end)
 
 module Monad_traversable (M : Preface_specs.MONAD) =
@@ -99,7 +105,7 @@ module Monad_traversable (M : Preface_specs.MONAD) =
         let rec traverse acc seq =
           match seq () with
           | S.Nil -> acc >|= rev
-          | S.Cons (x, xs) -> traverse (M.lift2 S.cons (f x) acc) xs
+          | S.Cons (x, xs) -> traverse (M.lift2 cons (f x) acc) xs
         in
         traverse (M.return S.empty)
       ;;
@@ -116,7 +122,7 @@ module Monoid (T : Preface_specs.Types.T0) =
 Preface_make.Monoid.Via_combine_and_neutral (struct
   type nonrec t = T.t t
 
-  let combine l r = S.append l r
+  let combine l r = append l r
 
   let neutral = S.empty
 end)

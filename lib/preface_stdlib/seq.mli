@@ -50,6 +50,10 @@ module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 val pure : 'a -> 'a t
 (** Create a value from ['a] to ['a t]. *)
 
+val cons : 'a -> 'a t -> 'a t
+(** [cons x xs] is the sequence containing the element [x] followed by the
+    sequence [xs].*)
+
 val rev : 'a t -> 'a t
 (** Reverse a [Seq.t] (the function may not terminate if the sequence is
     infinite).*)
