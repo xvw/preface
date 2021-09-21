@@ -47,7 +47,7 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
         let rec traverse acc seq =
           match seq () with
           | S.Nil -> rev <$> acc
-          | S.Cons (x, xs) -> traverse (S.cons <$> f x <*> acc) xs
+          | S.Cons (x, xs) -> traverse (A.lift2 S.cons (f x) acc) xs
         in
 
         traverse (A.pure S.empty) seq
@@ -94,14 +94,14 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 
       type 'a iter = 'a S.t
 
-      let traverse f seq =
+      let traverse f =
         let open M.Infix in
         let rec traverse acc seq =
           match seq () with
           | S.Nil -> acc >|= rev
-          | S.Cons (x, xs) -> traverse (f x >>= (fun a -> acc >|= S.cons a)) xs
+          | S.Cons (x, xs) -> traverse (M.lift2 S.cons (f x) acc) xs
         in
-        traverse (M.return S.empty) seq
+        traverse (M.return S.empty)
       ;;
     end)
 

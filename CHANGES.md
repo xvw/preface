@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Make `List` and `Nonenmpty_list` `Traversable` implementations (for both `Applicative` and `Monad`) Tail-recursive [**@xvw**](https://github.com/xvw)
 - Add `Seq` module in Stdlib (with `Functor`, `Applicative` (with `Traversable`), `Alternative`, `Monad` (with `Traversable`), `Monad_plus`, `Monoid` and `Foldable`) [**@xvw**](https://github.com/xvw)
 - Add `mli` for stdlib's test and example's test (in order to track unused tests) [**@xvw**](https://github.com/xvw)
 - Use absolute URLs for image in documentation (in order to fit with the new version of OCaml.org) [**@xvw**](https://github.com/xvw)

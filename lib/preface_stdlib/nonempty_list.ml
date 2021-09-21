@@ -45,13 +45,15 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
 
       type 'a iter = 'a Preface_core.Nonempty_list.t
 
-      let traverse =
+      let traverse f l =
         let open A.Infix in
-        let rec traverse_aux f = function
-          | Last x -> (fun x -> Last x) <$> f x
-          | x :: xs -> A.lift2 cons (f x) (traverse_aux f xs)
+        let rec traverse_aux acc = function
+          | Last x -> rev <$> A.lift2 cons (f x) acc
+          | x :: xs -> traverse_aux (A.lift2 cons (f x) acc) xs
         in
-        traverse_aux
+        match l with
+        | Last x -> create <$> f x
+        | x :: xs -> traverse_aux (create <$> f x) xs
       ;;
     end)
 
@@ -78,18 +80,15 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 
       type 'a iter = 'a Preface_core.Nonempty_list.t
 
-      let traverse =
-        let open M.Syntax in
-        let rec traverse_aux f = function
-          | Last x ->
-            let+ elt = f x in
-            Last elt
-          | x :: xs ->
-            let* h = f x in
-            let* t = traverse_aux f xs in
-            M.return (cons h t)
+      let traverse f l =
+        let open M.Infix in
+        let rec traverse_aux acc = function
+          | Last x -> rev <$> M.lift2 cons (f x) acc
+          | x :: xs -> traverse_aux (M.lift2 cons (f x) acc) xs
         in
-        traverse_aux
+        match l with
+        | Last x -> f x >|= create
+        | x :: xs -> traverse_aux (f x >|= create) xs
       ;;
     end)
 

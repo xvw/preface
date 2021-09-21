@@ -269,7 +269,7 @@ anymore! What if we create invalid users?
   ] |> Validated_list.sequence
 - : user list Validated_list.t =
 Preface_stdlib__.Validation.Invalid
- [Invalid_age (-32); Invalid_email "zaviervdwgmail.com"]
+ [Invalid_email "zaviervdwgmail.com"; Invalid_age (-32)]
 ```
 
 Excellent, we have an invalid result with all the errors that occurred
