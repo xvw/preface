@@ -6,6 +6,7 @@ let run number =
     @ Continuation.cases number
     @ List.cases number
     @ Nonempty_list.cases number
+    @ Seq.cases number
     @ Option.cases number
     @ Result.cases number
     @ Try.cases number

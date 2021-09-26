@@ -2,8 +2,6 @@ type template_item =
   | Const of string
   | Var of string
 
-type template = template_item list
-
 module Bindings = Map.Make (String)
 
 module Reader = Preface.Reader.Over (struct

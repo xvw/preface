@@ -58,6 +58,12 @@ val nonempty_list :
   -> 'a Preface_stdlib.Nonempty_list.t t
 (** Arbitrary for [Nonempty_list.t] *)
 
+val seq :
+     ?collect:('a Preface_stdlib.Seq.t -> string)
+  -> 'a t
+  -> 'a Preface_stdlib.Seq.t t
+(** Arbitrary for [Seq.t] *)
+
 val continuation :
      ?collect:('a Preface_stdlib.Continuation.t -> string)
   -> 'a t
@@ -153,4 +159,4 @@ val triple : 'a t -> 'b t -> 'c t -> ('a * 'b * 'c) t
 
 val quad : 'a t -> 'b t -> 'c t -> 'd t -> ('a * 'b * 'c * 'd) t
 
-val option : 'a t -> 'a option t
+val option : ?ratio:float -> 'a t -> 'a option t

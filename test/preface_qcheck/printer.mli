@@ -30,6 +30,9 @@ val validate : 'a t -> 'a Preface_stdlib.Validate.t t
 val nonempty_list : 'a t -> 'a Preface_stdlib.Nonempty_list.t t
 (** Printer for [Nonempty_list.t]. *)
 
+val seq : 'a t -> 'a Preface_stdlib.Seq.t t
+(** Printer for [Seq.t]. *)
+
 val stream : 'a t -> 'a Preface_stdlib.Stream.t t
 (** Printer for [Stream.t]. *)
 

@@ -54,6 +54,18 @@ let nonempty_list ?collect arbitrary =
   QCheck.make ?print ?collect gen
 ;;
 
+let seq ?collect arbitrary =
+  let gen = Gen.small_seq (QCheck.gen arbitrary) in
+  let print =
+    let open Opt in
+    arbitrary.QCheck.print
+    >|= fun printer x ->
+    let pp_hook ppf x = Format.fprintf ppf "%s" (printer x) in
+    Format.asprintf "%a" (Preface_stdlib.Seq.pp pp_hook) x
+  in
+  QCheck.make ?print ?collect gen
+;;
+
 let validation ?collect valid invalid =
   let gen = Gen.validation (QCheck.gen valid) (QCheck.gen invalid) in
   let print =

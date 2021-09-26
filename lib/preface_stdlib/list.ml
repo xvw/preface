@@ -36,13 +36,13 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
 
       type 'a iter = 'a list
 
-      let traverse =
+      let traverse f =
         let open A.Infix in
-        let rec traverse f = function
-          | [] -> A.pure []
-          | x :: xs -> Stdlib.List.cons <$> f x <*> traverse f xs
+        let rec traverse acc = function
+          | [] -> Stdlib.List.rev <$> acc
+          | x :: xs -> traverse (A.lift2 Stdlib.List.cons (f x) acc) xs
         in
-        traverse
+        traverse (A.pure [])
       ;;
     end)
 
@@ -80,16 +80,13 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 
       type 'a iter = 'a list
 
-      let traverse =
-        let open M.Syntax in
-        let rec traverse f = function
-          | [] -> M.return []
-          | x :: xs ->
-            let* h = f x in
-            let* t = traverse f xs in
-            M.return (Stdlib.List.cons h t)
+      let traverse f =
+        let open M.Infix in
+        let rec traverse acc = function
+          | [] -> acc >|= Stdlib.List.rev
+          | x :: xs -> traverse (M.lift2 Stdlib.List.cons (f x) acc) xs
         in
-        traverse
+        traverse (M.return [])
       ;;
     end)
 

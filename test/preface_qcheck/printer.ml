@@ -32,6 +32,8 @@ let nonempty_list pp x =
   Format.asprintf "%a" (Preface_stdlib.Nonempty_list.pp (to_string pp)) x
 ;;
 
+let seq pp x = Format.asprintf "%a" (Preface_stdlib.Seq.pp (to_string pp)) x
+
 let validate x = validation x (nonempty_list exn)
 
 let stream pp x =

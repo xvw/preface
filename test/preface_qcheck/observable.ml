@@ -67,6 +67,12 @@ let nonempty_list inner =
   Observable.make ~eq print
 ;;
 
+let seq inner =
+  let print = Printer.seq (Observable.print inner) in
+  let eq x y = Seq.equal (Observable.equal inner) x y in
+  Observable.make ~eq print
+;;
+
 let validate x = validation x (nonempty_list exn)
 
 include (

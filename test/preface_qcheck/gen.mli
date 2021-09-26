@@ -22,6 +22,15 @@ val nonempty_list : 'a t -> 'a Preface_core.Nonempty_list.t t
 val small_nonempty_list : 'a t -> 'a Preface_core.Nonempty_list.t t
 (** Generator for [Nonempty_list] using [small_nat] as sized-bound. *)
 
+val seq_size : int t -> 'a t -> 'a Preface_stdlib.Seq.t t
+(** Generator for [Seq.t] with a size generator and an element generator. *)
+
+val seq : 'a t -> 'a Preface_stdlib.Seq.t t
+(** Generator for [Seq] using [nat] as sized-bound. *)
+
+val small_seq : 'a t -> 'a Preface_stdlib.Seq.t t
+(** Generator for [Seq] using [small_nat] as sized-bound. *)
+
 val continuation : 'a t -> 'a Preface_stdlib.Continuation.t t
 (** Generator for [Continuation]. *)
 

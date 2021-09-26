@@ -14,6 +14,7 @@ module Pair = Pair
 
 module List = List
 module Nonempty_list = Nonempty_list
+module Seq = Seq
 module Stream = Stream
 
 (** {2 Error handling} *)
