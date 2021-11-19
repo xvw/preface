@@ -10,9 +10,10 @@
 (** {2 Note about complexity}
 
     Although free constructs are elegant, they introduce an execution cost due
-    to the recursive nature of defining the type of a [Freer Selective]. There
-    are {e cheaper} encodings but they are not, for the moment, available in
-    Preface. *)
+    to the recursive nature of defining the type of a [Freer Selective], [map]
+    and [select] (so it also applies to derived combinators) have [O(n)]
+    complexity. There are {e cheaper} encodings but they are not, for the
+    moment, available in Preface. *)
 
 (** {1 Structure anatomy} *)
 
