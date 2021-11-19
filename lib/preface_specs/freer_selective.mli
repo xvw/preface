@@ -7,6 +7,13 @@
     of the [Freer selective] to an other {!module:Preface_specs.Selective} or to
     a {!module:Preface_specs.Monoid}. *)
 
+(** {2 Note about complexity}
+
+    Although free constructs are elegant, they introduce an execution cost due
+    to the recursive nature of defining the type of a [Freer Selective]. There
+    are {e cheaper} encodings but they are not, for the moment, available in
+    Preface. *)
+
 (** {1 Structure anatomy} *)
 
 (** The natural transformation for [Freer Selective] to [Selective]. *)
