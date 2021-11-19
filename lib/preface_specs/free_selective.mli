@@ -49,7 +49,7 @@ module type TO_MONOID = sig
   type natural_transformation = { transform : 'a. 'a f -> monoid }
 
   val run : natural_transformation -> 'a t -> monoid
-  (** Run the natural transformation over the [Free applicative]. *)
+  (** Run the natural transformation over the [Free selective]. *)
 end
 
 (** The [Free selective] API without the {!module:Preface_specs.Selective} API. *)
@@ -58,7 +58,6 @@ module type CORE = sig
   (** The type held by the {!module:Preface_specs.Functor}. *)
 
   (** The type held by the [Free selective]. *)
-
   type _ t =
     | Pure : 'a -> 'a t
     | Select : ('a, 'b) Either.t t * ('a -> 'b) f -> 'b t
