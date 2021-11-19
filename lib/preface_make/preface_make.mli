@@ -91,6 +91,7 @@ module Traced = Traced
 
 module Free_applicative = Free_applicative
 module Free_selective = Free_selective
+module Freer_selective = Freer_selective
 module Free_monad = Free_monad
 module Freer_monad = Freer_monad
 
