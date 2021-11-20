@@ -96,8 +96,10 @@ module Freer_monad = Freer_monad
 (** {1 Conversion and Expansion}
 
     Produces abstractions based on other abstractions (e.g. bifunctors from
-    functors) *)
+    functors). Mainly for dealing with different arities. *)
 
+module Join = Join
 module Clown = Clown
 module Joker = Joker
 module Kleisli = Kleisli
+module Cokleisli = Cokleisli
