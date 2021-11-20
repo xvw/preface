@@ -95,10 +95,18 @@ end
 (** {2 From a Monad}
 
     Produces a {!module-type:Preface_specs.STRONG} from a
-    {!module-type:Preface_specs.MONAD}. *)
+    {!module-type:Preface_specs.MONAD}. (Using Star)*)
 
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Monad.t
+
+(** {2 From a Functor}
+
+    Produces a {!module-type:Preface_specs.STRONG} from a
+    {!module-type:Preface_specs.FUNCTOR}. (Using Star) *)
+
+module From_functor (Functor : Preface_specs.Functor.CORE) :
+  Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Functor.t
 
 (** {1 Manual construction}
 

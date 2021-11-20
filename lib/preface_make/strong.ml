@@ -159,6 +159,20 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
       end)
 end
 
+module From_functor (Functor : Preface_specs.Functor.CORE) :
+  Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Functor.t = struct
+  module Prof = Profunctor.From_functor (Functor)
+
+  include
+    Over_profunctor_via_fst
+      (Prof)
+      (struct
+        type ('a, 'b) t = 'a -> 'b Functor.t
+
+        let fst f (a, c) = Functor.map (fun x -> (x, c)) (f a)
+      end)
+end
+
 module Composition (F : Preface_specs.STRONG) (G : Preface_specs.STRONG) =
 struct
   module P = Profunctor.Composition (F) (G)
