@@ -100,3 +100,4 @@ module Freer_monad = Freer_monad
 
 module Clown = Clown
 module Joker = Joker
+module Kleisli = Kleisli
