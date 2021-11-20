@@ -100,3 +100,10 @@ module Sum (F : Preface_specs.BIFUNCTOR) (G : Preface_specs.BIFUNCTOR) = struct
     ;;
   end)
 end
+
+module From_functor (F : Preface_specs.Functor.CORE) :
+  Preface_specs.BIFUNCTOR with type ('a, 'b) t = 'a F.t = Via_bimap (struct
+  type ('a, 'b) t = 'a F.t
+
+  let bimap f _ x = F.map f x
+end)
