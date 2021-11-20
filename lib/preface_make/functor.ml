@@ -87,6 +87,13 @@ module From_comonad (Comonad : Preface_specs.COMONAD) :
   Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t =
   Comonad
 
+module From_bifunctor (Bifunctor : Preface_specs.Bifunctor.CORE) :
+  Preface_specs.FUNCTOR with type 'a t = ('a, 'a) Bifunctor.t = Via_map (struct
+  type 'a t = ('a, 'a) Bifunctor.t
+
+  let map f b = Bifunctor.bimap f f b
+end)
+
 module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) = struct
   type 'a sum =
     | L of 'a F.t

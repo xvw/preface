@@ -102,6 +102,14 @@ module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
 module From_comonad (Comonad : Preface_specs.COMONAD) :
   Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t
 
+(** {2 From a Bifunctor}
+
+    Specialize a {!module-type:Preface_specs.BIFUNCTOR} into a
+    {!module-type:Preface_specs.FUNCTOR} using Join. *)
+
+module From_bifunctor (Bifunctor : Preface_specs.Bifunctor.CORE) :
+  Preface_specs.FUNCTOR with type 'a t = ('a, 'a) Bifunctor.t
+
 (** {1 Manual construction}
 
     Advanced way to build a {!module-type:Preface_specs.FUNCTOR}, constructing
