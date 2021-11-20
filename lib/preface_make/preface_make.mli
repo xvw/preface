@@ -92,3 +92,11 @@ module Free_applicative = Free_applicative
 module Free_selective = Free_selective
 module Free_monad = Free_monad
 module Freer_monad = Freer_monad
+
+(** {1 Conversion and Expansion}
+
+    Produces abstractions based on other abstractions (e.g. bifunctors from
+    functors) *)
+
+module Clown = Clown
+module Joker = Joker
