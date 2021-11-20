@@ -70,19 +70,19 @@ module Over_profunctor_via_right
   include Left_via_right (P) (R)
 end
 
-module From_monad (Monad : Preface_specs.Monad.CORE) :
-  Preface_specs.CHOICE with type ('a, 'b) t = 'a -> 'b Monad.t = struct
-  module Prof = Profunctor.From_monad (Monad)
+module From_applicative (Applicative : Preface_specs.Applicative.CORE) :
+  Preface_specs.CHOICE with type ('a, 'b) t = 'a -> 'b Applicative.t = struct
+  module Prof = Profunctor.From_functor (Applicative)
 
   include
     Over_profunctor_via_left
       (Prof)
       (struct
-        type ('a, 'b) t = 'a -> 'b Monad.t
+        type ('a, 'b) t = 'a -> 'b Applicative.t
 
         let left f = function
-          | Either.Right x -> Monad.return (Either.Right x)
-          | Either.Left x -> Monad.map Either.left (f x)
+          | Either.Right x -> Applicative.pure (Either.Right x)
+          | Either.Left x -> Applicative.map Either.left (f x)
         ;;
       end)
 end

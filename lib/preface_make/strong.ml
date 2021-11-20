@@ -144,7 +144,7 @@ end
 
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Monad.t = struct
-  module Prof = Profunctor.From_monad (Monad)
+  module Prof = Profunctor.From_functor (Monad)
 
   include
     Over_profunctor_via_fst
