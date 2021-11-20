@@ -1,5 +1,5 @@
 (** [Kleisli] uses the Kleisli category to describe arity 2 constructions for
-    arrity 1 constructions, usually using the form:
+    arity 1 constructions, usually using the form:
     [type ('a, 'b) t = 'a -> F.t]. *)
 
 (** {2 Profunctor from a Functor}

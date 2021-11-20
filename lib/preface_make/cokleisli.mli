@@ -1,5 +1,5 @@
 (** [Cokleisli] uses the Cokleisli category to describe arity 2 constructions
-    for arrity 1 constructions, usually using the form:
+    for arity 1 constructions, usually using the form:
     [type ('a, 'b) t = 'a F.t -> 'b]. *)
 
 (** {2 Bifunctor from a Contravariant}
