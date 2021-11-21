@@ -21,7 +21,7 @@ jobs:
       - run: opam exec -- dune build
       - run: opam exec -- dune build @doc
       - run: mkdir -p _build/default/_doc/_html/images
-      - run: apt-get install graphviz
+      - run: sudo apt-get install graphviz
       - run: mkdir -p .github/figures
       - run: dot -Tsvg .github/dot/specs.dot -o ./.github/figures/specs.svg
       - run: dot -Tsvg .github/dot/cut.dot -o ./.github/figures/cut.svg
