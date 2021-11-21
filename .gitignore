@@ -10,3 +10,4 @@ _tests/
 node_modules
 _esy
 esy.lock
+.github/figures/*
