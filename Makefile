@@ -16,7 +16,8 @@ fmt:
 	dune build @fmt --auto-promote
 
 %.svg: ./.github/dot/%.dot
-	  dot -Tsvg $(<) -o ./.github/figures/$(@)
+	mkdir -p ./.github/figures
+	dot -Tsvg $(<) -o ./.github/figures/$(@)
 
 dot: specs.svg cut.svg
 
