@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Add `Invariant` (Functor) (and some instance) [**@gr-im**](https://github.com/gr-im)
 - Add `Kleisli` and `Cokleisli` [**@gr-im**](https://github.com/gr-im)
 - Add `Join`, `Joker` and `Clown` [**@gr-im**](https://github.com/gr-im)
 - Relax constraint for definition of `Profunctor` and `Choice` using the Kleisli Arrow [**@gr-im**](https://github.com/gr-im)
