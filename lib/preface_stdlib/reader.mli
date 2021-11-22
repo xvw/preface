@@ -17,6 +17,10 @@ module Over (Env : Preface_specs.Types.T0) : sig
 
   module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
 
+  (** {2 Invariant} *)
+
+  module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
+
   (** {2 Applicative} *)
 
   module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t

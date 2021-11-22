@@ -23,6 +23,9 @@ Preface_make.Functor.Via_map (struct
   let map f = function Valid x -> Valid (f x) | Invalid err -> Invalid err
 end)
 
+module Invariant (T : Preface_specs.Types.T0) =
+  Preface_make.Invariant.From_functor (Functor (T))
+
 let traverse_aux pure map f = function
   | Invalid x -> pure (Invalid x)
   | Valid x -> map (fun x -> Valid x) (f x)

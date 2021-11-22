@@ -24,6 +24,10 @@ module Monad : Preface_specs.MONAD with type 'a t = 'a t
 
 module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
 
+(** {2 Invariant} *)
+
+module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
+
 (** {1 Addtional functions}
 
     Additional functions to facilitate practical work with [Stream.t]. *)

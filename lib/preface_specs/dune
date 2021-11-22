@@ -21,6 +21,7 @@
   alt
   alternative
   monad_plus
+  invariant
   contravariant
   divisible
   category

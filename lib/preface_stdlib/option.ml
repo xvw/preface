@@ -72,6 +72,7 @@ module Monad =
   Preface_make.Traversable.Join_with_monad (Monad_internal) (Monad_traversable)
 module Monad_plus =
   Preface_make.Monad_plus.Over_monad_and_alternative (Monad) (Alternative)
+module Invariant = Preface_make.Invariant.From_functor (Functor)
 
 module Monoid (M : Preface_specs.SEMIGROUP) =
 Preface_make.Monoid.Via_combine_and_neutral (struct

@@ -20,6 +20,8 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map = map
 end)
 
+module Invariant = Preface_make.Invariant.From_functor (Functor)
+
 module Applicative = Preface_make.Applicative.Via_apply (struct
   type nonrec 'a t = 'a t
 

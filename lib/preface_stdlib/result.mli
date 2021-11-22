@@ -31,6 +31,11 @@ module Functor (T : Preface_specs.Types.T0) :
 module Alt (T : Preface_specs.Types.T0) :
   Preface_specs.ALT with type 'a t = ('a, T.t) Bifunctor.t
 
+(** {3 Invariant} *)
+
+module Invariant (T : Preface_specs.Types.T0) :
+  Preface_specs.INVARIANT with type 'a t = ('a, T.t) Bifunctor.t
+
 (** {3 Applicative}
 
     [Result.t] implements {!module-type:Preface_specs.APPLICATIVE} and

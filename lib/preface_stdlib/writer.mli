@@ -23,4 +23,8 @@ module Over (Tape : Preface_specs.MONOID) : sig
   (** {2 Applicative} *)
 
   module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
+
+  (** {2 Invariant} *)
+
+  module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 end

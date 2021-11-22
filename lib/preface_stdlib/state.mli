@@ -26,4 +26,8 @@ module Over (State : Preface_specs.Types.T0) : sig
   (** {2 Applicative} *)
 
   module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
+
+  (** {2 Invariant} *)
+
+  module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 end

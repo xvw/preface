@@ -19,4 +19,8 @@ module Over (Store : Preface_specs.Types.T0) : sig
   (** {2 Functor} *)
 
   module Functor : Preface_specs.FUNCTOR with type 'a t = 'a t
+
+  (** {2 Invariant} *)
+
+  module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 end

@@ -7,7 +7,7 @@
     some laws.
 
     + [contramap id = id]
-    + [(contramap f) % (contramap g) = contramap (g & f)] *)
+    + [(contramap f) % (contramap g) = contramap (g % f)] *)
 
 (** {1 Minimal definition} *)
 

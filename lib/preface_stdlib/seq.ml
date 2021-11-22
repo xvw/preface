@@ -18,6 +18,7 @@ let rev seq =
 ;;
 
 module Functor = Preface_make.Functor.Via_map (Stdlib.Seq)
+module Invariant = Preface_make.Invariant.From_functor (Functor)
 
 module Alternative = Preface_make.Alternative.Via_apply (struct
   type nonrec 'a t = 'a t

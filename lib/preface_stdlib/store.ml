@@ -9,4 +9,5 @@ module Over (Store : Preface_specs.Types.T0) = struct
   ;;
 
   module Functor = Preface_make.Store.Functor (Identity.Functor) (Store)
+  module Invariant = Preface_make.Invariant.From_functor (Functor)
 end
