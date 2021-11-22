@@ -81,6 +81,16 @@ module Sum (F : Preface_specs.BIFUNCTOR) (G : Preface_specs.BIFUNCTOR) : sig
   include Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) sum
 end
 
+(** {2 From a functor}
+
+    Produces a {!module-type:Preface_specs.BIFUNCTOR} from a
+    {!module-type:Preface_specs.FUNCTOR}. (Using
+    {{:https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.475.6134&rep=rep1&type=pdf}
+    Clown}) *)
+
+module From_functor (F : Preface_specs.Functor.CORE) :
+  Preface_specs.BIFUNCTOR with type ('a, 'b) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build an {!module-type:Preface_specs.BIFUNCTOR},

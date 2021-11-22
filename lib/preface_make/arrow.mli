@@ -26,7 +26,7 @@ module Over_category_and_via_arrow_and_fst
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Over_category_and_via_arrow_an_split
+module Over_category_and_via_arrow_and_split
     (Category : Preface_specs.CATEGORY)
     (Req : Preface_specs.Arrow.WITH_ARROW_AND_SPLIT
              with type ('a, 'b) t = ('a, 'b) Category.t) :

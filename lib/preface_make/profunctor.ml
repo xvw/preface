@@ -24,17 +24,17 @@ module Via_contramap_fst_and_map_snd
   Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t =
   Core_via_contramap_fst_and_map_snd (Req)
 
-module From_monad (Monad : Preface_specs.Monad.CORE) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = 'a -> 'b Monad.t = struct
-  type ('a, 'b) t = 'a -> 'b Monad.t
+module From_functor (Functor : Preface_specs.Functor.CORE) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = 'a -> 'b Functor.t = struct
+  type ('a, 'b) t = 'a -> 'b Functor.t
 
   open Preface_core.Fun.Infix
 
-  let dimap f g h = Monad.map g % h % f
+  let dimap f g h = Functor.map g % h % f
 
   let contramap_fst k f = f % k
 
-  let map_snd k f = Monad.map k % f
+  let map_snd k f = Functor.map k % f
 end
 
 module From_strong (Strong : Preface_specs.STRONG) :

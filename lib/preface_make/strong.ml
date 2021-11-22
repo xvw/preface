@@ -144,7 +144,7 @@ end
 
 module From_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Monad.t = struct
-  module Prof = Profunctor.From_monad (Monad)
+  module Prof = Profunctor.From_functor (Monad)
 
   include
     Over_profunctor_via_fst
@@ -156,6 +156,20 @@ module From_monad (Monad : Preface_specs.Monad.CORE) :
           let open Monad in
           bind (fun b -> return (b, c)) (f a)
         ;;
+      end)
+end
+
+module From_functor (Functor : Preface_specs.Functor.CORE) :
+  Preface_specs.STRONG with type ('a, 'b) t = 'a -> 'b Functor.t = struct
+  module Prof = Profunctor.From_functor (Functor)
+
+  include
+    Over_profunctor_via_fst
+      (Prof)
+      (struct
+        type ('a, 'b) t = 'a -> 'b Functor.t
+
+        let fst f (a, c) = Functor.map (fun x -> (x, c)) (f a)
       end)
 end
 

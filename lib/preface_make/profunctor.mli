@@ -41,13 +41,13 @@ end
 
 (** {1 From other abstraction} *)
 
-(** {2 From a Monad}
+(** {2 From a Functor}
 
     Produces a {!module-type:Preface_specs.PROFUNCTOR} from a
-    {!module-type:Preface_specs.MONAD}. *)
+    {!module-type:Preface_specs.FUNCTOR}. *)
 
-module From_monad (Monad : Preface_specs.Monad.CORE) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = 'a -> 'b Monad.t
+module From_functor (Functor : Preface_specs.Functor.CORE) :
+  Preface_specs.PROFUNCTOR with type ('a, 'b) t = 'a -> 'b Functor.t
 
 (** {2 From a Strong profunctor}
 

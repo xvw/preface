@@ -92,10 +92,10 @@ end
 
 (** {1 From other abstraction} *)
 
-(** {2 From a Monad}
+(** {2 From an Applicative}
 
     Produces a {!module-type:Preface_specs.CHOICE} from a
-    {!module-type:Preface_specs.MONAD}. *)
+    {!module-type:Preface_specs.APPLICATIVE}. *)
 
-module From_monad (Monad : Preface_specs.Monad.CORE) :
-  Preface_specs.CHOICE with type ('a, 'b) t = 'a -> 'b Monad.t
+module From_applicative (Applicative : Preface_specs.Applicative.CORE) :
+  Preface_specs.CHOICE with type ('a, 'b) t = 'a -> 'b Applicative.t
