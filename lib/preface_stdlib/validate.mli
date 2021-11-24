@@ -61,6 +61,10 @@ module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
 
 module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 
+(** {2 Invariant} *)
+
+module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
+
 (** {1 Addtional functions}
 
     Additional functions to facilitate practical work with [Validate.t]. *)

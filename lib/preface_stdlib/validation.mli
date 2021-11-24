@@ -67,6 +67,11 @@ module Monad (T : Preface_specs.Types.T0) :
 module Foldable (T : Preface_specs.Types.T0) :
   Preface_specs.FOLDABLE with type 'a t = ('a, T.t) t
 
+(** {3 Invariant} *)
+
+module Invariant (T : Preface_specs.Types.T0) :
+  Preface_specs.INVARIANT with type 'a t = ('a, T.t) Bifunctor.t
+
 (** {1 Addtional functions}
 
     Additional functions to facilitate practical work with [Validation.t]. *)

@@ -98,6 +98,7 @@ module Selective =
   Preface_make.Selective.Over_applicative_via_select
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
+module Invariant = Preface_make.Invariant.From_functor (Functor)
 
 module Comonad = Preface_make.Comonad.Via_extend (struct
   type nonrec 'a t = 'a t

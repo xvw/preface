@@ -1,7 +1,10 @@
 graph {
         node [shape=plaintext; fontname = "Helvetica"; style=filled; fillcolor=black; fontcolor=white];
         edge [color = gray];
-        
+
+        Invariant;
+        Invariant -- Functor;
+        Invariant -- Contravariant;
         Contravariant;
         Divisible;
         Functor -- Applicative -- Selective --  Monad;

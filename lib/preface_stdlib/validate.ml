@@ -10,6 +10,7 @@ let error err = invalid (Nonempty_list.create err)
 
 module Exn_list = Preface_make.Semigroup.From_alt (Nonempty_list.Alt) (Exn)
 module Functor = Validation.Functor (Exn_list)
+module Invariant = Preface_make.Invariant.From_functor (Functor)
 module Alt = Validation.Alt (Exn_list)
 module Applicative = Validation.Applicative (Exn_list)
 module Selective = Validation.Selective (Exn_list)

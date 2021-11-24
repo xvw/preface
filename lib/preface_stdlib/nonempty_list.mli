@@ -48,6 +48,10 @@ module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
 
 module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 
+(** {2 Invariant Functor} *)
+
+module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
+
 (** {2 Delayed implementation}
 
     By setting the [inner type] type of [Nonempty_list.t] it is possible to get

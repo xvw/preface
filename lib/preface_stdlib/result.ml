@@ -19,6 +19,9 @@ Preface_make.Functor.Via_map (struct
   let map f x = Bifunctor.bimap f id x
 end)
 
+module Invariant (T : Preface_specs.Types.T0) =
+  Preface_make.Invariant.From_functor (Functor (T))
+
 module Alt (T : Preface_specs.Types.T0) =
   Preface_make.Alt.Over_functor
     (Functor

@@ -33,3 +33,5 @@ module Monad = Preface_make.Monad.Via_map_and_join (struct
 
   let join c = { run = (fun k -> c.run (fun c' -> c'.run k)) }
 end)
+
+module Invariant = Preface_make.Invariant.From_functor (Functor)

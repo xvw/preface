@@ -81,6 +81,9 @@ module Monad (T : Preface_specs.Types.T0) = struct
   include Preface_make.Traversable.Join_with_monad (M) (T)
 end
 
+module Invariant (T : Preface_specs.Types.T0) =
+  Preface_make.Invariant.From_functor (Functor (T))
+
 module Foldable (T : Preface_specs.Types.T0) =
 Preface_make.Foldable.Via_fold_right (struct
   type nonrec 'a t = (T.t, 'a) t

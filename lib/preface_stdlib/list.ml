@@ -96,6 +96,7 @@ module Selective =
   Preface_make.Selective.Over_applicative_via_select
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
+module Invariant = Preface_make.Invariant.From_functor (Functor)
 
 module Monoid (T : Preface_specs.Types.T0) =
 Preface_make.Monoid.Via_combine_and_neutral (struct

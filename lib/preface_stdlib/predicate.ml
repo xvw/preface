@@ -6,6 +6,8 @@ module Contravariant = Preface_make.Contravariant.Via_contramap (struct
   let contramap f g = Preface_core.Fun.(g % f)
 end)
 
+module Invariant = Preface_make.Invariant.From_contravariant (Contravariant)
+
 module Divisible =
   Preface_make.Divisible.Over_contravariant
     (Contravariant)

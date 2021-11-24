@@ -35,6 +35,7 @@ module Monoid = Monoid
 
 (** {1 Functor hierarchy} *)
 
+module Invariant = Invariant
 module Functor = Functor
 module Alt = Alt
 module Applicative = Applicative

@@ -10,6 +10,8 @@ module Functor = Result.Functor (struct
   type t = exn
 end)
 
+module Invariant = Preface_make.Invariant.From_functor (Functor)
+
 module Alt = Result.Alt (struct
   type t = exn
 end)

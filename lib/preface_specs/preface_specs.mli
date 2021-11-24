@@ -19,6 +19,7 @@ module Monoid = Monoid
 
 (** {1 Functor hierarchy} *)
 
+module Invariant = Invariant
 module Functor = Functor
 module Alt = Alt
 module Applicative = Applicative
@@ -124,6 +125,8 @@ module type FREE_SELECTIVE = Free_selective.API
 module type FREE_MONAD = Free_monad.API
 
 module type FREER_MONAD = Freer_monad.API
+
+module type INVARIANT = Invariant.API
 
 module type CONTRAVARIANT = Contravariant.API
 

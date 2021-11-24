@@ -53,6 +53,11 @@ module Monad (T : Preface_specs.Types.T0) :
   Preface_specs.Traversable.API_OVER_MONAD
     with type 'a t = (T.t, 'a) Bifunctor.t
 
+(** {3 Invariant Functor} *)
+
+module Invariant (T : Preface_specs.Types.T0) :
+  Preface_specs.INVARIANT with type 'a t = (T.t, 'a) Bifunctor.t
+
 (** {3 Foldable} *)
 
 module Foldable (T : Preface_specs.Types.T0) :

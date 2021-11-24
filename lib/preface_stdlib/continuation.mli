@@ -17,7 +17,10 @@ module Applicative : Preface_specs.APPLICATIVE with type 'a t = 'a t
 (** {2 Monad} *)
 
 module Monad : Preface_specs.MONAD with type 'a t = 'a t
-(** {2 Monad API} *)
+
+(** {2 Invariant Functor} *)
+
+module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 
 (** {1 Addtional functions}
 
