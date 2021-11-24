@@ -25,6 +25,7 @@ graph {
         Functor -- Free_monad [style=dotted; arrowhead=none];
         
         Free_selective -- Selective;
+        Freer_selective -- Selective;
         Free_applicative -- Applicative;
         Free_monad -- Monad;
         Freer_monad -- Monad;

@@ -15,6 +15,7 @@
   free_monad
   freer_monad
   free_selective
+  freer_selective
   semigroup
   monoid
   foldable

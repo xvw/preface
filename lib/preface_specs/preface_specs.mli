@@ -75,6 +75,7 @@ module Traced = Traced
 
 module Free_applicative = Free_applicative
 module Free_selective = Free_selective
+module Freer_selective = Freer_selective
 module Free_monad = Free_monad
 module Freer_monad = Freer_monad
 
@@ -121,6 +122,8 @@ module type TRAVERSABLE = Traversable.API
 module type FREE_APPLICATIVE = Free_applicative.API
 
 module type FREE_SELECTIVE = Free_selective.API
+
+module type FREER_SELECTIVE = Freer_selective.API
 
 module type FREE_MONAD = Free_monad.API
 

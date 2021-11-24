@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Add `Freer Selective` [**@gr-im**](https://github.com/gr-im)
 - Add `Invariant` (Functor) (and some instance) [**@gr-im**](https://github.com/gr-im)
 - Add `Kleisli` and `Cokleisli` [**@gr-im**](https://github.com/gr-im)
 - Add `Join`, `Joker` and `Clown` [**@gr-im**](https://github.com/gr-im)
