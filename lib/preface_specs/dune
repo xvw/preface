@@ -25,6 +25,7 @@
   invariant
   contravariant
   divisible
+  decidable
   category
   arrow
   arrow_zero

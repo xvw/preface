@@ -35,6 +35,7 @@ module Traversable = Traversable
 
 module Contravariant = Contravariant
 module Divisible = Divisible
+module Decidable = Decidable
 
 (** {1 Bifunctor hierarchy} *)
 
@@ -137,6 +138,8 @@ module type CONTRAVARIANT = Contravariant.API
 module type DIVISIBLE = Divisible.API
 
 module type SEMIGROUPOID = Semigroupoid.API
+
+module type DECIDABLE = Decidable.API
 
 module type CATEGORY = Category.API
 
