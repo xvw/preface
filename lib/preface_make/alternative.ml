@@ -1,6 +1,6 @@
 module Core_via_map_and_product
-    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) :
-  Preface_specs.Alternative.CORE with type 'a t = 'a Req.t = struct
+    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) =
+struct
   include Applicative.Core_via_map_and_product (Req)
 
   let combine = Req.combine
@@ -8,8 +8,7 @@ module Core_via_map_and_product
   let neutral = Req.neutral
 end
 
-module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
-  Preface_specs.Alternative.CORE with type 'a t = 'a Req.t = struct
+module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) = struct
   include Applicative.Core_via_apply (Req)
 
   let combine = Req.combine
@@ -17,8 +16,7 @@ module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
   let neutral = Req.neutral
 end
 
-module Core_via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
-  Preface_specs.Alternative.CORE with type 'a t = 'a Req.t = struct
+module Core_via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) = struct
   include Applicative.Core_via_lift2 (Req)
 
   let combine = Req.combine
@@ -28,32 +26,29 @@ end
 
 let reduce' combine neutral list = List.fold_left combine neutral list
 
-module Operation (Core : Preface_specs.Alternative.CORE) :
-  Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t = struct
+module Operation (Core : Preface_specs.Alternative.CORE) = struct
   include Applicative.Operation (Core)
   include Alt.Operation (Core)
 
   let reduce list = reduce' Core.combine Core.neutral list
 end
 
-module Syntax (Core : Preface_specs.Alternative.CORE) :
-  Preface_specs.Alternative.SYNTAX with type 'a t = 'a Core.t =
-  Applicative.Syntax (Core)
+module Syntax (Core : Preface_specs.Alternative.CORE) = Applicative.Syntax (Core)
 
 module Infix
     (Core : Preface_specs.Alternative.CORE)
-    (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Alternative.INFIX with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t) =
+struct
   include Applicative.Infix (Core) (Operation)
   include Alt.Infix (Core) (Operation)
 end
 
 module Via
     (Core : Preface_specs.Alternative.CORE)
-    (Operation : Preface_specs.Alternative.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Alternative.INFIX with type 'a t = 'a Core.t)
-    (Syntax : Preface_specs.Alternative.SYNTAX with type 'a t = 'a Core.t) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Alternative.OPERATION)
+    (Infix : Preface_specs.Alternative.INFIX)
+    (Syntax : Preface_specs.Alternative.SYNTAX) =
+struct
   include Core
   include Operation
   include Syntax
@@ -63,8 +58,8 @@ module Via
 end
 
 module Via_map_and_product
-    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t = struct
+    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) =
+struct
   module Core = Core_via_map_and_product (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
@@ -75,8 +70,7 @@ module Via_map_and_product
   include Infix
 end
 
-module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t = struct
+module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) = struct
   module Core = Core_via_apply (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
@@ -87,8 +81,7 @@ module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
   include Infix
 end
 
-module Via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t = struct
+module Via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) = struct
   module Core = Core_via_lift2 (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
@@ -102,8 +95,7 @@ end
 module Over_applicative
     (Applicative : Preface_specs.APPLICATIVE)
     (Req : Preface_specs.Alternative.WITH_NEUTRAL_AND_COMBINE
-             with type 'a t = 'a Applicative.t) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t =
+             with type 'a t = 'a Applicative.t) =
   Via
     (struct
       include Applicative
@@ -137,8 +129,7 @@ module Over_applicative
 
 module Composition
     (F : Preface_specs.ALTERNATIVE)
-    (G : Preface_specs.APPLICATIVE) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a G.t F.t =
+    (G : Preface_specs.APPLICATIVE) =
   Over_applicative
     (Applicative.Composition (F) (G))
        (struct
@@ -149,8 +140,7 @@ module Composition
          let combine = F.combine
        end)
 
-module From_arrow_plus (A : Preface_specs.ARROW_PLUS) :
-  Preface_specs.ALTERNATIVE with type 'a t = (unit, 'a) A.t =
+module From_arrow_plus (A : Preface_specs.ARROW_PLUS) =
   Over_applicative
     (Applicative.From_arrow
        (A))
@@ -162,8 +152,7 @@ module From_arrow_plus (A : Preface_specs.ARROW_PLUS) :
          let combine x y = A.(x <|> y)
        end)
 
-module Product (F : Preface_specs.ALTERNATIVE) (G : Preface_specs.ALTERNATIVE) :
-  Preface_specs.ALTERNATIVE with type 'a t = 'a F.t * 'a G.t =
+module Product (F : Preface_specs.ALTERNATIVE) (G : Preface_specs.ALTERNATIVE) =
   Over_applicative
     (Applicative.Product (F) (G))
        (struct

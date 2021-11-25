@@ -1,11 +1,7 @@
 open Preface_core.Fun
+module Core (Req : Preface_specs.Functor.WITH_MAP) = Req
 
-module Core (Req : Preface_specs.Functor.WITH_MAP) :
-  Preface_specs.Functor.CORE with type 'a t = 'a Req.t =
-  Req
-
-module Operation (Core : Preface_specs.Functor.CORE) :
-  Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t = struct
+module Operation (Core : Preface_specs.Functor.CORE) = struct
   type 'a t = 'a Core.t
 
   let replace value x = (Core.map <% const) value x
@@ -15,8 +11,8 @@ end
 
 module Infix
     (Core : Preface_specs.Functor.CORE)
-    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Functor.INFIX with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) =
+struct
   type 'a t = 'a Operation.t
 
   let ( <$> ) = Core.map
@@ -30,17 +26,16 @@ end
 
 module Via
     (Core : Preface_specs.Functor.CORE)
-    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Functor.OPERATION)
+    (Infix : Preface_specs.Functor.INFIX) =
+struct
   include Core
   include Operation
   include Infix
   module Infix = Infix
 end
 
-module Via_map (Req : Preface_specs.Functor.WITH_MAP) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Req.t = struct
+module Via_map (Req : Preface_specs.Functor.WITH_MAP) = struct
   module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
@@ -49,46 +44,28 @@ module Via_map (Req : Preface_specs.Functor.WITH_MAP) :
   include Infix
 end
 
-module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
-  Preface_specs.FUNCTOR with type 'a t = 'a G.t F.t = Via_map (struct
+module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) =
+Via_map (struct
   type 'a t = 'a G.t F.t
 
   let map f x = F.map (G.map f) x
 end)
 
-module From_arrow (A : Preface_specs.ARROW) :
-  Preface_specs.FUNCTOR with type 'a t = (unit, 'a) A.t = Via_map (struct
+module From_arrow (A : Preface_specs.ARROW) = Via_map (struct
   type 'a t = (unit, 'a) A.t
 
   let map f x = A.(x >>> arrow f)
 end)
 
-module From_applicative (Applicative : Preface_specs.APPLICATIVE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Applicative.t =
-  Applicative
+module From_applicative (Applicative : Preface_specs.APPLICATIVE) = Applicative
+module From_alt (Alt : Preface_specs.ALT) = Alt
+module From_monad (Monad : Preface_specs.MONAD) = Monad
+module From_alternative (Alternative : Preface_specs.ALTERNATIVE) = Alternative
+module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) = Monad_plus
+module From_comonad (Comonad : Preface_specs.COMONAD) = Comonad
 
-module From_alt (Alt : Preface_specs.ALT) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Alt.t =
-  Alt
-
-module From_monad (Monad : Preface_specs.MONAD) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Monad.t =
-  Monad
-
-module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Alternative.t =
-  Alternative
-
-module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Monad_plus.t =
-  Monad_plus
-
-module From_comonad (Comonad : Preface_specs.COMONAD) :
-  Preface_specs.FUNCTOR with type 'a t = 'a Comonad.t =
-  Comonad
-
-module From_bifunctor (Bifunctor : Preface_specs.Bifunctor.CORE) :
-  Preface_specs.FUNCTOR with type 'a t = ('a, 'a) Bifunctor.t = Via_map (struct
+module From_bifunctor (Bifunctor : Preface_specs.Bifunctor.CORE) =
+Via_map (struct
   type 'a t = ('a, 'a) Bifunctor.t
 
   let map f b = Bifunctor.bimap f f b
@@ -106,8 +83,8 @@ module Sum (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) = struct
   end)
 end
 
-module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) :
-  Preface_specs.FUNCTOR with type 'a t = 'a F.t * 'a G.t = Via_map (struct
+module Product (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) =
+Via_map (struct
   type 'a t = 'a F.t * 'a G.t
 
   let map f (x, y) = (F.map f x, G.map f y)

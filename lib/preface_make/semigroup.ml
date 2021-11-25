@@ -1,9 +1,6 @@
-module Core (Req : Preface_specs.Semigroup.WITH_COMBINE) :
-  Preface_specs.Semigroup.CORE with type t = Req.t =
-  Req
+module Core (Req : Preface_specs.Semigroup.WITH_COMBINE) = Req
 
-module Operation (Core : Preface_specs.Semigroup.CORE) :
-  Preface_specs.Semigroup.OPERATION with type t = Core.t = struct
+module Operation (Core : Preface_specs.Semigroup.CORE) = struct
   type t = Core.t
 
   let times n x = Preface_core.Monoid.times Core.combine n x
@@ -11,8 +8,7 @@ module Operation (Core : Preface_specs.Semigroup.CORE) :
   let reduce_nel list = Preface_core.Monoid.reduce_nel Core.combine list
 end
 
-module Infix (Core : Preface_specs.Semigroup.CORE) :
-  Preface_specs.Semigroup.INFIX with type t = Core.t = struct
+module Infix (Core : Preface_specs.Semigroup.CORE) = struct
   type t = Core.t
 
   let ( <|> ) = Core.combine
@@ -20,17 +16,16 @@ end
 
 module Via
     (Core : Preface_specs.Semigroup.CORE)
-    (Operation : Preface_specs.Semigroup.OPERATION with type t = Core.t)
-    (Infix : Preface_specs.Semigroup.INFIX with type t = Operation.t) :
-  Preface_specs.SEMIGROUP with type t = Infix.t = struct
+    (Operation : Preface_specs.Semigroup.OPERATION)
+    (Infix : Preface_specs.Semigroup.INFIX) =
+struct
   include Core
   include Operation
   module Infix = Infix
   include Infix
 end
 
-module Via_combine (Req : Preface_specs.Semigroup.WITH_COMBINE) :
-  Preface_specs.SEMIGROUP with type t = Req.t = struct
+module Via_combine (Req : Preface_specs.Semigroup.WITH_COMBINE) = struct
   module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
@@ -41,8 +36,8 @@ end
 
 module From_alt
     (Alt : Preface_specs.Alt.WITH_COMBINE)
-    (T : Preface_specs.Types.T0) :
-  Preface_specs.SEMIGROUP with type t = T.t Alt.t = Via_combine (struct
+    (T : Preface_specs.Types.T0) =
+Via_combine (struct
   type t = T.t Alt.t
 
   let combine = Alt.combine

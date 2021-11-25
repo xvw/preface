@@ -67,7 +67,7 @@ module Via
 (** {2 Building Core} *)
 
 module Core_over_semigroup
-    (S : Preface_specs.SEMIGROUP)
+    (S : Preface_specs.Semigroup.CORE)
     (M : Preface_specs.Monoid.WITH_NEUTRAL with type t = S.t) :
   Preface_specs.Monoid.CORE with type t = M.t
 

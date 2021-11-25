@@ -135,12 +135,12 @@ module Core_over_functor_via_branch
   Preface_specs.Selective.CORE with type 'a t = 'a Req.t
 
 module Core_over_applicative_via_select
-    (Applicative : Preface_specs.APPLICATIVE)
+    (Applicative : Preface_specs.Applicative.CORE)
     (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Req.t
 
 module Core_over_applicative_via_branch
-    (Applicative : Preface_specs.APPLICATIVE)
+    (Applicative : Preface_specs.Applicative.CORE)
     (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Req.t
 

@@ -1,19 +1,18 @@
 module Core_via_dimap_and_closed
-    (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
-  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+    (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) =
+struct
   include Req
   include Profunctor.Core_via_dimap (Req)
 end
 
 module Core_via_contramap_fst_and_map_snd_and_closed
-    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
-  Preface_specs.Closed.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) =
+struct
   include Req
   include Profunctor.Core_via_contramap_fst_and_map_snd (Req)
 end
 
-module Operation (Core : Preface_specs.Closed.CORE) :
-  Preface_specs.Closed.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t = struct
+module Operation (Core : Preface_specs.Closed.CORE) = struct
   type ('a, 'b) t = ('a, 'b) Core.t
 
   let curry f = Core.contramap_fst (fun x y -> (x, y)) (Core.closed f)
@@ -22,16 +21,16 @@ end
 module Via
     (Core : Preface_specs.Closed.CORE)
     (Operation : Preface_specs.Closed.OPERATION
-                   with type ('a, 'b) t = ('a, 'b) Core.t) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Operation.t = struct
+                   with type ('a, 'b) t = ('a, 'b) Core.t) =
+struct
   include Core
   include Operation
 end
 
 module Over_profunctor_via_closed
     (P : Preface_specs.Profunctor.CORE)
-    (C : Preface_specs.Closed.WITH_CLOSED with type ('a, 'b) t = ('a, 'b) P.t) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) C.t = struct
+    (C : Preface_specs.Closed.WITH_CLOSED with type ('a, 'b) t = ('a, 'b) P.t) =
+struct
   module Core = struct
     include P
     include C
@@ -41,8 +40,8 @@ module Over_profunctor_via_closed
   include Operation (Core)
 end
 
-module Via_dimap_and_closed (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t = struct
+module Via_dimap_and_closed (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) =
+struct
   module C = struct
     include Profunctor.Via_dimap (Req)
     include Req
@@ -53,8 +52,8 @@ module Via_dimap_and_closed (Req : Preface_specs.Closed.WITH_DIMAP_AND_CLOSED) :
 end
 
 module Via_contramap_fst_and_map_snd_and_closed
-    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) :
-  Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) Req.t = struct
+    (Req : Preface_specs.Closed.WITH_CONTRAMAP_FST_AND_MAP_SND_AND_CLOSED) =
+struct
   module C = struct
     include Profunctor.Via_contramap_fst_and_map_snd (Req)
     include Req

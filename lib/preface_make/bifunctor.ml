@@ -1,7 +1,6 @@
 open Preface_core.Fun
 
-module Core_via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) :
-  Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+module Core_via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) = struct
   include Req
 
   let map_fst f = bimap f id
@@ -10,16 +9,14 @@ module Core_via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) :
 end
 
 module Core_via_map_fst_and_map_snd
-    (Req : Preface_specs.Bifunctor.WITH_MAP_FST_AND_MAP_SND) :
-  Preface_specs.Bifunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+    (Req : Preface_specs.Bifunctor.WITH_MAP_FST_AND_MAP_SND) =
+struct
   include Req
 
   let bimap f g = map_fst f %> map_snd g
 end
 
-module Operation (Core : Preface_specs.Bifunctor.CORE) :
-  Preface_specs.Bifunctor.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t =
-struct
+module Operation (Core : Preface_specs.Bifunctor.CORE) = struct
   type ('a, 'b) t = ('a, 'b) Core.t
 
   let replace_fst value x = Core.map_fst (const value) x
@@ -30,14 +27,13 @@ end
 module Via
     (Core : Preface_specs.Bifunctor.CORE)
     (Operation : Preface_specs.Bifunctor.OPERATION
-                   with type ('a, 'b) t = ('a, 'b) Core.t) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Core.t = struct
+                   with type ('a, 'b) t = ('a, 'b) Core.t) =
+struct
   include Core
   include Operation
 end
 
-module Via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t = struct
+module Via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) = struct
   module Core = Core_via_bimap (Req)
   module Operation = Operation (Core)
   include Core
@@ -45,8 +41,8 @@ module Via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) :
 end
 
 module Via_map_fst_and_map_snd
-    (Req : Preface_specs.Bifunctor.WITH_MAP_FST_AND_MAP_SND) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t = struct
+    (Req : Preface_specs.Bifunctor.WITH_MAP_FST_AND_MAP_SND) =
+struct
   module Core = Core_via_map_fst_and_map_snd (Req)
   module Operation = Operation (Core)
   include Core
@@ -55,8 +51,7 @@ end
 
 module From_functors_product
     (F : Preface_specs.FUNCTOR)
-    (G : Preface_specs.FUNCTOR) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = 'a F.t * 'b G.t =
+    (G : Preface_specs.FUNCTOR) =
 Via_map_fst_and_map_snd (struct
   type ('a, 'b) t = 'a F.t * 'b G.t
 
@@ -78,8 +73,7 @@ struct
   end)
 end
 
-module Product (F : Preface_specs.BIFUNCTOR) (G : Preface_specs.BIFUNCTOR) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t =
+module Product (F : Preface_specs.BIFUNCTOR) (G : Preface_specs.BIFUNCTOR) =
 Via_bimap (struct
   type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
 
@@ -101,8 +95,7 @@ module Sum (F : Preface_specs.BIFUNCTOR) (G : Preface_specs.BIFUNCTOR) = struct
   end)
 end
 
-module From_functor (F : Preface_specs.Functor.CORE) :
-  Preface_specs.BIFUNCTOR with type ('a, 'b) t = 'a F.t = Via_bimap (struct
+module From_functor (F : Preface_specs.Functor.CORE) = Via_bimap (struct
   type ('a, 'b) t = 'a F.t
 
   let bimap f _ x = F.map f x

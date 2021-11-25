@@ -1,7 +1,8 @@
 open Preface_core.Fun
 
 module Over_functor (F : Preface_specs.Functor.CORE) :
-  Preface_specs.FREE_APPLICATIVE with type 'a f = 'a F.t = struct
+  Preface_specs.FREE_APPLICATIVE with type 'a f = 'a F.t (* mandatory *) =
+struct
   type 'a f = 'a F.t
 
   type _ t =
