@@ -1,5 +1,5 @@
-module Core_via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
-  Preface_specs.Foldable.CORE with type 'a t = 'a Req.t = struct
+module Core_via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) =
+struct
   include Req
 
   let fold_map' neutral combine f x =
@@ -8,8 +8,7 @@ module Core_via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
   ;;
 end
 
-module Core_via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
-  Preface_specs.Foldable.CORE with type 'a t = 'a Req.t = struct
+module Core_via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) = struct
   include Req
 
   let fold_right f x acc =
@@ -17,8 +16,7 @@ module Core_via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
   ;;
 end
 
-module Operation (C : Preface_specs.Foldable.CORE) :
-  Preface_specs.Foldable.OPERATION with type 'a t = 'a C.t = struct
+module Operation (C : Preface_specs.Foldable.CORE) = struct
   type 'a t = 'a C.t
 
   let fold_map (type m) (module M : Preface_specs.Monoid.CORE with type t = m) f
@@ -45,29 +43,27 @@ end
 
 module Via
     (C : Preface_specs.Foldable.CORE)
-    (O : Preface_specs.Foldable.OPERATION with type 'a t = 'a C.t) :
-  Preface_specs.FOLDABLE with type 'a t = 'a O.t = struct
+    (O : Preface_specs.Foldable.OPERATION with type 'a t = 'a C.t) =
+struct
   include C
 
   include (O : Preface_specs.Foldable.OPERATION with type 'a t := 'a t)
 end
 
-module Via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) :
-  Preface_specs.FOLDABLE with type 'a t = 'a Req.t = struct
+module Via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) = struct
   module C = Core_via_fold_right (Req)
   module O = Operation (C)
   include Via (C) (O)
 end
 
-module Via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) :
-  Preface_specs.FOLDABLE with type 'a t = 'a Req.t = struct
+module Via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) = struct
   module C = Core_via_fold_map (Req)
   module O = Operation (C)
   include Via (C) (O)
 end
 
-module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
-  Preface_specs.FOLDABLE with type 'a t = 'a G.t F.t = Via_fold_map (struct
+module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) =
+Via_fold_map (struct
   type 'a t = 'a G.t F.t
 
   let fold_map' neutral combine f x =
@@ -90,8 +86,8 @@ module Sum (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) = struct
   end)
 end
 
-module Product (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
-  Preface_specs.FOLDABLE with type 'a t = 'a F.t * 'a G.t = Via_fold_map (struct
+module Product (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) =
+Via_fold_map (struct
   type 'a t = 'a F.t * 'a G.t
 
   let fold_map' neutral combine f (x, y) =

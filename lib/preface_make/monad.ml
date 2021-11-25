@@ -1,7 +1,6 @@
 open Preface_core.Fun
 
-module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Req.t = struct
+module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) = struct
   include Req
 
   let join m = bind id m
@@ -11,8 +10,8 @@ module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) :
   let compose_left_to_right f g x = bind g (f x)
 end
 
-module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Req.t = struct
+module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) =
+struct
   include Req
 
   let bind f m = join (map f m)
@@ -21,8 +20,8 @@ module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
 end
 
 module Core_via_kleisli_composition
-    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.Monad.CORE with type 'a t = 'a Req.t = struct
+    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) =
+struct
   include Req
 
   let bind f m = (compose_left_to_right (const m) f) ()
@@ -32,8 +31,7 @@ module Core_via_kleisli_composition
   let map f m = bind (return <% f) m
 end
 
-module Operation (Core : Preface_specs.Monad.CORE) :
-  Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t = struct
+module Operation (Core : Preface_specs.Monad.CORE) = struct
   include Functor.Operation (Core)
 
   let void _ = Core.return ()
@@ -52,8 +50,7 @@ module Operation (Core : Preface_specs.Monad.CORE) :
   ;;
 end
 
-module Syntax (Core : Preface_specs.Monad.CORE) :
-  Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t = struct
+module Syntax (Core : Preface_specs.Monad.CORE) = struct
   type 'a t = 'a Core.t
 
   let ( let* ) m f = Core.bind f m
@@ -63,8 +60,8 @@ end
 
 module Infix
     (Core : Preface_specs.Monad.CORE)
-    (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Monad.INFIX with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t) =
+struct
   include Functor.Infix (Core) (Operation)
 
   let ( >|= ) x f = Core.map f x
@@ -86,10 +83,10 @@ end
 
 module Via
     (Core : Preface_specs.Monad.CORE)
-    (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Monad.INFIX with type 'a t = 'a Core.t)
-    (Syntax : Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t) :
-  Preface_specs.MONAD with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Monad.OPERATION)
+    (Infix : Preface_specs.Monad.INFIX)
+    (Syntax : Preface_specs.Monad.SYNTAX) =
+struct
   include Core
   include Operation
   include Syntax
@@ -98,8 +95,7 @@ module Via
   module Infix = Infix
 end
 
-module Via_bind (Req : Preface_specs.Monad.WITH_BIND) :
-  Preface_specs.MONAD with type 'a t = 'a Req.t = struct
+module Via_bind (Req : Preface_specs.Monad.WITH_BIND) = struct
   module Core = Core_via_bind (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
@@ -110,8 +106,7 @@ module Via_bind (Req : Preface_specs.Monad.WITH_BIND) :
   include Infix
 end
 
-module Via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
-  Preface_specs.MONAD with type 'a t = 'a Req.t = struct
+module Via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) = struct
   module Core = Core_via_map_and_join (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
@@ -123,8 +118,8 @@ module Via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
 end
 
 module Via_kleisli_composition
-    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
-  Preface_specs.MONAD with type 'a t = 'a Req.t = struct
+    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) =
+struct
   module Core = Core_via_kleisli_composition (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
@@ -135,12 +130,9 @@ module Via_kleisli_composition
   include Infix
 end
 
-module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
-  Preface_specs.MONAD with type 'a t = 'a Monad_plus.t =
-  Monad_plus
+module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) = Monad_plus
 
-module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
-  Preface_specs.MONAD with type 'a t = (unit, 'a) A.t = Via_bind (struct
+module From_arrow_apply (A : Preface_specs.ARROW_APPLY) = Via_bind (struct
   type 'a t = (unit, 'a) A.t
 
   let return x = A.arrow (const x)
@@ -148,8 +140,8 @@ module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
   let bind f x = A.(x >>> arrow (fun x -> (f x, ())) >>> apply)
 end)
 
-module Product (F : Preface_specs.MONAD) (G : Preface_specs.MONAD) :
-  Preface_specs.MONAD with type 'a t = 'a F.t * 'a G.t = Via_bind (struct
+module Product (F : Preface_specs.MONAD) (G : Preface_specs.MONAD) =
+Via_bind (struct
   type 'a t = 'a F.t * 'a G.t
 
   let return x = (F.return x, G.return x)

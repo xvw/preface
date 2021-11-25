@@ -150,25 +150,25 @@ module Via
 (** {2 Building Core} *)
 
 module Core_over_category_and_via_arrow_and_fst_and_left
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.CORE)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_LEFT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 module Core_over_category_and_via_arrow_and_split_and_left
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.CORE)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_LEFT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 module Core_over_category_and_via_arrow_and_fst_and_choose
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.CORE)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_FST_AND_CHOOSE
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 module Core_over_category_and_via_arrow_and_split_and_choose
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.CORE)
     (Req : Preface_specs.Arrow_choice.WITH_ARROW_AND_SPLIT_AND_CHOOSE
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.CORE with type ('a, 'b) t = ('a, 'b) Req.t
@@ -176,7 +176,7 @@ module Core_over_category_and_via_arrow_and_split_and_choose
 (** {2 Deriving Operation} *)
 
 module Operation_over_category
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.OPERATION)
     (Core : Preface_specs.Arrow_choice.CORE
               with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_choice.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t
@@ -189,7 +189,7 @@ module Alias (Operation : Preface_specs.Arrow.OPERATION) :
 (** {2 Deriving Infix} *)
 
 module Infix_over_category
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.INFIX)
     (Core : Preface_specs.Arrow_choice.CORE
               with type ('a, 'b) t = ('a, 'b) Category.t)
     (Operation : Preface_specs.Arrow_choice.OPERATION

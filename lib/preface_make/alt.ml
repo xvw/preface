@@ -1,14 +1,12 @@
 module Core_over_functor
     (Functor : Preface_specs.FUNCTOR)
-    (Req : Preface_specs.Alt.WITH_COMBINE with type 'a t = 'a Functor.t) :
-  Preface_specs.Alt.CORE with type 'a t = 'a Req.t = struct
+    (Req : Preface_specs.Alt.WITH_COMBINE) =
+struct
   include Functor
   include Req
 end
 
-module Core (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) :
-  Preface_specs.Alt.CORE with type 'a t = 'a Req.t =
-  Req
+module Core (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) = Req
 
 module Times_and_reduce_nel (Core : Preface_specs.Alt.WITH_COMBINE) = struct
   let times n x = Preface_core.Monoid.times Core.combine n x
@@ -20,33 +18,32 @@ module Infix_combine (Core : Preface_specs.Alt.WITH_COMBINE) = struct
   let ( <|> ) = Core.combine
 end
 
-module Operation (Core : Preface_specs.Alt.CORE) :
-  Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t = struct
+module Operation (Core : Preface_specs.Alt.CORE) = struct
   include Functor.Operation (Core)
   include Times_and_reduce_nel (Core)
 end
 
 module Infix
     (Core : Preface_specs.Alt.CORE)
-    (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Alt.INFIX with type 'a t = 'a Operation.t = struct
+    (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t) =
+struct
   include Functor.Infix (Core) (Operation)
   include Infix_combine (Core)
 end
 
 module Via
     (Core : Preface_specs.Alt.CORE)
-    (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Alt.INFIX with type 'a t = 'a Operation.t) :
-  Preface_specs.ALT with type 'a t = 'a Infix.t = struct
+    (Operation : Preface_specs.Alt.OPERATION)
+    (Infix : Preface_specs.Alt.INFIX) =
+struct
   include Core
   include Operation
   module Infix = Infix
   include Infix
 end
 
-module Via_map_and_combine (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) :
-  Preface_specs.ALT with type 'a t = 'a Req.t = struct
+module Via_map_and_combine (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) =
+struct
   module Core = Core (Req)
   include Core
   module Operation = Operation (Core)
@@ -57,8 +54,8 @@ end
 
 module Over_functor
     (Functor : Preface_specs.FUNCTOR)
-    (Combine : Preface_specs.Alt.WITH_COMBINE with type 'a t = 'a Functor.t) :
-  Preface_specs.ALT with type 'a t = 'a Combine.t = struct
+    (Combine : Preface_specs.Alt.WITH_COMBINE) =
+struct
   include Functor
   include Combine
   include Times_and_reduce_nel (Combine)
@@ -71,8 +68,7 @@ module Over_functor
   include Infix
 end
 
-module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
-  Preface_specs.ALT with type 'a t = 'a G.t F.t =
+module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) =
   Over_functor
     (Functor.Composition (F) (G))
        (struct
@@ -81,8 +77,7 @@ module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
          let combine x y = F.combine x y
        end)
 
-module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
-  Preface_specs.ALT with type 'a t = 'a F.t * 'a G.t =
+module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) =
   Over_functor
     (Functor.Product (F) (G))
        (struct

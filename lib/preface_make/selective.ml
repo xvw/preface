@@ -19,8 +19,8 @@ end
 module Core_over_functor_via_select
     (Functor : Preface_specs.Functor.CORE)
     (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
-             with type 'a t = 'a Functor.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
+             with type 'a t = 'a Functor.t) =
+struct
   include Functor
   include Req
 
@@ -39,8 +39,8 @@ end
 module Core_over_functor_via_branch
     (Functor : Preface_specs.Functor.CORE)
     (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
-             with type 'a t = 'a Functor.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
+             with type 'a t = 'a Functor.t) =
+struct
   include Functor
   include Req
   include Select_via_branch (Req)
@@ -57,18 +57,18 @@ module Core_over_functor_via_branch
 end
 
 module Core_over_applicative_via_select
-    (Applicative : Preface_specs.APPLICATIVE)
-    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
+    (Applicative : Preface_specs.Applicative.CORE)
+    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) =
+struct
   include Applicative
   include Req
   include Branch_via_select (Applicative) (Req)
 end
 
 module Core_over_applicative_via_branch
-    (Applicative : Preface_specs.APPLICATIVE)
-    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) :
-  Preface_specs.Selective.CORE with type 'a t = 'a Req.t = struct
+    (Applicative : Preface_specs.Applicative.CORE)
+    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) =
+struct
   include Applicative
   include Req
 
@@ -79,8 +79,7 @@ module Core_over_applicative_via_branch
   end)
 end
 
-module Operation (Core : Preface_specs.Selective.CORE) :
-  Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t = struct
+module Operation (Core : Preface_specs.Selective.CORE) = struct
   include Applicative.Operation (Core)
 
   let if_ predicate if_true unless =
@@ -119,8 +118,8 @@ end
 
 module Infix
     (Core : Preface_specs.Selective.CORE)
-    (Operation : Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t) :
-  Preface_specs.Selective.INFIX with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t) =
+struct
   include Applicative.Infix (Core) (Operation)
 
   let ( <*? ) e f = Core.select e f
@@ -130,17 +129,14 @@ module Infix
   let ( <&&> ) l r = Operation.and_ l r
 end
 
-module Syntax (Core : Preface_specs.Selective.CORE) :
-  Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t = struct
-  include Applicative.Syntax (Core)
-end
+module Syntax (Core : Preface_specs.Selective.CORE) = Applicative.Syntax (Core)
 
 module Via
     (Core : Preface_specs.Selective.CORE)
-    (Operation : Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Selective.INFIX with type 'a t = 'a Core.t)
-    (Syntax : Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Core.t = struct
+    (Operation : Preface_specs.Selective.OPERATION)
+    (Infix : Preface_specs.Selective.INFIX)
+    (Syntax : Preface_specs.Selective.SYNTAX) =
+struct
   include Core
   include Operation
   include Syntax
@@ -152,8 +148,8 @@ end
 module Over_functor_via_select
     (Functor : Preface_specs.Functor.CORE)
     (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
-             with type 'a t = 'a Functor.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+             with type 'a t = 'a Functor.t) =
+struct
   module Core = Core_over_functor_via_select (Functor) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
@@ -167,8 +163,8 @@ end
 module Over_functor_via_branch
     (Functor : Preface_specs.Functor.CORE)
     (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
-             with type 'a t = 'a Functor.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+             with type 'a t = 'a Functor.t) =
+struct
   module Core = Core_over_functor_via_branch (Functor) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
@@ -181,8 +177,8 @@ end
 
 module Over_applicative_via_select
     (Applicative : Preface_specs.APPLICATIVE)
-    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) =
+struct
   module Core = Core_over_applicative_via_select (Applicative) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
@@ -195,8 +191,8 @@ end
 
 module Over_applicative_via_branch
     (Applicative : Preface_specs.APPLICATIVE)
-    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) :
-  Preface_specs.SELECTIVE with type 'a t = 'a Req.t = struct
+    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) =
+struct
   module Core = Core_over_applicative_via_branch (Applicative) (Req)
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
@@ -207,8 +203,7 @@ module Over_applicative_via_branch
   include Syntax
 end
 
-module Select_from_monad (Monad : Preface_specs.MONAD) :
-  Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Monad.t = struct
+module Select_from_monad (Monad : Preface_specs.MONAD) = struct
   type 'a t = 'a Monad.t
 
   let pure x = Monad.return x
@@ -219,8 +214,7 @@ module Select_from_monad (Monad : Preface_specs.MONAD) :
   ;;
 end
 
-module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
-  Preface_specs.SELECTIVE with type 'a t = (unit, 'a) A.t =
+module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) =
   Over_applicative_via_select
     (Applicative.From_arrow
        (A))
@@ -234,8 +228,7 @@ module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) :
          let select x y = A.(x >>> (to_arrow y ||| return ()))
        end)
 
-module Composition (F : Preface_specs.APPLICATIVE) (G : Preface_specs.SELECTIVE) :
-  Preface_specs.SELECTIVE with type 'a t = 'a G.t F.t =
+module Composition (F : Preface_specs.APPLICATIVE) (G : Preface_specs.SELECTIVE) =
   Over_applicative_via_select
     (Applicative.Composition (F) (G))
        (struct
@@ -244,8 +237,7 @@ module Composition (F : Preface_specs.APPLICATIVE) (G : Preface_specs.SELECTIVE)
          let select x y = F.apply (F.map G.select x) y
        end)
 
-module Product (F : Preface_specs.SELECTIVE) (G : Preface_specs.SELECTIVE) :
-  Preface_specs.SELECTIVE with type 'a t = 'a F.t * 'a G.t =
+module Product (F : Preface_specs.SELECTIVE) (G : Preface_specs.SELECTIVE) =
   Over_applicative_via_select
     (Applicative.Product (F) (G))
        (struct

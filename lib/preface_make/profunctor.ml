@@ -1,5 +1,4 @@
-module Core_via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) :
-  Preface_specs.Profunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+module Core_via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) = struct
   include Req
 
   let contramap_fst f x = Req.dimap f Fun.id x
@@ -8,24 +7,20 @@ module Core_via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) :
 end
 
 module Core_via_contramap_fst_and_map_snd
-    (Req : Preface_specs.Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND) :
-  Preface_specs.Profunctor.CORE with type ('a, 'b) t = ('a, 'b) Req.t = struct
+    (Req : Preface_specs.Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND) =
+struct
   include Req
 
   let dimap f g x = contramap_fst f (map_snd g x)
 end
 
-module Via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t =
+module Via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) =
   Core_via_dimap (Req)
-
 module Via_contramap_fst_and_map_snd
-    (Req : Preface_specs.Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Req.t =
+    (Req : Preface_specs.Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND) =
   Core_via_contramap_fst_and_map_snd (Req)
 
-module From_functor (Functor : Preface_specs.Functor.CORE) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = 'a -> 'b Functor.t = struct
+module From_functor (Functor : Preface_specs.Functor.CORE) = struct
   type ('a, 'b) t = 'a -> 'b Functor.t
 
   open Preface_core.Fun.Infix
@@ -37,17 +32,9 @@ module From_functor (Functor : Preface_specs.Functor.CORE) :
   let map_snd k f = Functor.map k % f
 end
 
-module From_strong (Strong : Preface_specs.STRONG) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Strong.t =
-  Strong
-
-module From_choice (Choice : Preface_specs.CHOICE) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Choice.t =
-  Choice
-
-module From_closed (Closed : Preface_specs.CLOSED) :
-  Preface_specs.PROFUNCTOR with type ('a, 'b) t = ('a, 'b) Closed.t =
-  Closed
+module From_strong (Strong : Preface_specs.STRONG) = Strong
+module From_choice (Choice : Preface_specs.CHOICE) = Choice
+module From_closed (Closed : Preface_specs.CLOSED) = Closed
 
 module Composition (F : Preface_specs.PROFUNCTOR) (G : Preface_specs.PROFUNCTOR) =
 struct

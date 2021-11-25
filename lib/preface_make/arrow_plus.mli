@@ -90,13 +90,13 @@ module Via
 (** {2 Building Core} *)
 
 module Core_over_category_and_via_arrow_and_fst
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.CORE)
     (Req : Preface_specs.Arrow_plus.WITH_ARROW_AND_FST
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_plus.CORE with type ('a, 'b) t = ('a, 'b) Req.t
 
 module Core_over_category_and_via_arrow_and_split
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.CORE)
     (Req : Preface_specs.Arrow_plus.WITH_ARROW_AND_SPLIT
              with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_plus.CORE with type ('a, 'b) t = ('a, 'b) Req.t
@@ -104,7 +104,7 @@ module Core_over_category_and_via_arrow_and_split
 (** {2 Deriving Operation} *)
 
 module Operation_over_category
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.OPERATION)
     (Core : Preface_specs.Arrow_plus.CORE
               with type ('a, 'b) t = ('a, 'b) Category.t) :
   Preface_specs.Arrow_plus.OPERATION with type ('a, 'b) t = ('a, 'b) Core.t
@@ -117,7 +117,7 @@ module Alias (Operation : Preface_specs.Arrow_plus.OPERATION) :
 (** {2 Deriving Infix} *)
 
 module Infix_over_category
-    (Category : Preface_specs.CATEGORY)
+    (Category : Preface_specs.Category.INFIX)
     (Core : Preface_specs.Arrow_plus.CORE
               with type ('a, 'b) t = ('a, 'b) Category.t)
     (Operation : Preface_specs.Arrow_plus.OPERATION
