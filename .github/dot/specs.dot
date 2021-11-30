@@ -50,6 +50,7 @@ graph {
         Monad -- Traversable;
 
         Monoid -- Category [style=dotted; arrowhead=none; constraint=false];
+        Semigroupoid -- Category
         Category -- Arrow;
         Profunctor -- Strong;
         Profunctor -- Choice;

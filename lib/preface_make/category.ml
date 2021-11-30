@@ -1,25 +1,11 @@
 module Core (Req : Preface_specs.Category.WITH_ID_AND_COMPOSE) = Req
 
 module Operation (Core : Preface_specs.Category.CORE) = struct
-  type ('a, 'b) t = ('a, 'b) Core.t
-
-  let compose_right_to_left f g = Core.compose f g
-
-  let compose_left_to_right f g = Core.compose g f
+  include Semigroupoid.Operation (Core)
 end
 
 module Infix (Core : Preface_specs.Category.CORE) = struct
-  type ('a, 'b) t = ('a, 'b) Core.t
-
-  let ( % ) f g = Core.compose f g
-
-  let ( <% ) f g = Core.compose f g
-
-  let ( %> ) f g = Core.compose g f
-
-  let ( <<< ) f g = Core.compose f g
-
-  let ( >>> ) f g = Core.compose g f
+  include Semigroupoid.Infix (Core)
 end
 
 module Via_id_and_compose (Req : Preface_specs.Category.WITH_ID_AND_COMPOSE) =

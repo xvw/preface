@@ -1,4 +1,4 @@
-(** A [Category] is a generalization of function composition to morphisms. *)
+(** A [Category] is a [Semigroupoid] with an identity at each object. *)
 
 (** {2 Laws}
 
@@ -19,8 +19,7 @@ module type WITH_ID_AND_COMPOSE = sig
   val id : ('a, 'a) t
   (** The identity morphism. *)
 
-  val compose : ('b, 'c) t -> ('a, 'b) t -> ('a, 'c) t
-  (** Morphism composition (from right to left). *)
+  include Semigroupoid.WITH_COMPOSE with type ('a, 'b) t := ('a, 'b) t
 end
 
 (** {1 Structure anatomy} *)
@@ -33,11 +32,8 @@ module type OPERATION = sig
   type ('a, 'b) t
   (** The type held by the [Category]. *)
 
-  val compose_right_to_left : ('b, 'c) t -> ('a, 'b) t -> ('a, 'c) t
-  (** An alias of {!val:CORE.compose}. *)
-
-  val compose_left_to_right : ('a, 'b) t -> ('b, 'c) t -> ('a, 'c) t
-  (** An alias of {!val:CORE.compose} with flipped argument. *)
+  include Semigroupoid.OPERATION with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 end
 
 (** Infix operators. *)
@@ -45,29 +41,8 @@ module type INFIX = sig
   type ('a, 'b) t
   (** The type held by the [Category]. *)
 
-  val ( % ) : ('b, 'c) t -> ('a, 'b) t -> ('a, 'c) t
-  (** An alias of {!val:CORE.compose} (to be iso with [Preface_core]). *)
-
-  val ( <% ) : ('b, 'c) t -> ('a, 'b) t -> ('a, 'c) t
-  (** An alias of {!val:CORE.compose} (to be iso with [Preface_core]). *)
-
-  val ( %> ) : ('a, 'b) t -> ('b, 'c) t -> ('a, 'c) t
-  (** An alias of {!val:OPERATION.compose_left_to_right} (to be iso with
-      [Preface_core]). *)
-
-  val ( <<< ) : ('b, 'c) t -> ('a, 'b) t -> ('a, 'c) t
-  (** An alias of {!val:CORE.compose} (to be iso with Haskell's approach). Even
-      [<<<] looks like [<%] (it is an alias for the same function), they differ
-      in their priorities.
-      {{:https://ocaml.org/manual/expr.html#ss%3Aprecedence-and-associativity}
-      OCaml documentation of operators priorities} *)
-
-  val ( >>> ) : ('a, 'b) t -> ('b, 'c) t -> ('a, 'c) t
-  (** An alias of {!val:CORE.compose_left_to_right} (to be iso with Haskell's
-      approach). Even [>>>] looks like [%>] (it is an alias for the same
-      function), they differ in their priorities.
-      {{:https://ocaml.org/manual/expr.html#ss%3Aprecedence-and-associativity}
-      OCaml documentation of operators priorities} *)
+  include Semigroupoid.INFIX with type ('a, 'b) t := ('a, 'b) t
+  (** @inline *)
 end
 
 (** {1 Complete API} *)

@@ -22,7 +22,8 @@
   profunctor
   strong
   choice
-  closed)
+  closed
+  semigroupoid)
  (libraries
   qcheck-core
   qcheck-alcotest
