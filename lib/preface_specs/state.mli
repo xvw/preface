@@ -42,7 +42,7 @@ end
 
 (** {1 Complete API} *)
 
-(** The complete interface of a [State] monad wich introduces the
+(** The complete interface of a [State] monad which introduces the
     {!module:Monad} API into the [State] API. *)
 module type API = sig
   include CORE

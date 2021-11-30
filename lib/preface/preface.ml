@@ -63,7 +63,7 @@
 
 module Specs = Preface_specs
 
-(** {2 Concretisations}
+(** {2 Achievements}
 
     In order to produce embodiments for the abstractions described in
     [Preface.Specs], [Preface.Make] offers a collection of functors that take
@@ -77,7 +77,7 @@ module Make = Preface_make
 
     The modular design of Preface may seem a little intimidating at first
     glance. Let's look at the logic of the cut to understand how best to use it
-    to describe new concretizations of abstractions.
+    to describe new achievements of abstractions.
 
     Abstractions must respect a minimum interface, however, sometimes there are
     several paths to describe the abstraction. For example, building a [Monad]
@@ -185,7 +185,7 @@ module Make = Preface_make
 
 (** {1 Standard library}
 
-    Whereas the previous section dealt mainly with the concretisation of
+    Whereas the previous section dealt mainly with the achievements of
     abstractions (using functor machinery). This section documents the standard
     Preface library. A collection of already implemented abstractions for
     relatively common data structures. *)

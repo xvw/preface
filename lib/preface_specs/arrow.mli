@@ -83,10 +83,10 @@ module type OPERATION = sig
   (** Send the input to both argument arrows and combine their output. *)
 
   val pre_compose_left_to_right : ('a -> 'b) -> ('b, 'c) t -> ('a, 'c) t
-  (** Precomposition with a function (the function should be pure). *)
+  (** Pre composition with a function (the function should be pure). *)
 
   val post_compose_left_to_right : ('a, 'b) t -> ('b -> 'c) -> ('a, 'c) t
-  (** Postcomposition with a function (the function should be pure). *)
+  (** Post composition with a function (the function should be pure). *)
 
   val pre_compose_right_to_left : ('b, 'c) t -> ('a -> 'b) -> ('a, 'c) t
   (** Reversed version of
@@ -103,11 +103,11 @@ module type ALIAS = sig
   (** The type held by the [Arrow]. *)
 
   val pre_compose : ('a -> 'b) -> ('b, 'c) t -> ('a, 'c) t
-  (** Conveinent alias of
+  (** Convenient alias of
       {!val:Preface_specs.Arrow.OPERATION.pre_compose_left_to_right}. *)
 
   val post_compose : ('a, 'b) t -> ('b -> 'c) -> ('a, 'c) t
-  (** Conveinent alias of
+  (** Convenient alias of
       {!val:Preface_specs.Arrow.OPERATION.post_compose_left_to_right}. *)
 end
 

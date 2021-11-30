@@ -1,4 +1,4 @@
-(** A [Foldable] is a data structure wich can be fold. In other word, reduced to
+(** A [Foldable] is a data structure which can be fold. In other word, reduced to
     a summary value one element at a time *)
 
 (** {1 Minimal definition} *)
@@ -6,7 +6,7 @@
 (** Minimal definition using [fold_map'].
 
     [fold_map' neutral combine f x] use explicit monoidal combinators passing in
-    order to deal with polymorphsim. *)
+    order to deal with polymorphism. *)
 module type WITH_FOLD_MAP = sig
   type 'a t
   (** The type held by [Foldable]. *)
@@ -47,7 +47,7 @@ module type OPERATION = sig
   val fold_map :
     (module Monoid.CORE with type t = 'm) -> ('a -> 'm) -> 'a t -> 'm
   (** Same of {!val:CORE.fold_map'} but using a [monoid] module instead of
-      giving explicitely [neutral] and [combine].*)
+      giving explicitly [neutral] and [combine].*)
 
   val fold_left : ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a
   (** Same of {!val:List.fold_left} for [Foldable]. *)

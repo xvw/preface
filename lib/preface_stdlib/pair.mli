@@ -13,7 +13,7 @@ type ('a, 'b) t = 'a * 'b
 
 module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Pair.t]. *)
 

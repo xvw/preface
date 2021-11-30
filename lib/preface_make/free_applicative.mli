@@ -15,7 +15,7 @@ module Over_functor (F : Preface_specs.Functor.CORE) :
     Build a {!module-type:Preface_specs.FREE_APPLICATIVE} over an
     {!module-type:Preface_specs.APPLICATIVE} with a
     [Natural transformation]which extracts the underlying value and a [run]
-    function wich is the [Natural transformation] from the underlying
+    function which is the [Natural transformation] from the underlying
     applicative using the identity.*)
 
 module Over_applicative (A : Preface_specs.Applicative.CORE) : sig

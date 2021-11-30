@@ -1,7 +1,7 @@
 (** Build monoidal approximation. *)
 
 (** [Over] and [Under] allows Static analysis of selective functors with
-    over-approximation.(mentionned in
+    over-approximation.(mentioned in
     {{:https://dl.acm.org/doi/pdf/10.1145/3341694} Selective Applicative
     Functor} by A. Mokhov, G. Lukyanov, S. Marlow and J. Dimino. *)
 
@@ -27,12 +27,12 @@ module Over (M : Preface_specs.MONOID) : sig
 
   module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 
-  (** {1 Addtional functions}
+  (** {1 Additional functions}
 
       Additional functions to facilitate practical work with [Over.t]. *)
 
   val get : 'a t -> M.t
-  (** Retreive the [Monoid] value from the [Over] approximation. *)
+  (** Retrieve the [Monoid] value from the [Over] approximation. *)
 end
 
 (** {1 Under approximation}
@@ -56,10 +56,10 @@ module Under (M : Preface_specs.MONOID) : sig
 
   module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 
-  (** {1 Addtional functions}
+  (** {1 Additional functions}
 
       Additional functions to facilitate practical work with [Under.t]. *)
 
   val get : 'a t -> M.t
-  (** Retreive the [Monoid] value from the [Under] approximation. *)
+  (** Retrieve the [Monoid] value from the [Under] approximation. *)
 end

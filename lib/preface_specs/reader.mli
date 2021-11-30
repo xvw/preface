@@ -33,7 +33,7 @@ end
 
 (** {1 Complete API} *)
 
-(** The complete interface of a [Reader] monad wich introduces the
+(** The complete interface of a [Reader] monad which introduces the
     {!module:Monad} API into the [Reader] API. *)
 module type API = sig
   include CORE

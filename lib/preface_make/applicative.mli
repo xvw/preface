@@ -94,7 +94,7 @@ module Const (M : Preface_specs.Monoid.CORE) : sig
   include Preface_specs.APPLICATIVE with type 'a t := 'a t
 
   val get : 'a t -> M.t
-  (** Retreive the [Monoid] value from the [Const]. *)
+  (** Retrieve the [Monoid] value from the [Const]. *)
 end
 
 (** {1 Manual construction}

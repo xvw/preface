@@ -38,7 +38,7 @@ module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
 
 module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Identity.t]. *)
 

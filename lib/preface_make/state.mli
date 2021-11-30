@@ -37,7 +37,7 @@ module Applicative (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) :
 (** {2 Alternative}
 
     If the {e Inner} {!module-type:Preface_specs.MONAD} is also an
-    {!module-type:Preface_specs.MOAND_PLUS}, the [State monad] is also an
+    {!module-type:Preface_specs.MONAD_PLUS}, the [State monad] is also an
     {!module-type:Preface_specs.ALTERNATIVE}. *)
 
 module Alternative

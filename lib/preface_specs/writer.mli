@@ -50,7 +50,7 @@ end
 
 (** {1 Complete API} *)
 
-(** The complete interface of a [Writer] monad wich introduces the
+(** The complete interface of a [Writer] monad which introduces the
     {!module:Monad} API into the [Writer] API. *)
 module type API = sig
   include CORE

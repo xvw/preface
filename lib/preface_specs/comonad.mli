@@ -86,7 +86,7 @@ module type OPERATION = sig
       and ['c t] to ['d t]. *)
 
   val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
-  (** Composing comonadic functions using Co-Kleisli Arrow (from right to left). *)
+  (** Composing co-monadic functions using Co-Kleisli Arrow (from right to left). *)
 
   include Functor.OPERATION with type 'a t := 'a t
   (** @inline *)
@@ -98,12 +98,12 @@ module type SYNTAX = sig
   (** The type held by the [Comonad]. *)
 
   val ( let@ ) : 'a t -> ('a t -> 'b) -> 'b t
-  (** Syntaxic shortcuts for version of {!val:CORE.extend}:
+  (** Syntactic shortcuts for version of {!val:CORE.extend}:
 
       [let@ x = e in f] is equals to [extend f e]. *)
 
   val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Syntaxic shortcuts for version of {!val:CORE.map} *)
+  (** Syntactic shortcuts for version of {!val:CORE.map} *)
 end
 
 (** Infix operators. *)

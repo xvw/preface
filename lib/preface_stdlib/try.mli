@@ -42,7 +42,7 @@ module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 
 module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Try.t]. *)
 
@@ -57,7 +57,7 @@ val error : exn -> 'a t
 
 val capture : (unit -> 'a) -> 'a t
 (** [capture f] perform [f] and wrap the result into a [t] if the execution of
-    [f] raise no exception, the result will be [Ok result] else, the catched
+    [f] raise no exception, the result will be [Ok result] else, the caught
     exception if wrapped into [Error exn]. *)
 
 val case : ('a -> 'b) -> (exn -> 'b) -> 'a t -> 'b

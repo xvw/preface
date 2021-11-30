@@ -13,8 +13,8 @@ Haskell offer very complete libraries to use them, and thus,
 facilitate their learning. In OCaml, it often happens that these
 abstractions are buried in the heart of certain
 libraries/projects. This is why one of the objectives of Preface is to
-propose tools for concretising these abstractions, at least as a
-pedagogical tool.
+propose tools to achieve these abstractions, at least as a pedagogical
+tool.
 
 - {{:https://github.com/xvw/preface} Preface on Github}
 - {{:https://github.com/xvw/preface/issues} Bugtracker}

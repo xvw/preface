@@ -39,7 +39,7 @@ module Arrow_choice :
 
 module Arrow_apply : Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Fun.t]. *)
 

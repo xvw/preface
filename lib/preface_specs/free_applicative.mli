@@ -2,7 +2,7 @@
     {!module:Preface_specs.Applicative} from a given
     {!module:Preface_specs.Functor}. *)
 
-(** Such {!module:Preface_specs.Applicative} is equiped with and additional
+(** Such {!module:Preface_specs.Applicative} is equipped with and additional
     function for [promoting] values from the underlying
     {!module:Preface_specs.Functor} into the [Free applicative] and a
     [Natural transformations] for transforming the value of the
