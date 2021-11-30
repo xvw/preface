@@ -1,7 +1,7 @@
 (** A [Free monad] allows you to build a {!module:Preface_specs.Monad} from a
     given {!module:Preface_specs.Functor}. *)
 
-(**Such {!module:Preface_specs.Monad} is equiped with two additional functions:
+(**Such {!module:Preface_specs.Monad} is equipped with two additional functions:
    one dedicated to the creation of a new data and another one for the effect
    handling. *)
 

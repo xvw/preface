@@ -46,7 +46,7 @@ end
 
 (** {1 Complete API} *)
 
-(** The complete interface of a [Store] comonad wich introduces the
+(** The complete interface of a [Store] comonad which introduces the
     {!module:Comonad} API into the [Store] API. *)
 module type API = sig
   include CORE

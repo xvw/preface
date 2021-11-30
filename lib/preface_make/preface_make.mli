@@ -1,4 +1,4 @@
-(** Set of functors ({e in ML sense}) whose role is {e to concretise} the
+(** Set of functors ({e in ML sense}) whose role is {e to achieve} the
     abstractions described in {!module:Preface_specs}. Each abstraction
     described in the specifications has its image in [Preface.Make] and the
     functors take as arguments modules constrained by the signatures described
@@ -11,7 +11,7 @@
 
     {2 Multiple path}
 
-    The concretisation of an abstraction usually offers several paths:
+    The achievement of an abstraction usually offers several paths:
 
     - using the minimal definition or implement as few combiners as possible.
       Some abstractions offer several minimal definitions, so it is up to you to
@@ -20,7 +20,7 @@
       {!module-type:Preface_specs.MONOID} defined over a
       {!module-type:Preface_specs.SEMIGROUP})
     - A manual approach where each feature has to be provided (while offering
-      intermediate functors to avoid boring tasks such as defining infixed
+      intermediate functors to avoid boring tasks such as defining infix
       operators).
     - A simplification of an existing abstraction, such as turning a
       {!module-type:Preface_specs.ALTERNATIVE} into a

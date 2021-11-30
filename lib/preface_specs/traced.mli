@@ -38,7 +38,7 @@ end
 
 (** {1 Complete API} *)
 
-(** The complete interface of a [Traced] comonad wich introduces the
+(** The complete interface of a [Traced] comonad which introduces the
     {!module:Comonad} API into the [Traced] API. *)
 module type API = sig
   include CORE

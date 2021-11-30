@@ -47,7 +47,7 @@ module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t
 
 module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Seq.t]. *)
 
@@ -64,7 +64,7 @@ val rev : 'a t -> 'a t
 
 val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 (** Equality between [Seq.t]. (The function may not terminate if the two
-    sequence are infinite (and indentitcal)). *)
+    sequence are infinite (and identical)). *)
 
 val pp : (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a t -> unit
 (** Formatter for pretty-printing for [Seq.t]. (The function may not terminate

@@ -63,7 +63,7 @@ module Invariant (T : Preface_specs.Types.T0) :
 module Foldable (T : Preface_specs.Types.T0) :
   Preface_specs.FOLDABLE with type 'a t = (T.t, 'a) Bifunctor.t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Either.t]. *)
 

@@ -98,7 +98,7 @@ module type OPERATION = sig
   (** {!module:Monad} [bind] specialized for Boolean. *)
 
   val when_ : bool t -> unit t -> unit t
-  (** Conditionnally perform an effect. *)
+  (** Conditionally perform an effect. *)
 
   val exists : ('a -> bool t) -> 'a list -> bool t
   (** Selective version of [List.exists]. *)

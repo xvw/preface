@@ -55,14 +55,14 @@ module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 (** {2 Delayed implementation}
 
     By setting the [inner type] type of [Nonempty_list.t] it is possible to get
-    implementations for abstractions twithout type parameter. *)
+    implementations for abstractions without type parameter. *)
 
 (** {3 Semigroup} *)
 
 module Semigroup (T : Preface_specs.Types.T0) :
   Preface_specs.SEMIGROUP with type t = T.t t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Nonempty_list.t]. *)
 

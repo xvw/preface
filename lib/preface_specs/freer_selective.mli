@@ -1,7 +1,7 @@
 (** A [Freer selective] allows you to build a {e rigid}
     {!module:Preface_specs.Selective} from a given arbitrary type. *)
 
-(** Such {!module:Preface_specs.selective} is equiped with and additional
+(** Such {!module:Preface_specs.selective} is equipped with and additional
     function for [promoting] values from the underlying type into the
     [Freer selective] and a [Natural transformations] for transforming the value
     of the [Freer selective] to an other {!module:Preface_specs.Selective} or to

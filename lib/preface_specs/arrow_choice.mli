@@ -35,7 +35,7 @@ module type WITH_CHOOSE = sig
 
   val choose :
     ('a, 'b) t -> ('c, 'd) t -> (('a, 'c) Either.t, ('b, 'd) Either.t) t
-  (** Split the input between the two argument arrows, retagging and merging
+  (** Split the input between the two argument arrows, re-tagging and merging
       their outputs. *)
 end
 

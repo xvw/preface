@@ -2,7 +2,7 @@
     {!module:Preface_specs.Selective} from a given
     {!module:Preface_specs.Functor}. *)
 
-(** Such {!module:Preface_specs.selective} is equiped with and additional
+(** Such {!module:Preface_specs.selective} is equipped with and additional
     function for [promoting] values from the underlying
     {!module:Preface_specs.Functor} into the [Free selective] and a
     [Natural transformations] for transforming the value of the [Free selective]

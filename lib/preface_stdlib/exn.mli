@@ -12,7 +12,7 @@ type t = exn
 exception Negative_position of int
 (** Occurs when an integer should be positive. *)
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Exn.t]. *)
 

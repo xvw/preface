@@ -28,7 +28,7 @@ module Comonad : Preface_specs.COMONAD with type 'a t = 'a t
 
 module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Stream.t]. *)
 
@@ -45,11 +45,11 @@ val cons : 'a -> 'a t -> 'a t
 (** Alias of {!val:stream}. *)
 
 val hd : 'a t -> 'a
-(** Get the head of the stream. Since [Stream.t] are infinites, [hd] can not
+(** Get the head of the stream. Since [Stream.t] are infinite, [hd] can not
     fail (without values). For each stream, we have an head. *)
 
 val tl : 'a t -> 'a t
-(** Get the tail of the stream. Like [hd], since [Stream.t] are infinites, the
+(** Get the tail of the stream. Like [hd], since [Stream.t] are infinite, the
     function can not fail. For each stream, we have a tail.*)
 
 val at : int -> 'a t -> 'a Try.t

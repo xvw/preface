@@ -72,7 +72,7 @@ module Foldable (T : Preface_specs.Types.T0) :
 module Invariant (T : Preface_specs.Types.T0) :
   Preface_specs.INVARIANT with type 'a t = ('a, T.t) Bifunctor.t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Validation.t]. *)
 

@@ -104,12 +104,12 @@ module type SYNTAX = sig
   (** The type held by the [Monad]. *)
 
   val ( let* ) : 'a t -> ('a -> 'b t) -> 'b t
-  (** Syntaxic shortcuts for flipped version of {!val:CORE.bind}:
+  (** Syntactic shortcuts for flipped version of {!val:CORE.bind}:
 
       [let* x = e in f] is equals to [bind (fun x -> f) e]. *)
 
   val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Syntaxic shortcuts for flipped version of {!val:CORE.map}:
+  (** Syntactic shortcuts for flipped version of {!val:CORE.map}:
 
       [let+ x = e in f] is equals to [map (fun x -> f) e]. *)
 end

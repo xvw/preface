@@ -59,7 +59,7 @@ module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t
 module Monoid (M : Preface_specs.SEMIGROUP) :
   Preface_specs.MONOID with type t = M.t t
 
-(** {1 Addtional functions}
+(** {1 Additional functions}
 
     Additional functions to facilitate practical work with [Option.t]. *)
 

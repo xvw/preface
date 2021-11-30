@@ -12,7 +12,7 @@ module Over (T : Preface_specs.Types.T1) :
 
     Build a {!module-type:Preface_specs.FREER_SELECTIVE} over an
     {!module-type:Preface_specs.SELECTIVE} with a [Natural transformation] which
-    extracts the underlying value and a [run] function wich is the
+    extracts the underlying value and a [run] function which is the
     [Natural transformation] from the underlying applicative using the identity.*)
 
 module Over_selective (F : Preface_specs.SELECTIVE) : sig

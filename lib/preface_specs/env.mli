@@ -21,10 +21,10 @@ module type CORE = sig
   (** Unwrap the env computation. *)
 
   val ask : 'a t -> env
-  (** Retreives the environment. *)
+  (** Retrieves the environment. *)
 
   val asks : (env -> 'b) -> 'a t -> 'b
-  (** Retreives the environment and apply a function. *)
+  (** Retrieves the environment and apply a function. *)
 
   val local : (env -> env) -> 'a t -> 'a t
   (** Modifies the environment using the specified function. *)
@@ -41,7 +41,7 @@ end
 
 (** {1 Complete API} *)
 
-(** The complete interface of a [Env] comonad wich introduces the
+(** The complete interface of a [Env] comonad which introduces the
     {!module:Comonad} API into the [Env] API. *)
 module type API = sig
   include CORE
