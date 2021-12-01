@@ -22,8 +22,7 @@ module Infix (Core : Preface_specs.Semigroupoid.CORE) = struct
   let ( >>> ) f g = Core.compose g f
 end
 
-module Via_compose (Req : Preface_specs.Semigroupoid.WITH_COMPOSE) =
-struct
+module Via_compose (Req : Preface_specs.Semigroupoid.WITH_COMPOSE) = struct
   module Core = Core (Req)
   include Core
   include Operation (Core)

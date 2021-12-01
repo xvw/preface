@@ -44,13 +44,14 @@ module Semigroupoid = Preface_make.Semigroupoid.Via_compose (struct
   let compose = compose_right_to_left
 end)
 
-module Category = Preface_make.Category.Via_id_and_compose (struct
-  type nonrec ('a, 'b) t = ('a, 'b) t
+module Category =
+  Preface_make.Category.Over_semigroupoid
+    (Semigroupoid)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
 
-  let id x = x
-
-  let compose = compose_right_to_left
-end)
+      let id x = x
+    end)
 
 module Arrow = Preface_make.Arrow.From_strong_and_category (Strong) (Category)
 

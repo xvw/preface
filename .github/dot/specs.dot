@@ -49,6 +49,7 @@ graph {
         Applicative -- Traversable;
         Monad -- Traversable;
 
+        Semigroup -- Semigroupoid [style=dotted; arrowhead=none; constraint=false];
         Monoid -- Category [style=dotted; arrowhead=none; constraint=false];
         Semigroupoid -- Category
         Category -- Arrow;

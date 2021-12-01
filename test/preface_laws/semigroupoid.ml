@@ -7,11 +7,11 @@ module type LAWS = sig
     string * (('a, 'b) t -> ('c, 'a) t -> ('d, 'c) t -> ('d, 'b) t pair)
 end
 
-module Laws (C : Preface_specs.SEMIGROUPOID) = struct
-  type ('a, 'b) t = ('a, 'b) C.t
+module Laws (S : Preface_specs.SEMIGROUPOID) = struct
+  type ('a, 'b) t = ('a, 'b) S.t
 
   let associativity =
     ( "f % (g % h) = (f % g) % h"
-    , (fun f g h -> (C.(f % (g % h)), C.(f % g % h))) )
+    , (fun f g h -> (S.(f % (g % h)), S.(f % g % h))) )
   ;;
 end

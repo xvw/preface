@@ -11,13 +11,21 @@
 
 (** {1 Minimal definition} *)
 
-(** Minimal interface using [id] and [compose]. *)
-module type WITH_ID_AND_COMPOSE = sig
+(** Minimal interface using [id]. *)
+module type WITH_ID = sig
   type ('a, 'b) t
   (** The type held by the [Category]. *)
 
   val id : ('a, 'a) t
   (** The identity morphism. *)
+end
+
+(** Minimal interface using [id] and [compose]. *)
+module type WITH_ID_AND_COMPOSE = sig
+  type ('a, 'b) t
+  (** The type held by the [Category]. *)
+
+  include WITH_ID with type ('a, 'b) t := ('a, 'b) t
 
   include Semigroupoid.WITH_COMPOSE with type ('a, 'b) t := ('a, 'b) t
 end

@@ -37,6 +37,17 @@ Via_id_and_compose (struct
   let compose f g = Monad.compose_left_to_right g f
 end)
 
+module Over_semigroupoid
+    (G : Preface_specs.Semigroupoid.WITH_COMPOSE)
+    (Req : Preface_specs.Category.WITH_ID with type ('a, 'b) t = ('a, 'b) G.t) =
+Via_id_and_compose (struct
+  type ('a, 'b) t = ('a, 'b) G.t
+
+  let id = Req.id
+
+  let compose = G.compose
+end)
+
 module Product (F : Preface_specs.CATEGORY) (G : Preface_specs.CATEGORY) =
 Via_id_and_compose (struct
   type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t

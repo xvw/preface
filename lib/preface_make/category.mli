@@ -1,6 +1,8 @@
 (** Building a {!module:Preface_specs.Category} *)
 
-(** {1 Using the minimal definition}
+(** {1 Using the minimal definition} *)
+
+(** {2 Using id and compose}
 
     Build a {!module-type:Preface_specs.CATEGORY} using
     {!module-type:Preface_specs.Category.WITH_ID_AND_COMPOSE}.
@@ -9,6 +11,20 @@
     API. *)
 
 module Via_id_and_compose (Req : Preface_specs.Category.WITH_ID_AND_COMPOSE) :
+  Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Req.t
+
+(** {2 Using a Semigroupoid and id}
+
+    Build a {!module-type:Preface_specs.CATEGORY} over
+    {!module-type:Preface_specs.Semigroupoid.CORE} using
+    {!module-type:Preface_specs.Category.WITH_ID}.
+
+    Standard method, using the minimal definition of an alt to derive its full
+    API. *)
+
+module Over_semigroupoid
+    (G : Preface_specs.Semigroupoid.CORE)
+    (Req : Preface_specs.Category.WITH_ID with type ('a, 'b) t = ('a, 'b) G.t) :
   Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) Req.t
 
 (** {1 Category Algebra}
