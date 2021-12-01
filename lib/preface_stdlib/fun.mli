@@ -22,6 +22,11 @@ module Choice : Preface_specs.CHOICE with type ('a, 'b) t = ('a, 'b) t
 
 module Closed : Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) t
 
+(** {2 Semigroupoid} *)
+
+module Semigroupoid :
+  Preface_specs.SEMIGROUPOID with type ('a, 'b) t = ('a, 'b) t
+
 (** {2 Category} *)
 
 module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t

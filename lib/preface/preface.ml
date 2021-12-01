@@ -172,7 +172,7 @@ module Make = Preface_make
       </center> %} *)
 
 (** Although it is likely that the use of the {e Happy Path} covers a very large
-    part of the use cases and that it is not necessary to concretise every
+    part of the use cases and that it is not necessary to achieve every
     abstraction by hand, it is still possible to do so.
 
     In addition, it is sometimes possible to describe one abstraction by

@@ -49,6 +49,7 @@ module Closed = Closed
 
 (** {1 Arrow hierarchy} *)
 
+module Semigroupoid = Semigroupoid
 module Category = Category
 module Arrow = Arrow
 module Arrow_zero = Arrow_zero
@@ -134,6 +135,8 @@ module type INVARIANT = Invariant.API
 module type CONTRAVARIANT = Contravariant.API
 
 module type DIVISIBLE = Divisible.API
+
+module type SEMIGROUPOID = Semigroupoid.API
 
 module type CATEGORY = Category.API
 

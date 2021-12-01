@@ -41,5 +41,6 @@
   state
   store
   env
-  traced)
+  traced
+  semigroupoid)
  (libraries preface_core either))

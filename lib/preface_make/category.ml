@@ -1,25 +1,11 @@
 module Core (Req : Preface_specs.Category.WITH_ID_AND_COMPOSE) = Req
 
 module Operation (Core : Preface_specs.Category.CORE) = struct
-  type ('a, 'b) t = ('a, 'b) Core.t
-
-  let compose_right_to_left f g = Core.compose f g
-
-  let compose_left_to_right f g = Core.compose g f
+  include Semigroupoid.Operation (Core)
 end
 
 module Infix (Core : Preface_specs.Category.CORE) = struct
-  type ('a, 'b) t = ('a, 'b) Core.t
-
-  let ( % ) f g = Core.compose f g
-
-  let ( <% ) f g = Core.compose f g
-
-  let ( %> ) f g = Core.compose g f
-
-  let ( <<< ) f g = Core.compose f g
-
-  let ( >>> ) f g = Core.compose g f
+  include Semigroupoid.Infix (Core)
 end
 
 module Via_id_and_compose (Req : Preface_specs.Category.WITH_ID_AND_COMPOSE) =
@@ -49,6 +35,17 @@ Via_id_and_compose (struct
   let id = Monad.return
 
   let compose f g = Monad.compose_left_to_right g f
+end)
+
+module Over_semigroupoid
+    (G : Preface_specs.Semigroupoid.WITH_COMPOSE)
+    (Req : Preface_specs.Category.WITH_ID with type ('a, 'b) t = ('a, 'b) G.t) =
+Via_id_and_compose (struct
+  type ('a, 'b) t = ('a, 'b) G.t
+
+  let id = Req.id
+
+  let compose = G.compose
 end)
 
 module Product (F : Preface_specs.CATEGORY) (G : Preface_specs.CATEGORY) =
