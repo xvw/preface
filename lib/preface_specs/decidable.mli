@@ -68,7 +68,7 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Decidable]. *)
 
-  include Divisible.INFIX with type 'a t := 'a
+  include Divisible.INFIX with type 'a t := 'a t
 end
 
 (** {1 Complete API} *)
