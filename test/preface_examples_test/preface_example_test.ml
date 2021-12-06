@@ -16,5 +16,6 @@ let () =
     @ Debruijn_reader.cases
     @ Approximation_for_selective.cases
     @ Xml_stax_writer.cases
-    @ Traced_dependencies.cases )
+    @ Traced_dependencies.cases
+    @ Decidable_pp.cases )
 ;;

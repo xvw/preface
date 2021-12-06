@@ -7,7 +7,7 @@
 
     + All {!module:Divisible} laws
     + [choose Either.left x (lose f) = x]
-    + [choose Either.right x (lose f) = x]
+    + [choose Either.right (lose f) x = x]
     + {[
         choose f (choose g m n) o
         =
@@ -92,9 +92,9 @@ module type API = sig
 
   (** {1 Infix operators} *)
 
-  module Infix : INFIX with type 'a t := 'a t
+  module Infix : INFIX with type 'a t = 'a t
 
-  include module type of Infix
+  include INFIX with type 'a t := 'a t
   (** @inline *)
 end
 

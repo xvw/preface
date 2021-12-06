@@ -27,6 +27,10 @@ struct
   include Contravariant.Infix (Core) (Operation)
 
   let ( >*< ) = Operation.divided
+
+  let ( >* ) x = Core.divide (fun x -> (x, ())) x
+
+  let ( *< ) x y = Core.divide (fun x -> ((), x)) x y
 end
 
 module Via
