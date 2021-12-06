@@ -11,7 +11,7 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map = map
 end)
 
-module Applicative = Preface_make.Applicative.Via_map_and_product (struct
+module Applicative = Preface_make.Applicative.Via_pure_map_and_product (struct
   type nonrec 'a t = 'a t
 
   let pure = pure

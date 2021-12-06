@@ -29,7 +29,7 @@ module Alt =
       let combine = append
     end)
 
-module Applicative_internal = Preface_make.Applicative.Via_apply (struct
+module Applicative_internal = Preface_make.Applicative.Via_pure_and_apply (struct
   type nonrec 'a t = 'a t
 
   let pure = pure

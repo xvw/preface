@@ -37,7 +37,7 @@ Comonad.Via_map_and_duplicate (struct
 end)
 
 module Applicative (A : Preface_specs.APPLICATIVE) (Env : Preface_specs.MONOID) =
-Applicative.Via_apply (struct
+Applicative.Via_pure_and_apply (struct
   type 'a t = Env.t * 'a A.t
 
   let pure x = (Env.neutral, A.pure x)

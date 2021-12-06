@@ -10,7 +10,7 @@
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
+module Via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
 
 (** {2 Using pure, map, product, neutral and combine}
@@ -21,8 +21,8 @@ module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_map_and_product
-    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) :
+module Via_pure_map_and_product
+    (Req : Preface_specs.Alternative.WITH_PURE_MAP_AND_PRODUCT) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
 
 (** {2 Using pure, lift2, neutral and combine}
@@ -33,7 +33,7 @@ module Via_map_and_product
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
+module Via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) :
   Preface_specs.ALTERNATIVE with type 'a t = 'a Req.t
 
 (** {2 Over an applicative}
@@ -99,14 +99,14 @@ module Via
 
 (** {2 Building Core} *)
 
-module Core_via_map_and_product
-    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) :
+module Core_via_pure_map_and_product
+    (Req : Preface_specs.Alternative.WITH_PURE_MAP_AND_PRODUCT) :
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
-module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) :
+module Core_via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) :
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
-module Core_via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) :
+module Core_via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) :
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
 (** {2 Deriving Operation} *)

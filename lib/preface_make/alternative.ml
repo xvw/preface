@@ -1,21 +1,21 @@
-module Core_via_map_and_product
-    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) =
+module Core_via_pure_map_and_product
+    (Req : Preface_specs.Alternative.WITH_PURE_MAP_AND_PRODUCT) =
 struct
-  include Applicative.Core_via_map_and_product (Req)
+  include Applicative.Core_via_pure_map_and_product (Req)
 
   let combine = Req.combine
   let neutral = Req.neutral
 end
 
-module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) = struct
-  include Applicative.Core_via_apply (Req)
+module Core_via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) = struct
+  include Applicative.Core_via_pure_and_apply (Req)
 
   let combine = Req.combine
   let neutral = Req.neutral
 end
 
-module Core_via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) = struct
-  include Applicative.Core_via_lift2 (Req)
+module Core_via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) = struct
+  include Applicative.Core_via_pure_and_lift2 (Req)
 
   let combine = Req.combine
   let neutral = Req.neutral
@@ -55,10 +55,10 @@ struct
   module Syntax = Syntax
 end
 
-module Via_map_and_product
-    (Req : Preface_specs.Alternative.WITH_MAP_AND_PRODUCT) =
+module Via_pure_map_and_product
+    (Req : Preface_specs.Alternative.WITH_PURE_MAP_AND_PRODUCT) =
 struct
-  module Core = Core_via_map_and_product (Req)
+  module Core = Core_via_pure_map_and_product (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -68,8 +68,8 @@ struct
   include Infix
 end
 
-module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) = struct
-  module Core = Core_via_apply (Req)
+module Via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) = struct
+  module Core = Core_via_pure_and_apply (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -79,8 +79,8 @@ module Via_apply (Req : Preface_specs.Alternative.WITH_APPLY) = struct
   include Infix
 end
 
-module Via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) = struct
-  module Core = Core_via_lift2 (Req)
+module Via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) = struct
+  module Core = Core_via_pure_and_lift2 (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)

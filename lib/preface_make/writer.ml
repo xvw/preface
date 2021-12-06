@@ -25,7 +25,7 @@ Functor.Via_map (struct
 end)
 
 module Applicative (A : Preface_specs.APPLICATIVE) (Tape : Preface_specs.MONOID) =
-Applicative.Via_apply (struct
+Applicative.Via_pure_and_apply (struct
   type 'a t = ('a * Tape.t) A.t
 
   let pure x = A.pure (x, Tape.neutral)

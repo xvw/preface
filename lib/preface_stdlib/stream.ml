@@ -16,7 +16,7 @@ end)
 
 module Invariant = Preface_make.Invariant.From_functor (Functor)
 
-module Applicative = Preface_make.Applicative.Via_apply (struct
+module Applicative = Preface_make.Applicative.Via_pure_and_apply (struct
   type nonrec 'a t = 'a t
 
   let pure = pure

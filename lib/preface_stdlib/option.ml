@@ -14,7 +14,7 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map f = function Some x -> Some (f x) | None -> None
 end)
 
-module Alternative = Preface_make.Alternative.Via_apply (struct
+module Alternative = Preface_make.Alternative.Via_pure_and_apply (struct
   type nonrec 'a t = 'a t
 
   let pure = pure

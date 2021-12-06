@@ -23,7 +23,7 @@ end)
 module Applicative
     (A : Preface_specs.APPLICATIVE)
     (Env : Preface_specs.Types.T0) =
-Applicative.Via_apply (struct
+Applicative.Via_pure_and_apply (struct
   type 'a t = Env.t -> 'a A.t
 
   let pure x = Fun.const (A.pure x)

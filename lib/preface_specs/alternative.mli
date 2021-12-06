@@ -24,8 +24,8 @@ module type WITH_NEUTRAL_AND_COMBINE = sig
 end
 
 (** Minimal definition using [neutral], [combine], [pure], [map] and [product]. *)
-module type WITH_MAP_AND_PRODUCT = sig
-  include Applicative.WITH_MAP_AND_PRODUCT
+module type WITH_PURE_MAP_AND_PRODUCT = sig
+  include Applicative.WITH_PURE_MAP_AND_PRODUCT
   (** @inline *)
 
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
@@ -33,14 +33,16 @@ module type WITH_MAP_AND_PRODUCT = sig
 end
 
 (** Minimal definition using [neutral], [combine], [pure] and [apply]. *)
-module type WITH_APPLY = sig
-  include Applicative.WITH_APPLY
+module type WITH_PURE_AND_APPLY = sig
+  include Applicative.WITH_PURE_AND_APPLY
+
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 
 (** Minimal definition using [neutral], [combine], [pure] and [lift2]. *)
-module type WITH_LIFT2 = sig
-  include Applicative.WITH_LIFT2
+module type WITH_PURE_AND_LIFT2 = sig
+  include Applicative.WITH_PURE_AND_LIFT2
+
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 

@@ -26,7 +26,7 @@ module Via_map (F : Preface_specs.Functor.CORE) = struct
     let map = map
   end)
 
-  module Applicative = Applicative.Via_apply (struct
+  module Applicative = Applicative.Via_pure_and_apply (struct
     type nonrec 'a t = 'a t
 
     let pure a = Return a
