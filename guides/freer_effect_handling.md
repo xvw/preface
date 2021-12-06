@@ -1,5 +1,5 @@
 ```ocaml
-# #require "preface"
+# #require "preface" ;;
 ```
 
 # Using Freer to handle effects

@@ -1,5 +1,5 @@
 ```ocaml
-# #require "preface"
+# #require "preface" ;;
 ```
 
 # Understanding the breakdown of Preface modules by instantiating monad for Option
@@ -226,16 +226,16 @@ magic aspect of our `map` has propagated correctly, we should see 4
 messages (each time the same) on the standard output!
 
 ```ocaml
-# Opt_with_magic_map.(succ =|< return 10)
+# Opt_with_magic_map.(succ =|< return 10) ;;
 Yeah, Im a Magic Map
 - : int option = Some 11
-# Opt_with_magic_map.(return 11 >|= succ)
+# Opt_with_magic_map.(return 11 >|= succ) ;;
 Yeah, Im a Magic Map
 - : int option = Some 12
-# Opt_with_magic_map.(succ <$> return 12)
+# Opt_with_magic_map.(succ <$> return 12) ;;
 Yeah, Im a Magic Map
 - : int option = Some 13
-# Opt_with_magic_map.(return 13 <&> succ)
+# Opt_with_magic_map.(return 13 <&> succ) ;;
 Yeah, Im a Magic Map
 - : int option = Some 14
 ```
