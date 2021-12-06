@@ -16,6 +16,10 @@ module Contravariant : Preface_specs.CONTRAVARIANT with type 'a t = 'a t
 
 module Divisible : Preface_specs.DIVISIBLE with type 'a t = 'a t
 
+(** {2 Decidable} *)
+
+module Decidable : Preface_specs.DECIDABLE with type 'a t = 'a t
+
 (** {2 Invariant Functor} *)
 
 module Invariant : Preface_specs.INVARIANT with type 'a t = 'a t

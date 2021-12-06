@@ -22,6 +22,19 @@ module Divisible =
       let conquer _ = true
     end)
 
+module Decidable =
+  Preface_make.Decidable.Over_divisible
+    (Divisible)
+    (struct
+      type nonrec 'a t = 'a t
+
+      let choose f pa pb c =
+        Preface_core.Shims.Either.fold ~left:pa ~right:pb (f c)
+      ;;
+
+      let lose a x = Void.absurd (a x)
+    end)
+
 let negate p x = not (p x)
 
 let tautology _ = true

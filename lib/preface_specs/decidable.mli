@@ -68,6 +68,9 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Decidable]. *)
 
+  val ( >|< ) : 'a t -> 'b t -> ('a, 'b) Either.t t
+  (** Infix version of [chosen]. *)
+
   include Divisible.INFIX with type 'a t := 'a t
 end
 

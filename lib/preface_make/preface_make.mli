@@ -51,6 +51,7 @@ module Traversable = Traversable
 
 module Contravariant = Contravariant
 module Divisible = Divisible
+module Decidable = Decidable
 
 (** {1 Bifunctor hierarchy} *)
 

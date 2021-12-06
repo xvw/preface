@@ -25,7 +25,14 @@ module Operation (Core : Preface_specs.Decidable.CORE) = struct
   let chosen a b = Core.choose Fun.id a b
 end
 
-module Infix = Divisible.Infix
+module Infix
+    (Core : Preface_specs.Decidable.CORE)
+    (Operation : Preface_specs.Decidable.OPERATION with type 'a t = 'a Core.t) =
+struct
+  include Divisible.Infix (Core) (Operation)
+
+  let ( >|< ) = Operation.chosen
+end
 
 module Via
     (Core : Preface_specs.Decidable.CORE)

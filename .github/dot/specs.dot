@@ -7,6 +7,7 @@ graph {
         Invariant -- Contravariant;
         Contravariant;
         Divisible;
+        Decidable;
         Functor -- Applicative -- Selective --  Monad;
         Applicative -- Alternative;
         Monad -- Monad_plus;
@@ -33,7 +34,7 @@ graph {
         Profunctor;
         Bifunctor;
 
-        Contravariant -- Divisible;
+        Contravariant -- Divisible -- Decidable;
         Contravariant -- Profunctor;
         Functor -- Profunctor;
         Functor -- Bifunctor;

@@ -62,6 +62,9 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Divisible]. *)
 
+  val ( >*< ) : 'a t -> 'b t -> ('a * 'b) t
+  (** Infix version of [divided]. *)
+
   include Contravariant.INFIX with type 'a t := 'a t
 end
 
