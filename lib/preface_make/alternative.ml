@@ -7,14 +7,18 @@ struct
   let neutral = Req.neutral
 end
 
-module Core_via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) = struct
+module Core_via_pure_and_apply
+    (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) =
+struct
   include Applicative.Core_via_pure_and_apply (Req)
 
   let combine = Req.combine
   let neutral = Req.neutral
 end
 
-module Core_via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) = struct
+module Core_via_pure_and_lift2
+    (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) =
+struct
   include Applicative.Core_via_pure_and_lift2 (Req)
 
   let combine = Req.combine
@@ -68,7 +72,8 @@ struct
   include Infix
 end
 
-module Via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) = struct
+module Via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) =
+struct
   module Core = Core_via_pure_and_apply (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
@@ -79,7 +84,8 @@ module Via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) 
   include Infix
 end
 
-module Via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) = struct
+module Via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) =
+struct
   module Core = Core_via_pure_and_lift2 (Req)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)

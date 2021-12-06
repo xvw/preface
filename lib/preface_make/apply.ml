@@ -1,7 +1,6 @@
 open Preface_core.Fun
 
-module Core_via_map_and_product
-    (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) =
+module Core_via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) =
 struct
   include Req
 
@@ -10,7 +9,8 @@ struct
   let lift2 f x y = apply (map f x) y
 end
 
-module Core_via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) = struct
+module Core_via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) =
+struct
   include Req
 
   let product a b = apply (map (fun a b -> (a, b)) a) b
@@ -18,7 +18,8 @@ module Core_via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) = s
   let lift2 f x y = apply (map f x) y
 end
 
-module Core_via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) = struct
+module Core_via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) =
+struct
   include Req
 
   let apply f a = lift2 (fun x -> x) f a
@@ -71,8 +72,7 @@ struct
   module Syntax = Syntax
 end
 
-module Via_map_and_product
-    (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) =
+module Via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) =
 struct
   module Core = Core_via_map_and_product (Req)
   module Operation = Operation (Core)
@@ -112,15 +112,15 @@ module From_applicative (Applicative : Preface_specs.APPLICATIVE) = struct
 
     let map = Applicative.map
 
-    let product a b = Applicative.apply (Applicative.map (fun a b -> (a, b)) a) b
+    let product a b =
+      Applicative.apply (Applicative.map (fun a b -> (a, b)) a) b
+    ;;
   end)
 end
 
 module From_alternative (Alternative : Preface_specs.ALTERNATIVE) = Alternative
 
-module Composition
-    (F : Preface_specs.APPLY)
-    (G : Preface_specs.APPLY) =
+module Composition (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) =
 Via_map_and_apply (struct
   type 'a t = 'a G.t F.t
 

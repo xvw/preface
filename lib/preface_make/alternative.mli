@@ -103,10 +103,12 @@ module Core_via_pure_map_and_product
     (Req : Preface_specs.Alternative.WITH_PURE_MAP_AND_PRODUCT) :
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
-module Core_via_pure_and_apply (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) :
+module Core_via_pure_and_apply
+    (Req : Preface_specs.Alternative.WITH_PURE_AND_APPLY) :
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
-module Core_via_pure_and_lift2 (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) :
+module Core_via_pure_and_lift2
+    (Req : Preface_specs.Alternative.WITH_PURE_AND_LIFT2) :
   Preface_specs.Alternative.CORE with type 'a t = 'a Req.t
 
 (** {2 Deriving Operation} *)

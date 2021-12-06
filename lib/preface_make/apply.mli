@@ -21,8 +21,7 @@ module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_map_and_product
-    (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) :
+module Via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) :
   Preface_specs.APPLY with type 'a t = 'a Req.t
 
 (** {2 Using map and lift2}
@@ -44,14 +43,13 @@ module Via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) :
 
     Right-to-left composition of {!module-type:Preface_specs.APPLY}.*)
 
-module Composition
-    (F : Preface_specs.APPLY)
-    (G : Preface_specs.APPLY) :
+module Composition (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) :
   Preface_specs.APPLY with type 'a t = 'a G.t F.t
 
 (** {2 Product}
 
     Construct the product of two {!module-type:Preface_specs.APPLY}. *)
+
 (*
 module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) :
   Preface_specs.APPLY with type 'a t = 'a F.t * 'a G.t
@@ -75,6 +73,7 @@ module From_alternative (Alternative : Preface_specs.ALTERNATIVE) :
   Preface_specs.APPLY with type 'a t = 'a Alternative.t
 
 (** {2 From an Arrow}
+
     Produces a {!module-type:Preface_specs.APPLY} from an
     {!module-type:Preface_specs.ARROW}. *)
 
@@ -86,6 +85,7 @@ module From_arrow (A : Preface_specs.ARROW) :
     Produces a {!module-type:Preface_specs.APPLY} from a
     {!module-type:Preface_specs.MONOID}. This APPLY is called [Const] or a
     phantom monoid. *)
+
 (*
 module Const (M : Preface_specs.Monoid.CORE) : sig
   type 'a t = Const of M.t
@@ -98,8 +98,8 @@ end
 *)
 (** {1 Manual construction}
 
-    Advanced way to build an {!module-type:Preface_specs.APPLY},
-    constructing and assembling a component-by-component of
+    Advanced way to build an {!module-type:Preface_specs.APPLY}, constructing
+    and assembling a component-by-component of
     {!module-type:Preface_specs.APPLY}. (In order to provide your own
     implementation for some features.) *)
 
@@ -114,17 +114,16 @@ module Via
 
 (** {2 Building Core} *)
 
-module Core_via_map_and_product
-    (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) :
+module Core_via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) :
   Preface_specs.Apply.CORE with type 'a t = 'a Req.t
 
+(** {2 Deriving Operation} *)
 module Core_via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
   Preface_specs.Apply.CORE with type 'a t = 'a Req.t
 (*
 module Core_via_lift2 (Req : Preface_specs.Apply.WITH_LIFT2) :
   Preface_specs.Apply.CORE with type 'a t = 'a Req.t
 *)
-(** {2 Deriving Operation} *)
 
 module Operation (Core : Preface_specs.Apply.CORE) :
   Preface_specs.Apply.OPERATION with type 'a t = 'a Core.t

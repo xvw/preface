@@ -1,6 +1,6 @@
-(** An [Applicative] is a functor with lifting and sequencing capabilities.
-    [Applicative] is more general (and by extension weaker) than a
-    {!module:Monad}. An [Applicative] is also a {!module:Functor}. *)
+(** An [Apply] is a functor with lifting and sequencing capabilities. [Apply] is
+    more general (and by extension weaker) than a {!module:Applicative}. An
+    [Apply] is also a {!module:Functor}. *)
 
 (** {2 Laws}
 
@@ -27,7 +27,7 @@ module type WITH_MAP_AND_PRODUCT = sig
   (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
 end
 
-(** Minimal interface using [apply]. *)
+(** Minimal interface using [map] and [apply]. *)
 module type WITH_MAP_AND_APPLY = sig
   type 'a t
   (** The type held by the [Applicative]. *)
@@ -39,7 +39,7 @@ module type WITH_MAP_AND_APPLY = sig
   (** [Applicative] functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 end
 
-(** Minimal interface using [lift2]. *)
+(** Minimal interface using [map] and [lift2]. *)
 module type WITH_MAP_AND_LIFT2 = sig
   type 'a t
   (** The type held by the [Applicative]. *)
@@ -148,7 +148,5 @@ end
 
 (** {1 Additional references}
 
-    - {{:http://hackage.haskell.org/package/base-4.12.0.0/docs/Control-Applicative.html}
-      Haskell's documentation of an Applicative Functor}
-    - {{:http://www.staff.city.ac.uk/~ross/papers/Applicative.html} Applicative
-      Programming with Effects} *)
+    - {{:https://hackage.haskell.org/package/semigroupoids-5.3.6/docs/Data-Functor-Apply.html#g:2}
+      Haskell's documentation of an Applicative Functor} *)
