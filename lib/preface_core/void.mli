@@ -8,3 +8,15 @@ val absurd : t -> 'a
     That is, once a contradiction has been asserted, any proposition (including
     their negations) can be inferred from it; this is known as deductive
     explosion.*)
+
+(** {As an identity for Either}
+
+    [Void.t] act as an identity for [Either]. *)
+
+val left : ('a, t) Either.t -> 'a
+(** If there is [void] on the right part of [Either], we know that the Either is
+    in [Left] branch. *)
+
+val right : (t, 'b) Either.t -> 'b
+(** If there is [void] on the left part of [Either], we know that the Either is
+    in [Right] branch. *)

@@ -36,14 +36,20 @@ module type WITH_LOSE_AND_CHOOSE = sig
       the result of the function. *)
 end
 
+(** Minimal definition using [contramap], [divide], [conquer], [lose] and
+    [choose]. *)
 module type WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER = sig
   include WITH_LOSE_AND_CHOOSE
 
   include Divisible.WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER with type 'a t := 'a t
 end
 
-module type CORE = WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER
+(** {1 Structure anatomy} *)
 
+module type CORE = WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER
+(** Basis operations. *)
+
+(** Additional operations. *)
 module type OPERATION = sig
   type 'a t
   (** The type held by the [Decidable]. *)
@@ -57,6 +63,7 @@ module type OPERATION = sig
   include Divisible.OPERATION with type 'a t := 'a t
 end
 
+(** Infix operators. *)
 module type INFIX = sig
   type 'a t
   (** The type held by the [Decidable]. *)
