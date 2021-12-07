@@ -1,6 +1,6 @@
 ```ocaml
-# #require "preface"
-# #install_printer Preface.Nonempty_list.pp
+# #require "preface" ;;
+# #install_printer Preface.Nonempty_list.pp ;;
 ```
 
 # Error management in a functional way
@@ -33,8 +33,9 @@ to describe computations that can potentially fail:
 
 There is also
 [Either](https://ocaml-preface.github.io/preface/Preface_stdlib/Either/index.html)
-which is strictly equivalent to `Result` (`('a, 'b) Either.t = ('b, 'a) Result.t`). But its constructors carry less meaning, in the
-context of error handling, so we will not use them in this guide.
+which is strictly equivalent to `Result` (`('a, 'b) Either.t = ('b, 'a)
+Result.t`). But its constructors carry less meaning, in the context of error
+handling, so we will not use them in this guide.
 
 As exceptions are an open sum type, they are comfortable for declaring
 errors by necessity. However, to ensure completeness of error handling,
@@ -251,7 +252,7 @@ what we were looking for:
 # [ create_user "xvw" 31 "xaviervdw@gmail.com"
   ; create_user "yvw" 32 "yaviervdw@gmail.com"
   ; create_user "zvw" 33 "zaviervdw@gmail.com"
-  ] |> Validated_list.sequence
+  ] |> Validated_list.sequence ;;
 - : user list Validated_list.t =
 Preface_stdlib__.Validation.Valid
  [{nickname = "xvw"; age = 31; email = "xaviervdw@gmail.com"};
@@ -266,7 +267,7 @@ anymore! What if we create invalid users?
 # [ create_user "xvw" 31 "xaviervdw@gmail.com"
   ; create_user "yvw" (-32) "yaviervdw@gmail.com"
   ; create_user "zvw" 33 "zaviervdwgmail.com"
-  ] |> Validated_list.sequence
+  ] |> Validated_list.sequence ;;
 - : user list Validated_list.t =
 Preface_stdlib__.Validation.Invalid
  [Invalid_email "zaviervdwgmail.com"; Invalid_age (-32)]
@@ -537,7 +538,7 @@ Now we can simulate some examples. Let's imagine that we haven't
 filled in any values in the form:
 
 ```ocaml
-# run_registration [];;
+# run_registration [] ;;
 - : Registration.t Validated_list.t =
 Preface_stdlib__.Validation.Invalid
  [Missing_field "checked_rules"; Missing_field "password";
@@ -557,7 +558,7 @@ example. Let's only fill in the email address incorrectly:
   ; ("email", "a bad email")
   ; ("password", "a-supposed-valid-password")
   ; ("checked_rules", "true")
-  ];;
+  ] ;;
 - : Registration.t Validated_list.t =
 Preface_stdlib__.Validation.Invalid [Invalid_email "a bad email"]
 ```
@@ -572,7 +573,7 @@ Yes, the error is correctly reported! Let's try one last case to make sure every
   ; ("email", "xvw@gmail.com")
   ; ("password", "a-supposed-valid-password")
   ; ("checked_rules", "false")
-  ];;
+  ] ;;
 - : Registration.t Validated_list.t =
 Preface_stdlib__.Validation.Invalid
  [Unchecked_bool; Int_lower (4, 7); String_too_short ("X", 2)]
@@ -589,7 +590,7 @@ to create a valid registration!
   ; ("email", "xaviervdw@gmail.com")
   ; ("password", "a-supposed-valid-password")
   ; ("checked_rules", "true")
-  ];;
+  ] ;;
 - : Registration.t Validated_list.t =
 Preface_stdlib__.Validation.Valid
  {Registration.name = "Xavier Van de Woestyne"; nickname = "xvw"; age = 31;

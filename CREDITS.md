@@ -23,6 +23,9 @@ license](LICENSE) The library is mainly maintained by:
 - [Pierre-Evariste
   Dagand](https://pages.lip6.fr/Pierre-Evariste.Dagand/) for a lot of
   help with Arrows
+- [Nicolas Rinaudo](https://github.com/nrinaudo) many questions and
+  conversations (not especially related to Preface) that led to
+  organisational/structural changes
 
 ## Used libraries
 
