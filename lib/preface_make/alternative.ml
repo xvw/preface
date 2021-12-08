@@ -115,17 +115,11 @@ module Over_applicative
       let reduce list = reduce' Req.combine Req.neutral list
     end)
     (struct
-      type 'a t = 'a Applicative.t
-
       include Applicative.Infix
 
       let ( <|> ) = Req.combine
     end)
-    (struct
-      type 'a t = 'a Applicative.t
-
-      include Applicative.Syntax
-    end)
+    (Applicative.Syntax)
 
 module Composition
     (F : Preface_specs.ALTERNATIVE)

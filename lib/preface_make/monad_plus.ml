@@ -134,17 +134,11 @@ module Over_monad
     end)
     (Operation_over_monad (Monad) (Req))
     (struct
-      type 'a t = 'a Monad.t
-
       include Monad.Infix
 
       let ( <|> ) = Req.combine
     end)
-    (struct
-      type 'a t = 'a Monad.t
-
-      include Monad.Syntax
-    end)
+    (Monad.Syntax)
 
 module Over_monad_and_alternative
     (Monad : Preface_specs.MONAD)
