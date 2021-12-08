@@ -86,7 +86,8 @@ module type OPERATION = sig
       and ['c t] to ['d t]. *)
 
   val compose_right_to_left : ('b t -> 'c) -> ('a t -> 'b) -> 'a t -> 'c
-  (** Composing co-monadic functions using Co-Kleisli Arrow (from right to left). *)
+  (** Composing co-monadic functions using Co-Kleisli Arrow (from right to
+      left). *)
 
   include Functor.OPERATION with type 'a t := 'a t
   (** @inline *)
@@ -158,16 +159,16 @@ module type API = sig
 
   (** {1 Infix operators} *)
 
-  module Infix : INFIX with type 'a t := 'a t
+  module Infix : INFIX with type 'a t = 'a t
 
-  include module type of Infix
+  include INFIX with type 'a t := 'a t
   (** @inline *)
 
   (** {1 Syntax} *)
 
-  module Syntax : SYNTAX with type 'a t := 'a t
+  module Syntax : SYNTAX with type 'a t = 'a t
 
-  include module type of Syntax
+  include SYNTAX with type 'a t := 'a t
   (** @inline *)
 end
 
