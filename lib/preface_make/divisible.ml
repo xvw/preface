@@ -20,7 +20,18 @@ module Operation (Core : Preface_specs.Divisible.CORE) = struct
   let conquered = Core.conquer
 end
 
-module Infix = Contravariant.Infix
+module Infix
+    (Core : Preface_specs.Divisible.CORE)
+    (Operation : Preface_specs.Divisible.OPERATION with type 'a t = 'a Core.t) =
+struct
+  include Contravariant.Infix (Core) (Operation)
+
+  let ( >*< ) = Operation.divided
+
+  let ( >* ) x = Core.divide (fun x -> (x, ())) x
+
+  let ( *< ) x y = Core.divide (fun x -> ((), x)) x y
+end
 
 module Via
     (Core : Preface_specs.Divisible.CORE)

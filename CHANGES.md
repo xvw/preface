@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Add `Decidable` (Contravariant analogue for `Alternative`) and add some missing infixes operators for `Divisible` [**@gr-im**](https://github.com/gr-im)
 - Removing early destructive substitution [**@xhtmlboi**](https://github.com/xhtmlboi)
 - Add `Semigroupoid` [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add `Freer Selective` [**@gr-im**](https://github.com/gr-im)

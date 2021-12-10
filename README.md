@@ -101,13 +101,10 @@ can see, the diagram is heavily inspired by the
 
 <p align="center"><img src="https://ocaml-preface.github.io/images/specs.svg" alt="typeclassopedia"></p>
 
-Obviously, the set of useful abstractions is still far from being
-present in Preface. One can deplore the absence, for example, of
-contravariant Divisible functors, and probably many others. We have
-decided to privilege those for which we had a short and medium term
-use. But if you find that an abstraction is missing, the development
-of Preface is open, don't hesitate to contribute by adding what was
-missing.
+Obviously, the set of useful abstractions is still far from being present in
+Preface. We have decided to privilege those for which we had a short and medium
+term use. But if you find that an abstraction is missing, the development of
+Preface is open, don't hesitate to contribute by adding what was missing.
 
 ## Concretisation in `Stdlib`
 
@@ -129,7 +126,7 @@ useful for the greatest number of people!
 | `List`                | The standard list of OCaml                                                        | `Foldable`, `Functor` (and `Invariant`), `Applicative`, `Alternative`, `Selective`, `Monad`, `Monad_plus`, `Traversable` through Applicative or Monad, `Monoid` (where the inner type must be fixed) |
 | `Nonempty_list`       | A list with, at least, one element                                                | `Foldable`, `Functor` (and `Invariant`), `Alt`, `Applicative`, `Selective`, `Monad`, `Comonad`, `Traversable` through Applicative or Monad, `Semigroup` (where the inner type must be fixed)         |
 | `Option`              | Deal with absence of values                                                       | `Foldable`, `Functor` (and `Invariant`), `Applicative`, `Alternative`, `Monad`, `Monad_plus`, `Traversable` through Applicative of Monad, `Monoid` (where the inner type must be fixed)              |
-| `Predicate`           | A generalization of function `'a -> bool`                                         | `Contravariant` (and `Invariant`), `Divisible`                                                                                                                                                       |
+| `Predicate`           | A generalization of function `'a -> bool`                                         | `Contravariant` (and `Invariant`), `Divisible`, `Decidable`                                                                                                                                                       |
 | `Reader`              | The reader monad using `Identity` as inner monad                                  | `Functor` (and `Invariant`), `Applicative`, `Monad`                                                                                                                                                  |
 | `Result`              | Deal with `Ok` or `Error` values                                                  | `Bifunctor` and can be specialised for the `error` part; `Functor` (and `Invariant`), `Alt`, `Applicative`, `Monad`, `Traversable` through Applicative and Monad, `Foldable`                         |
 | `Seq`                 | The standard sequence of OCaml                                                    | `Foldable`, `Functor` (and `Invariant`), `Applicative`, `Alternative`, `Selective`, `Monad`, `Monad_plus`, `Traversable` through Applicative or Monad, `Monoid` (where the inner type must be fixed) |

@@ -5,6 +5,7 @@
 
 (** {2 Common datatypes} *)
 
+module Void = Void
 module Identity = Identity
 module Option = Option
 module Either = Either
