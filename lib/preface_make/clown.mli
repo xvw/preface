@@ -1,5 +1,6 @@
 (** [Clown] can produces [Bifunctor] or [Profunctor] using a [Functor] (or a
-    [Contravariant]) on the first argument of the [Bi/Profunctor] as described in
+    [Contravariant]) on the first argument of the [Bi/Profunctor] as described
+    in
     {{:https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.475.6134&rep=rep1&type=pdf}
     Clowns to the Left, Jokers to the Right (Functional Pearl)}*)
 

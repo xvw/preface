@@ -1,5 +1,5 @@
-(** A [Foldable] is a data structure which can be fold. In other word, reduced to
-    a summary value one element at a time *)
+(** A [Foldable] is a data structure which can be fold. In other word, reduced
+    to a summary value one element at a time *)
 
 (** {1 Minimal definition} *)
 

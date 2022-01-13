@@ -55,7 +55,7 @@ module type OPERATION = sig
   include Arrow.OPERATION
   (** @inline *)
 
-  val times : int -> ('a, 'b) t -> ('a, 'b) t option
+  val times_nel : int -> ('a, 'b) t -> ('a, 'b) t option
   (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
       function will returns [None]. *)
 

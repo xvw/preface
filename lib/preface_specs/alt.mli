@@ -42,9 +42,9 @@ module type OPERATION = sig
   type 'a t
   (** A type ['a t] held by the [Alt]. *)
 
-  val times : int -> 'a t -> 'a t option
-  (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
-      function will returns [None]. *)
+  val times_nel : int -> 'a t -> 'a t option
+  (** [times_nel n x] apply [combine] on [x] [n] times. If [n] is lower than [1]
+      the function will returns [None]. *)
 
   val reduce_nel : 'a t Preface_core.Nonempty_list.t -> 'a t
   (** Reduce a [Nonempty_list.t] using [combine]. *)

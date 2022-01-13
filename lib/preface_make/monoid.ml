@@ -12,6 +12,8 @@ module Core (Req : Preface_specs.Monoid.WITH_NEUTRAL_AND_COMBINE) = Req
 module Operation (Core : Preface_specs.Monoid.CORE) = struct
   include Semigroup.Operation (Core)
 
+  let times n x = Preface_core.Monoid.times Core.combine Core.neutral n x
+
   let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 end
 
