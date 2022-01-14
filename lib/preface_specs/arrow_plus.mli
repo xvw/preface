@@ -56,6 +56,10 @@ module type OPERATION = sig
   include Arrow_alt.OPERATION
   (** @inline *)
 
+  val times : int -> ('a, 'b) t -> ('a, 'b) t
+  (** [times_nel n x] apply [combine] on [x] [n] times. If [n] is lower than [1]
+      the function will returns [neutral]. *)
+
   val reduce : ('a, 'b) t list -> ('a, 'b) t
   (** Reduce a [List.t] using [combine]. *)
 end

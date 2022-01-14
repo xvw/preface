@@ -30,6 +30,8 @@ module Operation (Core : Preface_specs.Alternative.CORE) = struct
   include Applicative.Operation (Core)
   include Alt.Operation (Core)
 
+  let times n x = Preface_core.Monoid.times Core.combine Core.neutral n x
+
   let reduce list = reduce' Core.combine Core.neutral list
 end
 
@@ -111,6 +113,8 @@ module Over_applicative
       end)
 
       include Applicative
+
+      let times n x = Preface_core.Monoid.times Req.combine Req.neutral n x
 
       let reduce list = reduce' Req.combine Req.neutral list
     end)

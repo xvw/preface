@@ -62,6 +62,10 @@ module type ALTERNATIVE_OPERATION = sig
   include Alt.OPERATION
   (** @inline *)
 
+  val times : int -> 'a t -> 'a t
+  (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
+      function will returns [neutral]. *)
+
   val reduce : 'a t list -> 'a t
   (** Reduce a [List.t] using [combine]. *)
 end

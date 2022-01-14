@@ -33,6 +33,8 @@ module Operation (Core : Preface_specs.Monad_plus.CORE) = struct
   include Monad.Operation (Core)
   include Alt.Operation (Core)
 
+  let times n x = Preface_core.Monoid.times Core.combine Core.neutral n x
+
   let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 
   let filter predicate m =
@@ -51,6 +53,8 @@ struct
     include Monad
     include Req
   end)
+
+  let times n x = Preface_core.Monoid.times Req.combine Req.neutral n x
 
   let reduce list = Preface_core.Monoid.reduce Req.combine Req.neutral list
 

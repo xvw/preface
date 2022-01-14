@@ -45,8 +45,8 @@ val cons : 'a -> 'a t -> 'a t
 (** Alias of {!val:stream}. *)
 
 val hd : 'a t -> 'a
-(** Get the head of the stream. Since [Stream.t] are infinite, [hd] can not
-    fail (without values). For each stream, we have an head. *)
+(** Get the head of the stream. Since [Stream.t] are infinite, [hd] can not fail
+    (without values). For each stream, we have an head. *)
 
 val tl : 'a t -> 'a t
 (** Get the tail of the stream. Like [hd], since [Stream.t] are infinite, the

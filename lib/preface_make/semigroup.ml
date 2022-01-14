@@ -3,7 +3,7 @@ module Core (Req : Preface_specs.Semigroup.WITH_COMBINE) = Req
 module Operation (Core : Preface_specs.Semigroup.CORE) = struct
   type t = Core.t
 
-  let times n x = Preface_core.Monoid.times Core.combine n x
+  let times_nel n x = Preface_core.Monoid.times_nel Core.combine n x
 
   let reduce_nel list = Preface_core.Monoid.reduce_nel Core.combine list
 end

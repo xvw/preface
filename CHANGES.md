@@ -1,5 +1,6 @@
 ## dev (Unreleased)
-
+ 
+- Rename `times` to `times_to_nel` for _semigroup-ish_ and add `times` for _monoid-ish_ [**@xvw**](https://github.com/xvw)
 - Add `Decidable` (Contravariant analogue for `Alternative`) and add some missing infixes operators for `Divisible` [**@gr-im**](https://github.com/gr-im)
 - Removing early destructive substitution [**@xhtmlboi**](https://github.com/xhtmlboi)
 - Add `Semigroupoid` [**@d-plaindoux**](https://github.com/d-plaindoux)

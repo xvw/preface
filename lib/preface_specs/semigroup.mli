@@ -30,9 +30,9 @@ module type OPERATION = sig
   type t
   (** the type held by the [Semigroup]. *)
 
-  val times : int -> t -> t option
-  (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
-      function will returns [None]. *)
+  val times_nel : int -> t -> t option
+  (** [times_nel n x] apply [combine] on [x] [n] times. If [n] is lower than [1]
+      the function will returns [None]. *)
 
   val reduce_nel : t Preface_core.Nonempty_list.t -> t
   (** Reduce a [Nonempty_list.t] using [combine]. *)

@@ -44,6 +44,10 @@ module type OPERATION = sig
   include Semigroup.OPERATION
   (** @inline *)
 
+  val times : int -> t -> t
+  (** [times n x] apply [combine] on [x] [n] times. If [n] is lower than [1] the
+      function will returns [neutral]. *)
+
   val reduce : t list -> t
   (** Reduce a [List.t] using [combine]. *)
 end
