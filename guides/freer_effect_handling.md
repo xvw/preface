@@ -188,7 +188,7 @@ effects, propagated by our program, for example:
 
 ```ocaml
 let run program =
-  let handler : type b. (b -> 'a) -> b IO.f -> 'a =
+  let handler : type a. (a, 'b) IO.handle =
     fun resume -> function
       | Print message ->
         let () = print_endline message in

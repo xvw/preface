@@ -9,7 +9,8 @@ module Over (Type : Preface_specs.Types.T1) = struct
 
   let perform f = Bind (f, (fun a -> Return a))
 
-  type 'a handler = { handler : 'b. ('b -> 'a) -> 'b f -> 'a }
+  type ('a, 'b) handle = ('a -> 'b) -> 'a f -> 'b
+  type 'a handler = { handler : 'b. ('b, 'a) handle}
 
   let run f =
     let rec loop_run = function
