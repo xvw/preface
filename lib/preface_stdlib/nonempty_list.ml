@@ -33,7 +33,6 @@ module Applicative_internal = Preface_make.Applicative.Via_apply (struct
   type nonrec 'a t = 'a t
 
   let pure = pure
-
   let apply fs xs = flatten @@ map (fun f -> map (fun x -> f x) xs) fs
 end)
 
@@ -42,7 +41,6 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
     (A)
     (struct
       type 'a t = 'a A.t
-
       type 'a iter = 'a Preface_core.Nonempty_list.t
 
       let traverse f l =
@@ -66,9 +64,7 @@ module Monad_internal = Preface_make.Monad.Via_map_and_join (struct
   type nonrec 'a t = 'a t
 
   let return = pure
-
   let map = map
-
   let join = flatten
 end)
 
@@ -77,7 +73,6 @@ module Monad_traversable (M : Preface_specs.MONAD) =
     (M)
     (struct
       type 'a t = 'a M.t
-
       type 'a iter = 'a Preface_core.Nonempty_list.t
 
       let traverse f l =
@@ -94,10 +89,12 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 
 module Monad =
   Preface_make.Traversable.Join_with_monad (Monad_internal) (Monad_traversable)
+
 module Selective =
   Preface_make.Selective.Over_applicative_via_select
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
+
 module Invariant = Preface_make.Invariant.From_functor (Functor)
 
 module Comonad = Preface_make.Comonad.Via_extend (struct
@@ -106,7 +103,7 @@ module Comonad = Preface_make.Comonad.Via_extend (struct
   let extract = function Last x | x :: _ -> x
 
   let rec extend f nel =
-    (match nel with Last _ -> Last (f nel) | _ :: xs -> f nel :: extend f xs)
+    match nel with Last _ -> Last (f nel) | _ :: xs -> f nel :: extend f xs
   ;;
 end)
 

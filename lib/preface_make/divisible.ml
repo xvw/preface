@@ -16,7 +16,6 @@ module Operation (Core : Preface_specs.Divisible.CORE) = struct
   include Contravariant.Operation (Core)
 
   let divided x = Core.divide id x
-
   let conquered = Core.conquer
 end
 
@@ -27,9 +26,7 @@ struct
   include Contravariant.Infix (Core) (Operation)
 
   let ( >*< ) = Operation.divided
-
   let ( >* ) x = Core.divide (fun x -> (x, ())) x
-
   let ( *< ) x y = Core.divide (fun x -> ((), x)) x y
 end
 

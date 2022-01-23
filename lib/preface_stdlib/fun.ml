@@ -64,7 +64,6 @@ module Arrow_choice =
       open Preface_core.Shims
 
       let case f g = Either.fold ~left:f ~right:g
-
       let choose f g = case (Either.left % f) (Either.right % g)
     end)
 

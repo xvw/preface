@@ -83,7 +83,6 @@ struct
   include Arrow.Operation_over_category (Category) (Core)
 
   let right x = Core.choose Core.id x
-
   let fan_in f g = Core.compose (Core.arrow extract) (Core.choose f g)
 end
 
@@ -99,7 +98,6 @@ struct
   include Arrow.Infix_over_category (Category) (Core) (Operation)
 
   let ( +++ ) = Core.choose
-
   let ( ||| ) = Operation.fan_in
 end
 
@@ -123,6 +121,7 @@ module Over_category_and_via_arrow_and_fst_and_left
 struct
   module Core =
     Core_over_category_and_via_arrow_and_fst_and_left (Category) (Req)
+
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category.Infix) (Core) (Operation)
@@ -139,6 +138,7 @@ module Over_over_category_and_via_arrow_and_split_and_left
 struct
   module Core =
     Core_over_category_and_via_arrow_and_split_and_left (Category) (Req)
+
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category.Infix) (Core) (Operation)
@@ -155,6 +155,7 @@ module Over_category_and_via_arrow_and_fst_and_choose
 struct
   module Core =
     Core_over_category_and_via_arrow_and_fst_and_choose (Category) (Req)
+
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category.Infix) (Core) (Operation)
@@ -171,6 +172,7 @@ module Over_category_and_via_arrow_and_split_and_choose
 struct
   module Core =
     Core_over_category_and_via_arrow_and_split_and_choose (Category) (Req)
+
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
   module Infix = Infix_over_category (Category) (Core) (Operation)

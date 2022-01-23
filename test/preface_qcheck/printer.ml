@@ -25,7 +25,6 @@ let validation pp_left pp_right x =
 ;;
 
 let exn e = Format.asprintf "%a " Preface_stdlib.Exn.pp e
-
 let try_ x = result x exn
 
 let nonempty_list pp x =
@@ -33,7 +32,6 @@ let nonempty_list pp x =
 ;;
 
 let seq pp x = Format.asprintf "%a" (Preface_stdlib.Seq.pp (to_string pp)) x
-
 let validate x = validation x (nonempty_list exn)
 
 let stream pp x =

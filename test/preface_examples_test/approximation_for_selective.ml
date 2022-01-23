@@ -2,7 +2,6 @@ module Monoid = Preface.Make.Monoid.Via_combine_and_neutral (struct
   type t = string
 
   let neutral = ""
-
   let combine x y = x ^ y
 end)
 

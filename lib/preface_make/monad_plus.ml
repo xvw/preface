@@ -2,7 +2,6 @@ module Core_via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) = struct
   include Monad.Core_via_bind (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -11,7 +10,6 @@ struct
   include Monad.Core_via_map_and_join (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -21,7 +19,6 @@ struct
   include Monad.Core_via_kleisli_composition (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -34,7 +31,6 @@ module Operation (Core : Preface_specs.Monad_plus.CORE) = struct
   include Alt.Operation (Core)
 
   let times n x = Preface_core.Monoid.times Core.combine Core.neutral n x
-
   let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 
   let filter predicate m =
@@ -55,7 +51,6 @@ struct
   end)
 
   let times n x = Preface_core.Monoid.times Req.combine Req.neutral n x
-
   let reduce list = Preface_core.Monoid.reduce Req.combine Req.neutral list
 
   let filter predicate m =
@@ -133,7 +128,6 @@ module Over_monad
       include Monad
 
       let combine = Req.combine
-
       let neutral = Req.neutral
     end)
     (Operation_over_monad (Monad) (Req))
@@ -148,6 +142,7 @@ module Over_monad_and_alternative
     (Monad : Preface_specs.MONAD)
     (Alternative : Preface_specs.ALTERNATIVE with type 'a t = 'a Monad.t) =
   Over_monad (Monad) (Alternative)
+
 module From_arrow_apply_and_arrow_plus
     (A : Preface_specs.ARROW_APPLY)
     (P : Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) A.t) =
@@ -161,6 +156,5 @@ module Product (F : Preface_specs.MONAD_PLUS) (G : Preface_specs.MONAD_PLUS) =
          type 'a t = 'a F.t * 'a G.t
 
          let neutral = (F.neutral, G.neutral)
-
          let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
        end)

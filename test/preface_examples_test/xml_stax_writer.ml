@@ -20,9 +20,9 @@ module Stax = struct
 
   let equal f d1 d2 =
     match (d1, d2) with
-    | (Text t1, Text t2) -> f t1 t2
-    | (Open t1, Open t2) -> f t1 t2
-    | (Close t1, Close t2) -> f t1 t2
+    | Text t1, Text t2 -> f t1 t2
+    | Open t1, Open t2 -> f t1 t2
+    | Close t1, Close t2 -> f t1 t2
     | _ -> false
   ;;
 end
@@ -56,21 +56,21 @@ let sax = Alcotest.testable Stax.pp (Stax.equal ( = ))
 let should_transform_a_pcdata () =
   let open Writer in
   let expected = Stax.[ Text "Hello World" ]
-  and (_, computed) = run_identity (sax_like Xml.(PCData "Hello World")) in
+  and _, computed = run_identity (sax_like Xml.(PCData "Hello World")) in
   Alcotest.(check (list sax)) "transform_a_pcdata" expected computed
 ;;
 
 let should_transform_a_tag () =
   let open Writer in
   let expected = Stax.[ Open "A"; Close "A" ]
-  and (_, computed) = run_identity (sax_like Xml.(Tag ("A", Empty))) in
+  and _, computed = run_identity (sax_like Xml.(Tag ("A", Empty))) in
   Alcotest.(check (list sax)) "transform_a_tag" expected computed
 ;;
 
 let should_transform_a_sequence () =
   let open Writer in
   let expected = Stax.[ Open "A"; Close "A"; Text "Hello World" ]
-  and (_, computed) =
+  and _, computed =
     run_identity (sax_like Xml.(Seq (Tag ("A", Empty), PCData "Hello World")))
   in
   Alcotest.(check (list sax)) "transform_a_sequence" expected computed
@@ -79,7 +79,7 @@ let should_transform_a_sequence () =
 let should_transform_empty () =
   let open Writer in
   let expected = []
-  and (_, computed) = run_identity (sax_like Xml.Empty) in
+  and _, computed = run_identity (sax_like Xml.Empty) in
   Alcotest.(check (list sax)) "transform_empty" expected computed
 ;;
 

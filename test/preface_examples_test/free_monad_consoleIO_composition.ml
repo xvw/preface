@@ -6,9 +6,7 @@ module Tell = struct
   module Functor = Preface.Make.Functor.Via_map (struct
     type nonrec 'a t = 'a t
 
-    let map f x =
-      (match x with Effect (s, k) -> Effect (s, (fun () -> f (k ()))))
-    ;;
+    let map f x = match x with Effect (s, k) -> Effect (s, fun () -> f (k ()))
   end)
 end
 
@@ -18,9 +16,7 @@ module Ask = struct
   module Functor = Preface.Make.Functor.Via_map (struct
     type nonrec 'a t = 'a t
 
-    let map f x =
-      (match x with Effect (s, k) -> Effect (s, (fun s -> f (k s))))
-    ;;
+    let map f x = match x with Effect (s, k) -> Effect (s, fun s -> f (k s))
   end)
 end
 
@@ -28,7 +24,6 @@ module ConsoleIO = Preface.Make.Functor.Sum (Ask.Functor) (Tell.Functor)
 module IO = Preface_make.Free_monad.Over_functor (ConsoleIO)
 
 let tell x = IO.perform (ConsoleIO.R (Tell.Effect (x, id)))
-
 let ask s = IO.perform (ConsoleIO.L (Ask.Effect (s, id)))
 
 let runConsoleIO output = function

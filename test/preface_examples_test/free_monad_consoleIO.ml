@@ -10,8 +10,8 @@ module ConsoleIO = struct
 
     let map f x =
       match x with
-      | Tell (s, k) -> Tell (s, (fun () -> f (k ())))
-      | Ask (s, k) -> Ask (s, (fun s -> f (k s)))
+      | Tell (s, k) -> Tell (s, fun () -> f (k ()))
+      | Ask (s, k) -> Ask (s, fun s -> f (k s))
     ;;
   end)
 end
@@ -19,7 +19,6 @@ end
 module IO = Preface_make.Free_monad.Over_functor (ConsoleIO.Functor)
 
 let tell x = IO.perform (ConsoleIO.Tell (x, id))
-
 let ask s = IO.perform (ConsoleIO.Ask (s, id))
 
 let runConsoleIO output = function

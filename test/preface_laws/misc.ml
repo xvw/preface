@@ -2,9 +2,7 @@ module Int_req = struct
   type t = int
 
   let arbitrary = QCheck.int
-
   let observable = QCheck.Observable.int
-
   let equal = Int.equal
 end
 
@@ -12,9 +10,7 @@ module String_req = struct
   type t = string
 
   let arbitrary = QCheck.string
-
   let observable = QCheck.Observable.string
-
   let equal = String.equal
 end
 
@@ -65,12 +61,16 @@ module String_monoid =
 
 module Sum_semigroup_cases =
   Preface_laws.Semigroup.Cases (Sum_semigroup) (Int_req)
+
 module Prod_semigroup_cases =
   Preface_laws.Semigroup.Cases (Prod_semigroup) (Int_req)
+
 module String_semigroup_cases =
   Preface_laws.Semigroup.Cases (String_semigroup) (String_req)
+
 module Sum_monoid_cases = Preface_laws.Monoid.Cases (Sum_monoid) (Int_req)
 module Prod_monoid_cases = Preface_laws.Monoid.Cases (Prod_monoid) (Int_req)
+
 module String_monoid_cases =
   Preface_laws.Monoid.Cases (String_monoid) (String_req)
 

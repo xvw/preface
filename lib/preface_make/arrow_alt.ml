@@ -26,7 +26,6 @@ struct
   include Arrow.Operation_over_category (Category) (Core)
 
   let times_nel n x = Preface_core.Monoid.times_nel Core.combine n x
-
   let reduce_nel list = Preface_core.Monoid.reduce_nel Core.combine list
 end
 

@@ -9,11 +9,9 @@ Preface_qcheck.Make.Test (struct
   let name = "neutral >>= x = neutral"
 
   type input = (X.t -> Y.t F.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary = QCheck.fun1 X.observable (A.arbitrary Y.arbitrary)
-
   let equal = A.equal Y.equal
 
   let left f' =
@@ -33,7 +31,6 @@ Preface_qcheck.Make.Test (struct
   let name = "(a <|> b) >>= f = (a >>= f) <|> (b >>= f)"
 
   type input = X.t F.t * X.t F.t * (X.t -> Y.t F.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -63,15 +60,11 @@ Preface_qcheck.Make.Test (struct
   let name = "(return a) <|> b = return a"
 
   type input = X.t * X.t F.t
-
   type output = X.t F.t
 
   let arbitrary = QCheck.(pair X.arbitrary (A.arbitrary X.arbitrary))
-
   let equal = A.equal X.equal
-
   let left (a, b) = F.(return a <|> b)
-
   let right (a, _) = F.return a
 end)
 
@@ -85,9 +78,7 @@ module Monoidal_behaviour
          type t = X.t F.t
 
          let equal = A.equal X.equal
-
          let arbitrary = A.arbitrary X.arbitrary
-
          let observable = A.observable X.observable
        end)
 

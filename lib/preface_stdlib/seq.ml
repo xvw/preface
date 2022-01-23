@@ -3,16 +3,15 @@ module S = Stdlib.Seq
 type 'a t = 'a S.t
 
 let pure x = S.return x
-
 let cons x xs () = S.Cons (x, xs)
 
 let rec append l r () =
-  (match l () with S.Nil -> r () | S.Cons (x, xs) -> S.Cons (x, append xs r))
+  match l () with S.Nil -> r () | S.Cons (x, xs) -> S.Cons (x, append xs r)
 ;;
 
 let rev seq =
   let rec aux acc seq =
-    (match seq () with S.Nil -> acc | S.Cons (x, xs) -> aux (cons x acc) xs)
+    match seq () with S.Nil -> acc | S.Cons (x, xs) -> aux (cons x acc) xs
   in
   aux S.empty seq
 ;;
@@ -27,7 +26,7 @@ module Alternative = Preface_make.Alternative.Via_apply (struct
 
   let apply fs xs =
     let rec aux a b () =
-      (match a () with S.Nil -> S.Nil | S.Cons (x, xs) -> merge xs b x b ())
+      match a () with S.Nil -> S.Nil | S.Cons (x, xs) -> merge xs b x b ()
     and merge a bs f b () =
       match b () with
       | S.Nil -> aux a bs ()
@@ -37,7 +36,6 @@ module Alternative = Preface_make.Alternative.Via_apply (struct
   ;;
 
   let neutral = S.empty
-
   let combine l r = append l r
 end)
 
@@ -46,7 +44,6 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
     (A)
     (struct
       type 'a t = 'a A.t
-
       type 'a iter = 'a S.t
 
       let traverse f seq =
@@ -85,11 +82,8 @@ module Monad_plus = Preface_make.Monad_plus.Via_bind (struct
   type nonrec 'a t = 'a t
 
   let return = pure
-
   let bind = S.flat_map
-
   let neutral = S.empty
-
   let combine l r = append l r
 end)
 
@@ -98,7 +92,6 @@ module Monad_traversable (M : Preface_specs.MONAD) =
     (M)
     (struct
       type 'a t = 'a M.t
-
       type 'a iter = 'a S.t
 
       let traverse f =
@@ -114,6 +107,7 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 
 module Monad =
   Preface_make.Traversable.Join_with_monad (Monad_plus) (Monad_traversable)
+
 module Selective =
   Preface_make.Selective.Over_applicative_via_select
     (Applicative)
@@ -124,16 +118,14 @@ Preface_make.Monoid.Via_combine_and_neutral (struct
   type nonrec t = T.t t
 
   let combine l r = append l r
-
   let neutral = S.empty
 end)
 
 let equal eq =
   let rec aux left right =
     match (left (), right ()) with
-    | (S.Nil, S.Nil) -> true
-    | (S.Cons (a, axs), S.Cons (b, bxs)) ->
-      if eq a b then aux axs bxs else false
+    | S.Nil, S.Nil -> true
+    | S.Cons (a, axs), S.Cons (b, bxs) -> if eq a b then aux axs bxs else false
     | _ -> false
   in
   aux

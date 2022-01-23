@@ -4,9 +4,7 @@ module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) = struct
   include Req
 
   let join m = bind id m
-
   let map f m = bind (return <% f) m
-
   let compose_left_to_right f g x = bind g (f x)
 end
 
@@ -15,7 +13,6 @@ struct
   include Req
 
   let bind f m = join (map f m)
-
   let compose_left_to_right f g x = bind g (f x)
 end
 
@@ -25,9 +22,7 @@ struct
   include Req
 
   let bind f m = (compose_left_to_right (const m) f) ()
-
   let join m = bind id m
-
   let map f m = bind (return <% f) m
 end
 
@@ -35,9 +30,7 @@ module Operation (Core : Preface_specs.Monad.CORE) = struct
   include Functor.Operation (Core)
 
   let void _ = Core.return ()
-
   let compose_right_to_left f g x = Core.compose_left_to_right g f x
-
   let lift = Core.map
 
   let lift2 f ma mb =
@@ -54,7 +47,6 @@ module Syntax (Core : Preface_specs.Monad.CORE) = struct
   type 'a t = 'a Core.t
 
   let ( let* ) m f = Core.bind f m
-
   let ( let+ ) m f = Core.map f m
 end
 
@@ -65,19 +57,12 @@ struct
   include Functor.Infix (Core) (Operation)
 
   let ( >|= ) x f = Core.map f x
-
   let ( =|< ) = Core.map
-
   let ( >>= ) x f = Core.bind f x
-
   let ( =<< ) = Core.bind
-
   let ( >=> ) = Core.compose_left_to_right
-
   let ( <=< ) = Operation.compose_right_to_left
-
-  let ( >> ) ma mb = ma >>= (fun _ -> mb)
-
+  let ( >> ) ma mb = ma >>= fun _ -> mb
   let ( << ) ma _ = ma
 end
 
@@ -136,7 +121,6 @@ module From_arrow_apply (A : Preface_specs.ARROW_APPLY) = Via_bind (struct
   type 'a t = (unit, 'a) A.t
 
   let return x = A.arrow (const x)
-
   let bind f x = A.(x >>> arrow (fun x -> (f x, ())) >>> apply)
 end)
 
@@ -145,6 +129,5 @@ Via_bind (struct
   type 'a t = 'a F.t * 'a G.t
 
   let return x = (F.return x, G.return x)
-
   let bind f (m, n) = (F.bind (fst % f) m, G.bind (snd % f) n)
 end)

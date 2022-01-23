@@ -4,11 +4,8 @@ module type LAWS = sig
   include Profunctor.LAWS
 
   val fst_define_snd : string * (('a, 'b) t -> ('a * 'c, 'b * 'c) t pair)
-
   val snd_define_fst : string * (('a, 'b) t -> ('c * 'a, 'c * 'b) t pair)
-
   val contramap_fst : string * (('a, 'b) t -> ('a * 'c, 'b) t pair)
-
   val contramap_snd : string * (('a, 'b) t -> ('c * 'a, 'b) t pair)
 
   val dinaturality_fst :

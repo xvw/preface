@@ -27,7 +27,6 @@ end
     [compose_left_to_right]. *)
 module type WITH_KLEISLI_COMPOSITION = sig
   include Monad.WITH_KLEISLI_COMPOSITION
-
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 

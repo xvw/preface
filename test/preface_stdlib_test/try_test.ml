@@ -5,7 +5,6 @@ let subject a =
 ;;
 
 exception Invalid_name of string
-
 exception Invalid_age of int
 
 let validate_name (name, age) =

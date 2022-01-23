@@ -6,17 +6,13 @@ module Preserve_identity
     (X : Model.T0) =
 Make.Test (struct
   let name = "extend extract = id"
-
   let arbitrary = A.arbitrary X.arbitrary
 
   type input = X.t F.t
-
   type output = X.t F.t
 
   let equal = A.equal X.equal
-
   let left x = F.(extend extract) x
-
   let right x = Fun.id x
 end)
 
@@ -36,7 +32,6 @@ Make.Test (struct
   ;;
 
   type input = (X.t F.t -> Y.t) QCheck.fun_ * X.t F.t
-
   type output = Y.t
 
   let equal = Y.equal
@@ -108,7 +103,6 @@ Make.Test (struct
   ;;
 
   type input = (X.t F.t -> Y.t) QCheck.fun_ * X.t F.t
-
   type output = Y.t
 
   let equal = Y.equal
@@ -140,7 +134,6 @@ Make.Test (struct
   ;;
 
   type input = (X.t F.t -> Y.t) QCheck.fun_ * X.t F.t
-
   type output = Y.t
 
   let equal = Y.equal
@@ -206,17 +199,13 @@ module Duplicate_preserve_identity
     (X : Model.T0) =
 Make.Test (struct
   let name = "extract % duplicate = id"
-
   let arbitrary = A.arbitrary X.arbitrary
 
   type input = X.t F.t
-
   type output = X.t F.t
 
   let equal = A.equal X.equal
-
   let left x = Preface_stdlib.Fun.Infix.(F.(extract % duplicate) x)
-
   let right x = Fun.id x
 end)
 
@@ -226,17 +215,13 @@ module Map_duplicate_preserve_identity
     (X : Model.T0) =
 Make.Test (struct
   let name = "map extract % duplicate = id"
-
   let arbitrary = A.arbitrary X.arbitrary
 
   type input = X.t F.t
-
   type output = X.t F.t
 
   let equal = A.equal X.equal
-
   let left x = Preface_stdlib.Fun.Infix.(F.(map extract % duplicate) x)
-
   let right x = Fun.id x
 end)
 
@@ -246,17 +231,13 @@ module Map_duplicate_duplicate
     (X : Model.T0) =
 Make.Test (struct
   let name = "duplicate % duplicate = map duplicate % duplicate"
-
   let arbitrary = A.arbitrary X.arbitrary
 
   type input = X.t F.t
-
   type output = X.t F.t F.t F.t
 
   let equal = A.equal (A.equal (A.equal X.equal))
-
   let left x = Preface_stdlib.Fun.Infix.(F.(duplicate % duplicate) x)
-
   let right x = Preface_stdlib.Fun.Infix.(F.(map duplicate % duplicate) x)
 end)
 
@@ -276,7 +257,6 @@ Make.Test (struct
   ;;
 
   type input = (X.t F.t -> Y.t) QCheck.fun_ * X.t F.t
-
   type output = Y.t F.t
 
   let equal = A.equal Y.equal
@@ -298,17 +278,13 @@ module Duplicate_extend_id
     (X : Model.T0) =
 Make.Test (struct
   let name = "duplicate = extend id"
-
   let arbitrary = A.arbitrary X.arbitrary
 
   type input = X.t F.t
-
   type output = X.t F.t F.t
 
   let equal = A.equal (A.equal X.equal)
-
   let left x = F.duplicate x
-
   let right x = (F.extend Fun.id) x
 end)
 
@@ -325,7 +301,6 @@ Make.Test (struct
   ;;
 
   type input = (X.t -> Y.t) QCheck.fun_ * X.t F.t
-
   type output = Y.t F.t
 
   let equal = A.equal Y.equal
@@ -352,11 +327,15 @@ struct
   module Extend_extend = Extend_extend (F) (A) (T.A) (T.B) (T.C)
   module Infix_extract_extend = Infix_extract_extend (F) (A) (T.A) (T.B)
   module Rev_infix_extract_extend = Rev_infix_extract_extend (F) (A) (T.A) (T.B)
+
   module Infix_extend_triple =
     Infix_extend_triple (F) (A) (T.A) (T.B) (T.C) (T.D)
+
   module Duplicate_preserve_identity = Duplicate_preserve_identity (F) (A) (T.A)
+
   module Map_duplicate_preserve_identity =
     Map_duplicate_preserve_identity (F) (A) (T.A)
+
   module Map_duplicate_duplicate = Map_duplicate_duplicate (F) (A) (T.A)
   module Extend_map_duplicate = Extend_map_duplicate (F) (A) (T.A) (T.B)
   module Duplicate_extend_id = Duplicate_extend_id (F) (A) (T.A)

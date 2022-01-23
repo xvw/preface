@@ -10,8 +10,6 @@ module Semigroup_cases
          type t = T.A.t F.t
 
          let equal = A.equal T.A.equal
-
          let arbitrary = A.arbitrary T.A.arbitrary
-
          let observable = A.observable T.A.observable
        end)

@@ -11,7 +11,6 @@ module type LAWS = sig
     string * (('a, 'b) t -> (('c, 'a) Either.t, ('c, 'b) Either.t) t pair)
 
   val map_snd_left : string * (('a, 'b) t -> ('a, ('b, 'c) Either.t) t pair)
-
   val map_snd_right : string * (('a, 'b) t -> ('a, ('c, 'b) Either.t) t pair)
 
   val contramap_fst_right :

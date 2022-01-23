@@ -44,15 +44,11 @@ Preface_qcheck.Make.Test (struct
   let name = "neutral <*> a = neutral"
 
   type input = X.t F.t
-
   type output = X.t F.t
 
   let arbitrary = A.arbitrary X.arbitrary
-
   let equal = A.equal X.equal
-
   let left x = F.(neutral <*> x)
-
   let right _ = F.neutral
 end)
 
@@ -66,9 +62,7 @@ module Monoidal_behaviour
          type t = X.t F.t
 
          let equal = A.equal X.equal
-
          let arbitrary = A.arbitrary X.arbitrary
-
          let observable = A.observable X.observable
        end)
 

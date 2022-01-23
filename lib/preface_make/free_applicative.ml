@@ -37,14 +37,13 @@ struct
    ;;
 
     let product a b = apply (apply (Pure (fun x y -> (x, y))) a) b
-
     let lift2 f x y = apply (map f x) y
   end
 
   module Operation = Applicative.Operation (Core)
+
   module A =
-    Applicative.Via (Core) (Operation)
-      (Applicative.Infix (Core) (Operation))
+    Applicative.Via (Core) (Operation) (Applicative.Infix (Core) (Operation))
       (Applicative.Syntax (Core))
 
   module To_applicative (Applicative : Preface_specs.Applicative.CORE) = struct

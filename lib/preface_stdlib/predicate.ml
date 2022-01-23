@@ -15,7 +15,7 @@ module Divisible =
       type nonrec 'a t = 'a t
 
       let divide f pa pb x =
-        let (a, b) = f x in
+        let a, b = f x in
         pa a && pb b
       ;;
 
@@ -36,20 +36,14 @@ module Decidable =
     end)
 
 let negate p x = not (p x)
-
 let tautology _ = true
-
 let contradiction _ = false
-
 let and_ l r x = l x && r x
-
 let or_ l r x = l x || r x
 
 module Infix = struct
   let ( && ) = and_
-
   let ( || ) = or_
-
   let ( ! ) = negate
 end
 

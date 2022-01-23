@@ -7,15 +7,11 @@ Preface_qcheck.Make.Test (struct
   let name = "combine is associative"
 
   type input = F.t * F.t * F.t
-
   type output = F.t
 
   let arbitrary = QCheck.triple A.arbitrary A.arbitrary A.arbitrary
-
   let equal = A.equal
-
   let left (a, b, c) = F.(combine (combine a b) c)
-
   let right (a, b, c) = F.(combine a (combine b c))
 end)
 

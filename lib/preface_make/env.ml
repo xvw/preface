@@ -3,7 +3,6 @@ module Core_over_comonad
     (Env : Preface_specs.Types.T0) =
 struct
   type env = Env.t
-
   type 'a comonad = 'a C.t
 
   let lower (_, c) = c
@@ -11,11 +10,8 @@ struct
   type 'a t = env * 'a comonad
 
   let run (e, c) = (e, c)
-
   let ask (e, _) = e
-
   let asks f (e, _) = f e
-
   let local f (e, c) = (f e, c)
 
   module Local (Env : Preface_specs.Types.T0) = struct
@@ -37,7 +33,6 @@ Comonad.Via_map_and_duplicate (struct
   include Functor (C) (Env)
 
   let duplicate (e, c) = (e, C.extend (fun x -> (e, x)) c)
-
   let extract (_, c) = C.extract c
 end)
 
@@ -46,7 +41,6 @@ Applicative.Via_apply (struct
   type 'a t = Env.t * 'a A.t
 
   let pure x = (Env.neutral, A.pure x)
-
   let apply (m, a) (n, b) = (Env.combine m n, A.apply a b)
 end)
 

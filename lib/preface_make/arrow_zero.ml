@@ -79,8 +79,10 @@ struct
       end)
 
   module Operation_aux = Operation_over_category (Arrow) (Core_aux)
+
   module Infix_aux =
     Infix_over_category (Arrow.Infix) (Core_aux) (Operation_aux)
+
   include Core_aux
   include Operation_aux
   include Arrow

@@ -21,7 +21,6 @@ module Operation (Core : Preface_specs.Decidable.CORE) = struct
   include Divisible.Operation (Core)
 
   let lost = Core.lose Fun.id
-
   let chosen a b = Core.choose Fun.id a b
 end
 

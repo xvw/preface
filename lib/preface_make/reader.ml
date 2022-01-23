@@ -3,19 +3,13 @@ module Core_over_monad
     (Env : Preface_specs.Types.T0) =
 struct
   type env = Env.t
-
   type 'a monad = 'a Monad.t
-
   type 'a t = env -> 'a monad
 
   let upper m _ = m
-
   let run reader_m env = reader_m env
-
   let ask = Monad.return
-
   let local f reader x = reader (f x)
-
   let reader f = f
 end
 
@@ -33,7 +27,6 @@ Applicative.Via_apply (struct
   type 'a t = Env.t -> 'a A.t
 
   let pure x = Fun.const (A.pure x)
-
   let apply reader_f reader_v x = A.apply (reader_f x) (reader_v x)
 end)
 
@@ -46,7 +39,6 @@ module Alternative
          type 'a t = Env.t -> 'a A.t
 
          let neutral _ = A.neutral
-
          let combine reader_l reader_r r = A.combine (reader_l r) (reader_r r)
        end)
 
@@ -55,7 +47,6 @@ Monad.Via_bind (struct
   type 'a t = Env.t -> 'a M.t
 
   let return x = Fun.const (M.return x)
-
   let bind f reader r = M.bind (fun a -> (f a) r) (reader r)
 end)
 
@@ -66,7 +57,6 @@ module Monad_plus (M : Preface_specs.MONAD_PLUS) (Env : Preface_specs.Types.T0) 
          type 'a t = Env.t -> 'a M.t
 
          let neutral _ = M.neutral
-
          let combine reader_l reader_r r = M.combine (reader_l r) (reader_r r)
        end)
 

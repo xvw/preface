@@ -28,7 +28,7 @@ module Alt (T : Preface_specs.Types.T0) =
        (struct
          type nonrec 'a t = (T.t, 'a) t
 
-         let combine x y = (match (x, y) with (Left _, a) -> a | (a, _) -> a)
+         let combine x y = match (x, y) with Left _, a -> a | a, _ -> a
        end)
 
 module Applicative (T : Preface_specs.Types.T0) = struct
@@ -40,7 +40,7 @@ module Applicative (T : Preface_specs.Types.T0) = struct
     let pure = pure
 
     let apply fa xa =
-      (match (fa, xa) with (Right f, x) -> F.map f x | (Left x, _) -> Left x)
+      match (fa, xa) with Right f, x -> F.map f x | Left x, _ -> Left x
     ;;
   end)
 
@@ -49,7 +49,6 @@ module Applicative (T : Preface_specs.Types.T0) = struct
       (A)
       (struct
         type 'a t = 'a A.t
-
         type 'a iter = (T.t, 'a) Bifunctor.t
 
         let traverse f x = traverse_aux A.pure A.map f x
@@ -63,7 +62,6 @@ module Monad (T : Preface_specs.Types.T0) = struct
     type nonrec 'a t = (T.t, 'a) t
 
     let return = pure
-
     let bind f = function Right x -> f x | Left x -> Left x
   end)
 
@@ -72,7 +70,6 @@ module Monad (T : Preface_specs.Types.T0) = struct
       (M)
       (struct
         type 'a t = 'a M.t
-
         type 'a iter = (T.t, 'a) Bifunctor.t
 
         let traverse f x = traverse_aux M.return M.map f x
@@ -88,13 +85,13 @@ module Foldable (T : Preface_specs.Types.T0) =
 Preface_make.Foldable.Via_fold_right (struct
   type nonrec 'a t = (T.t, 'a) t
 
-  let fold_right f x acc = (match x with Left _ -> acc | Right v -> f v acc)
+  let fold_right f x acc = match x with Left _ -> acc | Right v -> f v acc
 end)
 
 let equal f g left right =
   match (left, right) with
-  | (Left x, Left y) -> f x y
-  | (Right x, Right y) -> g x y
+  | Left x, Left y -> f x y
+  | Right x, Right y -> g x y
   | _ -> false
 ;;
 

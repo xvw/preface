@@ -11,5 +11,4 @@ let times combine neutral n x =
 ;;
 
 let reduce_nel combine list = Nonempty_list.reduce combine list
-
 let reduce combine neutral list = List.fold_left combine neutral list

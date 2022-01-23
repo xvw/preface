@@ -9,15 +9,11 @@ Preface_qcheck.Make.Test (struct
   let name = "bimap id id = id"
 
   type input = (X.t, Y.t) F.t
-
   type output = input
 
   let arbitrary = A.arbitrary X.arbitrary Y.arbitrary
-
   let equal = A.equal X.equal Y.equal
-
   let left x = F.bimap (fun x -> x) (fun x -> x) x
-
   let right x = (fun x -> x) x
 end)
 
@@ -30,15 +26,11 @@ Preface_qcheck.Make.Test (struct
   let name = "map_fst id = id"
 
   type input = (X.t, Y.t) F.t
-
   type output = input
 
   let arbitrary = A.arbitrary X.arbitrary Y.arbitrary
-
   let equal = A.equal X.equal Y.equal
-
   let left x = F.map_fst (fun x -> x) x
-
   let right x = (fun x -> x) x
 end)
 
@@ -51,15 +43,11 @@ Preface_qcheck.Make.Test (struct
   let name = "map_snd id = id"
 
   type input = (X.t, Y.t) F.t
-
   type output = input
 
   let arbitrary = A.arbitrary X.arbitrary Y.arbitrary
-
   let equal = A.equal X.equal Y.equal
-
   let left x = F.map_snd (fun x -> x) x
-
   let right x = (fun x -> x) x
 end)
 
@@ -239,8 +227,10 @@ struct
   module First = Perserve_first (F) (A) (T.A) (T.B)
   module Second = Perserve_second (F) (A) (T.A) (T.B)
   module Bimap_fst_snd = Bimap_fst_snd (F) (A) (T.A) (T.B) (T.C) (T.D)
+
   module Bimap_parametricity =
     Bimap_parametricity (F) (A) (T.A) (T.B) (T.C) (T.D) (T.E) (T.F)
+
   module Fst_parametricity = Fst_parametricity (F) (A) (T.A) (T.B) (T.C) (T.D)
   module Snd_parametricity = Snd_parametricity (F) (A) (T.A) (T.B) (T.C) (T.D)
 

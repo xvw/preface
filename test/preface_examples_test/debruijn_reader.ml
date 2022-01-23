@@ -19,9 +19,9 @@ module DeBruijn = struct
 
   let rec equal f d1 d2 =
     match (d1, d2) with
-    | (App (d11, d12), App (d21, d22)) -> equal f d11 d21 && equal f d12 d22
-    | (Abs d11, Abs d22) -> equal f d11 d22
-    | (Var i1, Var i2) -> f i1 i2
+    | App (d11, d12), App (d21, d22) -> equal f d11 d21 && equal f d12 d22
+    | Abs d11, Abs d22 -> equal f d11 d22
+    | Var i1, Var i2 -> f i1 i2
     | _ -> false
   ;;
 end

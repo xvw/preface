@@ -8,15 +8,11 @@ Preface_qcheck.Make.Test (struct
   let name = "pure id <*> x = x"
 
   type input = X.t F.t
-
   type output = input
 
   let arbitrary = A.arbitrary X.arbitrary
-
   let equal = A.equal X.equal
-
   let left x = F.(pure (fun x -> x) <*> x)
-
   let right x = x
 end)
 
@@ -29,11 +25,9 @@ Preface_qcheck.Make.Test (struct
   let name = "pure f <*> pure x = pure (f x)"
 
   type input = X.t * (X.t -> Y.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary = QCheck.(pair X.arbitrary (fun1 X.observable Y.arbitrary))
-
   let equal = A.equal Y.equal
 
   let left (x, f') =
@@ -56,7 +50,6 @@ Preface_qcheck.Make.Test (struct
   let name = "f <*> pure x = pure ((|>) x) <*> f"
 
   type input = X.t * (X.t -> Y.t) QCheck.fun_ F.t
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -123,7 +116,6 @@ Preface_qcheck.Make.Test (struct
   let name = "fmap f x = pure f <*> x"
 
   type input = X.t F.t * (X.t -> Y.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -151,15 +143,11 @@ Preface_qcheck.Make.Test (struct
   let name = "u *> v = (id <$ u) <*> v"
 
   type input = X.t F.t
-
   type output = input
 
   let arbitrary = A.arbitrary X.arbitrary
-
   let equal = A.equal X.equal
-
   let left x = F.(pure () *> x)
-
   let right x = F.((fun x -> x) <$ pure () <*> x)
 end)
 
@@ -171,20 +159,17 @@ Preface_qcheck.Make.Test (struct
   let name = "u <* v = lift2 const u v"
 
   type input = X.t F.t
-
   type output = input
 
   let arbitrary = A.arbitrary X.arbitrary
-
   let equal = A.equal X.equal
-
   let left x = F.(x <* pure ())
-
   let right x = F.(lift2 Preface_core.Fun.const x (pure ()))
 end)
 
 module Preserve_functor_identity (A : Preface_specs.APPLICATIVE) =
   Functor.Preserve_identity (A)
+
 module Preserve_functor_morphism (A : Preface_specs.APPLICATIVE) =
   Functor.Preserve_morphism (A)
 

@@ -10,7 +10,6 @@ let dependencies_of = function
 ;;
 
 let f = Preface.List.Foldable.fold_map (module S) dependencies_of
-
 let direct_deps = D.traced f
 
 let deps subject =

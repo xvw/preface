@@ -4,7 +4,6 @@ module Core_via_bimap (Req : Preface_specs.Bifunctor.WITH_BIMAP) = struct
   include Req
 
   let map_fst f = bimap f id
-
   let map_snd f = bimap id f
 end
 
@@ -20,7 +19,6 @@ module Operation (Core : Preface_specs.Bifunctor.CORE) = struct
   type ('a, 'b) t = ('a, 'b) Core.t
 
   let replace_fst value x = Core.map_fst (const value) x
-
   let replace_snd value x = Core.map_snd (const value) x
 end
 
@@ -56,7 +54,6 @@ Via_map_fst_and_map_snd (struct
   type ('a, 'b) t = 'a F.t * 'b G.t
 
   let map_fst f (x, y) = (F.map f x, y)
-
   let map_snd f (x, y) = (x, G.map f y)
 end)
 

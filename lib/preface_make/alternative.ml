@@ -4,7 +4,6 @@ struct
   include Applicative.Core_via_map_and_product (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -12,7 +11,6 @@ module Core_via_apply (Req : Preface_specs.Alternative.WITH_APPLY) = struct
   include Applicative.Core_via_apply (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -20,7 +18,6 @@ module Core_via_lift2 (Req : Preface_specs.Alternative.WITH_LIFT2) = struct
   include Applicative.Core_via_lift2 (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -31,7 +28,6 @@ module Operation (Core : Preface_specs.Alternative.CORE) = struct
   include Alt.Operation (Core)
 
   let times n x = Preface_core.Monoid.times Core.combine Core.neutral n x
-
   let reduce list = reduce' Core.combine Core.neutral list
 end
 
@@ -103,7 +99,6 @@ module Over_applicative
       include Applicative
 
       let combine = Req.combine
-
       let neutral = Req.neutral
     end)
     (struct
@@ -115,7 +110,6 @@ module Over_applicative
       include Applicative
 
       let times n x = Preface_core.Monoid.times Req.combine Req.neutral n x
-
       let reduce list = reduce' Req.combine Req.neutral list
     end)
     (struct
@@ -134,7 +128,6 @@ module Composition
          type 'a t = 'a G.t F.t
 
          let neutral = F.neutral
-
          let combine = F.combine
        end)
 
@@ -146,7 +139,6 @@ module From_arrow_plus (A : Preface_specs.ARROW_PLUS) =
          type 'a t = (unit, 'a) A.t
 
          let neutral = A.neutral
-
          let combine x y = A.(x <|> y)
        end)
 
@@ -157,6 +149,5 @@ module Product (F : Preface_specs.ALTERNATIVE) (G : Preface_specs.ALTERNATIVE) =
          type 'a t = 'a F.t * 'a G.t
 
          let neutral = (F.neutral, G.neutral)
-
          let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
        end)

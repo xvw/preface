@@ -1,17 +1,11 @@
 type ('a, 'b) t = 'a * 'b
 
 let fst (x, _) = x
-
 let snd (_, x) = x
-
 let swap (x, y) = (y, x)
-
 let curry f x y = f (x, y)
-
 let uncurry f (x, y) = f x y
-
 let equal f g (x, y) (x', y') = f x x' && g y y'
-
 let pp f g formater (x, y) = Format.fprintf formater "(%a, %a)" f x g y
 
 module Infix = struct

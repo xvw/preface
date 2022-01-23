@@ -3,23 +3,15 @@ module Core_over_comonad
     (Tape : Preface_specs.MONOID) =
 struct
   type tape = Tape.t
-
   type 'a comonad = 'a C.t
-
   type 'a t = (tape -> 'a) comonad
 
   let run f = f
-
   let lower f = (C.map (fun g -> g Tape.neutral)) f
-
   let trace t f = (C.extract f) t
-
   let traces f g = trace (f ((C.extract g) Tape.neutral)) g
-
   let listen t = run (C.map (fun f m -> (f m, m))) t
-
   let listens g t = run (C.map (fun f m -> (f m, g m))) t
-
   let censor g t = run (C.map (fun f x -> f (g x))) t
 end
 

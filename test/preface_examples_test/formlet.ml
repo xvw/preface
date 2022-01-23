@@ -19,9 +19,7 @@ module Formlet = struct
   ;;
 
   exception Invalid_age of int
-
   exception Invalid_name of (string * string)
-
   exception Unchecked_rules
 
   let validate_age age =

@@ -19,9 +19,9 @@ module Circuit = struct
       {
         eval =
           (fun x ->
-            let (circuit1, b) = c1.eval x in
-            let (circuit2, c) = c2.eval b in
-            (compose circuit2 circuit1, c))
+            let circuit1, b = c1.eval x in
+            let circuit2, c = c2.eval b in
+            (compose circuit2 circuit1, c) )
       }
     ;;
   end)
@@ -38,8 +38,8 @@ module Circuit = struct
           {
             eval =
               (fun (a, b) ->
-                let (cir, c) = circuit.eval a in
-                (fst cir, (c, b)))
+                let cir, c = circuit.eval a in
+                (fst cir, (c, b)) )
           }
         ;;
       end)
@@ -55,9 +55,9 @@ module Circuit = struct
             eval =
               (function
               | Either.Left b ->
-                let (circuit', c) = origin.eval b in
+                let circuit', c = origin.eval b in
                 (left circuit', Either.Left c)
-              | Either.Right d -> (left origin, Either.Right d))
+              | Either.Right d -> (left origin, Either.Right d) )
           }
         ;;
       end)
@@ -65,7 +65,7 @@ module Circuit = struct
   let rec run circuit = function
     | [] -> []
     | x :: xs ->
-      let (cir, a) = circuit.eval x in
+      let cir, a = circuit.eval x in
       a :: run cir xs
   ;;
 
@@ -73,8 +73,8 @@ module Circuit = struct
     {
       eval =
         (fun input ->
-          let (output, aux) = f input acc in
-          (fold aux f, output))
+          let output, aux = f input acc in
+          (fold aux f, output) )
     }
   ;;
 
@@ -86,7 +86,6 @@ module Circuit = struct
 end
 
 let total = Circuit.reduce 0 ( + )
-
 let total_float = Circuit.reduce 0. ( +. )
 
 let total_test () =

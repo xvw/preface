@@ -2,7 +2,6 @@ module Req = struct
   type 'a t = 'a Preface_stdlib.Stream.t
 
   let arbitrary x = Preface_qcheck.Arbitrary.stream x
-
   let observable x = Preface_qcheck.Observable.stream ~fuel:10 x
 
   let equal f x y =
@@ -15,12 +14,15 @@ end
 module Functor =
   Preface_laws.Functor.Cases (Preface_stdlib.Stream.Functor) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Applicative =
   Preface_laws.Applicative.Cases (Preface_stdlib.Stream.Applicative) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Monad =
   Preface_laws.Monad.Cases (Preface_stdlib.Stream.Monad) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Comonad =
   Preface_laws.Comonad.Cases (Preface_stdlib.Stream.Comonad) (Req)
     (Preface_qcheck.Sample.Pack1)

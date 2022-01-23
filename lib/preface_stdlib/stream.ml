@@ -1,17 +1,11 @@
 type 'a t = C of 'a * 'a t Lazy.t
 
 let stream a l = C (a, l)
-
 let rec pure x = C (x, lazy (pure x))
-
 let repeat = pure
-
 let cons x s = C (x, lazy s)
-
 let hd = function C (x, _) -> x
-
 let tl = function C (_, xs) -> Lazy.force xs
-
 let rec map f = function C (x, xs) -> C (f x, lazy (map f @@ Lazy.force xs))
 
 module Functor = Preface_make.Functor.Via_map (struct
@@ -30,7 +24,7 @@ module Applicative = Preface_make.Applicative.Via_apply (struct
   let rec apply stream1 stream2 =
     let f g x = g x in
     match (stream1, stream2) with
-    | (C (x, xs), C (y, ys)) ->
+    | C (x, xs), C (y, ys) ->
       C (f x y, lazy (apply (Lazy.force xs) (Lazy.force ys)))
   ;;
 end)
@@ -39,7 +33,6 @@ module Monad = Preface_make.Monad.Via_map_and_join (struct
   type nonrec 'a t = 'a t
 
   let return = pure
-
   let map = map
 
   let rec join = function
@@ -108,7 +101,6 @@ let drop_while predicate stream =
 
 module Infix = struct
   let ( <:> ) = cons
-
   let ( .%[] ) s i = at i s
 end
 

@@ -1,7 +1,5 @@
 exception Invalid_int of string
-
 exception Missing_field of string
-
 exception String_shorter of (string * int)
 
 let err = Preface.Nonempty_list.create
@@ -22,7 +20,7 @@ module Functor = Preface.Make.Functor.Via_map (struct
           let open Preface.Validation in
           match env.parser x with
           | Invalid x -> Invalid x
-          | Valid value -> Valid (f value))
+          | Valid value -> Valid (f value) )
     }
   ;;
 end)
@@ -50,9 +48,7 @@ let string_with_len potential_len value =
 module Free = Preface.Make.Free_applicative.Over_functor (Functor)
 
 let field name reader = Free.promote (parser reader name)
-
 let string ?len name = field name (string_with_len len)
-
 let int name = field name read_int
 
 module Run = Free.To_applicative (Preface.Validate.Applicative)
@@ -61,7 +57,6 @@ module Count = Free.To_monoid (struct
   type t = int
 
   let neutral = 0
-
   let combine x y = x + y
 end)
 

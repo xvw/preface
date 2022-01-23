@@ -5,15 +5,11 @@ Preface_qcheck.Make.Test (struct
   let name = "neutral <|> x = x"
 
   type input = F.t
-
   type output = F.t
 
   let arbitrary = A.arbitrary
-
   let equal = A.equal
-
   let left x = F.(neutral <|> x)
-
   let right x = x
 end)
 
@@ -24,15 +20,11 @@ Preface_qcheck.Make.Test (struct
   let name = "x <|> neutral = x"
 
   type input = F.t
-
   type output = F.t
 
   let arbitrary = A.arbitrary
-
   let equal = A.equal
-
   let left x = F.(x <|> neutral)
-
   let right x = x
 end)
 
