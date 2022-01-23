@@ -8,15 +8,11 @@ Preface_qcheck.Make.Test (struct
   let name = "map id = id"
 
   type input = X.t F.t
-
   type output = input
 
   let arbitrary = A.arbitrary X.arbitrary
-
   let equal = A.equal X.equal
-
   let left x = F.map (fun x -> x) x
-
   let right x = (fun x -> x) x
 end)
 
@@ -30,7 +26,6 @@ Preface_qcheck.Make.Test (struct
   let name = "map (f % g) = map f % map g"
 
   type input = X.t F.t * (Y.t -> Z.t) QCheck.fun_ * (X.t -> Y.t) QCheck.fun_
-
   type output = Z.t F.t
 
   let arbitrary =

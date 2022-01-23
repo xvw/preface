@@ -8,11 +8,9 @@ Preface_qcheck.Make.Test (struct
   let name = "join % join = join % map join"
 
   type input = X.t F.t F.t F.t
-
   type output = X.t F.t
 
   let arbitrary = A.arbitrary (A.arbitrary (A.arbitrary X.arbitrary))
-
   let equal = A.equal X.equal
 
   let left x =
@@ -34,7 +32,6 @@ Preface_qcheck.Make.Test (struct
   let name = "join % map return = join % return = id"
 
   type input = X.t F.t
-
   type output = X.t F.t * X.t F.t
 
   let arbitrary = A.arbitrary X.arbitrary
@@ -60,11 +57,9 @@ Preface_qcheck.Make.Test (struct
   let name = "map id = id"
 
   type input = X.t F.t
-
   type output = X.t F.t
 
   let arbitrary = A.arbitrary X.arbitrary
-
   let equal = A.equal X.equal
 
   let left x =
@@ -85,7 +80,6 @@ Preface_qcheck.Make.Test (struct
   let name = "map (f % g) = map f % map g"
 
   type input = X.t F.t * (Z.t -> Y.t) QCheck.fun_ * (X.t -> Z.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -121,7 +115,6 @@ Preface_qcheck.Make.Test (struct
   let name = "map f % join = join % map (map f)"
 
   type input = X.t F.t F.t * (X.t -> Y.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -153,11 +146,9 @@ Preface_qcheck.Make.Test (struct
   let name = "map f % return = return f"
 
   type input = X.t * (X.t -> Y.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary = QCheck.(pair X.arbitrary (fun1 X.observable Y.arbitrary))
-
   let equal = A.equal Y.equal
 
   let left (x, f') =
@@ -182,7 +173,6 @@ Preface_qcheck.Make.Test (struct
   let name = "return x >>= f = f x"
 
   type input = X.t * (X.t -> Y.t F.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -210,15 +200,11 @@ Preface_qcheck.Make.Test (struct
   let name = "x >>= return = x"
 
   type input = X.t F.t
-
   type output = X.t F.t
 
   let arbitrary = A.arbitrary X.arbitrary
-
   let equal = A.equal X.equal
-
   let left x = F.(x >>= return)
-
   let right x = x
 end)
 
@@ -254,7 +240,7 @@ Preface_qcheck.Make.Test (struct
   let right (x, f', g') =
     let f = QCheck.Fn.apply f'
     and g = QCheck.Fn.apply g' in
-    F.(x >>= (fun y -> f y >>= g))
+    F.(x >>= fun y -> f y >>= g)
   ;;
 end)
 
@@ -267,7 +253,6 @@ Preface_qcheck.Make.Test (struct
   let name = "return >=> f = f"
 
   type input = X.t * (X.t -> Y.t F.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -296,7 +281,6 @@ Preface_qcheck.Make.Test (struct
   let name = "f >=> return = f"
 
   type input = X.t * (X.t -> Y.t F.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -367,8 +351,10 @@ struct
   module Join_map_1 = Join_map_1 (F) (A) (T.A)
   module Join_map_2 = Join_map_2 (F) (A) (T.A)
   module Natural_transformation_1 = Natural_transformation_1 (F) (A) (T.A)
+
   module Natural_transformation_2 =
     Natural_transformation_2 (F) (A) (T.A) (T.B) (T.C)
+
   module Natural_transformation_3 = Natural_transformation_3 (F) (A) (T.A) (T.B)
   module Natural_transformation_4 = Natural_transformation_4 (F) (A) (T.A) (T.B)
   module Left_identity = Left_identity (F) (A) (T.A) (T.B)
@@ -376,6 +362,7 @@ struct
   module Associativity = Associativity (F) (A) (T.A) (T.B) (T.C)
   module Kleisli_left_identity = Kleisli_left_identity (F) (A) (T.A) (T.B)
   module Kleisli_right_identity = Kleisli_right_identity (F) (A) (T.A) (T.B)
+
   module Kleisli_associativity =
     Kleisli_associativity (F) (A) (T.A) (T.B) (T.C) (T.D)
 

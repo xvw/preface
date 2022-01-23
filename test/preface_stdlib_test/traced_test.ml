@@ -2,7 +2,6 @@ module I = Preface.Make.Monoid.Via_combine_and_neutral (struct
   type t = Int.t
 
   let neutral = 0
-
   let combine x y = x + y
 end)
 

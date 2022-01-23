@@ -16,7 +16,9 @@ module type CORE = sig
     | Return : 'a -> 'a t
     | Bind : 'b f * ('b -> 'a t) -> 'a t
 
-  type 'a handler = { handler : 'b. ('b -> 'a) -> 'b f -> 'a }
+  type ('a, 'b) handle = ('a -> 'b) -> 'a f -> 'b
+
+  type 'a handler = { handler : 'b. ('b, 'a) handle }
   (** The handler type. Which is a [Natural transformation] from the
       [Freer Monad] to an unwrapped [Identity monad]. *)
 

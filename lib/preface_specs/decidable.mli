@@ -40,7 +40,6 @@ end
     [choose]. *)
 module type WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER = sig
   include WITH_LOSE_AND_CHOOSE
-
   include Divisible.WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER with type 'a t := 'a t
 end
 

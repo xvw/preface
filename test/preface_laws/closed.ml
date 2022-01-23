@@ -21,7 +21,7 @@ module Laws (C : Preface_specs.CLOSED) = struct
     let rhs f x = (C.map_snd (fun x -> x % f) % C.closed) x in
     ( "contramap_fst (fun x -> x % f) % closed = map_snd (fun x -> x % f) % \
        closed"
-    , (fun f x -> (lhs f x, rhs f x)) )
+    , fun f x -> (lhs f x, rhs f x) )
   ;;
 
   let closed_closed =
@@ -29,13 +29,13 @@ module Laws (C : Preface_specs.CLOSED) = struct
     let rhs x =
       (C.dimap (fun f (x, y) -> f x y) (fun f x y -> f (x, y)) % C.closed) x
     in
-    ("closed % closed = dimap uncurry curry % closed", (fun x -> (lhs x, rhs x)))
+    ("closed % closed = dimap uncurry curry % closed", fun x -> (lhs x, rhs x))
   ;;
 
   let dimap_const =
     let f g = g () in
     let lhs x = (C.dimap Fun.const f % C.closed) x in
     let rhs x = Fun.id x in
-    ("dimap const (fun f -> f ()) % closed = id", (fun x -> (lhs x, rhs x)))
+    ("dimap const (fun f -> f ()) % closed = id", fun x -> (lhs x, rhs x))
   ;;
 end

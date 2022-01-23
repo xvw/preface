@@ -2,7 +2,6 @@ module Core_via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) = struct
   include Req
 
   let contramap_fst f x = Req.dimap f Fun.id x
-
   let map_snd f x = Req.dimap Fun.id f x
 end
 
@@ -16,6 +15,7 @@ end
 
 module Via_dimap (Req : Preface_specs.Profunctor.WITH_DIMAP) =
   Core_via_dimap (Req)
+
 module Via_contramap_fst_and_map_snd
     (Req : Preface_specs.Profunctor.WITH_CONTRAMAP_FST_AND_MAP_SND) =
   Core_via_contramap_fst_and_map_snd (Req)
@@ -26,9 +26,7 @@ module From_functor (Functor : Preface_specs.Functor.CORE) = struct
   open Preface_core.Fun.Infix
 
   let dimap f g h = Functor.map g % h % f
-
   let contramap_fst k f = f % k
-
   let map_snd k f = Functor.map k % f
 end
 

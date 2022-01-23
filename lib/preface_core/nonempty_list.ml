@@ -5,11 +5,10 @@ type 'a t =
 let create x = Last x
 
 let rec rev_append l1 l2 =
-  (match l1 with Last x -> x :: l2 | x :: xs -> rev_append xs (x :: l2))
+  match l1 with Last x -> x :: l2 | x :: xs -> rev_append xs (x :: l2)
 ;;
 
 let hd = function Last x | x :: _ -> x
-
 let tl = function Last _ -> None | _ :: xs -> Some xs
 
 let rev = function
@@ -124,8 +123,8 @@ let flatten = function
 
 let equal f a b =
   let rec eq_aux = function
-    | (Last x, Last y) -> f x y
-    | (x :: xs, y :: ys) -> f x y && eq_aux (xs, ys)
+    | Last x, Last y -> f x y
+    | x :: xs, y :: ys -> f x y && eq_aux (xs, ys)
     | _ -> false
   in
   eq_aux (a, b)

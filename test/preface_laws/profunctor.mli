@@ -6,9 +6,7 @@ module type LAWS = sig
   type ('a, 'b) t
 
   val dimap_identity : string * (('a, 'b) t -> ('a, 'b) t pair)
-
   val contramap_fst_identity : string * (('a, 'b) t -> ('a, 'b) t pair)
-
   val map_snd_identity : string * (('a, 'b) t -> ('a, 'b) t pair)
 
   val dimap_equality :

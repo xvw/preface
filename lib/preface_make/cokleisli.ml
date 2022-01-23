@@ -19,7 +19,6 @@ Strong.Via_dimap_and_fst (struct
   type ('a, 'b) t = 'a C.t -> 'b
 
   let dimap f g p = C.map f %> p %> g
-
   let fst f x = (f (C.map Stdlib.fst x), Stdlib.snd (C.extract x))
 end)
 
@@ -38,7 +37,6 @@ Category.Via_id_and_compose (struct
   type ('a, 'b) t = 'a C.t -> 'b
 
   let id = C.extract
-
   let compose f g = C.compose_left_to_right g f
 end)
 

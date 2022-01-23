@@ -23,7 +23,6 @@ module Over_functor (F : Preface_specs.Functor.CORE) = struct
     type nonrec 'a t = 'a t
 
     let bimap f g = Either.case (Either.left % f) (Either.right % g)
-
     let pure x = Pure x
 
     let rec select : type a b. (a, b) Either.t t -> (a -> b) t -> b t =

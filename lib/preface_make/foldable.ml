@@ -35,9 +35,7 @@ module Operation (C : Preface_specs.Foldable.CORE) = struct
   ;;
 
   let for_all p x = C.fold_map' true ( && ) p x
-
   let exists p x = C.fold_map' false ( || ) p x
-
   let length x = fold_left (fun acc _ -> succ acc) 0 x
 end
 
@@ -46,7 +44,6 @@ module Via
     (O : Preface_specs.Foldable.OPERATION with type 'a t = 'a C.t) =
 struct
   include C
-
   include (O : Preface_specs.Foldable.OPERATION with type 'a t := 'a t)
 end
 

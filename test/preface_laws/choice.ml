@@ -11,7 +11,6 @@ module type LAWS = sig
     string * (('a, 'b) t -> (('c, 'a) Either.t, ('c, 'b) Either.t) t pair)
 
   val map_snd_left : string * (('a, 'b) t -> ('a, ('b, 'c) Either.t) t pair)
-
   val map_snd_right : string * (('a, 'b) t -> ('a, ('c, 'b) Either.t) t pair)
 
   val contramap_fst_right :
@@ -57,13 +56,13 @@ module Laws (C : Preface_specs.CHOICE) = struct
   let left_defined_by_right =
     let lhs x = C.left x in
     let rhs x = C.dimap Either.swap Either.swap (C.right x) in
-    ("left = dimap Either.swap Either.swap % right", (fun x -> (lhs x, rhs x)))
+    ("left = dimap Either.swap Either.swap % right", fun x -> (lhs x, rhs x))
   ;;
 
   let right_defined_by_left =
     let lhs x = C.right x in
     let rhs x = C.dimap Either.swap Either.swap (C.left x) in
-    ("right = dimap Either.swap Either.swap % left", (fun x -> (lhs x, rhs x)))
+    ("right = dimap Either.swap Either.swap % left", fun x -> (lhs x, rhs x))
   ;;
 
   let map_snd_left =
@@ -71,7 +70,7 @@ module Laws (C : Preface_specs.CHOICE) = struct
     let lhs x = C.map_snd Either.left x in
     let rhs x = (C.contramap_fst Either.left % C.left) x in
     ( "map_snd Either.left = contramap_fst Either.left % left"
-    , (fun x -> (lhs x, rhs x)) )
+    , fun x -> (lhs x, rhs x) )
   ;;
 
   let map_snd_right =
@@ -79,7 +78,7 @@ module Laws (C : Preface_specs.CHOICE) = struct
     let lhs x = C.map_snd Either.right x in
     let rhs x = (C.contramap_fst Either.right % C.right) x in
     ( "map_snd Either.right = contramap_fst Either.right % right"
-    , (fun x -> (lhs x, rhs x)) )
+    , fun x -> (lhs x, rhs x) )
   ;;
 
   let contramap_fst_right =
@@ -89,7 +88,7 @@ module Laws (C : Preface_specs.CHOICE) = struct
     let rhs f x = (C.map_snd (right f) % C.left) x in
     ( "contramap_fst (Fun.Choice.right f) % left = map_snd (Fun.Choice.right \
        f) % left"
-    , (fun f x -> (lhs f x, rhs f x)) )
+    , fun f x -> (lhs f x, rhs f x) )
   ;;
 
   let contramap_fst_left =
@@ -99,20 +98,20 @@ module Laws (C : Preface_specs.CHOICE) = struct
     let rhs f x = (C.map_snd (left f) % C.right) x in
     ( "contramap_fst (Fun.Choice.left f) % right = map_snd (Fun.Choice.left f) \
        % right"
-    , (fun f x -> (lhs f x, rhs f x)) )
+    , fun f x -> (lhs f x, rhs f x) )
   ;;
 
   let left_left =
     let open Preface_core.Fun.Infix in
     let lhs x = (C.left % C.left) x in
     let rhs x = (C.dimap assoc unassoc % C.left) x in
-    ("left % left = dimap assoc unassoc % left", (fun x -> (lhs x, rhs x)))
+    ("left % left = dimap assoc unassoc % left", fun x -> (lhs x, rhs x))
   ;;
 
   let right_right =
     let open Preface_core.Fun.Infix in
     let lhs x = (C.right % C.right) x in
     let rhs x = (C.dimap unassoc assoc % C.right) x in
-    ("left % left = dimap unassoc assoc % right", (fun x -> (lhs x, rhs x)))
+    ("left % left = dimap unassoc assoc % right", fun x -> (lhs x, rhs x))
   ;;
 end

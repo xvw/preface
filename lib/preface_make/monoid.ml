@@ -13,7 +13,6 @@ module Operation (Core : Preface_specs.Monoid.CORE) = struct
   include Semigroup.Operation (Core)
 
   let times n x = Preface_core.Monoid.times Core.combine Core.neutral n x
-
   let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 end
 
@@ -62,7 +61,6 @@ Via_combine_and_neutral (struct
   type t = T.t Alternative.t
 
   let combine = Alternative.combine
-
   let neutral = Alternative.neutral
 end)
 
@@ -73,6 +71,5 @@ Via_combine_and_neutral (struct
   type t = T.t Monad_plus.t
 
   let combine = Monad_plus.combine
-
   let neutral = Monad_plus.neutral
 end)

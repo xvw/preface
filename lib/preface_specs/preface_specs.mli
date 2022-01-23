@@ -88,83 +88,44 @@ module Freer_monad = Freer_monad
     name in upper case. *)
 
 module type SEMIGROUP = Semigroup.API
-
 module type MONOID = Monoid.API
-
 module type FUNCTOR = Functor.API
-
 module type BIFUNCTOR = Bifunctor.API
-
 module type PROFUNCTOR = Profunctor.API
-
 module type STRONG = Strong.API
-
 module type CHOICE = Choice.API
-
 module type CLOSED = Closed.API
-
 module type APPLICATIVE = Applicative.API
-
 module type ALT = Alt.API
-
 module type ALTERNATIVE = Alternative.API
-
 module type SELECTIVE = Selective.API
-
 module type MONAD = Monad.API
-
 module type MONAD_PLUS = Monad_plus.API
-
 module type COMONAD = Comonad.API
-
 module type FOLDABLE = Foldable.API
-
 module type TRAVERSABLE = Traversable.API
-
 module type FREE_APPLICATIVE = Free_applicative.API
-
 module type FREE_SELECTIVE = Free_selective.API
-
 module type FREER_SELECTIVE = Freer_selective.API
-
 module type FREE_MONAD = Free_monad.API
-
 module type FREER_MONAD = Freer_monad.API
-
 module type INVARIANT = Invariant.API
-
 module type CONTRAVARIANT = Contravariant.API
-
 module type DIVISIBLE = Divisible.API
-
 module type SEMIGROUPOID = Semigroupoid.API
-
 module type DECIDABLE = Decidable.API
-
 module type CATEGORY = Category.API
-
 module type ARROW = Arrow.API
-
 module type ARROW_ZERO = Arrow_zero.API
-
 module type ARROW_ALT = Arrow_alt.API
-
 module type ARROW_PLUS = Arrow_plus.API
-
 module type ARROW_CHOICE = Arrow_choice.API
-
 module type ARROW_APPLY = Arrow_apply.API
-
 module type READER = Reader.API
-
 module type WRITER = Writer.API
-
 module type STATE = State.API
-
 module type STORE = Store.API
-
 module type ENV = Env.API
-
 module type TRACED = Traced.API
 
 (** {1 Types}

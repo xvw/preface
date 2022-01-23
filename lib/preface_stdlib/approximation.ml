@@ -5,7 +5,6 @@ module Over (M : Preface_specs.MONOID) = struct
     type nonrec 'a t = 'a t
 
     let pure _ = Over M.neutral
-
     let apply (Over x) (Over y) = Over M.(x <|> y)
   end)
 
@@ -28,7 +27,6 @@ module Under (M : Preface_specs.MONOID) = struct
     type nonrec 'a t = 'a t
 
     let pure _ = Under M.neutral
-
     let apply (Under x) (Under y) = Under M.(x <|> y)
   end)
 

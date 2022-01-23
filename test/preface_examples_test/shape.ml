@@ -5,9 +5,7 @@
 
 module Shape = struct
   type radius = int
-
   type width = int
-
   type height = int
 
   type shape =
@@ -16,8 +14,8 @@ module Shape = struct
 
   let eq l r =
     match (l, r) with
-    | (Circle x, Circle y) -> x = y
-    | (Rectangle (w, h), Rectangle (w2, h2)) -> w = w2 && h = h2
+    | Circle x, Circle y -> x = y
+    | Rectangle (w, h), Rectangle (w2, h2) -> w = w2 && h = h2
     | _ -> false
   ;;
 
@@ -29,7 +27,6 @@ module Shape = struct
   exception Fail of string
 
   let circle r = Circle r
-
   let rectangle w h = Rectangle (w, h)
 
   let make choice r w h =

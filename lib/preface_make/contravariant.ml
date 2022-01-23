@@ -15,11 +15,8 @@ struct
   type 'a t = 'a Core.t
 
   let ( >$ ) x c = Operation.replace x c
-
   let ( $< ) c x = Operation.replace x c
-
   let ( >$< ) f c = Core.contramap f c
-
   let ( >&< ) c f = Core.contramap f c
 end
 

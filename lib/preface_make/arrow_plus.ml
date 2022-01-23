@@ -6,7 +6,6 @@ struct
   include Arrow.Core_over_category_and_via_arrow_and_fst (Category) (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -18,7 +17,6 @@ struct
   include Arrow.Core_over_category_and_via_arrow_and_split (Category) (Req)
 
   let combine = Req.combine
-
   let neutral = Req.neutral
 end
 
@@ -30,11 +28,8 @@ struct
   include Arrow.Operation_over_category (Category) (Core)
 
   let times_nel n x = Preface_core.Monoid.times_nel Core.combine n x
-
   let reduce_nel list = Preface_core.Monoid.reduce_nel Core.combine list
-
   let times n x = Preface_core.Monoid.times Core.combine Core.neutral n x
-
   let reduce list = Preface_core.Monoid.reduce Core.combine Core.neutral list
 end
 
@@ -130,7 +125,6 @@ module From_monad_plus (Monad : Preface_specs.Monad_plus.CORE) =
          type ('a, 'b) t = 'a -> 'b Monad.t
 
          let combine f g x = Monad.combine (f x) (g x)
-
          let neutral _ = Monad.neutral
        end)
 
@@ -141,6 +135,5 @@ module Product (F : Preface_specs.ARROW_PLUS) (G : Preface_specs.ARROW_PLUS) =
          type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
 
          let neutral = (F.neutral, G.neutral)
-
          let combine (x1, y1) (x2, y2) = (F.combine x1 x2, G.combine y1 y2)
        end)

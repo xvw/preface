@@ -2,27 +2,30 @@ module Req = struct
   type 'a t = 'a Preface_stdlib.List.t
 
   let arbitrary x = Preface_qcheck.Arbitrary.small_list x
-
   let observable x = Preface_qcheck.Observable.list x
-
   let equal x = Preface_stdlib.List.equal x
 end
 
 module Functor =
   Preface_laws.Functor.Cases (Preface_stdlib.List.Functor) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Applicative =
   Preface_laws.Applicative.Cases (Preface_stdlib.List.Applicative) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Selective =
   Preface_laws.Selective.Rigid_cases (Preface_stdlib.List.Selective) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Alternative =
   Preface_laws.Alternative.Cases (Preface_stdlib.List.Alternative) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Monad =
   Preface_laws.Monad.Cases (Preface_stdlib.List.Monad) (Req)
     (Preface_qcheck.Sample.Pack1)
+
 module Monad_plus_monoidal =
   Preface_laws.Monad_plus.Cases_for_monoidal
     (Preface_stdlib.List.Monad_plus)

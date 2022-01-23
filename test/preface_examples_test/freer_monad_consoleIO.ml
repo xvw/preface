@@ -9,7 +9,6 @@ end
 module IO = Preface.Make.Freer_monad.Over (ConsoleIO)
 
 let tell x = IO.perform (ConsoleIO.Tell (x, id))
-
 let ask s = IO.perform (ConsoleIO.Ask (s, id))
 
 let runConsoleIO output sk = function

@@ -35,14 +35,12 @@ end
 (** Minimal definition using [neutral], [combine], [pure] and [apply]. *)
 module type WITH_APPLY = sig
   include Applicative.WITH_APPLY
-
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 
 (** Minimal definition using [neutral], [combine], [pure] and [lift2]. *)
 module type WITH_LIFT2 = sig
   include Applicative.WITH_LIFT2
-
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 

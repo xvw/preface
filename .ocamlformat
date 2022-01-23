@@ -1,28 +1,20 @@
-version = 0.19.0
+version = 0.20.1
 margin = 80
 max-indent = 68
 
-align-cases = false
-align-constructors-decl = false
-align-variants-decl = false
 assignment-operator = begin-line
 
-break-before-in = fit-or-vertical
 break-cases = fit
-break-collection-expressions = fit-or-vertical
 break-fun-decl = wrap
 break-fun-sig = fit-or-vertical
 break-infix = fit-or-vertical
 break-infix-before-func = true
 break-separators = before
 break-sequences = true
-break-string-literals = auto
-break-struct = force
 
 cases-exp-indent = 2
 cases-matching-exp-indent = normal
 
-disambiguate-non-breaking-match = true
 
 doc-comments = after-when-possible
 doc-comments-padding = 2
@@ -31,16 +23,9 @@ dock-collection-brackets = true
 
 exp-grouping = preserve
 
-extension-indent = 2
-
 field-space = loose
 
-function-indent = 2
-function-indent-nested = never
-
 if-then-else = keyword-first
-
-indent-after-in = 0
 
 indicate-multiline-delimiters = space
 indicate-nested-or-patterns = unsafe-no
@@ -50,17 +35,10 @@ infix-precedence = indent
 leading-nested-match-parens = false
 
 let-and = sparse
-let-binding-indent = 2
 let-binding-spacing = double-semicolon
 let-module = compact
 
-match-indent = 0
-match-indent-nested = never
-module-item-spacing = sparse
-nested-match = wrap
-
 parens-tuple = always
-parens-tuple-patterns = always
 
 parse-docstrings = true
 
@@ -73,10 +51,7 @@ space-around-lists = true
 space-around-records = true
 space-around-variants = true
 
-stritem-extension-indent = 0
-
 type-decl = sparse
-type-decl-indent = 2
 
 wrap-comments = false
 wrap-fun-args = true

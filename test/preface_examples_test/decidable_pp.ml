@@ -16,7 +16,6 @@ module Printer = struct
   type 'a t = 'a -> string
 
   let string = Fun.id
-
   let const s = Fun.const s
 
   let of_pp (type a) (module P : PP with type t = a) x =
@@ -24,7 +23,6 @@ module Printer = struct
   ;;
 
   let int = of_pp (module I)
-
   let nl = const "\n"
 
   open Preface.Fun.Infix
@@ -44,7 +42,7 @@ module Printer = struct
         let conquer x = Fun.const "" x
 
         let divide f x y c =
-          let (a, b) = f c in
+          let a, b = f c in
           x a ^ y b
         ;;
       end)
@@ -56,7 +54,6 @@ module Printer = struct
         type nonrec 'a t = 'a t
 
         let lose f x = Preface.Void.absurd (f x)
-
         let choose f x y c = Either.fold ~left:x ~right:y (f c)
       end)
 

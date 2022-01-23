@@ -4,7 +4,6 @@ module Operation (Core : Preface_specs.Semigroupoid.CORE) = struct
   type ('a, 'b) t = ('a, 'b) Core.t
 
   let compose_right_to_left f g = Core.compose f g
-
   let compose_left_to_right f g = Core.compose g f
 end
 
@@ -12,13 +11,9 @@ module Infix (Core : Preface_specs.Semigroupoid.CORE) = struct
   type ('a, 'b) t = ('a, 'b) Core.t
 
   let ( % ) f g = Core.compose f g
-
   let ( <% ) f g = Core.compose f g
-
   let ( %> ) f g = Core.compose g f
-
   let ( <<< ) f g = Core.compose f g
-
   let ( >>> ) f g = Core.compose g f
 end
 

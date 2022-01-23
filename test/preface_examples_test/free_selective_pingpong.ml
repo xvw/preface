@@ -30,7 +30,6 @@ module IO = struct
   end)
 
   let get_line = perform IORead
-
   let put_line s = perform (IOWrite s)
 
   module Selective =
@@ -43,7 +42,6 @@ module Free = struct
   include Preface.Make.Free_selective.Over_functor (Functor)
 
   let get_line = promote (Read Fun.id)
-
   let put_line s = promote (Write (s, ()))
 end
 
@@ -97,7 +95,7 @@ let test_when_read_returns_ping () =
                 let () = state := !state @ [ "Read" ] in
                 resume "ping"
             in
-            f resume effect)
+            f resume effect )
       }
       (free_to_io ping_pong)
   in
@@ -121,7 +119,7 @@ let test_when_read_returns_something_else () =
                 let () = state := !state @ [ "Read" ] in
                 resume "not_ping"
             in
-            f resume effect)
+            f resume effect )
       }
       (free_to_io ping_pong)
   in

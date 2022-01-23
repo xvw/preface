@@ -23,7 +23,7 @@ let identity ?collect arbitrary =
   let small =
     let open Opt in
     arbitrary.QCheck.small
-    >|= (fun f x -> x |> Preface_stdlib.Identity.extract |> f)
+    >|= fun f x -> x |> Preface_stdlib.Identity.extract |> f
   in
   QCheck.make ?print ?shrink ?small ?collect gen
 ;;

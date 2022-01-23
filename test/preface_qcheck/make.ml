@@ -1,16 +1,11 @@
 module type DRIVER = sig
   type input
-
   type output
 
   val arbitrary : input QCheck.arbitrary
-
   val left : input -> output
-
   val right : input -> output
-
   val equal : output -> output -> bool
-
   val name : string
 end
 

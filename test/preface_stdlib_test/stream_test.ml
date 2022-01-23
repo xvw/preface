@@ -7,7 +7,6 @@ let subject_try a =
 ;;
 
 let rec numbers n = stream n (lazy (numbers (n + 1)))
-
 let naturals = numbers 0
 
 let should_extract () =

@@ -5,7 +5,7 @@ let pure x = Some x
 module Foldable = Preface_make.Foldable.Via_fold_right (struct
   type nonrec 'a t = 'a t
 
-  let fold_right f x acc = (match x with None -> acc | Some v -> f v acc)
+  let fold_right f x acc = match x with None -> acc | Some v -> f v acc
 end)
 
 module Functor = Preface_make.Functor.Via_map (struct
@@ -20,12 +20,11 @@ module Alternative = Preface_make.Alternative.Via_apply (struct
   let pure = pure
 
   let apply fa xa =
-    (match (fa, xa) with (Some f, Some x) -> Some (f x) | _ -> None)
+    match (fa, xa) with Some f, Some x -> Some (f x) | _ -> None
   ;;
 
   let neutral = None
-
-  let combine l r = (match (l, r) with (None, x) -> x | (x, _) -> x)
+  let combine l r = match (l, r) with None, x -> x | x, _ -> x
 end)
 
 let traverse_aux pure map f = function
@@ -38,7 +37,6 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
     (A)
     (struct
       type 'a t = 'a A.t
-
       type 'a iter = 'a option
 
       let traverse f x = traverse_aux A.pure A.map f x
@@ -53,7 +51,6 @@ module Monad_internal = Preface_make.Monad.Via_bind (struct
   type nonrec 'a t = 'a t
 
   let return x = Some x
-
   let bind f = function Some x -> f x | None -> None
 end)
 
@@ -62,7 +59,6 @@ module Monad_traversable (M : Preface_specs.MONAD) =
     (M)
     (struct
       type 'a t = 'a M.t
-
       type 'a iter = 'a option
 
       let traverse f x = traverse_aux M.return M.map f x
@@ -70,8 +66,10 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 
 module Monad =
   Preface_make.Traversable.Join_with_monad (Monad_internal) (Monad_traversable)
+
 module Monad_plus =
   Preface_make.Monad_plus.Over_monad_and_alternative (Monad) (Alternative)
+
 module Invariant = Preface_make.Invariant.From_functor (Functor)
 
 module Monoid (M : Preface_specs.SEMIGROUP) =
@@ -82,15 +80,15 @@ Preface_make.Monoid.Via_combine_and_neutral (struct
 
   let combine x y =
     match (x, y) with
-    | (None, result) | (result, None) -> result
-    | (Some a, Some b) -> Some (M.combine a b)
+    | None, result | result, None -> result
+    | Some a, Some b -> Some (M.combine a b)
   ;;
 end)
 
 let equal f left right =
   match (left, right) with
-  | (None, None) -> true
-  | (Some x, Some y) -> f x y
+  | None, None -> true
+  | Some x, Some y -> f x y
   | _ -> false
 ;;
 
@@ -100,7 +98,5 @@ let pp pp' formater = function
 ;;
 
 let if_ p value = if p value then Some value else None
-
 let unless p = if_ (Predicate.negate p)
-
-let or_ a b = (match a with Some x -> Some x | None -> b)
+let or_ a b = match a with Some x -> Some x | None -> b

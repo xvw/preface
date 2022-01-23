@@ -6,7 +6,6 @@ struct
   include Req
 
   let apply f a = map (fun (f, a) -> f a) @@ product f a
-
   let lift2 f x y = apply (map f x) y
 end
 
@@ -14,9 +13,7 @@ module Core_via_apply (Req : Preface_specs.Applicative.WITH_APPLY) = struct
   include Req
 
   let map f a = apply (pure f) a
-
   let product a b = apply (apply (pure (fun a b -> (a, b))) a) b
-
   let lift2 f x y = apply (map f x) y
 end
 
@@ -24,9 +21,7 @@ module Core_via_lift2 (Req : Preface_specs.Applicative.WITH_LIFT2) = struct
   include Req
 
   let apply f a = lift2 (fun x -> x) f a
-
   let map f a = apply (pure f) a
-
   let product a b = apply (apply (pure (fun a b -> (a, b))) a) b
 end
 
@@ -34,7 +29,6 @@ module Operation (Core : Preface_specs.Applicative.CORE) = struct
   include Functor.Operation (Core)
 
   let lift = Core.map
-
   let lift3 f a b = Core.(apply @@ apply (apply (pure f) a) b)
 end
 
@@ -42,7 +36,6 @@ module Syntax (Core : Preface_specs.Applicative.CORE) = struct
   type 'a t = 'a Core.t
 
   let ( let+ ) x f = Core.map f x
-
   let ( and+ ) = Core.product
 end
 
@@ -53,11 +46,8 @@ struct
   include Functor.Infix (Core) (Operation)
 
   let ( <*> ) = Core.apply
-
   let ( <**> ) a b = Core.lift2 (fun x f -> f x) a b
-
   let ( *> ) a b = Core.lift2 (fun _x y -> y) a b
-
   let ( <* ) a b = Core.lift2 const a b
 end
 
@@ -134,7 +124,6 @@ Via_apply (struct
   type 'a t = 'a G.t F.t
 
   let pure x = F.pure (G.pure x)
-
   let apply f x = F.lift2 G.apply f x
 end)
 
@@ -142,9 +131,7 @@ module From_arrow (A : Preface_specs.ARROW) = Via_apply (struct
   type 'a t = (unit, 'a) A.t
 
   let pure x = A.arrow (const x)
-
   let uncurry f (x, y) = f x y
-
   let apply f x = A.(f &&& x >>> arrow (uncurry Fun.id))
 end)
 
@@ -153,7 +140,6 @@ Via_apply (struct
   type 'a t = 'a F.t * 'a G.t
 
   let pure x = (F.pure x, G.pure x)
-
   let apply (f, g) (x, y) = (F.apply f x, G.apply g y)
 end)
 
@@ -165,7 +151,6 @@ module Const (M : Preface_specs.Monoid.CORE) = struct
       type nonrec 'a t = 'a t
 
       let pure _ = Const M.neutral
-
       let apply (Const f) (Const x) = Const (M.combine f x)
     end) :
       Preface_specs.APPLICATIVE with type 'a t := 'a t )

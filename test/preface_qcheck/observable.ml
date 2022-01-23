@@ -45,8 +45,8 @@ let stream ?(fuel = 200) a =
     match
       (Preface_stdlib.Stream.take fuel x, Preface_stdlib.Stream.take fuel y)
     with
-    | (Error _, _) | (_, Error _) -> false
-    | (Ok l, Ok r) -> Preface_stdlib.List.equal (Observable.equal a) l r
+    | Error _, _ | _, Error _ -> false
+    | Ok l, Ok r -> Preface_stdlib.List.equal (Observable.equal a) l r
   in
   let hash x = Hashtbl.hash (Preface_stdlib.Stream.take fuel x) in
   Observable.make ~eq ~hash print

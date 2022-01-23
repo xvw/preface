@@ -14,7 +14,6 @@ module Effect = struct
   end)
 
   let get_home = perform Get_home
-
   let print message = perform (Print message)
 
   let program path =
@@ -52,7 +51,7 @@ let happy_path_without_path () =
                 let () = record output "get_home" in
                 resume "/xhtmlboi"
             in
-            f resume effect)
+            f resume effect )
       }
       (program None)
   in
@@ -78,7 +77,7 @@ let happy_path_with_path () =
                 let () = record output "get_home" in
                 resume "/xhtmlboi"
             in
-            f resume effect)
+            f resume effect )
       }
       (program (Some "./a-path"))
   in
@@ -104,7 +103,7 @@ let unhappy_path_without_path () =
                 let () = record output "get_home" in
                 Preface.Try.error No_home
             in
-            f resume effect)
+            f resume effect )
       }
       (program None)
   in

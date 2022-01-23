@@ -4,7 +4,7 @@ module Over (Store : Preface_specs.Types.T0) = struct
   let store f s = (Identity.pure f, s)
 
   let run_identity c =
-    let (f, s) = run c in
+    let f, s = run c in
     (Identity.extract f, s)
   ;;
 

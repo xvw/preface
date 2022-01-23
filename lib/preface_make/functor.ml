@@ -5,7 +5,6 @@ module Operation (Core : Preface_specs.Functor.CORE) = struct
   type 'a t = 'a Core.t
 
   let replace value x = (Core.map <% const) value x
-
   let void x = replace () x
 end
 
@@ -16,11 +15,8 @@ struct
   type 'a t = 'a Operation.t
 
   let ( <$> ) = Core.map
-
   let ( <&> ) x f = Core.map f x
-
   let ( <$ ) value x = Operation.replace value x
-
   let ( $> ) x value = Operation.replace value x
 end
 

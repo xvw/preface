@@ -1,5 +1,6 @@
 ## dev (Unreleased)
  
+- Add `('a, 'b) handle` to simplify handlers for `Freer_monad` [**@xvw**](https://github.com/xvw)
 - Rename `times` to `times_to_nel` for _semigroup-ish_ and add `times` for _monoid-ish_ [**@xvw**](https://github.com/xvw)
 - Add `Decidable` (Contravariant analogue for `Alternative`) and add some missing infixes operators for `Divisible` [**@gr-im**](https://github.com/gr-im)
 - Removing early destructive substitution [**@xhtmlboi**](https://github.com/xhtmlboi)

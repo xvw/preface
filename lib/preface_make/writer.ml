@@ -3,27 +3,17 @@ module Core_over_monad
     (Tape : Preface_specs.MONOID) =
 struct
   type tape = Tape.t
-
   type 'a monad = 'a Monad.t
-
   type 'a t = ('a * tape) monad
 
   let upper m = Monad.bind (fun a -> Monad.return (a, Tape.neutral)) m
-
   let writer (x, t) = Monad.return (x, t)
-
   let run writer_m = writer_m
-
   let exec x = Monad.map snd x
-
   let tell s = writer ((), s)
-
   let listen m = Monad.map (fun (x, b) -> ((x, b), b)) m
-
   let listens f m = Monad.map (fun (x, b) -> ((x, f b), b)) m
-
   let pass m = Monad.map (fun ((x, f), b) -> (x, f b)) m
-
   let censor f m = Monad.map (fun (x, b) -> (x, f b)) m
 end
 
@@ -53,7 +43,6 @@ module Alternative (A : Preface_specs.ALTERNATIVE) (Tape : Preface_specs.MONOID)
          type 'a t = ('a * Tape.t) A.t
 
          let neutral = A.neutral
-
          let combine writer_l writer_r = A.combine writer_l writer_r
        end)
 
@@ -64,7 +53,7 @@ Monad.Via_bind (struct
   let return x = M.return (x, Tape.neutral)
 
   let bind f m =
-    M.(m >>= (fun (x, t) -> f x >|= (fun (y, u) -> (y, Tape.combine t u))))
+    M.(m >>= fun (x, t) -> f x >|= fun (y, u) -> (y, Tape.combine t u))
   ;;
 end)
 
@@ -75,7 +64,6 @@ module Monad_plus (M : Preface_specs.MONAD_PLUS) (Tape : Preface_specs.MONOID) =
          type 'a t = ('a * Tape.t) M.t
 
          let neutral = M.neutral
-
          let combine writer_l writer_r = M.combine writer_l writer_r
        end)
 

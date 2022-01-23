@@ -21,9 +21,7 @@ let map_scenario_2 () =
 ;;
 
 let create age name = (age, name)
-
 let is_positive number = if number >= 0 then Some number else None
-
 let is_potential_name name = if String.length name >= 3 then Some name else None
 
 let parallel_validation_1 () =
@@ -66,7 +64,7 @@ let sequential_validation_1 () =
   let expected = Some (10, "John Doe")
   and computed =
     let open Monad in
-    is_positive 10 >|= create >>= (fun f -> is_potential_name "John Doe" >|= f)
+    is_positive 10 >|= create >>= fun f -> is_potential_name "John Doe" >|= f
   in
   Alcotest.(check (option (pair int string)))
     "Sequential_Validation_1" expected computed
@@ -76,9 +74,7 @@ let sequential_validation_2 () =
   let expected = None
   and computed =
     let open Monad in
-    is_positive (-10)
-    >|= create
-    >>= (fun f -> is_potential_name "John Doe" >|= f)
+    is_positive (-10) >|= create >>= fun f -> is_potential_name "John Doe" >|= f
   in
   Alcotest.(check (option (pair int string)))
     "Sequential_Validation_2" expected computed
@@ -87,7 +83,7 @@ let sequential_validation_2 () =
 let sequential_validation_3 () =
   let expected = None
   and computed =
-    Monad.(is_positive 10 >|= create >>= (fun f -> is_potential_name "J" >|= f))
+    Monad.(is_positive 10 >|= create >>= fun f -> is_potential_name "J" >|= f)
   in
   Alcotest.(check (option (pair int string)))
     "Sequential_Validation_1" expected computed
@@ -97,7 +93,7 @@ let sequential_validation_4 () =
   let expected = None
   and computed =
     let open Monad in
-    is_positive (-10) >|= create >>= (fun f -> is_potential_name "J" >|= f)
+    is_positive (-10) >|= create >>= fun f -> is_potential_name "J" >|= f
   in
   Alcotest.(check (option (pair int string)))
     "Sequential_Validation_1" expected computed
@@ -124,7 +120,6 @@ let fold_map_over_values () =
     type t = int
 
     let neutral = 1
-
     let combine = ( * )
   end) in
   let expected = 120
@@ -137,7 +132,6 @@ let fold_map_over_empty () =
     type t = int
 
     let neutral = 1
-
     let combine = ( * )
   end) in
   let expected = 1

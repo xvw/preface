@@ -1,9 +1,7 @@
 type 'a t = ('a, exn) Result.t
 
 let pure x = Ok x
-
 let ok = pure
-
 let error exn = Error exn
 
 module Functor = Result.Functor (struct
@@ -28,8 +26,7 @@ module Foldable = Result.Foldable (struct
   type t = exn
 end)
 
-let capture f = (try ok (f ()) with exn -> error exn)
-
+let capture f = try ok (f ()) with exn -> error exn
 let case f g = function Ok x -> f x | Error exn -> g exn
 
 let to_validation = function
@@ -38,5 +35,4 @@ let to_validation = function
 ;;
 
 let equal f = Result.equal f Exn.equal
-
 let pp pp' = Result.pp pp' Exn.pp

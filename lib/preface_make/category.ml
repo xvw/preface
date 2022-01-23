@@ -33,7 +33,6 @@ Via_id_and_compose (struct
   type ('a, 'b) t = 'a -> 'b Monad.t
 
   let id = Monad.return
-
   let compose f g = Monad.compose_left_to_right g f
 end)
 
@@ -44,7 +43,6 @@ Via_id_and_compose (struct
   type ('a, 'b) t = ('a, 'b) G.t
 
   let id = Req.id
-
   let compose = G.compose
 end)
 
@@ -53,6 +51,5 @@ Via_id_and_compose (struct
   type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
 
   let id = (F.id, G.id)
-
   let compose (x1, y1) (x2, y2) = (F.compose x1 x2, G.compose y1 y2)
 end)

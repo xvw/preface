@@ -9,7 +9,6 @@ let fold_map_over_values () =
     type t = int
 
     let neutral = 1
-
     let combine = ( * )
   end) in
   let expected = 120
@@ -27,7 +26,6 @@ let fold_map_over_empty () =
     type t = int
 
     let neutral = 1
-
     let combine = ( * )
   end) in
   let expected = 1

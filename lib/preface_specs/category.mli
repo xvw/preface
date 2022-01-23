@@ -26,7 +26,6 @@ module type WITH_ID_AND_COMPOSE = sig
   (** The type held by the [Category]. *)
 
   include WITH_ID with type ('a, 'b) t := ('a, 'b) t
-
   include Semigroupoid.WITH_COMPOSE with type ('a, 'b) t := ('a, 'b) t
 end
 

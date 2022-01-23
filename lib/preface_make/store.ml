@@ -3,7 +3,6 @@ module Core_over_comonad
     (Store : Preface_specs.Types.T0) =
 struct
   type store = Store.t
-
   type 'a comonad = 'a C.t
 
   let lower (f, s) = C.map (fun g -> g s) f
@@ -11,15 +10,10 @@ struct
   type 'a t = (store -> 'a) comonad * store
 
   let run (f, s) = (f, s)
-
   let pos (_, s) = s
-
   let peek s (g, _) = (C.extract g) s
-
   let peeks f (g, s) = (C.extract g) (f s)
-
   let seek s (f, _) = (f, s)
-
   let seeks f (g, s) = (g, f s)
 
   module Experiment (F : Preface_specs.FUNCTOR) = struct
@@ -32,7 +26,6 @@ Comonad.Via_extend (struct
   type 'a t = (Store.t -> 'a) C.t * Store.t
 
   let extract (g, s) = (C.extract g) s
-
   let extend f (g, s) = (C.extend (fun g' s' -> f (g', s')) g, s)
 end)
 

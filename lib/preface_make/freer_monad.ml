@@ -7,9 +7,10 @@ module Over (Type : Preface_specs.Types.T1) = struct
     | Return : 'a -> 'a t
     | Bind : 'b f * ('b -> 'a t) -> 'a t
 
-  let perform f = Bind (f, (fun a -> Return a))
+  let perform f = Bind (f, fun a -> Return a)
 
-  type 'a handler = { handler : 'b. ('b -> 'a) -> 'b f -> 'a }
+  type ('a, 'b) handle = ('a -> 'b) -> 'a f -> 'b
+  type 'a handler = { handler : 'b. ('b, 'a) handle }
 
   let run f =
     let rec loop_run = function
@@ -40,7 +41,7 @@ module Over (Type : Preface_specs.Types.T1) = struct
     let rec apply f a =
       match f with
       | Return f' -> map f' a
-      | Bind (i, c) -> Bind (i, c %> (fun f -> apply f a))
+      | Bind (i, c) -> Bind (i, c %> fun f -> apply f a)
     ;;
   end)
 

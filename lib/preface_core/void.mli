@@ -9,7 +9,7 @@ val absurd : t -> 'a
     their negations) can be inferred from it; this is known as deductive
     explosion.*)
 
-(** {As an identity for Either}
+(** {1 As an identity for Either}
 
     [Void.t] act as an identity for [Either]. *)
 

@@ -12,15 +12,11 @@ Preface_qcheck.Make.Test (struct
   let name = "x <*? pure id = Either.case id id <$> x"
 
   type input = (X.t, X.t) Either.t F.t
-
   type output = X.t F.t
 
   let arbitrary = A.arbitrary (either X.arbitrary X.arbitrary)
-
   let equal = A.equal X.equal
-
   let left x = F.(x <*? pure (fun x -> x))
-
   let right x = F.(Either.case (fun x -> x) (fun x -> x) <$> x)
 end)
 
@@ -236,7 +232,6 @@ Preface_qcheck.Make.Test (struct
   let name = "(x <*? pure y) = (Either.case y id <$> x)"
 
   type input = (X.t, Y.t) Either.t F.t * (X.t -> Y.t) QCheck.fun_
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -269,7 +264,6 @@ Preface_qcheck.Make.Test (struct
   let name = "(pure (Right x) <*? y) = pure x"
 
   type input = X.t * (Y.t -> X.t) QCheck.fun_ F.t
-
   type output = X.t F.t
 
   let arbitrary =
@@ -295,7 +289,6 @@ Preface_qcheck.Make.Test (struct
   let name = "(pure (Left x) <*? y) = ((|>) x) <$> y"
 
   type input = X.t * (X.t -> Y.t) QCheck.fun_ F.t
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -324,7 +317,6 @@ Preface_qcheck.Make.Test (struct
   let name = "f <*> g = apply f g"
 
   type input = (X.t -> Y.t) QCheck.fun_ F.t * X.t F.t
-
   type output = Y.t F.t
 
   let arbitrary =
@@ -355,7 +347,6 @@ Preface_qcheck.Make.Test (struct
   let name = "(x *> (y <*? z)) = ((x *> y) <*? z)"
 
   type input = X.t F.t * (Y.t, Z.t) Either.t F.t * (Y.t -> Z.t) QCheck.fun_ F.t
-
   type output = Z.t F.t
 
   let arbitrary =

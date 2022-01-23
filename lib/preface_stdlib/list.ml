@@ -24,7 +24,6 @@ module Alternative = Preface_make.Alternative.Via_apply (struct
   ;;
 
   let neutral = []
-
   let combine l r = l @ r
 end)
 
@@ -33,7 +32,6 @@ module Applicative_traversable (A : Preface_specs.APPLICATIVE) =
     (A)
     (struct
       type 'a t = 'a A.t
-
       type 'a iter = 'a list
 
       let traverse f =
@@ -68,7 +66,6 @@ module Monad_plus = Preface_make.Monad_plus.Via_bind (struct
   ;;
 
   let neutral = []
-
   let combine l r = l @ r
 end)
 
@@ -77,7 +74,6 @@ module Monad_traversable (M : Preface_specs.MONAD) =
     (M)
     (struct
       type 'a t = 'a M.t
-
       type 'a iter = 'a list
 
       let traverse f =
@@ -92,10 +88,12 @@ module Monad_traversable (M : Preface_specs.MONAD) =
 
 module Monad =
   Preface_make.Traversable.Join_with_monad (Monad_plus) (Monad_traversable)
+
 module Selective =
   Preface_make.Selective.Over_applicative_via_select
     (Applicative)
     (Preface_make.Selective.Select_from_monad (Monad))
+
 module Invariant = Preface_make.Invariant.From_functor (Functor)
 
 module Monoid (T : Preface_specs.Types.T0) =
@@ -103,14 +101,13 @@ Preface_make.Monoid.Via_combine_and_neutral (struct
   type nonrec t = T.t t
 
   let combine l r = l @ r
-
   let neutral = []
 end)
 
 let equal f a b =
   let rec eq = function
-    | ([], []) -> true
-    | (x :: xs, y :: ys) -> f x y && eq (xs, ys)
+    | [], [] -> true
+    | x :: xs, y :: ys -> f x y && eq (xs, ys)
     | _ -> false
   in
   eq (a, b)

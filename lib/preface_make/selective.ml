@@ -28,7 +28,6 @@ struct
     type nonrec 'a t = 'a t
 
     let pure x = pure x
-
     let apply f x = select (map Either.left f) (map ( |> ) x)
   end
 
@@ -49,7 +48,6 @@ struct
     type nonrec 'a t = 'a t
 
     let pure x = pure x
-
     let apply f x = select (map Either.left f) (map ( |> ) x)
   end
 
@@ -90,11 +88,8 @@ module Operation (Core : Preface_specs.Selective.CORE) = struct
   ;;
 
   let bind_bool x f = if_ x (f false) (f true)
-
   let when_ predicate action = if_ predicate action (Core.pure ())
-
   let or_ left right = if_ left (Core.pure true) right
-
   let and_ left right = if_ left right (Core.pure false)
 
   let exists predicate =
@@ -123,9 +118,7 @@ struct
   include Applicative.Infix (Core) (Operation)
 
   let ( <*? ) e f = Core.select e f
-
   let ( <||> ) l r = Operation.or_ l r
-
   let ( <&&> ) l r = Operation.and_ l r
 end
 
@@ -210,7 +203,7 @@ module Select_from_monad (Monad : Preface_specs.MONAD) = struct
 
   let select xs fs =
     let open Monad.Infix in
-    xs >>= Preface_core.Shims.Either.case (fun a -> fs >|= (fun f -> f a)) pure
+    xs >>= Preface_core.Shims.Either.case (fun a -> fs >|= fun f -> f a) pure
   ;;
 end
 

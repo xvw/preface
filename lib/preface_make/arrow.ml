@@ -31,7 +31,6 @@ struct
   include Category
 
   let return () = Core.arrow (fun x -> x)
-
   let snd x = Core.split Core.id x
 
   let fan_out pre post =
@@ -39,11 +38,8 @@ struct
   ;;
 
   let pre_compose_left_to_right f x = compose_left_to_right (Core.arrow f) x
-
   let post_compose_left_to_right x f = compose_left_to_right x (Core.arrow f)
-
   let pre_compose_right_to_left x f = compose_right_to_left x (Core.arrow f)
-
   let post_compose_right_to_left f x = compose_right_to_left (Core.arrow f) x
 end
 
@@ -51,7 +47,6 @@ module Alias (Operation : Preface_specs.Arrow.OPERATION) = struct
   type ('a, 'b) t = ('a, 'b) Operation.t
 
   let pre_compose f x = Operation.pre_compose_left_to_right f x
-
   let post_compose x f = Operation.post_compose_left_to_right x f
 end
 
@@ -63,15 +58,10 @@ struct
   include Category
 
   let ( *** ) l r = Core.split l r
-
   let ( &&& ) l r = Operation.fan_out l r
-
   let ( ^>> ) l r = Operation.pre_compose_left_to_right l r
-
   let ( >>^ ) l r = Operation.post_compose_left_to_right l r
-
   let ( <<^ ) l r = Operation.pre_compose_right_to_left l r
-
   let ( ^<< ) l r = Operation.post_compose_right_to_left l r
 end
 
@@ -125,7 +115,6 @@ module From_monad (Monad : Preface_specs.Monad.CORE) = struct
     type ('a, 'b) t = 'a -> 'b Monad.t
 
     let arrow f = (fun f g x -> f (g x)) Monad.return f
-
     let fst f (b, d) = Monad.bind (fun c -> Monad.return (c, d)) (f b)
   end
 
@@ -147,7 +136,6 @@ module From_strong_and_category
       type ('a, 'b) t = ('a, 'b) Category.t
 
       let arrow f = Strong.dimap f (fun x -> x) Category.id
-
       let fst = Strong.fst
     end)
 
@@ -158,6 +146,5 @@ module Product (F : Preface_specs.ARROW) (G : Preface_specs.ARROW) =
          type ('a, 'b) t = ('a, 'b) F.t * ('a, 'b) G.t
 
          let arrow f = (F.arrow f, G.arrow f)
-
          let fst (x, y) = (F.fst x, G.fst y)
        end)

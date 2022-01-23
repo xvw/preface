@@ -13,9 +13,9 @@
         divide f (divide g m n) o
         = divide
             (fun x ->
-              let (bc, _) = f x in
-              let (b, c) = g bc in
-              (a, (b, c)))
+              let bc, _ = f x in
+              let b, c = g bc in
+              (a, (b, c)) )
             m (divide id n o)
       ]} *)
 
@@ -36,7 +36,6 @@ end
 
 module type WITH_CONTRAMAP_AND_DIVIDE_AND_CONQUER = sig
   include WITH_DIVIDE_AND_CONQUER
-
   include Contravariant.WITH_CONTRAMAP with type 'a t := 'a t
 end
 
@@ -51,7 +50,6 @@ module type OPERATION = sig
   (** The type held by the [Divisible]. *)
 
   val divided : 'a t -> 'b t -> ('a * 'b) t
-
   val conquered : unit t
 
   include Contravariant.OPERATION with type 'a t := 'a t

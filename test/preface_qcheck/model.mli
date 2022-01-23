@@ -2,9 +2,7 @@ module type T0 = sig
   type t
 
   val arbitrary : t Arbitrary.t
-
   val observable : t Observable.t
-
   val equal : t -> t -> bool
 end
 
@@ -12,9 +10,7 @@ module type T1 = sig
   type 'a t
 
   val arbitrary : 'a QCheck.arbitrary -> 'a t QCheck.arbitrary
-
   val observable : 'a QCheck.Observable.t -> 'a t Observable.t
-
   val equal : ('a -> 'a -> bool) -> 'a t -> 'a t -> bool
 end
 
