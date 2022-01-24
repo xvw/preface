@@ -4,8 +4,8 @@
 
 (** {2 Laws}
 
-    To have a predictable behaviour, the instance of [Applicative] must obey
-    some laws.
+    To have a predictable behaviour, the instance of [Apply] must obey some
+    laws.
 
     + [apply = lift2 id]
     + [lift2 f x y = f <$> x <*> y]
@@ -27,25 +27,19 @@ module type WITH_MAP_AND_PRODUCT = sig
   (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
 end
 
-(** Minimal interface using [map] and [apply]. *)
-module type WITH_MAP_AND_APPLY = sig
+(** Minimal interface using [apply]. *)
+module type WITH_APPLY = sig
   type 'a t
   (** The type held by the [Applicative]. *)
-
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val apply : ('a -> 'b) t -> 'a t -> 'b t
   (** [Applicative] functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
 end
 
-(** Minimal interface using [map] and [lift2]. *)
-module type WITH_MAP_AND_LIFT2 = sig
+(** Minimal interface using [lift2]. *)
+module type WITH_LIFT2 = sig
   type 'a t
   (** The type held by the [Applicative]. *)
-
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
   (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
@@ -55,13 +49,13 @@ end
 
 (** Basis operations. *)
 module type CORE = sig
-  include WITH_MAP_AND_APPLY
+  include WITH_APPLY
   (** @inline *)
 
   include WITH_MAP_AND_PRODUCT with type 'a t := 'a t
   (** @inline *)
 
-  include WITH_MAP_AND_LIFT2 with type 'a t := 'a t
+  include WITH_LIFT2 with type 'a t := 'a t
   (** @inline *)
 end
 
@@ -149,4 +143,4 @@ end
 (** {1 Additional references}
 
     - {{:https://hackage.haskell.org/package/semigroupoids-5.3.6/docs/Data-Functor-Apply.html#g:2}
-      Haskell's documentation of an Applicative Functor} *)
+      Haskell's documentation of an Apply Functor} *)

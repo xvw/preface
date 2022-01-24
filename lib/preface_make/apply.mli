@@ -10,7 +10,9 @@
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
+module Via_map_and_apply
+    (Req : Preface_specs.Apply.WITH_APPLY)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) :
   Preface_specs.APPLY with type 'a t = 'a Req.t
 
 (** {2 Using pure, map and product}
@@ -32,7 +34,9 @@ module Via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) :
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) :
+module Via_map_and_lift2
+    (Req : Preface_specs.Apply.WITH_LIFT2)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) :
   Preface_specs.APPLY with type 'a t = 'a Req.t
 
 (** {1 APPLY Algebra}
@@ -116,12 +120,15 @@ module Core_via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT)
   Preface_specs.Apply.CORE with type 'a t = 'a Req.t
 
 (** {2 Deriving Operation} *)
-module Core_via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
+module Core_over_functor_via_apply
+    (Req : Preface_specs.Apply.WITH_APPLY)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) :
   Preface_specs.Apply.CORE with type 'a t = 'a Req.t
-(*
-module Core_via_lift2 (Req : Preface_specs.Apply.WITH_LIFT2) :
+
+module Core_over_functor_via_lift2
+    (Req : Preface_specs.Apply.WITH_LIFT2)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) :
   Preface_specs.Apply.CORE with type 'a t = 'a Req.t
-*)
 
 module Operation (Core : Preface_specs.Apply.CORE) :
   Preface_specs.Apply.OPERATION with type 'a t = 'a Core.t

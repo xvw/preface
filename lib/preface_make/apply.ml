@@ -8,17 +8,23 @@ struct
   let lift2 f x y = apply (map f x) y
 end
 
-module Core_via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) =
+module Core_over_functor_via_apply
+    (Req : Preface_specs.Apply.WITH_APPLY)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) =
 struct
   include Req
+  include Functor
 
   let product a b = apply (map (fun a b -> (a, b)) a) b
   let lift2 f x y = apply (map f x) y
 end
 
-module Core_via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) =
+module Core_over_functor_via_lift2
+    (Req : Preface_specs.Apply.WITH_LIFT2)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) =
 struct
   include Req
+  include Functor
 
   let apply f a = lift2 (fun x -> x) f a
   let product a b = apply (map (fun a b -> (a, b)) a) b
@@ -76,8 +82,11 @@ struct
   include Infix
 end
 
-module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) = struct
-  module Core = Core_via_map_and_apply (Req)
+module Via_map_and_apply
+    (Req : Preface_specs.Apply.WITH_APPLY)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) =
+struct
+  module Core = Core_over_functor_via_apply (Req) (Functor)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -87,8 +96,11 @@ module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) = struct
   include Infix
 end
 
-module Via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) = struct
-  module Core = Core_via_map_and_lift2 (Req)
+module Via_map_and_lift2
+    (Req : Preface_specs.Apply.WITH_LIFT2)
+    (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) =
+struct
+  module Core = Core_over_functor_via_lift2 (Req) (Functor)
   module Operation = Operation (Core)
   module Syntax = Syntax (Core)
   module Infix = Infix (Core) (Operation)
@@ -113,39 +125,60 @@ end
 module From_alternative (Alternative : Preface_specs.ALTERNATIVE) = Alternative
 
 module Composition (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) =
-Via_map_and_apply (struct
-  type 'a t = 'a G.t F.t
+  Via_map_and_apply
+    (struct
+      type 'a t = 'a G.t F.t
 
-  let map f x = F.map (G.map f) x
-  let apply f x = F.lift2 G.apply f x
-end)
+      let apply f x = F.lift2 G.apply f x
+    end)
+    (struct
+      type 'a t = 'a G.t F.t
 
-module From_arrow (A : Preface_specs.ARROW) = Via_map_and_apply (struct
-  type 'a t = (unit, 'a) A.t
+      let map f x = F.map (G.map f) x
+    end)
 
-  let map f x = A.(x >>> arrow f)
-  let uncurry f (x, y) = f x y
-  let apply f x = A.(f &&& x >>> arrow (uncurry Fun.id))
-end)
+module From_arrow (A : Preface_specs.ARROW) =
+  Via_map_and_apply
+    (struct
+      type 'a t = (unit, 'a) A.t
+
+      let uncurry f (x, y) = f x y
+      let apply f x = A.(f &&& x >>> arrow (uncurry Fun.id))
+    end)
+    (struct
+      type 'a t = (unit, 'a) A.t
+
+      let map f x = A.(x >>> arrow f)
+    end)
 
 module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) =
-Via_map_and_apply (struct
-  type 'a t = 'a F.t * 'a G.t
+  Via_map_and_apply
+    (struct
+      type 'a t = 'a F.t * 'a G.t
 
-  let map f (x, y) = (F.map f x, G.map f y)
-  let apply (f, g) (x, y) = (F.apply f x, G.apply g y)
-end)
+      let apply (f, g) (x, y) = (F.apply f x, G.apply g y)
+    end)
+    (struct
+      type 'a t = 'a F.t * 'a G.t
+
+      let map f (x, y) = (F.map f x, G.map f y)
+    end)
 
 module Const (M : Preface_specs.Monoid.CORE) = struct
   type 'a t = Const of M.t
 
   include (
-    Via_map_and_apply (struct
-      type nonrec 'a t = 'a t
+    Via_map_and_apply
+      (struct
+        type nonrec 'a t = 'a t
 
-      let map _f (Const x) = Const x
-      let apply (Const f) (Const x) = Const (M.combine f x)
-    end) :
+        let apply (Const f) (Const x) = Const (M.combine f x)
+      end)
+      (struct
+        type nonrec 'a t = 'a t
+
+        let map _f (Const x) = Const x
+      end) :
       Preface_specs.APPLY with type 'a t := 'a t )
 
   let get (Const value) = value

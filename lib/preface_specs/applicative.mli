@@ -28,11 +28,7 @@ module type WITH_PURE_MAP_AND_PRODUCT = sig
   val pure : 'a -> 'a t
   (** Lift a value from ['a] into a new ['a t]. *)
 
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
-
-  val product : 'a t -> 'b t -> ('a * 'b) t
-  (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
+  include Apply.WITH_MAP_AND_PRODUCT with type 'a t := 'a t
 end
 
 (** Minimal interface using [apply]. *)
@@ -43,8 +39,7 @@ module type WITH_PURE_AND_APPLY = sig
   val pure : 'a -> 'a t
   (** Lift a value from ['a] into a new ['a t]. *)
 
-  val apply : ('a -> 'b) t -> 'a t -> 'b t
-  (** [Applicative] functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
+  include Apply.WITH_APPLY with type 'a t := 'a t
 end
 
 (** Minimal interface using [lift2]. *)
@@ -55,8 +50,7 @@ module type WITH_PURE_AND_LIFT2 = sig
   val pure : 'a -> 'a t
   (** Lift a value from ['a] into a new ['a t]. *)
 
-  val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
-  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
+  include Apply.WITH_LIFT2 with type 'a t := 'a t
 end
 
 (** {1 Structure anatomy} *)
@@ -78,12 +72,7 @@ module type OPERATION = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  val lift : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
-
-  val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
-  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
-      and ['c t] to ['d t]. *)
+  include Apply.OPERATION with type 'a t := 'a t
 
   include Functor.OPERATION with type 'a t := 'a t
   (** @inline *)
@@ -94,11 +83,7 @@ module type SYNTAX = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Flipped mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
-
-  val ( and+ ) : 'a t -> 'b t -> ('a * 'b) t
-  (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
+  include Apply.SYNTAX with type 'a t := 'a t
 end
 
 (** Infix operators. *)
@@ -106,17 +91,7 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  val ( <*> ) : ('a -> 'b) t -> 'a t -> 'b t
-  (** [Applicative] functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
-
-  val ( <**> ) : 'a t -> ('a -> 'b) t -> 'b t
-  (** Flipped [Applicative] functor of [('a -> 'b) t] over ['a t] to ['b t]. *)
-
-  val ( *> ) : unit t -> 'a t -> 'a t
-  (** Discard the value of the first argument. *)
-
-  val ( <* ) : 'a t -> unit t -> 'a t
-  (** Discard the value of the second argument. *)
+  include Apply.INFIX with type 'a t := 'a t
 
   include Functor.INFIX with type 'a t := 'a t
   (** @inline *)
