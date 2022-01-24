@@ -50,10 +50,9 @@ module Composition (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) :
 
     Construct the product of two {!module-type:Preface_specs.APPLY}. *)
 
-(*
 module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) :
   Preface_specs.APPLY with type 'a t = 'a F.t * 'a G.t
-*)
+
 (** {1 From other abstraction} *)
 
 (** {2 From a Monad}
@@ -86,7 +85,6 @@ module From_arrow (A : Preface_specs.ARROW) :
     {!module-type:Preface_specs.MONOID}. This APPLY is called [Const] or a
     phantom monoid. *)
 
-(*
 module Const (M : Preface_specs.Monoid.CORE) : sig
   type 'a t = Const of M.t
 
@@ -95,7 +93,7 @@ module Const (M : Preface_specs.Monoid.CORE) : sig
   val get : 'a t -> M.t
   (** Retrieve the [Monoid] value from the [Const]. *)
 end
-*)
+
 (** {1 Manual construction}
 
     Advanced way to build an {!module-type:Preface_specs.APPLY}, constructing

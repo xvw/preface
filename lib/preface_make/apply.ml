@@ -5,7 +5,6 @@ struct
   include Req
 
   let apply f a = map (fun (f, a) -> f a) @@ product f a
-
   let lift2 f x y = apply (map f x) y
 end
 
@@ -14,7 +13,6 @@ struct
   include Req
 
   let product a b = apply (map (fun a b -> (a, b)) a) b
-
   let lift2 f x y = apply (map f x) y
 end
 
@@ -23,7 +21,6 @@ struct
   include Req
 
   let apply f a = lift2 (fun x -> x) f a
-
   let product a b = apply (map (fun a b -> (a, b)) a) b
 end
 
@@ -31,7 +28,6 @@ module Operation (Core : Preface_specs.Apply.CORE) = struct
   include Functor.Operation (Core)
 
   let lift = Core.map
-
   let lift3 f a b = Core.(apply @@ apply (Core.map f a) b)
 end
 
@@ -39,7 +35,6 @@ module Syntax (Core : Preface_specs.Apply.CORE) = struct
   type 'a t = 'a Core.t
 
   let ( let+ ) x f = Core.map f x
-
   let ( and+ ) = Core.product
 end
 
@@ -50,11 +45,8 @@ struct
   include Functor.Infix (Core) (Operation)
 
   let ( <*> ) = Core.apply
-
   let ( <**> ) a b = Core.lift2 (fun x f -> f x) a b
-
-  let ( *> ) a b = Core.lift2 (fun _x y -> y) a b
-
+  let ( *> ) a b = Core.lift2 (flip const) a b
   let ( <* ) a b = Core.lift2 const a b
 end
 
@@ -125,7 +117,6 @@ Via_map_and_apply (struct
   type 'a t = 'a G.t F.t
 
   let map f x = F.map (G.map f) x
-
   let apply f x = F.lift2 G.apply f x
 end)
 
@@ -133,19 +124,15 @@ module From_arrow (A : Preface_specs.ARROW) = Via_map_and_apply (struct
   type 'a t = (unit, 'a) A.t
 
   let map f x = A.(x >>> arrow f)
-
   let uncurry f (x, y) = f x y
-
   let apply f x = A.(f &&& x >>> arrow (uncurry Fun.id))
 end)
-(*
+
 module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) =
 Via_map_and_apply (struct
   type 'a t = 'a F.t * 'a G.t
 
-  ('a F.t * 'a G.t -> 'b F.t * 'b G.t) -> ('a F.t * 'a G.t) -> ('b F.t * 'b G.t)
-  let map f (x,y) =
-
+  let map f (x, y) = (F.map f x, G.map f y)
   let apply (f, g) (x, y) = (F.apply f x, G.apply g y)
 end)
 
@@ -156,12 +143,10 @@ module Const (M : Preface_specs.Monoid.CORE) = struct
     Via_map_and_apply (struct
       type nonrec 'a t = 'a t
 
-      let map f (Const x) = Const (f x)
-
+      let map _f (Const x) = Const x
       let apply (Const f) (Const x) = Const (M.combine f x)
     end) :
       Preface_specs.APPLY with type 'a t := 'a t )
 
   let get (Const value) = value
 end
-*)
