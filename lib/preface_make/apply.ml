@@ -82,7 +82,7 @@ struct
   include Infix
 end
 
-module Via_map_and_apply
+module Over_functor_via_apply
     (Req : Preface_specs.Apply.WITH_APPLY)
     (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) =
 struct
@@ -96,7 +96,7 @@ struct
   include Infix
 end
 
-module Via_map_and_lift2
+module Over_functor_via_lift2
     (Req : Preface_specs.Apply.WITH_LIFT2)
     (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) =
 struct
@@ -125,7 +125,7 @@ end
 module From_alternative (Alternative : Preface_specs.ALTERNATIVE) = Alternative
 
 module Composition (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) =
-  Via_map_and_apply
+  Over_functor_via_apply
     (struct
       type 'a t = 'a G.t F.t
 
@@ -138,7 +138,7 @@ module Composition (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) =
     end)
 
 module From_arrow (A : Preface_specs.ARROW) =
-  Via_map_and_apply
+  Over_functor_via_apply
     (struct
       type 'a t = (unit, 'a) A.t
 
@@ -152,7 +152,7 @@ module From_arrow (A : Preface_specs.ARROW) =
     end)
 
 module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) =
-  Via_map_and_apply
+  Over_functor_via_apply
     (struct
       type 'a t = 'a F.t * 'a G.t
 
@@ -168,7 +168,7 @@ module Const (M : Preface_specs.Monoid.CORE) = struct
   type 'a t = Const of M.t
 
   include (
-    Via_map_and_apply
+    Over_functor_via_apply
       (struct
         type nonrec 'a t = 'a t
 

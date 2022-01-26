@@ -10,7 +10,7 @@
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_map_and_apply
+module Over_functor_via_apply
     (Req : Preface_specs.Apply.WITH_APPLY)
     (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) :
   Preface_specs.APPLY with type 'a t = 'a Req.t
@@ -34,7 +34,7 @@ module Via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) :
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_map_and_lift2
+module Over_functor_via_lift2
     (Req : Preface_specs.Apply.WITH_LIFT2)
     (Functor : Preface_specs.Functor.WITH_MAP with type 'a t = 'a Req.t) :
   Preface_specs.APPLY with type 'a t = 'a Req.t
