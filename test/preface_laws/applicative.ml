@@ -1,6 +1,6 @@
 open Preface_qcheck
 
-module Perserve_identity
+module Preserve_identity
     (F : Preface_specs.APPLICATIVE)
     (A : Model.T1 with type 'a t = 'a F.t)
     (X : Model.T0) =
@@ -167,39 +167,27 @@ Preface_qcheck.Make.Test (struct
   let right x = F.(lift2 Preface_core.Fun.const x (pure ()))
 end)
 
-module Preserve_functor_identity (A : Preface_specs.APPLICATIVE) =
-  Functor.Preserve_identity (A)
-
-module Preserve_functor_morphism (A : Preface_specs.APPLICATIVE) =
-  Functor.Preserve_morphism (A)
-
 module Cases
     (F : Preface_specs.APPLICATIVE)
     (A : Model.T1 with type 'a t = 'a F.t)
     (T : Sample.PACKAGE) =
 struct
-  module Id = Perserve_identity (F) (A) (T.A)
+  module Apply = Apply.Cases (F) (A) (T)
+  module Id = Preserve_identity (F) (A) (T.A)
   module Homomorphism = Homomorphism (F) (A) (T.A) (T.B)
   module Interchange = Interchange (F) (A) (T.A) (T.B)
   module Composition = Composition (F) (A) (T.A) (T.B) (T.C)
   module Map = Map_additional (F) (A) (T.A) (T.B)
-  module Ignore_left = Ignore_left (F) (A) (T.A)
-  module Ignore_right = Ignore_right (F) (A) (T.A)
-  module Functor_id = Preserve_functor_identity (F) (A) (T.A)
-  module Functor_morphsim = Preserve_functor_morphism (F) (A) (T.A) (T.B) (T.C)
 
   let cases n =
-    [
+    (Apply.cases n)
+    @ ([
       Id.test n
     ; Homomorphism.test n
     ; Interchange.test n
     ; Composition.test n
     ; Map.test n
-    ; Ignore_left.test n
-    ; Ignore_right.test n
-    ; Functor_id.test n
-    ; Functor_morphsim.test n
     ]
-    |> Stdlib.List.map QCheck_alcotest.to_alcotest
+    |> Stdlib.List.map QCheck_alcotest.to_alcotest)
   ;;
 end
