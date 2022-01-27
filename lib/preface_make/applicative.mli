@@ -36,6 +36,19 @@ module Via_pure_map_and_product
 module Via_pure_and_lift2 (Req : Preface_specs.Applicative.WITH_PURE_AND_LIFT2) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
 
+(** {2 Over an apply}
+
+    Build a {!module-type:Preface_specs.APPLICATIVE} over an
+    {!module-type:Preface_specs.APPLY}.
+
+    If you already have an Applicative, you can enrich it by passing only
+    [combine] and [neutral].. *)
+
+module Over_apply
+    (Apply : Preface_specs.APPLY)
+    (Req : Preface_specs.Applicative.WITH_PURE with type 'a t = 'a Apply.t) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
+
 (** {1 Applicative Algebra}
 
     Construction of {!module-type:Preface_specs.APPLICATIVE} by combining them. *)

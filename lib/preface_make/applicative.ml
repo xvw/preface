@@ -123,6 +123,18 @@ end
 
 module From_alternative (Alternative : Preface_specs.ALTERNATIVE) = Alternative
 
+module Over_apply
+    (Apply : Preface_specs.APPLY)
+    (Req : Preface_specs.Applicative.WITH_PURE with type 'a t = 'a Apply.t) =
+struct
+  include Via_pure_and_apply (struct
+    type 'a t = 'a Apply.t
+
+    let pure = Req.pure
+    let apply = Apply.apply
+  end)
+end
+
 module Composition
     (F : Preface_specs.APPLICATIVE)
     (G : Preface_specs.APPLICATIVE) =

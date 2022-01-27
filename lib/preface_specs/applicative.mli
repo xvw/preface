@@ -21,13 +21,20 @@
 (** {1 Minimal definition} *)
 
 (** Minimal interface using [map] and [product]. *)
-module type WITH_PURE_MAP_AND_PRODUCT = sig
+module type WITH_PURE = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
   val pure : 'a -> 'a t
   (** Lift a value from ['a] into a new ['a t]. *)
+end
 
+(** Minimal interface using [map] and [product]. *)
+module type WITH_PURE_MAP_AND_PRODUCT = sig
+  type 'a t
+  (** The type held by the [Applicative]. *)
+
+  include WITH_PURE with type 'a t := 'a t
   include Apply.WITH_MAP_AND_PRODUCT with type 'a t := 'a t
 end
 
@@ -36,9 +43,7 @@ module type WITH_PURE_AND_APPLY = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  val pure : 'a -> 'a t
-  (** Lift a value from ['a] into a new ['a t]. *)
-
+  include WITH_PURE with type 'a t := 'a t
   include Apply.WITH_APPLY with type 'a t := 'a t
 end
 
@@ -47,9 +52,7 @@ module type WITH_PURE_AND_LIFT2 = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  val pure : 'a -> 'a t
-  (** Lift a value from ['a] into a new ['a t]. *)
-
+  include WITH_PURE with type 'a t := 'a t
   include Apply.WITH_LIFT2 with type 'a t := 'a t
 end
 

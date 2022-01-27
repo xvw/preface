@@ -64,6 +64,14 @@ module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) :
     Produces a {!module-type:Preface_specs.APPLY} from a
     {!module-type:Preface_specs.MONAD}. *)
 
+module From_monad (Monad : Preface_specs.MONAD) :
+  Preface_specs.APPLY with type 'a t = 'a Monad.t
+
+(** {2 From an Applicative}
+
+    Produces a {!module-type:Preface_specs.APPLY} from a
+    {!module-type:Preface_specs.MONAD}. *)
+
 module From_applicative (Applicative : Preface_specs.APPLICATIVE) :
   Preface_specs.APPLY with type 'a t = 'a Applicative.t
 

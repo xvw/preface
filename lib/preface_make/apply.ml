@@ -110,6 +110,21 @@ struct
   include Infix
 end
 
+module From_monad (Monad : Preface_specs.MONAD) = struct
+  include Via_map_and_product (struct
+    type 'a t = 'a Monad.t
+
+    let map = Monad.map
+
+    let product a b =
+      let open Monad.Syntax in
+      let* a = a in
+      let+ b = b in
+      (a, b)
+    ;;
+  end)
+end
+
 module From_applicative (Applicative : Preface_specs.APPLICATIVE) = struct
   include Via_map_and_product (struct
     type 'a t = 'a Applicative.t
