@@ -180,14 +180,14 @@ struct
   module Map = Map_additional (F) (A) (T.A) (T.B)
 
   let cases n =
-    (Apply.cases n)
-    @ ([
-      Id.test n
-    ; Homomorphism.test n
-    ; Interchange.test n
-    ; Composition.test n
-    ; Map.test n
-    ]
-    |> Stdlib.List.map QCheck_alcotest.to_alcotest)
+    Apply.cases n
+    @ ( [
+          Id.test n
+        ; Homomorphism.test n
+        ; Interchange.test n
+        ; Composition.test n
+        ; Map.test n
+        ]
+      |> Stdlib.List.map QCheck_alcotest.to_alcotest )
   ;;
 end
