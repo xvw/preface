@@ -15,13 +15,10 @@
 
 (** {1 Minimal definition} *)
 
-(** Minimal interface using [map] and [product]. *)
-module type WITH_MAP_AND_PRODUCT = sig
+(** Minimal interface using [product]. *)
+module type WITH_PRODUCT = sig
   type 'a t
   (** The type held by the [Applicative]. *)
-
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
 
   val product : 'a t -> 'b t -> ('a * 'b) t
   (** Product functor mapping from ['a t] and ['b t] to [('a * 'b) t]. *)
@@ -45,14 +42,44 @@ module type WITH_LIFT2 = sig
   (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
 end
 
+(** Minimal interface using [map] and [product]. *)
+module type WITH_MAP_AND_PRODUCT = sig
+  type 'a t
+  (** The type held by the [Applicative]. *)
+
+  include Functor.WITH_MAP with type 'a t := 'a t
+  include WITH_PRODUCT with type 'a t := 'a t
+end
+
+(** Minimal interface using [map] and [product]. *)
+module type WITH_MAP_AND_APPLY = sig
+  type 'a t
+  (** The type held by the [Applicative]. *)
+
+  include Functor.WITH_MAP with type 'a t := 'a t
+  include WITH_APPLY with type 'a t := 'a t
+end
+
+(** Minimal interface using [map] and [lift2]. *)
+module type WITH_MAP_AND_LIFT2 = sig
+  type 'a t
+  (** The type held by the [Applicative]. *)
+
+  include Functor.WITH_MAP with type 'a t := 'a t
+  include WITH_LIFT2 with type 'a t := 'a t
+end
+
 (** {1 Structure anatomy} *)
 
 (** Basis operations. *)
 module type CORE = sig
-  include WITH_APPLY
+  include Functor.WITH_MAP
   (** @inline *)
 
-  include WITH_MAP_AND_PRODUCT with type 'a t := 'a t
+  include WITH_APPLY with type 'a t := 'a t
+  (** @inline *)
+
+  include WITH_PRODUCT with type 'a t := 'a t
   (** @inline *)
 
   include WITH_LIFT2 with type 'a t := 'a t
