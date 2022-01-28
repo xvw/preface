@@ -12,11 +12,10 @@ module Core_over_functor_via_apply
     (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Apply.WITH_APPLY with type 'a t = 'a Functor.t) =
 struct
-  include Req
-  include Functor
-
-  let product a b = apply (map (fun a b -> (a, b)) a) b
-  let lift2 f x y = apply (map f x) y
+  include Core_via_map_and_apply (struct
+    include Functor
+    include Req
+  end)
 end
 
 module Core_via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) =
@@ -31,11 +30,10 @@ module Core_over_functor_via_product
     (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Apply.WITH_PRODUCT with type 'a t = 'a Functor.t) =
 struct
-  include Req
-  include Functor
-
-  let apply f a = map (fun (f, a) -> f a) @@ product f a
-  let lift2 f x y = apply (map f x) y
+  include Core_via_map_and_product (struct
+    include Functor
+    include Req
+  end)
 end
 
 module Core_via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) =
@@ -50,11 +48,10 @@ module Core_over_functor_via_lift2
     (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Apply.WITH_LIFT2 with type 'a t = 'a Functor.t) =
 struct
-  include Req
-  include Functor
-
-  let apply f a = lift2 (fun x -> x) f a
-  let product a b = apply (map (fun a b -> (a, b)) a) b
+  include Core_via_map_and_lift2 (struct
+    include Functor
+    include Req
+  end)
 end
 
 module Operation (Core : Preface_specs.Apply.CORE) = struct
