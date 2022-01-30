@@ -9,7 +9,7 @@ module Functor = Preface_make.Functor.Via_map (struct
   let map f = f
 end)
 
-module Applicative = Preface_make.Applicative.Via_apply (struct
+module Applicative = Preface_make.Applicative.Via_pure_and_apply (struct
   type nonrec 'a t = 'a t
 
   let pure = pure

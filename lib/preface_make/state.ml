@@ -25,7 +25,7 @@ Functor.Via_map (struct
 end)
 
 module Applicative (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) =
-Applicative.Via_apply (struct
+Applicative.Via_pure_and_apply (struct
   type 'a t = State.t -> ('a * State.t) M.t
 
   let pure x s = M.return (x, s)

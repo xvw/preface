@@ -43,5 +43,6 @@
   store
   env
   traced
-  semigroupoid)
+  semigroupoid
+  apply)
  (libraries preface_core either))

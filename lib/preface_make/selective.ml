@@ -32,7 +32,7 @@ struct
   end
 
   include Branch_via_select (Functor) (Req)
-  include Applicative.Core_via_apply (Ap)
+  include Applicative.Core_via_pure_and_apply (Ap)
 end
 
 module Core_over_functor_via_branch
@@ -51,7 +51,7 @@ struct
     let apply f x = select (map Either.left f) (map ( |> ) x)
   end
 
-  include Applicative.Core_via_apply (Ap)
+  include Applicative.Core_via_pure_and_apply (Ap)
 end
 
 module Core_over_applicative_via_select

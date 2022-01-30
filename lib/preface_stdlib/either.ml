@@ -32,7 +32,7 @@ module Alt (T : Preface_specs.Types.T0) =
        end)
 
 module Applicative (T : Preface_specs.Types.T0) = struct
-  module A = Preface_make.Applicative.Via_apply (struct
+  module A = Preface_make.Applicative.Via_pure_and_apply (struct
     module F = Functor (T)
 
     type nonrec 'a t = (T.t, 'a) t

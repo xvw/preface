@@ -10,7 +10,7 @@
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
+module Via_pure_and_apply (Req : Preface_specs.Applicative.WITH_PURE_AND_APPLY) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
 
 (** {2 Using pure, map and product}
@@ -21,8 +21,8 @@ module Via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_map_and_product
-    (Req : Preface_specs.Applicative.WITH_MAP_AND_PRODUCT) :
+module Via_pure_map_and_product
+    (Req : Preface_specs.Applicative.WITH_PURE_MAP_AND_PRODUCT) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
 
 (** {2 Using pure and lift2}
@@ -33,7 +33,20 @@ module Via_map_and_product
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_lift2 (Req : Preface_specs.Applicative.WITH_LIFT2) :
+module Via_pure_and_lift2 (Req : Preface_specs.Applicative.WITH_PURE_AND_LIFT2) :
+  Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
+
+(** {2 Over an apply}
+
+    Build a {!module-type:Preface_specs.APPLICATIVE} over an
+    {!module-type:Preface_specs.APPLY}.
+
+    If you already have an Applicative, you can enrich it by passing only
+    [combine] and [neutral].. *)
+
+module Over_apply
+    (Apply : Preface_specs.APPLY)
+    (Req : Preface_specs.Applicative.WITH_PURE with type 'a t = 'a Apply.t) :
   Preface_specs.APPLICATIVE with type 'a t = 'a Req.t
 
 (** {1 Applicative Algebra}
@@ -115,14 +128,16 @@ module Via
 
 (** {2 Building Core} *)
 
-module Core_via_map_and_product
-    (Req : Preface_specs.Applicative.WITH_MAP_AND_PRODUCT) :
+module Core_via_pure_map_and_product
+    (Req : Preface_specs.Applicative.WITH_PURE_MAP_AND_PRODUCT) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
 
-module Core_via_apply (Req : Preface_specs.Applicative.WITH_APPLY) :
+module Core_via_pure_and_apply
+    (Req : Preface_specs.Applicative.WITH_PURE_AND_APPLY) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
 
-module Core_via_lift2 (Req : Preface_specs.Applicative.WITH_LIFT2) :
+module Core_via_pure_and_lift2
+    (Req : Preface_specs.Applicative.WITH_PURE_AND_LIFT2) :
   Preface_specs.Applicative.CORE with type 'a t = 'a Req.t
 
 (** {2 Deriving Operation} *)

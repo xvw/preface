@@ -43,7 +43,7 @@ module Alt (Errors : Preface_specs.SEMIGROUP) =
        end)
 
 module Applicative (Errors : Preface_specs.SEMIGROUP) = struct
-  module A = Preface_make.Applicative.Via_apply (struct
+  module A = Preface_make.Applicative.Via_pure_and_apply (struct
     type nonrec 'a t = ('a, Errors.t) t
 
     let pure = valid

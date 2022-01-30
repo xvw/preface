@@ -4,6 +4,7 @@
  (modules
   aliases
   functor
+  apply
   applicative
   selective
   monad
