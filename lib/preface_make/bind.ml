@@ -160,8 +160,7 @@ struct
   include Infix
 end
 
-module From_monad (Monad : Preface_specs.MONAD)  = Monad
-
+module From_monad (Monad : Preface_specs.MONAD) = Monad
 module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) = Monad_plus
 
 module From_arrow_apply (A : Preface_specs.ARROW_APPLY) =
