@@ -5,35 +5,36 @@
 (** {2 Using return and bind}
 
     Build a {!module-type:Preface_specs.MONAD} using
-    {!module-type:Preface_specs.Monad.WITH_BIND}.
+    {!module-type:Preface_specs.Monad.WITH_RETURN_AND_BIND}.
 
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_bind (Req : Preface_specs.Monad.WITH_BIND) :
+module Via_return_and_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** {2 Using return, map and join}
 
     Build a {!module-type:Preface_specs.MONAD} using
-    {!module-type:Preface_specs.Monad.WITH_MAP_AND_JOIN}.
+    {!module-type:Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN}.
 
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
+module Via_return_map_and_join
+    (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** {2 Using return and the kleisli composition}
 
     Build a {!module-type:Preface_specs.MONAD} using
-    {!module-type:Preface_specs.Monad.WITH_KLEISLI_COMPOSITION}.
+    {!module-type:Preface_specs.Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION}.
 
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_kleisli_composition
-    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
+module Via_return_and_kleisli_composition
+    (Req : Preface_specs.Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** {1 Monad Algebra}
@@ -82,14 +83,15 @@ module Via
 
 (** {2 Building Core} *)
 
-module Core_via_bind (Req : Preface_specs.Monad.WITH_BIND) :
+module Core_via_return_and_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
-module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_MAP_AND_JOIN) :
+module Core_via_return_map_and_join
+    (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
-module Core_via_kleisli_composition
-    (Req : Preface_specs.Monad.WITH_KLEISLI_COMPOSITION) :
+module Core_via_return_and_kleisli_composition
+    (Req : Preface_specs.Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
 (** {2 Deriving Operation} *)

@@ -170,19 +170,17 @@ struct
   include Infix
 end
 
-module From_monad (Monad : Preface_specs.MONAD) = struct
+module From_bind (Bind : Preface_specs.Bind.CORE) = struct
   include Via_map_and_product (struct
-    type 'a t = 'a Monad.t
+    type 'a t = 'a Bind.t
 
-    let map = Monad.map
-
-    let product a b =
-      let open Monad.Syntax in
-      let* a = a in
-      let+ b = b in
-      (a, b)
-    ;;
+    let map = Bind.map
+    let product a b = Bind.(bind (fun a -> map (fun b -> (a, b)) b) a)
   end)
+end
+
+module From_monad (Monad : Preface_specs.MONAD) = struct
+  include From_bind (Monad)
 end
 
 module From_applicative (Applicative : Preface_specs.APPLICATIVE) = Applicative

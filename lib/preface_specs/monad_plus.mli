@@ -16,7 +16,7 @@ end
 
 (** Minimal definition using [neutral], [combine], [return], [map] and [join]. *)
 module type WITH_MAP_AND_JOIN = sig
-  include Monad.WITH_MAP_AND_JOIN
+  include Monad.WITH_RETURN_MAP_AND_JOIN
   (** @inline *)
 
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
@@ -26,13 +26,13 @@ end
 (** Minimal definition using [neutral], [combine], [return],
     [compose_left_to_right]. *)
 module type WITH_KLEISLI_COMPOSITION = sig
-  include Monad.WITH_KLEISLI_COMPOSITION
+  include Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
 end
 
 (** Minimal definition using [neutral], [combine], [return], [bind]. *)
 module type WITH_BIND = sig
-  include Monad.WITH_BIND
+  include Monad.WITH_RETURN_AND_BIND
   (** @inline *)
 
   include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t

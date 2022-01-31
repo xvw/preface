@@ -58,7 +58,7 @@ module Applicative (T : Preface_specs.Types.T0) = struct
 end
 
 module Monad (T : Preface_specs.Types.T0) = struct
-  module M = Preface_make.Monad.Via_bind (struct
+  module M = Preface_make.Monad.Via_return_and_bind (struct
     type nonrec 'a t = (T.t, 'a) t
 
     let return = pure

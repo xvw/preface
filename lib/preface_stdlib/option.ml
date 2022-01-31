@@ -47,7 +47,7 @@ module Applicative =
     (Alternative)
     (Applicative_traversable)
 
-module Monad_internal = Preface_make.Monad.Via_bind (struct
+module Monad_internal = Preface_make.Monad.Via_return_and_bind (struct
   type nonrec 'a t = 'a t
 
   let return x = Some x

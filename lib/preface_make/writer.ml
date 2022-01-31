@@ -47,7 +47,7 @@ module Alternative (A : Preface_specs.ALTERNATIVE) (Tape : Preface_specs.MONOID)
        end)
 
 module Monad (M : Preface_specs.MONAD) (Tape : Preface_specs.MONOID) =
-Monad.Via_bind (struct
+Monad.Via_return_and_bind (struct
   type 'a t = ('a * Tape.t) M.t
 
   let return x = M.return (x, Tape.neutral)

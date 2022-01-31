@@ -22,7 +22,7 @@ module Applicative = Preface_make.Applicative.Via_pure_map_and_product (struct
   ;;
 end)
 
-module Monad = Preface_make.Monad.Via_map_and_join (struct
+module Monad = Preface_make.Monad.Via_return_map_and_join (struct
   type nonrec 'a t = 'a t
 
   let return = pure

@@ -16,7 +16,7 @@ module Applicative = Preface_make.Applicative.Via_pure_and_apply (struct
   let apply f = f
 end)
 
-module Monad = Preface_make.Monad.Via_bind (struct
+module Monad = Preface_make.Monad.Via_return_and_bind (struct
   type nonrec 'a t = 'a t
 
   let return = pure

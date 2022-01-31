@@ -5,8 +5,10 @@
   preface_specs
   types
   functor
+  apply
   applicative
   selective
+  bind
   monad
   comonad
   traversable
@@ -43,6 +45,5 @@
   store
   env
   traced
-  semigroupoid
-  apply)
+  semigroupoid)
  (libraries preface_core either))

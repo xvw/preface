@@ -61,7 +61,7 @@ module Applicative =
     (Applicative_internal)
     (Applicative_traversable)
 
-module Monad_internal = Preface_make.Monad.Via_map_and_join (struct
+module Monad_internal = Preface_make.Monad.Via_return_map_and_join (struct
   type nonrec 'a t = 'a t
 
   let return = pure

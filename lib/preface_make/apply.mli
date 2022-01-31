@@ -10,17 +10,16 @@
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
-module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
-  Preface_specs.APPLY with type 'a t = 'a Req.t
-
 (** {2 Using apply over functor}
 
     Build a {!module-type:Preface_specs.APPLY} using
     {!module-type:Preface_specs.Functor.WITH_MAP} and
-    {!module-type:Preface_specs.APPLY.WITH_APPLY}.
+    {!module-type:Preface_specs.Apply.WITH_APPLY}.
 
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
+module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
+  Preface_specs.APPLY with type 'a t = 'a Req.t
 
 module Over_functor_via_apply
     (Functor : Preface_specs.Functor.WITH_MAP)
@@ -30,7 +29,7 @@ module Over_functor_via_apply
 (** {2 Using map and product}
 
     Build a {!module-type:Preface_specs.APPLY} using
-    {!module-type:Preface_specs.APPLY.WITH_MAP_AND_PRODUCT}.
+    {!module-type:Preface_specs.Apply.WITH_MAP_AND_PRODUCT}.
 
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
@@ -42,7 +41,7 @@ module Via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) :
 
     Build a {!module-type:Preface_specs.APPLY} using
     {!module-type:Preface_specs.Functor.WITH_MAP} and
-    {!module-type:Preface_specs.APPLY.WITH_PRODUCT}.
+    {!module-type:Preface_specs.Apply.WITH_PRODUCT}.
 
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
@@ -55,7 +54,7 @@ module Over_functor_via_product
 (** {2 Using map and lift2}
 
     Build a {!module-type:Preface_specs.APPLY} using
-    {!module-type:Preface_specs.APPLY.WITH_LIFT2}.
+    {!module-type:Preface_specs.Apply.WITH_LIFT2}.
 
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
@@ -67,7 +66,7 @@ module Via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) :
 
     Build a {!module-type:Preface_specs.APPLY} using
     {!module-type:Preface_specs.Functor.WITH_MAP} and
-    {!module-type:Preface_specs.APPLY.WITH_LIFT2}.
+    {!module-type:Preface_specs.Apply.WITH_LIFT2}.
 
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
@@ -96,6 +95,14 @@ module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) :
   Preface_specs.APPLY with type 'a t = 'a F.t * 'a G.t
 
 (** {1 From other abstraction} *)
+
+(** {2 From a Monad}
+
+    Produces a {!module-type:Preface_specs.APPLY} from a
+    {!module-type:Preface_specs.MONAD}. *)
+
+module From_bind (Bind : Preface_specs.Bind.CORE) :
+  Preface_specs.APPLY with type 'a t = 'a Bind.t
 
 (** {2 From a Monad}
 
