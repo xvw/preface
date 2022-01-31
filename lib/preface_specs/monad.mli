@@ -22,8 +22,8 @@
 
 (** {1 Minimal definition} *)
 
-(** Minimal definition using [bind]. *)
-module type WITH_BIND = sig
+(** Minimal definition using [return] and [bind]. *)
+module type WITH_RETURN_AND_BIND = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
@@ -34,8 +34,8 @@ module type WITH_BIND = sig
   (** [bind f m] passes the result of computation [m] to function [f]. *)
 end
 
-(** Minimal definition using [map] and [join]. *)
-module type WITH_MAP_AND_JOIN = sig
+(** Minimal definition using [return], [map] and [join]. *)
+module type WITH_RETURN_MAP_AND_JOIN = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
@@ -50,8 +50,8 @@ module type WITH_MAP_AND_JOIN = sig
       argument into the outer level. *)
 end
 
-(** Minimal definition using [compose_left_to_right]. *)
-module type WITH_KLEISLI_COMPOSITION = sig
+(** Minimal definition using [return] and [compose_left_to_right]. *)
+module type WITH_RETURN_AND_KLEISLI_COMPOSITION = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
@@ -66,13 +66,13 @@ end
 
 (** Basis operations. *)
 module type CORE = sig
-  include WITH_BIND
+  include WITH_RETURN_AND_BIND
   (** @inline *)
 
-  include WITH_MAP_AND_JOIN with type 'a t := 'a t
+  include WITH_RETURN_MAP_AND_JOIN with type 'a t := 'a t
   (** @inline *)
 
-  include WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
+  include WITH_RETURN_AND_KLEISLI_COMPOSITION with type 'a t := 'a t
   (** @inline *)
 end
 
