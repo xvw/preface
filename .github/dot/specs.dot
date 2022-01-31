@@ -8,7 +8,7 @@ graph {
         Contravariant;
         Divisible;
         Decidable;
-        Functor -- Apply -- Applicative -- Selective --  Monad;
+        Functor -- Apply -- Applicative -- Selective -- Bind -- Monad;
         Applicative -- Alternative;
         Monad -- Monad_plus;
         Functor -- Alt;
@@ -39,7 +39,7 @@ graph {
         Functor -- Profunctor;
         Functor -- Bifunctor;
 
-        Monad --State;
+        Monad -- State;
         Monad -- Reader;
         Monad -- Writer;
 

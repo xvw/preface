@@ -80,7 +80,7 @@ that is fairly well understood. So far so good, let's implement a
 monad on option via the `bind` function!
 
 ```ocaml
-module Opt_monad = Preface.Make.Monad.Via_bind (struct 
+module Opt_monad = Preface.Make.Monad.Via_return_and_bind (struct 
   type 'a t = 'a option 
   
   let return x = Some x
@@ -118,7 +118,7 @@ could also describe a complete interface using `map` and `join` (which
 is conceptually closer to the categorical definition of a monad):
 
 ```ocaml
-module Opt_monad_2 = Preface.Make.Monad.Via_map_and_join (struct 
+module Opt_monad_2 = Preface.Make.Monad.Via_return_map_and_join (struct 
   type 'a t = 'a option 
   
   let return x = Some x
@@ -185,7 +185,7 @@ implement it with bind but provide a very fast implementation of
 
 ```ocaml
 module Opt_core = struct
-  include Preface.Make.Monad.Core_via_bind (struct 
+  include Preface.Make.Monad.Core_via_return_and_bind (struct 
     type 'a t = 'a option 
     let return x = Some x
     let bind f = function Some x -> f x | None -> None

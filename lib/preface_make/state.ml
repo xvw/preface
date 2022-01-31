@@ -39,7 +39,7 @@ Applicative.Via_pure_and_apply (struct
 end)
 
 module Monad (M : Preface_specs.MONAD) (State : Preface_specs.Types.T0) =
-Monad.Via_bind (struct
+Monad.Via_return_and_bind (struct
   type 'a t = State.t -> ('a * State.t) M.t
 
   let return x s = M.return (x, s)

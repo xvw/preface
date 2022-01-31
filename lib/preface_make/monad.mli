@@ -10,7 +10,7 @@
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) :
+module Via_return_and_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** {2 Using return, map and join}
@@ -21,7 +21,8 @@ module Via_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) :
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_map_and_join (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) :
+module Via_return_map_and_join
+    (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
 (** {2 Using return and the kleisli composition}
@@ -32,7 +33,7 @@ module Via_map_and_join (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) :
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
 
-module Via_kleisli_composition
+module Via_return_and_kleisli_composition
     (Req : Preface_specs.Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION) :
   Preface_specs.MONAD with type 'a t = 'a Req.t
 
@@ -82,13 +83,14 @@ module Via
 
 (** {2 Building Core} *)
 
-module Core_via_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) :
+module Core_via_return_and_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
-module Core_via_map_and_join (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) :
+module Core_via_return_map_and_join
+    (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 
-module Core_via_kleisli_composition
+module Core_via_return_and_kleisli_composition
     (Req : Preface_specs.Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION) :
   Preface_specs.Monad.CORE with type 'a t = 'a Req.t
 

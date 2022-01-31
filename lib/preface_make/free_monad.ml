@@ -38,7 +38,7 @@ module Via_map (F : Preface_specs.Functor.CORE) = struct
     ;;
   end)
 
-  module Monad = Monad.Via_bind (struct
+  module Monad = Monad.Via_return_and_bind (struct
     type nonrec 'a t = 'a t
 
     let return a = Return a

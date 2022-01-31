@@ -43,7 +43,7 @@ module Alternative
        end)
 
 module Monad (M : Preface_specs.MONAD) (Env : Preface_specs.Types.T0) =
-Monad.Via_bind (struct
+Monad.Via_return_and_bind (struct
   type 'a t = Env.t -> 'a M.t
 
   let return x = Fun.const (M.return x)

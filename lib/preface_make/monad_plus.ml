@@ -1,5 +1,5 @@
 module Core_via_bind (Req : Preface_specs.Monad_plus.WITH_BIND) = struct
-  include Monad.Core_via_bind (Req)
+  include Monad.Core_via_return_and_bind (Req)
 
   let combine = Req.combine
   let neutral = Req.neutral
@@ -7,7 +7,7 @@ end
 
 module Core_via_map_and_join (Req : Preface_specs.Monad_plus.WITH_MAP_AND_JOIN) =
 struct
-  include Monad.Core_via_map_and_join (Req)
+  include Monad.Core_via_return_map_and_join (Req)
 
   let combine = Req.combine
   let neutral = Req.neutral
@@ -16,7 +16,7 @@ end
 module Core_via_kleisli_composition
     (Req : Preface_specs.Monad_plus.WITH_KLEISLI_COMPOSITION) =
 struct
-  include Monad.Core_via_kleisli_composition (Req)
+  include Monad.Core_via_return_and_kleisli_composition (Req)
 
   let combine = Req.combine
   let neutral = Req.neutral
