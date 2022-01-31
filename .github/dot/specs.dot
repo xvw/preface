@@ -8,7 +8,11 @@ graph {
         Contravariant;
         Divisible;
         Decidable;
-        Functor -- Apply -- Applicative -- Selective -- Bind -- Monad;
+        Functor -- Applicative -- Selective -- Monad;
+        Functor -- Apply [style=dotted; arrowhead=none; constraint=false];
+        Apply -- Applicative;
+        Bind -- Monad;
+        Functor -- Bind [style=dotted; arrowhead=none; constraint=false];
         Applicative -- Alternative;
         Monad -- Monad_plus;
         Functor -- Alt;
