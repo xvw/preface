@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Add `Bind` [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add `Apply` [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add `('a, 'b) handle` to simplify handlers for `Freer_monad` [**@xvw**](https://github.com/xvw)
 - Rename `times` to `times_to_nel` for _semigroup-ish_ and add `times` for _monoid-ish_ [**@xvw**](https://github.com/xvw)

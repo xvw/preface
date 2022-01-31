@@ -101,6 +101,14 @@ module Product (F : Preface_specs.APPLY) (G : Preface_specs.APPLY) :
     Produces a {!module-type:Preface_specs.APPLY} from a
     {!module-type:Preface_specs.MONAD}. *)
 
+module From_bind (Bind : Preface_specs.Bind.CORE) :
+  Preface_specs.APPLY with type 'a t = 'a Bind.t
+
+(** {2 From a Monad}
+
+    Produces a {!module-type:Preface_specs.APPLY} from a
+    {!module-type:Preface_specs.MONAD}. *)
+
 module From_monad (Monad : Preface_specs.MONAD) :
   Preface_specs.APPLY with type 'a t = 'a Monad.t
 
