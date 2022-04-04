@@ -43,14 +43,26 @@ module type INFIX = sig
   val ( >$ ) : 'b -> 'b t -> 'a t
   (** Infix version of {!val:OPERATION.replace}. *)
 
+  val ( ^$ ) : 'b -> 'b t -> 'a t
+  (** Right-associative version of [>$]. *)
+
   val ( $< ) : 'b t -> 'b -> 'a t
   (** Infix flipped version of {!val:OPERATION.replace}. *)
+
+  val ( &$ ) : 'b t -> 'b -> 'a t
+  (** Right-associative version of [$<]. *)
 
   val ( >$< ) : ('a -> 'b) -> 'b t -> 'a t
   (** Infix version of {!val:CORE.map}. *)
 
+  val ( ^$^ ) : ('a -> 'b) -> 'b t -> 'a t
+  (** Right-associative version of [>$<]. *)
+
   val ( >&< ) : 'b t -> ('a -> 'b) -> 'a t
   (** Infix flipped version of {!val:CORE.map}. *)
+
+  val ( ^&^ ) : 'b t -> ('a -> 'b) -> 'a t
+  (** Right-associative version of [>&<]. *)
 end
 
 (** {1 Complete API} *)
