@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Add right-associative operators for `Contravariant`, `Divisible` and `Decidable`  [**@xhtmlboi**](https://github.com/xhtmlboi)
 - Add `Bind` [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add `Apply` [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add `('a, 'b) handle` to simplify handlers for `Freer_monad` [**@xvw**](https://github.com/xvw)

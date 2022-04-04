@@ -70,6 +70,9 @@ module type INFIX = sig
   val ( >|< ) : 'a t -> 'b t -> ('a, 'b) Either.t t
   (** Infix version of [chosen]. *)
 
+  val ( ^|^ ) : 'a t -> 'b t -> ('a, 'b) Either.t t
+  (** Right-associative version of [>|<]. *)
+
   include Divisible.INFIX with type 'a t := 'a t
 end
 
