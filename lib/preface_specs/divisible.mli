@@ -63,11 +63,20 @@ module type INFIX = sig
   val ( >*< ) : 'a t -> 'b t -> ('a * 'b) t
   (** Infix version of [divided]. *)
 
+  val ( ^*^ ) : 'a t -> 'b t -> ('a * 'b) t
+  (** Right-associative version of [>*<]. *)
+
   val ( >* ) : 'a t -> unit t -> 'a t
   (** Discard the value of the second argument. *)
 
+  val ( ^* ) : 'a t -> unit t -> 'a t
+  (** Right-associative version of [>*]. *)
+
   val ( *< ) : unit t -> 'a t -> 'a t
   (** Discard the value of the first argument. *)
+
+  val ( &* ) : unit t -> 'a t -> 'a t
+  (** Right-associative version of [*<]. *)
 
   include Contravariant.INFIX with type 'a t := 'a t
 end

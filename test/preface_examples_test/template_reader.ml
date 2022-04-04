@@ -39,8 +39,7 @@ let should_transform_constant () =
 let should_transform_variable () =
   let expected = "Alice"
   and computed =
-    Reader.run_identity
-      (transform [ Var "name" ])
+    Reader.run_identity (transform [ Var "name" ])
       (Bindings.singleton "name" "Alice")
   in
   Alcotest.(check string) "transform_variable" expected computed

@@ -31,6 +31,7 @@ struct
   include Divisible.Infix (Core) (Operation)
 
   let ( >|< ) = Operation.chosen
+  let ( ^|^ ) = Operation.chosen
 end
 
 module Via

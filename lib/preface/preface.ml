@@ -95,7 +95,9 @@ module Make = Preface_make
     the user the freedom to implement, or not, a function by wrapping the
     function definition in a value of this type:
 
-    {[ val f : [< `Derived | `Custom of 'a -> 'b ] ]}
+    {[
+      val f : [< `Derived | `Custom of 'a -> 'b ]
+    ]}
 
     Instead of relying on this kind of (rather clever!) trick, we decided to
     rely mainly on the module language.
