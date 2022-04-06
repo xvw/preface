@@ -7,6 +7,16 @@ module Via_map (F : Preface_specs.Functor.CORE) = struct
 
   let perform f = Bind (F.map (fun a -> Return a) f)
 
+  module To_monad (Monad : Preface_specs.Monad.CORE) = struct
+    type natural_transformation = { transform : 'a. 'a f -> 'a Monad.t }
+
+    let rec run transformation = function
+      | Return a -> Monad.return a
+      | Bind g ->
+        Monad.bind (fun x -> run transformation x) (transformation.transform g)
+    ;;
+  end
+
   let run f =
     let rec loop_run = function
       | Return a -> a
