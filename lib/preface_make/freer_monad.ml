@@ -12,6 +12,21 @@ module Over (Type : Preface_specs.Types.T1) = struct
   type ('a, 'b) handle = ('a -> 'b) -> 'a f -> 'b
   type 'a handler = { handler : 'b. ('b, 'a) handle }
 
+  module To_monad (Monad : Preface_specs.Monad.CORE) = struct
+    type natural_transformation = { transform : 'a. 'a f -> 'a Monad.t }
+
+    let run transformation =
+      let rec loop_run = function
+        | Return a -> Monad.return a
+        | Bind (intermediate, continue) ->
+          Monad.bind
+            (fun x -> loop_run (continue x))
+            (transformation.transform intermediate)
+      in
+      loop_run
+    ;;
+  end
+
   let run f =
     let rec loop_run = function
       | Return a -> a
