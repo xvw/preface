@@ -12,8 +12,7 @@ module Via_map (F : Preface_specs.Functor.CORE) = struct
 
     let rec run transformation = function
       | Return a -> Monad.return a
-      | Bind g ->
-        Monad.bind (fun x -> run transformation x) (transformation.transform g)
+      | Bind g -> Monad.bind (run transformation) (transformation.transform g)
     ;;
   end
 

@@ -10,6 +10,7 @@ let () =
     @ Freer_monad_consoleIO.cases
     @ Freer_monad_os_effect.cases
     @ Freer_monad_os_explicit_continuation.cases
+    @ Freer_monad_print_read_or_fail.cases
     @ Free_selective_pingpong.cases
     @ Freer_selective_ping_pong.cases
     @ Template_reader.cases

@@ -17,9 +17,13 @@ module type TO_MONAD = sig
   type 'a monad
   (** The type held by the [Monad]. *)
 
-  type natural_transformation = { transform : 'a. 'a f -> 'a monad }
+  type ('a, 'b) handle = ('a -> 'b monad) -> 'a f -> 'b monad
 
-  val run : natural_transformation -> 'a t -> 'a monad
+  type 'a handler = { handler : 'b. ('b, 'a) handle }
+  (** The handler type. Which is a [Natural transformation] from the
+      [Freer Monad] to the given [Monad]. *)
+
+  val run : 'a handler -> 'a t -> 'a monad
   (** Run the natural transformation over the [Free monad]. *)
 end
 
