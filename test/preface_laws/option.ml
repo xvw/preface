@@ -22,10 +22,15 @@ module Alternative =
   Preface_laws.Alternative.Cases (Preface_stdlib.Option.Alternative) (Req)
     (Preface_qcheck.Sample.Pack1)
 
+module Selective =
+  Preface_laws.Selective.Rigid_cases (Preface_stdlib.Option.Selective) (Req)
+    (Preface_qcheck.Sample.Pack1)
+
 let cases n =
   [
     ("Option Functor Laws", Functor.cases n)
   ; ("Option Applicative Laws", Applicative.cases n)
+  ; ("Option Selective Laws", Selective.cases n)
   ; ("Option Monad Laws", Monad.cases n)
   ; ("Option Alternative Laws", Alternative.cases n)
   ]

@@ -29,6 +29,11 @@ module Applicative =
     (Preface_stdlib.Either.Applicative (Int)) (Req_with_int)
     (Preface_qcheck.Sample.Pack1)
 
+module Selective =
+  Preface_laws.Selective.Cases
+    (Preface_stdlib.Either.Selective (Int)) (Req_with_int)
+    (Preface_qcheck.Sample.Pack1)
+
 module Monad =
   Preface_laws.Monad.Cases
     (Preface_stdlib.Either.Monad (Int)) (Req_with_int)
@@ -43,6 +48,7 @@ let cases n =
     ("Either (with int as Left part) Functor Laws", Functor.cases n)
   ; ("Either (with int as Left part) Alt Semigroup Laws", Alt.cases n)
   ; ("Either (with int as Left part) Applicative Laws", Applicative.cases n)
+  ; ("Either (with int as Left part) Selective Laws", Selective.cases n)
   ; ("Either (with int as left part) Monad Laws", Monad.cases n)
   ; ("Either Bifunctor Laws", Bifunctor.cases n)
   ]

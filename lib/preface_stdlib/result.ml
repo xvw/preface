@@ -84,6 +84,10 @@ module Monad (T : Preface_specs.Types.T0) = struct
   include Preface_make.Traversable.Join_with_monad (M) (T)
 end
 
+module Selective (T : Preface_specs.Types.T0) =
+  Preface_make.Selective.Over_applicative_via_select
+    (Applicative (T)) (Preface_make.Selective.Select_from_monad (Monad (T)))
+
 module Foldable (T : Preface_specs.Types.T0) =
 Preface_make.Foldable.Via_fold_right (struct
   type nonrec 'a t = ('a, T.t) t

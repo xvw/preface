@@ -46,6 +46,11 @@ module Applicative (T : Preface_specs.Types.T0) :
   Preface_specs.Traversable.API_OVER_APPLICATIVE
     with type 'a t = ('a, T.t) Bifunctor.t
 
+(** {3 Selective} *)
+
+module Selective (T : Preface_specs.Types.T0) :
+  Preface_specs.SELECTIVE with type 'a t = ('a, T.t) Bifunctor.t
+
 (** {3 Monad}
 
     [Result.t] implements {!module-type:Preface_specs.MONAD} and introduces an

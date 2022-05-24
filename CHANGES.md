@@ -1,5 +1,6 @@
 ## dev (Unreleased)
 
+- Add selective to Either, Options, Result and Try [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add specialized interpreters/handlers for `Free` and `Freer` monads [**@xhtmlboi**](https://github.com/xhtmlboi)
 - Add right-associative operators for `Contravariant`, `Divisible` and `Decidable`  [**@xhtmlboi**](https://github.com/xhtmlboi)
 - Add `Bind` [**@d-plaindoux**](https://github.com/d-plaindoux)

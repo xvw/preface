@@ -29,6 +29,11 @@ module Applicative =
     (Preface_stdlib.Result.Applicative (Int)) (Req_with_int)
     (Preface_qcheck.Sample.Pack1)
 
+module Selective =
+  Preface_laws.Selective.Cases
+    (Preface_stdlib.Result.Selective (Int)) (Req_with_int)
+    (Preface_qcheck.Sample.Pack1)
+
 module Monad =
   Preface_laws.Monad.Cases
     (Preface_stdlib.Result.Monad (Int)) (Req_with_int)
@@ -43,6 +48,7 @@ let cases n =
     ("Result (with int as Error part) Functor Laws", Functor.cases n)
   ; ("Result (with int as Error part) Alt semigroup Laws", Functor.cases n)
   ; ("Result (with int as Error part) Applicative Laws", Applicative.cases n)
+  ; ("Result (with int as Error part) Selective Laws", Selective.cases n)
   ; ("Result (with int as Error part) Monad Laws", Monad.cases n)
   ; ("Result Bifunctor Laws", Bifunctor.cases n)
   ]

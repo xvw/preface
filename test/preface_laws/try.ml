@@ -18,6 +18,10 @@ module Applicative =
   Preface_laws.Applicative.Cases (Preface_stdlib.Try.Applicative) (Req)
     (Preface_qcheck.Sample.Pack1)
 
+module Selective =
+  Preface_laws.Selective.Cases (Preface_stdlib.Try.Selective) (Req)
+    (Preface_qcheck.Sample.Pack1)
+
 module Monad =
   Preface_laws.Monad.Cases (Preface_stdlib.Try.Monad) (Req)
     (Preface_qcheck.Sample.Pack1)
@@ -27,6 +31,7 @@ let cases n =
     ("Try Functor Laws", Functor.cases n)
   ; ("Try Alt semigroup Laws", Alt.cases n)
   ; ("Try Applicative Laws", Applicative.cases n)
+  ; ("Try Selective Laws", Selective.cases n)
   ; ("Try Monad Laws", Monad.cases n)
   ]
 ;;
