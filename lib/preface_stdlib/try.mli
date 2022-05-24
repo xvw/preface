@@ -26,6 +26,10 @@ module Alt : Preface_specs.ALT with type 'a t = 'a t
 module Applicative :
   Preface_specs.Traversable.API_OVER_APPLICATIVE with type 'a t = 'a t
 
+(** {2 Selective} *)
+
+module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
+
 (** {2 Monad}
 
     [Try.t] implements {!module-type:Preface_specs.MONAD} and introduces an
@@ -33,10 +37,6 @@ module Applicative :
     an iterable structure. *)
 
 module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
-
-(** {2 Selective} *)
-
-module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
 
 (** {2 Foldable} *)
 
