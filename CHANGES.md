@@ -1,4 +1,4 @@
-## dev (Unreleased)
+## v1.0.0 (May 2022)
 
 - Add selective to Either, Options, Result and Try [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add specialized interpreters/handlers for `Free` and `Freer` monads [**@xhtmlboi**](https://github.com/xhtmlboi)

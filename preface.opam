@@ -1,5 +1,5 @@
 opam-version: "2.0"
-version: "dev"
+version: "1.0.0"
 
 maintainer: "xaviervdw@gmail.com"
 authors: [
