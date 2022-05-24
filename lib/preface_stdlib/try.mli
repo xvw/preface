@@ -34,6 +34,10 @@ module Applicative :
 
 module Monad : Preface_specs.Traversable.API_OVER_MONAD with type 'a t = 'a t
 
+(** {2 Selective} *)
+
+module Selective : Preface_specs.SELECTIVE with type 'a t = 'a t
+
 (** {2 Foldable} *)
 
 module Foldable : Preface_specs.FOLDABLE with type 'a t = 'a t

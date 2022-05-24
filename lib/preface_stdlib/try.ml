@@ -22,6 +22,10 @@ module Monad = Result.Monad (struct
   type t = exn
 end)
 
+module Selective = Result.Selective (struct
+  type t = exn
+end)
+
 module Foldable = Result.Foldable (struct
   type t = exn
 end)

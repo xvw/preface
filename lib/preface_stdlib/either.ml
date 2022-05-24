@@ -78,6 +78,11 @@ module Monad (T : Preface_specs.Types.T0) = struct
   include Preface_make.Traversable.Join_with_monad (M) (T)
 end
 
+module Selective (T : Preface_specs.Types.T0) =
+  Preface_make.Selective.Over_applicative_via_select
+    (Applicative(T))
+    (Preface_make.Selective.Select_from_monad (Monad(T)))
+
 module Invariant (T : Preface_specs.Types.T0) =
   Preface_make.Invariant.From_functor (Functor (T))
 
