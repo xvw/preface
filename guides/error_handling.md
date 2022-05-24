@@ -76,7 +76,7 @@ to use `bind` and `map` to chain operations:
        >|= succ
        >>= safe_divide 2
     ;;
-val result : int Preface.Try.Monad.t = Ok 11
+val result : int Preface.Try.Selective.t = Ok 11
 ```
 
 We could also perform a computation that could fail... by dividing by
@@ -91,7 +91,7 @@ zero!
        >|= succ
        >>= safe_divide 2
     ;;
-val failed : int Preface.Try.Monad.t = Error Division_by_zero
+val failed : int Preface.Try.Selective.t = Error Division_by_zero
 ```
 
 And as with all monads, one can of course take advantage of
@@ -108,7 +108,7 @@ Here is the first example using the syntactic versions of `bind` and
     let z = succ y in
     safe_divide 2 z
     ;;
-val result : int Preface.Try.Monad.t = Ok 11
+val result : int Preface.Try.Selective.t = Ok 11
 ```
 
 This pattern makes it possible to model quite complex error cases,
