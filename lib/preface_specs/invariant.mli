@@ -1,4 +1,4 @@
-(** [Invariant] is and "Invariant Functor". Every {!module:Functor} and
+(** [Invariant] is an "Invariant Functor". Every {!module:Functor} and
     {!module:Contravariant} is an Invariant Functor. *)
 
 (** {2 Laws}
