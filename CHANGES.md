@@ -1,3 +1,7 @@
+## dev (unreleased)
+
+- Exposition of `Apply` and `Make` in `Preface.Make `[**@gr-im**](https://github.com/gr-im)
+
 ## v1.0.0 (May 2022)
 
 - Add selective to Either, Options, Result and Try [**@d-plaindoux**](https://github.com/d-plaindoux)
