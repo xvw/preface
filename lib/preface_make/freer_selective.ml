@@ -1,4 +1,3 @@
-module Either = Preface_core.Shims.Either
 open Preface_core.Fun.Infix
 
 module Over (Type : Preface_specs.Types.T1) = struct
@@ -39,7 +38,7 @@ module Over (Type : Preface_specs.Types.T1) = struct
        fun f x -> function
         | Select (y, z) -> Select (aux (g f) x y, z)
         | Pure y ->
-          let h = Either.case (( |> ) y) Fun.id in
+          let h = Either.fold ~left:(( |> ) y) ~right:Fun.id in
           Functor.(h % f <$> x)
       in
 

@@ -17,9 +17,6 @@
         choose f' m (choose Fun.id n o)
       ]} *)
 
-open Preface_core
-open Shims
-
 (** {1 Minimal definition} *)
 
 (** Exposes the [lose] and [choose] functions, mandatory for each requirement. *)
@@ -27,9 +24,9 @@ module type WITH_LOSE_AND_CHOOSE = sig
   type 'a t
   (** The type held by the [Decidable]. *)
 
-  val lose : ('a -> Void.t) -> 'a t
-  (** Since [Void.t] is identity for [Either.t], [lose] act as an identity for
-      Decidable. *)
+  val lose : ('a -> Preface_core.Void.t) -> 'a t
+  (** Since [Preface_core.Void.t] is identity for [Either.t], [lose] act as an
+      identity for Decidable. *)
 
   val choose : ('a -> ('b, 'c) Either.t) -> 'b t -> 'c t -> 'a t
   (** [choose f x y] says that if [f] can handle either [x] or [y] it can handle
@@ -53,7 +50,7 @@ module type OPERATION = sig
   type 'a t
   (** The type held by the [Decidable]. *)
 
-  val lost : Void.t t
+  val lost : Preface_core.Void.t t
   (** [lose] acting on identity.*)
 
   val chosen : 'a t -> 'b t -> ('a, 'b) Either.t t

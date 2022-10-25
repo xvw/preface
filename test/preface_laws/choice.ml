@@ -1,5 +1,4 @@
 open Aliases
-open Preface_core.Shims
 
 module type LAWS = sig
   include Profunctor.LAWS
@@ -55,13 +54,17 @@ module Laws (C : Preface_specs.CHOICE) = struct
 
   let left_defined_by_right =
     let lhs x = C.left x in
-    let rhs x = C.dimap Either.swap Either.swap (C.right x) in
+    let rhs x =
+      C.dimap Preface_core.Either.swap Preface_core.Either.swap (C.right x)
+    in
     ("left = dimap Either.swap Either.swap % right", fun x -> (lhs x, rhs x))
   ;;
 
   let right_defined_by_left =
     let lhs x = C.right x in
-    let rhs x = C.dimap Either.swap Either.swap (C.left x) in
+    let rhs x =
+      C.dimap Preface_core.Either.swap Preface_core.Either.swap (C.left x)
+    in
     ("right = dimap Either.swap Either.swap % left", fun x -> (lhs x, rhs x))
   ;;
 

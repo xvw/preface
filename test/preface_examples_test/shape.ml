@@ -78,8 +78,7 @@ let validation_shape_3 () =
 
 let validation_shape_4 () =
   let open Preface.Validate in
-  let expected =
-    invalid Nel.(Shape.Fail "width" :: create (Shape.Fail "height"))
+  let expected = invalid Nel.(Shape.Fail "width" :: create (Shape.Fail "height"))
   and computed =
     Shape.make (valid false)
       (invalid (Nel.create (Shape.Fail "radius")))

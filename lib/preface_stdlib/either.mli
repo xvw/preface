@@ -6,7 +6,7 @@
 
 (** {1 Type} *)
 
-type ('a, 'b) t = ('a, 'b) Preface_core.Shims.Either.t =
+type ('a, 'b) t = ('a, 'b) Stdlib.Either.t =
   | Left of 'a
   | Right of 'b
 
@@ -46,8 +46,7 @@ module Applicative (T : Preface_specs.Types.T0) :
 (** {3 Selective} *)
 
 module Selective (T : Preface_specs.Types.T0) :
-  Preface_specs.SELECTIVE
-    with type 'a t = (T.t, 'a) Bifunctor.t
+  Preface_specs.SELECTIVE with type 'a t = (T.t, 'a) Bifunctor.t
 
 (** {3 Monad}
 

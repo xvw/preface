@@ -147,7 +147,7 @@ let test_with_invalid_user_missing_name_and_invalid_age () =
   let expected =
     Preface.(
       Validate.invalid
-        Nonempty_list.(Invalid_int "coq" :: Last (Missing_field "name")))
+        Nonempty_list.(Invalid_int "coq" :: Last (Missing_field "name")) )
   and computed = run [ ("age", "coq"); ("nickname", "XHTMLBoy") ] in
   Alcotest.(check validated_user_testable)
     "user should be invalid" expected computed

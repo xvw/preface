@@ -13,10 +13,10 @@ val absurd : t -> 'a
 
     [Void.t] act as an identity for [Either]. *)
 
-val left : ('a, t) Either.t -> 'a
+val left : ('a, t) Stdlib.Either.t -> 'a
 (** If there is [void] on the right part of [Either], we know that the Either is
     in [Left] branch. *)
 
-val right : (t, 'b) Either.t -> 'b
+val right : (t, 'b) Stdlib.Either.t -> 'b
 (** If there is [void] on the left part of [Either], we know that the Either is
     in [Right] branch. *)

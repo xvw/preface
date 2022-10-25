@@ -1,5 +1,4 @@
 open Aliases
-open Preface_core.Shims
 
 module type LAWS = sig
   include Profunctor.LAWS

@@ -28,10 +28,7 @@ module Decidable =
     (struct
       type nonrec 'a t = 'a t
 
-      let choose f pa pb c =
-        Preface_core.Shims.Either.fold ~left:pa ~right:pb (f c)
-      ;;
-
+      let choose f pa pb c = Stdlib.Either.fold ~left:pa ~right:pb (f c)
       let lose a x = Void.absurd (a x)
     end)
 
