@@ -46,4 +46,4 @@
   env
   traced
   semigroupoid)
- (libraries preface_core either))
+ (libraries preface_core))
