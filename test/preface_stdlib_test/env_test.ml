@@ -87,7 +87,7 @@ let pipeline2 () =
   let expected = "--__Hello__--"
   and computed =
     Formatter.(
-      truncate =>= padding % local (fun x -> { x with char = '_' }) =>= padding)
+      truncate =>= padding % local (fun x -> { x with char = '_' }) =>= padding )
       ctx
   in
   check string "Should be equal" expected computed

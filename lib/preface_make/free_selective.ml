@@ -1,5 +1,4 @@
 open Preface_core.Fun
-module Either = Preface_core.Shims.Either
 
 module Over_functor (F : Preface_specs.Functor.CORE) = struct
   type 'a f = 'a F.t
@@ -22,12 +21,12 @@ module Over_functor (F : Preface_specs.Functor.CORE) = struct
   module Core = struct
     type nonrec 'a t = 'a t
 
-    let bimap f g = Either.case (Either.left % f) (Either.right % g)
+    let bimap f g = Either.fold ~left:(Either.left % f) ~right:(Either.right % g)
     let pure x = Pure x
 
     let rec select : type a b. (a, b) Either.t t -> (a -> b) t -> b t =
      fun x -> function
-      | Pure y -> Functor.map (Either.case y id) x
+      | Pure y -> Functor.map (Either.fold ~left:y ~right:id) x
       | Select (either, fs) ->
         let f u = Either.(map_right right) u
         and g x a = bimap (fun b -> (b, a)) (fun k -> k a) x

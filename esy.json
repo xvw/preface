@@ -13,9 +13,8 @@
         "build": "dune build -p #{self.name}"
     },
     "dependencies": {
-        "ocaml": ">=4.8",
-        "@opam/dune" : ">= 2.7.1",
-        "@opam/either":"*"
+        "ocaml": ">=4.12",
+        "@opam/dune" : ">= 2.7.1"
     },
     "devDependencies": {
         "@opam/alcotest" : "*",

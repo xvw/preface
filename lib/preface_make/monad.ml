@@ -34,10 +34,7 @@ module Operation (Core : Preface_specs.Monad.CORE) = struct
   let void _ = Core.return ()
   let compose_right_to_left f g x = Core.compose_left_to_right g f x
   let lift = Core.map
-
-  let lift2 f ma mb =
-    Core.(bind (fun a -> bind (fun b -> return (f a b)) mb) ma)
-  ;;
+  let lift2 f ma mb = Core.(bind (fun a -> bind (fun b -> return (f a b)) mb) ma)
 
   let lift3 f ma mb mc =
     let open Core in

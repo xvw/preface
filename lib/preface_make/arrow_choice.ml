@@ -1,5 +1,3 @@
-open Preface_core.Shims
-
 let extract = function Either.Left x | Either.Right x -> x
 
 module Choose_over_left
@@ -11,9 +9,9 @@ struct
   let choose f g =
     let ( >>> ) f g = Category.compose g f in
     Left.left f
-    >>> Arrow.arrow Either.swap
+    >>> Arrow.arrow Preface_core.Either.swap
     >>> Left.left g
-    >>> Arrow.arrow Either.swap
+    >>> Arrow.arrow Preface_core.Either.swap
   ;;
 end
 
@@ -272,7 +270,7 @@ module From_monad (Monad : Preface_specs.Monad.CORE) = struct
         let choose f g =
           let left = Arr.(f >>> arrow Either.left)
           and right = Arr.(g >>> arrow Either.right) in
-          Preface_core.Shims.Either.case left right
+          Either.fold ~left ~right
         ;;
       end)
 end

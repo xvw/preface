@@ -1,5 +1,4 @@
 open Preface_qcheck
-module Either = Preface_core.Shims.Either
 module E = Preface_stdlib.Either
 
 let either l r = Arbitrary.either l r
@@ -17,7 +16,7 @@ Preface_qcheck.Make.Test (struct
   let arbitrary = A.arbitrary (either X.arbitrary X.arbitrary)
   let equal = A.equal X.equal
   let left x = F.(x <*? pure (fun x -> x))
-  let right x = F.(Either.case (fun x -> x) (fun x -> x) <$> x)
+  let right x = F.(Either.fold ~left:(fun x -> x) ~right:(fun x -> x) <$> x)
 end)
 
 module Distributive
@@ -251,7 +250,7 @@ Preface_qcheck.Make.Test (struct
   let right (x, y') =
     let y = QCheck.Fn.apply y' in
     let open Preface_core.Fun in
-    F.(Either.case y id <$> x)
+    F.(Either.fold ~left:y ~right:id <$> x)
   ;;
 end)
 

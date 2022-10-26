@@ -14,7 +14,7 @@ module Closed = Preface_laws.Closed.Laws (Preface_stdlib.Fun.Closed)
 module Either = Preface_stdlib.Either
 
 let tuple_eq f g (a, b) (a', b') = f a a' && g b b'
-let either_eq left right = Preface_core.Shims.Either.equal ~left ~right
+let either_eq left right = Either.equal left right
 let either l r = Preface_qcheck.Arbitrary.either l r
 
 let pro_dimap_id (module P : Preface_qcheck.Sample.PACKAGE) count =

@@ -1,6 +1,7 @@
 ## dev (unreleased)
 
-- Exposition of `Apply` and `Make` in `Preface.Make `[**@gr-im**](https://github.com/gr-im)
+- **Breaking change** change minimal version of OCaml to `>= 4.12.0` [**@gr-im**](https://github.com/gr-im)
+- Exposition of `Apply` and `Make` in `Preface.Make ` [**@gr-im**](https://github.com/gr-im)
 
 ## v1.0.0 (May 2022)
 

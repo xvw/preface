@@ -61,10 +61,8 @@ module Arrow_choice =
     (struct
       type nonrec ('a, 'b) t = ('a, 'b) t
 
-      open Preface_core.Shims
-
-      let case f g = Either.fold ~left:f ~right:g
-      let choose f g = case (Either.left % f) (Either.right % g)
+      let case f g = Stdlib.Either.fold ~left:f ~right:g
+      let choose f g = case (Stdlib.Either.left % f) (Stdlib.Either.right % g)
     end)
 
 module Arrow_apply =

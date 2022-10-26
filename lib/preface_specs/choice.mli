@@ -16,8 +16,6 @@
     + [left % left = dimap assoc unassoc % left]
     + [left % left = dimap unassoc assoc % right] *)
 
-open Preface_core.Shims
-
 (** {1 Minimal definition} *)
 
 (** Minimal interface using [left] and without {!module:Profunctor}. *)

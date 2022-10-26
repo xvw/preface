@@ -22,9 +22,8 @@ build: [
 ]
 
 depends: [
-  "ocaml" { >= "4.08.0" }
+  "ocaml" { >= "4.12.0" }
   "dune" { >= "2.8.0" }
-  "either"
   "alcotest" {with-test}
   "qcheck-core" {with-test}
   "qcheck-alcotest" {with-test}

@@ -203,7 +203,7 @@ module Select_from_monad (Monad : Preface_specs.MONAD) = struct
 
   let select xs fs =
     let open Monad.Infix in
-    xs >>= Preface_core.Shims.Either.case (fun a -> fs >|= fun f -> f a) pure
+    xs >>= Either.fold ~left:(fun a -> fs >|= fun f -> f a) ~right:pure
   ;;
 end
 
