@@ -37,6 +37,8 @@ module Decidable = Decidable
 
 (** {1 Bifunctor hierarchy} *)
 
+module Bifunctor = Bifunctor
+
 (** {1 Profunctor hierarchy} *)
 
 (** {1 Arrow hierarchy} *)
