@@ -5,26 +5,24 @@ module Side = struct
   }
 
   let repr side = side.repr
-  let fun_ side = side.fun_
   let make repr fun_ = { repr; fun_ }
   let pp ppf side = Format.fprintf ppf "%s" (repr side)
 end
 
+type ('a, 'b) side = ('a, 'b) Side.t
+
 type ('a, 'b) t = {
-    name : string
-  ; lhs : ('a, 'b) Side.t
+    lhs : ('a, 'b) Side.t
   ; rhs : ('a, 'b) Side.t
 }
 
-let name law = law.name
 let lhs law = law.lhs
 let rhs law = law.rhs
-let make name lhs rhs = { name; lhs; rhs }
+let make lhs rhs = { lhs; rhs }
 
 let pp ppf law =
-  Format.fprintf ppf "%s: %a = %a" (name law) Side.pp (lhs law) Side.pp
-    (rhs law)
+  Format.fprintf ppf "%a = %a" Side.pp (lhs law) Side.pp (rhs law)
 ;;
 
-let law name ~lhs ~rhs = make name lhs rhs
+let law ~lhs ~rhs = make lhs rhs
 let ( =~ ) name fun_ = Side.make name fun_

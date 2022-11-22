@@ -2,13 +2,10 @@ module type LAWS_MONOID = sig
   module Alternative : Preface_specs.ALTERNATIVE
   include Applicative.LAWS with module Applicative := Alternative
 
-  val alternative_left_identity :
-    unit -> ('a Alternative.t, 'a Alternative.t) Law.t
+  val alternative_monoid_1 : unit -> ('a Alternative.t, 'a Alternative.t) Law.t
+  val alternative_monoid_2 : unit -> ('a Alternative.t, 'a Alternative.t) Law.t
 
-  val alternative_right_identity :
-    unit -> ('a Alternative.t, 'a Alternative.t) Law.t
-
-  val alternative_associative_combine :
+  val alternative_monoid_3 :
        unit
     -> ( 'a Alternative.t
        , 'a Alternative.t -> 'a Alternative.t -> 'a Alternative.t )
@@ -19,7 +16,7 @@ module type LAWS_RIGHT_DISTRIBUTIVITY = sig
   module Alternative : Preface_specs.ALTERNATIVE
   include Applicative.LAWS with module Applicative := Alternative
 
-  val alternative_apply_right_distribution :
+  val alternative_right_distrib_1 :
        unit
     -> ( ('a -> 'b) Alternative.t
        , ('a -> 'b) Alternative.t -> 'a Alternative.t -> 'b Alternative.t )
@@ -30,7 +27,7 @@ module type LAWS_RIGHT_ABSORPTION = sig
   module Alternative : Preface_specs.ALTERNATIVE
   include Applicative.LAWS with module Applicative := Alternative
 
-  val alternative_right_absorption_for_apply :
+  val alternative_right_absorb_1 :
     unit -> ('a Alternative.t, 'a Alternative.t) Law.t
 end
 
@@ -39,26 +36,25 @@ module For_monoidal (A : Preface_specs.ALTERNATIVE) :
   open Law
   include Applicative.For (A)
 
-  let alternative_left_identity () =
+  let alternative_monoid_1 () =
     let lhs = A.(combine neutral)
     and rhs x = x in
 
-    law "Left identity" ~lhs:("neutral <|> x" =~ lhs) ~rhs:("x" =~ rhs)
+    law ~lhs:("neutral <|> x" =~ lhs) ~rhs:("x" =~ rhs)
   ;;
 
-  let alternative_right_identity () =
+  let alternative_monoid_2 () =
     let lhs x = A.(combine x neutral)
     and rhs x = x in
 
-    law "Right identity" ~lhs:("x <|> neutral" =~ lhs) ~rhs:("x" =~ rhs)
+    law ~lhs:("x <|> neutral" =~ lhs) ~rhs:("x" =~ rhs)
   ;;
 
-  let alternative_associative_combine () =
+  let alternative_monoid_3 () =
     let lhs a b c = A.(Infix.(a <|> b) <|> c)
     and rhs a b c = A.(a <|> Infix.(b <|> c)) in
 
-    law "Combine must be associative" ~lhs:("(a <|> b) <|> c" =~ lhs)
-      ~rhs:("a <|> (b <|> c)" =~ rhs)
+    law ~lhs:("(a <|> b) <|> c" =~ lhs) ~rhs:("a <|> (b <|> c)" =~ rhs)
   ;;
 end
 
@@ -67,12 +63,11 @@ module For_right_distributivity (A : Preface_specs.ALTERNATIVE) :
   open Law
   include Applicative.For (A)
 
-  let alternative_apply_right_distribution () =
+  let alternative_right_distrib_1 () =
     let lhs f g x = A.(Infix.(f <|> g) <*> x)
     and rhs f g x = A.(Infix.(f <*> x) <|> Infix.(g <*> x)) in
 
-    law "Apply is right distributive" ~lhs:("(f <|> g) <*> a" =~ lhs)
-      ~rhs:("(f <*> a) <|> (g <*> a)" =~ rhs)
+    law ~lhs:("(f <|> g) <*> a" =~ lhs) ~rhs:("(f <*> a) <|> (g <*> a)" =~ rhs)
   ;;
 end
 
@@ -81,11 +76,10 @@ module For_right_absorbtion (A : Preface_specs.ALTERNATIVE) :
   open Law
   include Applicative.For (A)
 
-  let alternative_right_absorption_for_apply () =
+  let alternative_right_absorb_1 () =
     let lhs = A.(apply neutral)
     and rhs = Fun.id in
 
-    law "Right absorbtion for Apply" ~lhs:("neutral <*> x" =~ lhs)
-      ~rhs:("x" =~ rhs)
+    law ~lhs:("neutral <*> x" =~ lhs) ~rhs:("x" =~ rhs)
   ;;
 end

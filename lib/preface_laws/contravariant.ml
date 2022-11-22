@@ -1,10 +1,9 @@
 module type LAWS = sig
   module Contravariant : Preface_specs.CONTRAVARIANT
 
-  val contravariant_preserve_identity_morphisms :
-    unit -> ('a Contravariant.t, 'a Contravariant.t) Law.t
+  val contravariant_1 : unit -> ('a Contravariant.t, 'a Contravariant.t) Law.t
 
-  val contravariant_preserve_composition_of_morphisms :
+  val contravariant_2 :
        unit
     -> ('a -> 'b, ('b -> 'c) -> 'c Contravariant.t -> 'a Contravariant.t) Law.t
 end
@@ -13,20 +12,19 @@ module For (C : Preface_specs.CONTRAVARIANT) :
   LAWS with module Contravariant := C = struct
   open Law
 
-  let contravariant_preserve_identity_morphisms () =
+  let contravariant_1 () =
     let lhs x = C.contramap Fun.id x
     and rhs x = x in
 
-    law "Preserve identity morphisms" ~lhs:("contramap id" =~ lhs)
-      ~rhs:("id" =~ rhs)
+    law ~lhs:("contramap id" =~ lhs) ~rhs:("id" =~ rhs)
   ;;
 
-  let contravariant_preserve_composition_of_morphisms () =
+  let contravariant_2 () =
     let open Preface_core.Fun.Infix in
     let lhs f g = C.contramap (g % f)
     and rhs f g = C.(contramap f % contramap g) in
 
-    law "Preserve composition of morphisms"
+    law
       ~lhs:("contramap (g % f)" =~ lhs)
       ~rhs:("(contramap f) % (contramap g)" =~ rhs)
   ;;

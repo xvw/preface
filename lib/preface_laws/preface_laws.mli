@@ -41,6 +41,11 @@ module Bifunctor = Bifunctor
 
 (** {1 Profunctor hierarchy} *)
 
+module Profunctor = Profunctor
+module Strong = Strong
+module Choice = Choice
+module Closed = Closed
+
 (** {1 Arrow hierarchy} *)
 
 (** {1 Descriptions of laws}

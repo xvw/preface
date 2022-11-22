@@ -2,47 +2,33 @@ module type LAWS = sig
   module Comonad : Preface_specs.COMONAD
   include Functor.LAWS with module Functor := Comonad
 
-  val comonad_extend_preserve_identity :
-    unit -> ('a Comonad.t, 'a Comonad.t) Law.t
+  val comonad_1 : unit -> ('a Comonad.t, 'a Comonad.t) Law.t
+  val comonad_2 : unit -> ('a Comonad.t -> 'b, 'a Comonad.t -> 'b) Law.t
 
-  val comonad_extract_extend :
-    unit -> ('a Comonad.t -> 'b, 'a Comonad.t -> 'b) Law.t
-
-  val comonad_extend_extend :
+  val comonad_3 :
        unit
     -> ( 'a Comonad.t -> 'b
        , ('c Comonad.t -> 'a) -> 'c Comonad.t -> 'b Comonad.t )
        Law.t
 
-  val comonad_left_extract_extend :
-    unit -> ('a Comonad.t -> 'b, 'a Comonad.t -> 'b) Law.t
+  val comonad_4 : unit -> ('a Comonad.t -> 'b, 'a Comonad.t -> 'b) Law.t
+  val comonad_5 : unit -> ('a Comonad.t -> 'b, 'a Comonad.t -> 'b) Law.t
 
-  val comonad_right_extract_extend :
-    unit -> ('a Comonad.t -> 'b, 'a Comonad.t -> 'b) Law.t
-
-  val comonad_extend_associative :
+  val comonad_6 :
        unit
     -> ( 'a Comonad.t -> 'b
        , ('b Comonad.t -> 'c) -> ('c Comonad.t -> 'd) -> 'a Comonad.t -> 'd )
        Law.t
 
-  val comonad_duplicate_preserve_identity :
-    unit -> ('a Comonad.t, 'a Comonad.t) Law.t
+  val comonad_7 : unit -> ('a Comonad.t, 'a Comonad.t) Law.t
+  val comonad_8 : unit -> ('a Comonad.t, 'a Comonad.t) Law.t
+  val comonad_9 : unit -> ('a Comonad.t, 'a Comonad.t Comonad.t Comonad.t) Law.t
 
-  val comonad_map_duplicate_preserve_identity :
-    unit -> ('a Comonad.t, 'a Comonad.t) Law.t
-
-  val comonad_duplicate_duplicate_is_map_duplicate_duplicate :
-    unit -> ('a Comonad.t, 'a Comonad.t Comonad.t Comonad.t) Law.t
-
-  val comonad_extend_map_duplicate :
+  val comonad_10 :
     unit -> ('a Comonad.t -> 'b, 'a Comonad.t -> 'b Comonad.t) Law.t
 
-  val comonad_duplicate_extend_id :
-    unit -> ('a Comonad.t, 'a Comonad.t Comonad.t) Law.t
-
-  val comonad_map_extend_extract :
-    unit -> ('a -> 'b, 'a Comonad.t -> 'b Comonad.t) Law.t
+  val comonad_11 : unit -> ('a Comonad.t, 'a Comonad.t Comonad.t) Law.t
+  val comonad_12 : unit -> ('a -> 'b, 'a Comonad.t -> 'b Comonad.t) Law.t
 end
 
 module For (C : Preface_specs.COMONAD) : LAWS with module Comonad := C = struct
@@ -50,105 +36,89 @@ module For (C : Preface_specs.COMONAD) : LAWS with module Comonad := C = struct
   open Preface_core.Fun
   open Law
 
-  let comonad_extend_preserve_identity () =
+  let comonad_1 () =
     let lhs x = C.(extend extract) x
     and rhs x = x in
 
-    law "Extend preserve identity" ~lhs:("extend extract" =~ lhs)
-      ~rhs:("id" =~ rhs)
+    law ~lhs:("extend extract" =~ lhs) ~rhs:("id" =~ rhs)
   ;;
 
-  let comonad_extract_extend () =
+  let comonad_2 () =
     let lhs f x = C.(extract % extend f) x
     and rhs f x = f x in
 
-    law "Extract and extend of f is f"
-      ~lhs:("extract % extend" =~ lhs)
-      ~rhs:("f" =~ rhs)
+    law ~lhs:("extract % extend" =~ lhs) ~rhs:("f" =~ rhs)
   ;;
 
-  let comonad_extend_extend () =
+  let comonad_3 () =
     let lhs f g x = C.(extend f % extend g) x
     and rhs f g x = C.(extend (f % extend g)) x in
 
-    law
-      "A composition of extend f and g is and extend of a composition f and \
-       extend g"
-      ~lhs:("extend f % extend g" =~ lhs)
-      ~rhs:("extend (f % extend g)" =~ rhs)
+    law ~lhs:("extend f % extend g" =~ lhs) ~rhs:("extend (f % extend g)" =~ rhs)
   ;;
 
-  let comonad_left_extract_extend () =
+  let comonad_4 () =
     let lhs f x = C.(f =>= extract) x
     and rhs f x = f x in
 
-    law "Infix version of extract extend" ~lhs:("f =>= extract" =~ lhs)
-      ~rhs:("f" =~ rhs)
+    law ~lhs:("f =>= extract" =~ lhs) ~rhs:("f" =~ rhs)
   ;;
 
-  let comonad_right_extract_extend () =
+  let comonad_5 () =
     let lhs f x = C.(extract =>= f) x
     and rhs f x = f x in
 
-    law "Right infix version of extract extend" ~lhs:("extract =>= f" =~ lhs)
-      ~rhs:("f" =~ rhs)
+    law ~lhs:("extract =>= f" =~ lhs) ~rhs:("f" =~ rhs)
   ;;
 
-  let comonad_extend_associative () =
+  let comonad_6 () =
     let lhs f g h x = C.(Infix.(f =>= g) =>= h) x
     and rhs f g h x = C.(f =>= Infix.(g =>= h)) x in
 
-    law "Extend is associative" ~lhs:("(f =>= g) =>= h" =~ lhs)
-      ~rhs:("f =>= (g =>= h)" =~ rhs)
+    law ~lhs:("(f =>= g) =>= h" =~ lhs) ~rhs:("f =>= (g =>= h)" =~ rhs)
   ;;
 
-  let comonad_duplicate_preserve_identity () =
+  let comonad_7 () =
     let lhs x = C.(extract % duplicate) x
     and rhs x = x in
 
-    law "Duplicate preserve identity"
-      ~lhs:("extract % duplicate" =~ lhs)
-      ~rhs:("id" =~ rhs)
+    law ~lhs:("extract % duplicate" =~ lhs) ~rhs:("id" =~ rhs)
   ;;
 
-  let comonad_map_duplicate_preserve_identity () =
+  let comonad_8 () =
     let lhs x = C.(map extract % duplicate) x
     and rhs x = x in
 
-    law "Map over duplicate preserve identity"
-      ~lhs:("map extract % duplicate" =~ lhs)
-      ~rhs:("id" =~ rhs)
+    law ~lhs:("map extract % duplicate" =~ lhs) ~rhs:("id" =~ rhs)
   ;;
 
-  let comonad_duplicate_duplicate_is_map_duplicate_duplicate () =
+  let comonad_9 () =
     let lhs x = C.(duplicate % duplicate) x
     and rhs x = C.(map duplicate % duplicate) x in
 
-    law "Duplicate over duplicate is map duplicate over duplicate"
+    law
       ~lhs:("duplicate % duplicate" =~ lhs)
       ~rhs:("map duplicate % duplicate" =~ rhs)
   ;;
 
-  let comonad_extend_map_duplicate () =
+  let comonad_10 () =
     let lhs f x = C.(extend f) x
     and rhs f x = C.(map f % duplicate) x in
-    law "Extend f is map f over duplicate" ~lhs:("extend f" =~ lhs)
-      ~rhs:("map f % duplicate" =~ rhs)
+
+    law ~lhs:("extend f" =~ lhs) ~rhs:("map f % duplicate" =~ rhs)
   ;;
 
-  let comonad_duplicate_extend_id () =
+  let comonad_11 () =
     let lhs x = C.duplicate x
     and rhs x = C.(extend (fun x -> x)) x in
 
-    law "Duplicate is extend id" ~lhs:("duplicate" =~ lhs)
-      ~rhs:("extend id" =~ rhs)
+    law ~lhs:("duplicate" =~ lhs) ~rhs:("extend id" =~ rhs)
   ;;
 
-  let comonad_map_extend_extract () =
+  let comonad_12 () =
     let lhs f x = C.map f x
     and rhs f x = C.(extend (f % extract)) x in
 
-    law "map is extend over extract" ~lhs:("map f" =~ lhs)
-      ~rhs:("extend (f % extract)" =~ rhs)
+    law ~lhs:("map f" =~ lhs) ~rhs:("extend (f % extract)" =~ rhs)
   ;;
 end
