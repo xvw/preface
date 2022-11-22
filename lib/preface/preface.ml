@@ -27,6 +27,14 @@
   </tr>
   <tr>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
+      <strong style="font-weight: 900;">Preface.Laws</strong>
+    </td>
+    <td style="border:1px solid #d5d5d5; padding: 6px;">
+      Functors to generate laws for a given abstraction.
+    </td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #d5d5d5; padding: 6px;">
       <strong style="font-weight: 900;">Preface</strong>
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
@@ -35,14 +43,6 @@
       the functors present in <code>Preface.Make</code>.
       This library is, at least, an example of the use of
       <code>Specs</code> and <code>Make</code>.
-    </td>
-  </tr>
- <tr>
-    <td style="border:1px solid #d5d5d5; padding: 6px;">
-      <strong style="font-weight: 900;">Preface.Laws</strong>
-    </td>
-    <td style="border:1px solid #d5d5d5; padding: 6px;">
-      Functors to generate laws for a given abstraction.
     </td>
   </tr>
 </table>
@@ -126,7 +126,7 @@ module Make = Preface_make
     </td>
     <td style="border:1px solid #d5d5d5; padding: 6px;">
         This module describes all the fundamental operations. For example,
-       for a monad, we would find <code>return<code>, <code>map</code>,
+       for a monad, we would find <code>return</code>, <code>map</code>,
        <code>bind</code>, <code>join</code> and
        <code>compose_left_to_right</code>
     </td>
