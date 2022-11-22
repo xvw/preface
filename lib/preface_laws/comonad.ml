@@ -40,85 +40,83 @@ module For (C : Preface_specs.COMONAD) : LAWS with module Comonad := C = struct
     let lhs x = C.(extend extract) x
     and rhs x = x in
 
-    law ~lhs:("extend extract" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("extend extract" =~ lhs) ("id" =~ rhs)
   ;;
 
   let comonad_2 () =
     let lhs f x = C.(extract % extend f) x
     and rhs f x = f x in
 
-    law ~lhs:("extract % extend" =~ lhs) ~rhs:("f" =~ rhs)
+    law ("extract % extend" =~ lhs) ("f" =~ rhs)
   ;;
 
   let comonad_3 () =
     let lhs f g x = C.(extend f % extend g) x
     and rhs f g x = C.(extend (f % extend g)) x in
 
-    law ~lhs:("extend f % extend g" =~ lhs) ~rhs:("extend (f % extend g)" =~ rhs)
+    law ("extend f % extend g" =~ lhs) ("extend (f % extend g)" =~ rhs)
   ;;
 
   let comonad_4 () =
     let lhs f x = C.(f =>= extract) x
     and rhs f x = f x in
 
-    law ~lhs:("f =>= extract" =~ lhs) ~rhs:("f" =~ rhs)
+    law ("f =>= extract" =~ lhs) ("f" =~ rhs)
   ;;
 
   let comonad_5 () =
     let lhs f x = C.(extract =>= f) x
     and rhs f x = f x in
 
-    law ~lhs:("extract =>= f" =~ lhs) ~rhs:("f" =~ rhs)
+    law ("extract =>= f" =~ lhs) ("f" =~ rhs)
   ;;
 
   let comonad_6 () =
     let lhs f g h x = C.(Infix.(f =>= g) =>= h) x
     and rhs f g h x = C.(f =>= Infix.(g =>= h)) x in
 
-    law ~lhs:("(f =>= g) =>= h" =~ lhs) ~rhs:("f =>= (g =>= h)" =~ rhs)
+    law ("(f =>= g) =>= h" =~ lhs) ("f =>= (g =>= h)" =~ rhs)
   ;;
 
   let comonad_7 () =
     let lhs x = C.(extract % duplicate) x
     and rhs x = x in
 
-    law ~lhs:("extract % duplicate" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("extract % duplicate" =~ lhs) ("id" =~ rhs)
   ;;
 
   let comonad_8 () =
     let lhs x = C.(map extract % duplicate) x
     and rhs x = x in
 
-    law ~lhs:("map extract % duplicate" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("map extract % duplicate" =~ lhs) ("id" =~ rhs)
   ;;
 
   let comonad_9 () =
     let lhs x = C.(duplicate % duplicate) x
     and rhs x = C.(map duplicate % duplicate) x in
 
-    law
-      ~lhs:("duplicate % duplicate" =~ lhs)
-      ~rhs:("map duplicate % duplicate" =~ rhs)
+    law ("duplicate % duplicate" =~ lhs) ("map duplicate % duplicate" =~ rhs)
   ;;
 
   let comonad_10 () =
     let lhs f x = C.(extend f) x
     and rhs f x = C.(map f % duplicate) x in
 
-    law ~lhs:("extend f" =~ lhs) ~rhs:("map f % duplicate" =~ rhs)
+    law ("extend f" =~ lhs) ("map f % duplicate" =~ rhs)
   ;;
 
   let comonad_11 () =
     let lhs x = C.duplicate x
     and rhs x = C.(extend (fun x -> x)) x in
 
-    law ~lhs:("duplicate" =~ lhs) ~rhs:("extend id" =~ rhs)
+    law ("duplicate" =~ lhs) ("extend id" =~ rhs)
   ;;
 
   let comonad_12 () =
     let lhs f x = C.map f x
     and rhs f x = C.(extend (f % extract)) x in
 
-    law ~lhs:("map f" =~ lhs) ~rhs:("extend (f % extract)" =~ rhs)
+    law ("map f" =~ lhs) ("extend (f % extract)" =~ rhs)
   ;;
 end

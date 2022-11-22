@@ -32,9 +32,7 @@ struct
       (F.fold_map (module E) f x) z
     in
 
-    law
-      ~lhs:("fold_right f x z" =~ lhs)
-      ~rhs:("(fold_map (module Endo) f x) z" =~ rhs)
+    law ("fold_right f x z" =~ lhs) ("(fold_map (module Endo) f x) z" =~ rhs)
   ;;
 
   let foldable_2 () =
@@ -47,8 +45,8 @@ struct
       (F.fold_map (module D) t x) z
     in
 
-    law ~lhs:("fold_left f z x" =~ lhs)
-      ~rhs:("(fold_map (module Dual(Endo)) (Fun.flip f) x) z" =~ rhs)
+    law ("fold_left f z x" =~ lhs)
+      ("(fold_map (module Dual(Endo)) (Fun.flip f) x) z" =~ rhs)
   ;;
 
   let foldable_3 () =
@@ -58,6 +56,6 @@ struct
       F.fold_map (module M) (fun x -> x) x
     in
 
-    law ~lhs:("reduce (module M)" =~ lhs) ~rhs:("fold_map (module M) id" =~ rhs)
+    law ("reduce (module M)" =~ lhs) ("fold_map (module M) id" =~ rhs)
   ;;
 end

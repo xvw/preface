@@ -38,7 +38,7 @@ module For_monad (T : Preface_specs.Traversable.API_OVER_MONAD) :
     let lhs x = TId.traverse (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("traverse id x" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("traverse id x" =~ lhs) ("x" =~ rhs)
   ;;
 end
 
@@ -51,7 +51,7 @@ module For_applicative (T : Preface_specs.Traversable.API_OVER_APPLICATIVE) :
     let lhs x = TId.traverse (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("traverse id x" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("traverse id x" =~ lhs) ("x" =~ rhs)
   ;;
 
   module Compose (F : Preface_specs.APPLICATIVE) (G : Preface_specs.APPLICATIVE) =
@@ -67,8 +67,8 @@ module For_applicative (T : Preface_specs.Traversable.API_OVER_APPLICATIVE) :
       and rhs f g x = TC.traverse (F.map g % f) x in
 
       law
-        ~lhs:("traverse (compose % map g % g)" =~ lhs)
-        ~rhs:("compose % map (traverse g) % traverse f" =~ rhs)
+        ("traverse (compose % map g % g)" =~ lhs)
+        ("compose % map (traverse g) % traverse f" =~ rhs)
     ;;
   end
 
@@ -86,7 +86,7 @@ module For_applicative (T : Preface_specs.Traversable.API_OVER_APPLICATIVE) :
       let lhs f x = NT.run (TF.traverse f x)
       and rhs f x = TG.traverse (NT.run % f) x in
 
-      law ~lhs:("t % traverse f" =~ lhs) ~rhs:("traverse (t % f)" =~ rhs)
+      law ("t % traverse f" =~ lhs) ("traverse (t % f)" =~ rhs)
     ;;
   end
 end

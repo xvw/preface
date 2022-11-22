@@ -28,36 +28,34 @@ struct
     let lhs x = A.(pure Fun.id <*> x)
     and rhs x = x in
 
-    law ~lhs:("pure id <*> x" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("pure id <*> x" =~ lhs) ("x" =~ rhs)
   ;;
 
   let applicative_2 () =
     let lhs f x = A.(pure f <*> pure x)
     and rhs f x = A.pure (f x) in
 
-    law ~lhs:("pure f <*> pure x" =~ lhs) ~rhs:("pure f x" =~ rhs)
+    law ("pure f <*> pure x" =~ lhs) ("pure f x" =~ rhs)
   ;;
 
   let applicative_3 () =
     let lhs f x = A.(f <*> pure x)
     and rhs f x = A.(pure (( |> ) x) <*> f) in
 
-    law ~lhs:("f <*> pure x" =~ lhs) ~rhs:("pure ((|>) x) <*> f" =~ rhs)
+    law ("f <*> pure x" =~ lhs) ("pure ((|>) x) <*> f" =~ rhs)
   ;;
 
   let applicative_4 () =
     let lhs u v w = A.(pure ( % ) <*> u <*> v <*> w)
     and rhs u v w = A.(u <*> Infix.(v <*> w)) in
 
-    law
-      ~lhs:("pure ( % ) <*> u <*> v <*> w" =~ lhs)
-      ~rhs:("u <*> (v <*> w)" =~ rhs)
+    law ("pure ( % ) <*> u <*> v <*> w" =~ lhs) ("u <*> (v <*> w)" =~ rhs)
   ;;
 
   let applicative_5 () =
     let lhs = A.map
     and rhs f x = A.(pure f <*> x) in
 
-    law ~lhs:("map f x" =~ lhs) ~rhs:("pure f <*> x" =~ rhs)
+    law ("map f x" =~ lhs) ("pure f <*> x" =~ rhs)
   ;;
 end

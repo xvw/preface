@@ -48,21 +48,21 @@ module For_monoidal (M : Preface_specs.MONAD_PLUS) :
     let lhs = M.(combine neutral)
     and rhs x = x in
 
-    law ~lhs:("neutral <|> x" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("neutral <|> x" =~ lhs) ("x" =~ rhs)
   ;;
 
   let monad_plus_monoid_2 () =
     let lhs x = M.(combine x neutral)
     and rhs x = x in
 
-    law ~lhs:("x <|> neutral" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("x <|> neutral" =~ lhs) ("x" =~ rhs)
   ;;
 
   let monad_plus_monoid_3 () =
     let lhs a b c = M.(Infix.(a <|> b) <|> c)
     and rhs a b c = M.(a <|> Infix.(b <|> c)) in
 
-    law ~lhs:("(a <|> b) <|> c" =~ lhs) ~rhs:("a <|> (b <|> c)" =~ rhs)
+    law ("(a <|> b) <|> c" =~ lhs) ("a <|> (b <|> c)" =~ rhs)
   ;;
 end
 
@@ -75,7 +75,7 @@ module For_left_absorption (M : Preface_specs.MONAD_PLUS) :
     let lhs f = M.(neutral >>= f)
     and rhs _ = M.neutral in
 
-    law ~lhs:("neutral >>= f" =~ lhs) ~rhs:("neutral" =~ rhs)
+    law ("neutral >>= f" =~ lhs) ("neutral" =~ rhs)
   ;;
 end
 
@@ -88,7 +88,7 @@ module For_left_distributivity (M : Preface_specs.MONAD_PLUS) :
     let lhs a b f = M.(a <|> b >>= f)
     and rhs a b f = M.(a >>= f <|> (b >>= f)) in
 
-    law ~lhs:("(a <|> b) >>= f" =~ lhs) ~rhs:("(a >>= f) <|> (b >>= f)" =~ rhs)
+    law ("(a <|> b) >>= f" =~ lhs) ("(a >>= f) <|> (b >>= f)" =~ rhs)
   ;;
 end
 
@@ -101,6 +101,6 @@ module For_left_catch (M : Preface_specs.MONAD_PLUS) :
     let lhs a b = M.(return a <|> b)
     and rhs a _ = M.(return a) in
 
-    law ~lhs:("(return a) <|> b" =~ lhs) ~rhs:("return a" =~ rhs)
+    law ("(return a) <|> b" =~ lhs) ("return a" =~ rhs)
   ;;
 end

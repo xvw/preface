@@ -30,7 +30,7 @@ module For (S : Preface_specs.STRONG) : LAWS with module Strong := S = struct
     let lhs x = S.fst x
     and rhs x = S.dimap Util.swap Util.swap (S.snd x) in
 
-    law ~lhs:("fst" =~ lhs) ~rhs:("dimap swap swap % snd" =~ rhs)
+    law ("fst" =~ lhs) ("dimap swap swap % snd" =~ rhs)
   ;;
 
   let strong_2 () =
@@ -38,8 +38,8 @@ module For (S : Preface_specs.STRONG) : LAWS with module Strong := S = struct
     and rhs x = (S.map_snd fst % S.fst) x in
 
     law
-      ~lhs:("contramap_fst (fun (x, _) -> x)" =~ lhs)
-      ~rhs:("map_snd (fun (x, _) -> x) % fst" =~ rhs)
+      ("contramap_fst (fun (x, _) -> x)" =~ lhs)
+      ("map_snd (fun (x, _) -> x) % fst" =~ rhs)
   ;;
 
   let strong_3 () =
@@ -47,22 +47,22 @@ module For (S : Preface_specs.STRONG) : LAWS with module Strong := S = struct
     and rhs f x = (S.map_snd (Util.Fun.Strong.snd f) % S.fst) x in
 
     law
-      ~lhs:("contramap_fst (Fun.Strong.snd f) % fst" =~ lhs)
-      ~rhs:("map_snd (Fun.Strong.snd f) % fst" =~ rhs)
+      ("contramap_fst (Fun.Strong.snd f) % fst" =~ lhs)
+      ("map_snd (Fun.Strong.snd f) % fst" =~ rhs)
   ;;
 
   let strong_4 () =
     let lhs x = (S.fst % S.fst) x
     and rhs x = Util.(S.dimap assoc unassoc % S.fst) x in
 
-    law ~lhs:("fst % fst" =~ lhs) ~rhs:("dimap assoc unassoc % fst" =~ rhs)
+    law ("fst % fst" =~ lhs) ("dimap assoc unassoc % fst" =~ rhs)
   ;;
 
   let strong_5 () =
     let lhs x = S.snd x
     and rhs x = S.dimap Util.swap Util.swap (S.fst x) in
 
-    law ~lhs:("snd" =~ lhs) ~rhs:("dimap swap swap % fst" =~ rhs)
+    law ("snd" =~ lhs) ("dimap swap swap % fst" =~ rhs)
   ;;
 
   let strong_6 () =
@@ -70,8 +70,8 @@ module For (S : Preface_specs.STRONG) : LAWS with module Strong := S = struct
     and rhs x = (S.map_snd snd % S.snd) x in
 
     law
-      ~lhs:("contramap_fst (fun (_, x) -> x)" =~ lhs)
-      ~rhs:("map_snd (fun (_, x) -> x) % snd" =~ rhs)
+      ("contramap_fst (fun (_, x) -> x)" =~ lhs)
+      ("map_snd (fun (_, x) -> x) % snd" =~ rhs)
   ;;
 
   let strong_7 () =
@@ -79,14 +79,14 @@ module For (S : Preface_specs.STRONG) : LAWS with module Strong := S = struct
     and rhs f x = (S.map_snd (Util.Fun.Strong.fst f) % S.snd) x in
 
     law
-      ~lhs:("contramap_fst (Fun.Strong.fst f) % snd" =~ lhs)
-      ~rhs:("map_snd (Fun.Strong.fst f) % snd" =~ rhs)
+      ("contramap_fst (Fun.Strong.fst f) % snd" =~ lhs)
+      ("map_snd (Fun.Strong.fst f) % snd" =~ rhs)
   ;;
 
   let strong_8 () =
     let lhs x = (S.snd % S.snd) x
     and rhs x = Util.(S.dimap unassoc assoc % S.snd) x in
 
-    law ~lhs:("snd % snd" =~ lhs) ~rhs:("dimap unassoc assoc  % snd" =~ rhs)
+    law ("snd % snd" =~ lhs) ("dimap unassoc assoc  % snd" =~ rhs)
   ;;
 end

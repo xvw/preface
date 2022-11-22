@@ -24,5 +24,5 @@ let pp ppf law =
   Format.fprintf ppf "%a = %a" Side.pp (lhs law) Side.pp (rhs law)
 ;;
 
-let law ~lhs ~rhs = make lhs rhs
+let law lhs rhs = make lhs rhs
 let ( =~ ) name fun_ = Side.make name fun_

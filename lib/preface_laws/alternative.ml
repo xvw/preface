@@ -40,21 +40,21 @@ module For_monoidal (A : Preface_specs.ALTERNATIVE) :
     let lhs = A.(combine neutral)
     and rhs x = x in
 
-    law ~lhs:("neutral <|> x" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("neutral <|> x" =~ lhs) ("x" =~ rhs)
   ;;
 
   let alternative_monoid_2 () =
     let lhs x = A.(combine x neutral)
     and rhs x = x in
 
-    law ~lhs:("x <|> neutral" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("x <|> neutral" =~ lhs) ("x" =~ rhs)
   ;;
 
   let alternative_monoid_3 () =
     let lhs a b c = A.(Infix.(a <|> b) <|> c)
     and rhs a b c = A.(a <|> Infix.(b <|> c)) in
 
-    law ~lhs:("(a <|> b) <|> c" =~ lhs) ~rhs:("a <|> (b <|> c)" =~ rhs)
+    law ("(a <|> b) <|> c" =~ lhs) ("a <|> (b <|> c)" =~ rhs)
   ;;
 end
 
@@ -67,7 +67,7 @@ module For_right_distributivity (A : Preface_specs.ALTERNATIVE) :
     let lhs f g x = A.(Infix.(f <|> g) <*> x)
     and rhs f g x = A.(Infix.(f <*> x) <|> Infix.(g <*> x)) in
 
-    law ~lhs:("(f <|> g) <*> a" =~ lhs) ~rhs:("(f <*> a) <|> (g <*> a)" =~ rhs)
+    law ("(f <|> g) <*> a" =~ lhs) ("(f <*> a) <|> (g <*> a)" =~ rhs)
   ;;
 end
 
@@ -80,6 +80,6 @@ module For_right_absorbtion (A : Preface_specs.ALTERNATIVE) :
     let lhs = A.(apply neutral)
     and rhs = Fun.id in
 
-    law ~lhs:("neutral <*> x" =~ lhs) ~rhs:("x" =~ rhs)
+    law ("neutral <*> x" =~ lhs) ("x" =~ rhs)
   ;;
 end

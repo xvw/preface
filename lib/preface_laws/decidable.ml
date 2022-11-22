@@ -18,13 +18,13 @@ struct
     let lhs f m = D.choose Either.left m (D.lose f)
     and rhs _ m = m in
 
-    law ~lhs:("choose Either.left m (lose f)" =~ lhs) ~rhs:("m" =~ rhs)
+    law ("choose Either.left m (lose f)" =~ lhs) ("m" =~ rhs)
   ;;
 
   let decidable_2 () =
     let lhs f m = D.choose Either.right (D.lose f) m
     and rhs _ m = m in
 
-    law ~lhs:("choose Either.right (lose f) m" =~ lhs) ~rhs:("m" =~ rhs)
+    law ("choose Either.right (lose f) m" =~ lhs) ("m" =~ rhs)
   ;;
 end

@@ -43,50 +43,48 @@ struct
     let lhs x = B.bimap (fun x -> x) (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("bimap id id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("bimap id id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let bifunctor_2 () =
     let lhs x = B.map_fst (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("map_fst id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("map_fst id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let bifunctor_3 () =
     let lhs x = B.map_snd (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("map_snd id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("map_snd id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let bifunctor_4 () =
     let lhs f g x = B.bimap f g x
     and rhs f g x = (B.map_fst f % B.map_snd g) x in
 
-    law ~lhs:("bimap f g" =~ lhs) ~rhs:("map_fst f % map_snd g" =~ rhs)
+    law ("bimap f g" =~ lhs) ("map_fst f % map_snd g" =~ rhs)
   ;;
 
   let bifunctor_5 () =
     let lhs f g h i x = B.bimap (f % g) (h % i) x
     and rhs f g h i x = (B.bimap f h % B.bimap g i) x in
 
-    law
-      ~lhs:("bimap (f % g) (h % i)" =~ lhs)
-      ~rhs:("bimap f h % bimap g i" =~ rhs)
+    law ("bimap (f % g) (h % i)" =~ lhs) ("bimap f h % bimap g i" =~ rhs)
   ;;
 
   let bifunctor_6 () =
     let lhs f g x = B.map_fst (f % g) x
     and rhs f g x = (B.map_fst f % B.map_fst g) x in
 
-    law ~lhs:("map_fst (f % g)" =~ lhs) ~rhs:("map_fst f % map_fst g" =~ rhs)
+    law ("map_fst (f % g)" =~ lhs) ("map_fst f % map_fst g" =~ rhs)
   ;;
 
   let bifunctor_7 () =
     let lhs f g x = B.map_snd (f % g) x
     and rhs f g x = (B.map_snd f % B.map_snd g) x in
 
-    law ~lhs:("map_snd (f % g)" =~ lhs) ~rhs:("map_snd f % map_snd g" =~ rhs)
+    law ("map_snd (f % g)" =~ lhs) ("map_snd f % map_snd g" =~ rhs)
   ;;
 end

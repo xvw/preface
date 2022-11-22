@@ -14,13 +14,13 @@ module For (A : Preface_specs.APPLY) : LAWS with module Apply := A = struct
     let lhs u v = A.(u *> v)
     and rhs u v = A.(Infix.(Fun.id <$ u) <*> v) in
 
-    law ~lhs:("u *> v" =~ lhs) ~rhs:("(id <$ u) <*> v" =~ rhs)
+    law ("u *> v" =~ lhs) ("(id <$ u) <*> v" =~ rhs)
   ;;
 
   let apply_2 () =
     let lhs u v = A.(u <* v)
     and rhs u v = A.(lift2 Fun.const u v) in
 
-    law ~lhs:("u <* v" =~ lhs) ~rhs:("lift2 const u v" =~ rhs)
+    law ("u <* v" =~ lhs) ("lift2 const u v" =~ rhs)
   ;;
 end

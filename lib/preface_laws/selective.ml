@@ -70,9 +70,7 @@ struct
     let lhs x = S.(x <*? pure id)
     and rhs x = S.(Either.fold ~left:id ~right:id <$> x) in
 
-    law
-      ~lhs:("x <*? pure Fun.id" =~ lhs)
-      ~rhs:("Either.case Fun.id Fun.id <$> x" =~ rhs)
+    law ("x <*? pure Fun.id" =~ lhs) ("Either.case Fun.id Fun.id <$> x" =~ rhs)
   ;;
 
   let selective_2 () =
@@ -82,8 +80,8 @@ struct
     in
 
     law
-      ~lhs:("pure x <*? (y *> z)" =~ lhs)
-      ~rhs:("(pure x <*? y) *> (pure x <*? z)" =~ rhs)
+      ("pure x <*? (y *> z)" =~ lhs)
+      ("(pure x <*? y) *> (pure x <*? z)" =~ rhs)
   ;;
 
   let selective_3 () =
@@ -99,12 +97,11 @@ struct
       fst <*? snd <*? trd
     in
 
-    law ~lhs:("x <*? (y <*? z)" =~ lhs)
-      ~rhs:
-        ( "(Either.(map_right right) <$> x) <*? ((fun x a -> Either.map \
-           ~left:(fun x -> (x, a)) ~right:(fun f -> f a) x) <$> y) <*? \
-           (uncurry <$> z)"
-        =~ rhs )
+    law ("x <*? (y <*? z)" =~ lhs)
+      ( "(Either.(map_right right) <$> x) <*? ((fun x a -> Either.map \
+         ~left:(fun x -> (x, a)) ~right:(fun f -> f a) x) <$> y) <*? (uncurry \
+         <$> z)"
+      =~ rhs )
   ;;
 
   let selective_4 () =
@@ -112,8 +109,8 @@ struct
     and rhs f x y = S.(select (Either.map_right f <$> x) (( % ) f <$> y)) in
 
     law
-      ~lhs:("f <$> select x y" =~ lhs)
-      ~rhs:("select (Either.map_right f <$> x) (map f <$> y)" =~ rhs)
+      ("f <$> select x y" =~ lhs)
+      ("select (Either.map_right f <$> x) (map f <$> y)" =~ rhs)
   ;;
 
   let selective_5 () =
@@ -121,8 +118,8 @@ struct
     and rhs f x y = S.(select x (( %> ) f <$> y)) in
 
     law
-      ~lhs:("select (Either.map_left f <$> x) y" =~ lhs)
-      ~rhs:("select x ((%>) f) <$> y)" =~ rhs)
+      ("select (Either.map_left f <$> x) y" =~ lhs)
+      ("select x ((%>) f) <$> y)" =~ rhs)
   ;;
 
   let selective_6 () =
@@ -132,15 +129,15 @@ struct
     in
 
     law
-      ~lhs:("select x (f <$> y)" =~ lhs)
-      ~rhs:("select (Either.map_left (flip f) <$> x) ((|>) <$> y)" =~ rhs)
+      ("select x (f <$> y)" =~ lhs)
+      ("select (Either.map_left (flip f) <$> x) ((|>) <$> y)" =~ rhs)
   ;;
 
   let selective_7 () =
     let lhs x y = S.(x <*? pure y)
     and rhs x y = S.(Either.fold ~left:y ~right:id <$> x) in
 
-    law ~lhs:("x <*? pure y" =~ lhs) ~rhs:("Either.case y Fun.id <$> x" =~ rhs)
+    law ("x <*? pure y" =~ lhs) ("Either.case y Fun.id <$> x" =~ rhs)
   ;;
 end
 
@@ -153,14 +150,13 @@ module For_rigid (S : Preface_specs.SELECTIVE) :
     let lhs f x = S.apply f x
     and rhs f x = S.(select (map Either.left f) (map ( |> ) x)) in
 
-    law ~lhs:("f <*> x" =~ lhs)
-      ~rhs:("select (map Either.left f) (map ( |> ) x" =~ rhs)
+    law ("f <*> x" =~ lhs) ("select (map Either.left f) (map ( |> ) x" =~ rhs)
   ;;
 
   let selective_9 () =
     let lhs x y z = S.(Infix.(ignore <$> x) *> Infix.(y <*? z))
     and rhs x y z = S.(Infix.((ignore <$> x) *> y) <*? z) in
 
-    law ~lhs:("x *> (y <*? z)" =~ lhs) ~rhs:("(x *> y) <*? z" =~ rhs)
+    law ("x *> (y <*? z)" =~ lhs) ("(x *> y) <*? z" =~ rhs)
   ;;
 end

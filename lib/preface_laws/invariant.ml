@@ -22,7 +22,7 @@ struct
     let lhs x = I.invmap (fun x -> x) (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("invmap id id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("invmap id id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let invariant_2 () =
@@ -31,7 +31,7 @@ struct
     and rhs g g' f f' x = I.invmap (g % f) (f' % g') x in
 
     law
-      ~lhs:("(invmap g g') % (invmap f f')" =~ lhs)
-      ~rhs:("invmap (g % g') (f % f')" =~ rhs)
+      ("(invmap g g') % (invmap f f')" =~ lhs)
+      ("invmap (g % g') (f % f')" =~ rhs)
   ;;
 end

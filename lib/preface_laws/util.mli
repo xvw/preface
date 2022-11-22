@@ -36,6 +36,18 @@ module Fun : sig
   module Strong : Preface_specs.STRONG with type ('a, 'b) t = ('a, 'b) t
   module Choice : Preface_specs.CHOICE with type ('a, 'b) t = ('a, 'b) t
   module Closed : Preface_specs.CLOSED with type ('a, 'b) t = ('a, 'b) t
+
+  module Semigroupoid :
+    Preface_specs.SEMIGROUPOID with type ('a, 'b) t = ('a, 'b) t
+
+  module Category : Preface_specs.CATEGORY with type ('a, 'b) t = ('a, 'b) t
+  module Arrow : Preface_specs.ARROW with type ('a, 'b) t = ('a, 'b) t
+
+  module Arrow_choice :
+    Preface_specs.ARROW_CHOICE with type ('a, 'b) t = ('a, 'b) t
+
+  module Arrow_apply :
+    Preface_specs.ARROW_APPLY with type ('a, 'b) t = ('a, 'b) t
 end
 
 (** {1 Parametrized modules} *)

@@ -13,6 +13,6 @@ struct
     let lhs a b c = S.(Infix.(a <|> b) <|> c)
     and rhs a b c = S.(a <|> Infix.(b <|> c)) in
 
-    law ~lhs:("(a <|> b) <|> c" =~ lhs) ~rhs:("a <|> (b <|> c)" =~ rhs)
+    law ("(a <|> b) <|> c" =~ lhs) ("a <|> (b <|> c)" =~ rhs)
   ;;
 end

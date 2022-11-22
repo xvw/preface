@@ -48,49 +48,47 @@ struct
     let lhs x = P.dimap (fun x -> x) (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("dimap id id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("dimap id id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let profunctor_2 () =
     let lhs x = P.contramap_fst (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("contramap_fst id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("contramap_fst id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let profunctor_3 () =
     let lhs x = P.map_snd (fun x -> x) x
     and rhs x = x in
 
-    law ~lhs:("map_snd id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("map_snd id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let profunctor_4 () =
     let lhs f g x = P.dimap f g x
     and rhs f g x = (P.contramap_fst f % P.map_snd g) x in
 
-    law ~lhs:("dimap f g" =~ lhs) ~rhs:("contramap_fst f % map_snd g" =~ rhs)
+    law ("dimap f g" =~ lhs) ("contramap_fst f % map_snd g" =~ rhs)
   ;;
 
   let profunctor_5 () =
     let lhs f g h i x = P.dimap (f % g) (h % i) x
     and rhs f g h i x = (P.dimap g h % P.dimap f i) x in
-    law
-      ~lhs:("dimap (f % g) (h % i)" =~ lhs)
-      ~rhs:("dimap f h % dimap g i" =~ rhs)
+    law ("dimap (f % g) (h % i)" =~ lhs) ("dimap f h % dimap g i" =~ rhs)
   ;;
 
   let profunctor_6 () =
     let lhs f g x = P.contramap_fst (f % g) x
     and rhs f g x = (P.contramap_fst g % P.contramap_fst f) x in
     law
-      ~lhs:("contramap_fst (f % g)" =~ lhs)
-      ~rhs:("contramap_fst f % contramap_fst g" =~ rhs)
+      ("contramap_fst (f % g)" =~ lhs)
+      ("contramap_fst f % contramap_fst g" =~ rhs)
   ;;
 
   let profunctor_7 () =
     let lhs f g x = P.map_snd (f % g) x
     and rhs f g x = (P.map_snd f % P.map_snd g) x in
-    law ~lhs:("map_snd (f % g)" =~ lhs) ~rhs:("map_snd f % map_snd g" =~ rhs)
+    law ("map_snd (f % g)" =~ lhs) ("map_snd f % map_snd g" =~ rhs)
   ;;
 end

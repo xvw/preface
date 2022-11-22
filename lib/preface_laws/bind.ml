@@ -25,29 +25,27 @@ module For (B : Preface_specs.BIND) : LAWS with module Bind := B = struct
     let lhs x = B.(join % join) x
     and rhs x = B.(join % map join) x in
 
-    law ~lhs:("join % join" =~ lhs) ~rhs:("join % map join" =~ rhs)
+    law ("join % join" =~ lhs) ("join % map join" =~ rhs)
   ;;
 
   let bind_2 () =
     let lhs f x = B.(map f % join) x
     and rhs f x = B.(join % map (map f)) x in
 
-    law ~lhs:("map f % join" =~ lhs) ~rhs:("join % map (map f)" =~ rhs)
+    law ("map f % join" =~ lhs) ("join % map (map f)" =~ rhs)
   ;;
 
   let bind_3 () =
     let lhs x f g = B.(x >>= Infix.(fun y -> f y >>= g))
     and rhs x f g = B.(Infix.(x >>= f) >>= g) in
 
-    law
-      ~lhs:("x >>= (fun y -> f y >>= g)" =~ lhs)
-      ~rhs:("(x >>= f) >>= g" =~ rhs)
+    law ("x >>= (fun y -> f y >>= g)" =~ lhs) ("(x >>= f) >>= g" =~ rhs)
   ;;
 
   let bind_4 () =
     let lhs f g h x = B.(Infix.(f >=> g) >=> h) x
     and rhs f g h x = B.(f >=> Infix.(g >=> h)) x in
 
-    law ~lhs:("(f >=> g) >=> h" =~ lhs) ~rhs:("f >=> (g >=> h)" =~ rhs)
+    law ("(f >=> g) >=> h" =~ lhs) ("f >=> (g >=> h)" =~ rhs)
   ;;
 end

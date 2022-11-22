@@ -14,13 +14,13 @@ module For (A : Preface_specs.ALT) : LAWS with module Alt := A = struct
     let lhs a b c = A.(Infix.(a <|> b) <|> c)
     and rhs a b c = A.(a <|> Infix.(b <|> c)) in
 
-    law ~lhs:("(a <|> b) <|> c" =~ lhs) ~rhs:("a <|> (b <|> c)" =~ rhs)
+    law ("(a <|> b) <|> c" =~ lhs) ("a <|> (b <|> c)" =~ rhs)
   ;;
 
   let alt_2 () =
     let lhs f a b = A.(f <$> Infix.(a <|> b))
     and rhs f a b = A.(Infix.(f <$> a) <|> Infix.(f <$> b)) in
 
-    law ~lhs:("f <$> (a <|> b)" =~ lhs) ~rhs:("(f <$> a) <|> (f <$> b)" =~ rhs)
+    law ("f <$> (a <|> b)" =~ lhs) ("(f <$> a) <|> (f <$> b)" =~ rhs)
   ;;
 end

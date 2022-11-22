@@ -16,7 +16,7 @@ module For (C : Preface_specs.CONTRAVARIANT) :
     let lhs x = C.contramap Fun.id x
     and rhs x = x in
 
-    law ~lhs:("contramap id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("contramap id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let contravariant_2 () =
@@ -24,8 +24,6 @@ module For (C : Preface_specs.CONTRAVARIANT) :
     let lhs f g = C.contramap (g % f)
     and rhs f g = C.(contramap f % contramap g) in
 
-    law
-      ~lhs:("contramap (g % f)" =~ lhs)
-      ~rhs:("(contramap f) % (contramap g)" =~ rhs)
+    law ("contramap (g % f)" =~ lhs) ("(contramap f) % (contramap g)" =~ rhs)
   ;;
 end

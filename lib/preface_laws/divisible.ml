@@ -40,14 +40,14 @@ struct
     let lhs m = D.divide delta m D.conquer
     and rhs m = m in
 
-    law ~lhs:("divide (fun x -> (x, x)) m conquer" =~ lhs) ~rhs:("m" =~ rhs)
+    law ("divide (fun x -> (x, x)) m conquer" =~ lhs) ("m" =~ rhs)
   ;;
 
   let divisible_2 () =
     let lhs m = D.divide delta D.conquer m
     and rhs m = m in
 
-    law ~lhs:("divide (fun x -> (x, x)) conquer m" =~ lhs) ~rhs:("m" =~ rhs)
+    law ("divide (fun x -> (x, x)) conquer m" =~ lhs) ("m" =~ rhs)
   ;;
 
   let divisible_3 () =
@@ -55,22 +55,22 @@ struct
     and rhs m n o = D.divide delta m (D.divide delta n o) in
 
     law
-      ~lhs:("divide (fun x -> (x, x)) (divide delta m n) o" =~ lhs)
-      ~rhs:("divide (fun x -> (x, x)) m (divide delta n o)" =~ rhs)
+      ("divide (fun x -> (x, x)) (divide delta m n) o" =~ lhs)
+      ("divide (fun x -> (x, x)) m (divide delta n o)" =~ rhs)
   ;;
 
   let divisible_4 () =
     let lhs f m = D.divide f m D.conquer
     and rhs f m = D.contramap (fst % f) m in
 
-    law ~lhs:("divide f m conquer" =~ lhs) ~rhs:("contramap (fst % f)" =~ rhs)
+    law ("divide f m conquer" =~ lhs) ("contramap (fst % f)" =~ rhs)
   ;;
 
   let divisible_5 () =
     let lhs f m = D.divide f D.conquer m
     and rhs f m = D.contramap (snd % f) m in
 
-    law ~lhs:("divide f conquer m" =~ lhs) ~rhs:("contramap (snd % f)" =~ rhs)
+    law ("divide f conquer m" =~ lhs) ("contramap (snd % f)" =~ rhs)
   ;;
 
   let divisible_6 () =
@@ -85,10 +85,9 @@ struct
     in
 
     law
-      ~lhs:("divide f (divide g m n) o" =~ lhs)
-      ~rhs:
-        ( "divide (fun a -> let bc = fst (f a) in let (b, c) = g bc in (a, (b, \
-           c))) m (divide (fun x -> x) n o)"
-        =~ rhs )
+      ("divide f (divide g m n) o" =~ lhs)
+      ( "divide (fun a -> let bc = fst (f a) in let (b, c) = g bc in (a, (b, \
+         c))) m (divide (fun x -> x) n o)"
+      =~ rhs )
   ;;
 end

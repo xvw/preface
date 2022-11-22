@@ -14,7 +14,7 @@ module For (F : Preface_specs.FUNCTOR) : LAWS with module Functor := F = struct
     let lhs x = F.map Fun.id x
     and rhs x = x in
 
-    law ~lhs:("map id" =~ lhs) ~rhs:("id" =~ rhs)
+    law ("map id" =~ lhs) ("id" =~ rhs)
   ;;
 
   let functor_2 () =
@@ -22,6 +22,6 @@ module For (F : Preface_specs.FUNCTOR) : LAWS with module Functor := F = struct
     let lhs f g = F.map (f % g)
     and rhs f g = F.(map f % map g) in
 
-    law ~lhs:("map (f % g)" =~ lhs) ~rhs:("(map f) % (map g)" =~ rhs)
+    law ("map (f % g)" =~ lhs) ("(map f) % (map g)" =~ rhs)
   ;;
 end
