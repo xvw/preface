@@ -78,8 +78,8 @@ module For_right_absorbtion (A : Preface_specs.ALTERNATIVE) :
 
   let alternative_right_absorb_1 () =
     let lhs = A.(apply neutral)
-    and rhs = Fun.id in
+    and rhs _ = A.neutral in
 
-    law ("neutral <*> x" =~ lhs) ("x" =~ rhs)
+    law ("neutral <*> x" =~ lhs) ("neutral" =~ rhs)
   ;;
 end

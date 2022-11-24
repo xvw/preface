@@ -21,7 +21,7 @@ module For (C : Preface_specs.CLOSED) : LAWS with module Closed := C = struct
     and rhs f x = C.map_snd (fun x -> x % f) (C.closed x) in
 
     law
-      ("contrampa_fs (fun x -> x % f) % closed" =~ lhs)
+      ("contrampa_fst (fun x -> x % f) % closed" =~ lhs)
       ("map_snd (fun x -> x % f) % closed" =~ rhs)
   ;;
 

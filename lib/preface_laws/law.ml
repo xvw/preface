@@ -26,3 +26,5 @@ let pp ppf law =
 
 let law lhs rhs = make lhs rhs
 let ( =~ ) name fun_ = Side.make name fun_
+let name law = Format.asprintf "%a" pp law
+let get_sides law = (law.lhs.fun_, law.rhs.fun_)

@@ -1,4 +1,4 @@
-(** The library is divided into 4 parts (in the user area) which serve
+(** The library is divided into 5 parts (in the user area) which serve
     complementary purposes.*)
 
 (** {%html:
@@ -211,3 +211,4 @@ include Preface_stdlib
     abstraction. *)
 
 module Laws = Preface_laws
+module Qcheck = Preface_qcheck

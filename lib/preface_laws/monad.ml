@@ -19,7 +19,7 @@ module For (M : Preface_specs.MONAD) : LAWS with module Monad := M = struct
     let lhs x = (M.(join % map return) x, id x)
     and rhs x = (M.(join % return) x, id x) in
 
-    law ("join % map return = id" =~ lhs) ("join % return = id" =~ rhs)
+    law ("join % map return = id" =~ lhs) ("join % return" =~ rhs)
   ;;
 
   let monad_2 () =

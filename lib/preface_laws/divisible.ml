@@ -16,16 +16,6 @@ module type LAWS = sig
 
   val divisible_5 :
     unit -> ('a -> 'b * 'c, 'c Divisible.t -> 'a Divisible.t) Law.t
-
-  val divisible_6 :
-       unit
-    -> ( 'a -> 'b * 'a
-       ,    ('b -> 'a * 'a)
-         -> 'a Divisible.t
-         -> 'a Divisible.t
-         -> 'a Divisible.t
-         -> 'a Divisible.t )
-       Law.t
 end
 
 module For (D : Preface_specs.DIVISIBLE) : LAWS with module Divisible := D =
@@ -71,23 +61,5 @@ struct
     and rhs f m = D.contramap (snd % f) m in
 
     law ("divide f conquer m" =~ lhs) ("contramap (snd % f)" =~ rhs)
-  ;;
-
-  let divisible_6 () =
-    let lhs f g m n o = D.divide f (D.divide g m n) o
-    and rhs f g m n o =
-      let f' a =
-        let bc, _ = f a in
-        let b, c = g bc in
-        (a, (b, c))
-      in
-      D.divide f' m (D.divide (fun x -> x) n o)
-    in
-
-    law
-      ("divide f (divide g m n) o" =~ lhs)
-      ( "divide (fun a -> let bc = fst (f a) in let (b, c) = g bc in (a, (b, \
-         c))) m (divide (fun x -> x) n o)"
-      =~ rhs )
   ;;
 end
