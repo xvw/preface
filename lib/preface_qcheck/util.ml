@@ -29,6 +29,8 @@ let pp_either left right ppf = function
   | Stdlib.Either.Right x -> Format.fprintf ppf "Right %a" right x
 ;;
 
+let pp_exn ppf x = Format.fprintf ppf "%s" (Printexc.to_string_default x)
+
 let pp_result ok error ppf = function
   | Ok x -> Format.fprintf ppf "Ok %a" ok x
   | Error x -> Format.fprintf ppf "Error %a" error x
@@ -65,10 +67,12 @@ let obs_result ok error =
   QCheck2.Observable.make ~eq ~hash print
 ;;
 
+let equal_exn a b = Int.equal (Printexc.exn_slot_id a) (Printexc.exn_slot_id b)
+
 let obs_exn =
   let hash exn = Hashtbl.seeded_hash 100 exn
   and print = Printexc.to_string
-  and eq a b = Int.equal (Printexc.exn_slot_id a) (Printexc.exn_slot_id b) in
+  and eq = equal_exn in
   QCheck2.Observable.make ~eq ~hash print
 ;;
 

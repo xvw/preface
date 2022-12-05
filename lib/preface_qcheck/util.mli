@@ -15,14 +15,12 @@ val test :
 
 val gen_either :
   'a QCheck2.Gen.t -> 'b QCheck2.Gen.t -> ('a, 'b) Either.t QCheck2.Gen.t
-(** A generator that generates values of type [Either.t]. *)
 
 val gen_result :
   'a QCheck2.Gen.t -> 'b QCheck2.Gen.t -> ('a, 'b) Result.t QCheck2.Gen.t
-(** A generator that generates values of type [Result.t]. *)
 
 val gen_try : 'a QCheck2.Gen.t -> ('a, exn) Result.t QCheck2.Gen.t
-(** A generator that generates values of type [Try.t]. *)
+val gen_exn : exn QCheck2.Gen.t
 
 (** {1 Additional observers} *)
 
@@ -37,6 +35,7 @@ val obs_result :
   -> ('a, 'b) Result.t QCheck2.Observable.t
 
 val obs_try : 'a QCheck2.Observable.t -> ('a, exn) Result.t QCheck2.Observable.t
+val obs_exn : exn QCheck2.Observable.t
 
 (** {1 Pretty-printers}
 
@@ -62,6 +61,8 @@ val pp_try :
   -> ('a, exn) Result.t
   -> unit
 
+val pp_exn : Format.formatter -> exn -> unit
+
 (** {1 Equality}
 
     Additional equivalence function. *)
@@ -75,3 +76,5 @@ val equal_either :
   -> ('a, 'b) Either.t
   -> ('a, 'b) Either.t
   -> bool
+
+val equal_exn : exn -> exn -> bool

@@ -98,10 +98,15 @@ module Traversable_applicative_suite =
     (Sample.String)
     (Sample.Float)
 
+module Monoid_suite =
+  Preface.Qcheck.Monoid.Suite
+    (Req.List.Mono (Sample.Int)) (Preface.List.Monoid (Sample.Int))
+
 let cases ~count =
   Util.with_alcotest ~count
     [
-      ("List Invariant", Invariant_suite.tests)
+      ("List Monoid (biased on Int)", Monoid_suite.tests)
+    ; ("List Invariant", Invariant_suite.tests)
     ; ("List Functor", Functor_suite.tests)
     ; ("List Alt", Alt_suite.tests)
     ; ("List Apply", Apply_suite.tests)

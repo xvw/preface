@@ -1,5 +1,5 @@
 (library
-  (name preface_qcheck)
-  (public_name preface.qcheck)
-  (modules_without_implementation model preface_qcheck)
-  (libraries preface.core preface.specs preface.laws qcheck-core))
+ (name preface_qcheck)
+ (public_name preface.qcheck)
+ (modules_without_implementation model preface_qcheck)
+ (libraries preface.core preface.specs preface.laws qcheck-core))

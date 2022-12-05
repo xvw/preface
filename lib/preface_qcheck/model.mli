@@ -26,6 +26,7 @@ module type COVARIANT_0 = sig
   type t
 
   val generator : t QCheck2.Gen.t
+  val observable : t QCheck2.Observable.t
   val pp : Format.formatter -> t -> unit
   val equal : t -> t -> bool
 end

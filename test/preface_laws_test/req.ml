@@ -1,3 +1,12 @@
+module Exn = struct
+  type t = exn
+
+  let generator = Preface.Qcheck.Util.gen_exn
+  let observable = Preface.Qcheck.Util.obs_exn
+  let pp = Preface.Qcheck.Util.pp_exn
+  let equal = Preface.Qcheck.Util.equal_exn
+end
+
 module Identity = struct
   type 'a t = 'a Preface.Identity.t
 
@@ -28,6 +37,92 @@ module List = struct
   let observable x = QCheck2.Observable.list x
   let pp x = Preface.List.pp x
   let equal x = Stdlib.List.equal x
+
+  module Mono (T : Preface.Qcheck.Model.T0) = struct
+    type t = T.t list
+
+    let generator = generator T.generator
+    let observable = observable T.observable
+    let pp = pp T.pp
+    let equal = equal T.equal
+  end
+end
+
+module Seq = struct
+  type 'a t = 'a Stdlib.Seq.t
+
+  let generator x =
+    let open QCheck2.Gen in
+    let+ xs = list_size (int_bound 4) x in
+    Stdlib.List.to_seq xs
+  ;;
+
+  let observable subobs =
+    let eq = Preface.Seq.equal (QCheck2.Observable.equal subobs) in
+    let print =
+      Format.asprintf "%a"
+        (Preface.Seq.pp (Util.pp_of_print @@ QCheck2.Observable.print subobs))
+    in
+    let hash x =
+      Stdlib.Seq.fold_left
+        (fun acc x -> Hashtbl.seeded_hash acc (QCheck2.Observable.hash subobs x))
+        0x42 x
+    in
+    QCheck2.Observable.make ~eq ~hash print
+  ;;
+
+  let pp x = Preface.Seq.pp x
+  let equal x = Preface.Seq.equal x
+
+  module Mono (T : Preface.Qcheck.Model.T0) = struct
+    type t = T.t Stdlib.Seq.t
+
+    let generator = generator T.generator
+    let observable = observable T.observable
+    let pp = pp T.pp
+    let equal = equal T.equal
+  end
+end
+
+module Nonempty_list = struct
+  type 'a t = 'a Preface.Nonempty_list.t
+
+  let generator x =
+    let open QCheck2.Gen in
+    let* xs = list_size (int_bound 4) x in
+    let+ x = x in
+    Stdlib.List.fold_left
+      Preface.Nonempty_list.(fun acc x -> x :: acc)
+      (Preface.Nonempty_list.create x)
+      xs
+  ;;
+
+  let observable subobs =
+    let eq = Preface.Nonempty_list.equal (QCheck2.Observable.equal subobs) in
+    let print =
+      Format.asprintf "%a"
+        (Preface.Nonempty_list.pp
+           (Util.pp_of_print @@ QCheck2.Observable.print subobs) )
+    in
+    let hash x =
+      Preface.Nonempty_list.fold_left
+        (fun acc x -> Hashtbl.seeded_hash acc (QCheck2.Observable.hash subobs x))
+        0x42 x
+    in
+    QCheck2.Observable.make ~eq ~hash print
+  ;;
+
+  let pp x = Preface.Nonempty_list.pp x
+  let equal x = Preface.Nonempty_list.equal x
+
+  module Mono (T : Preface.Qcheck.Model.T0) = struct
+    type t = T.t Preface.Nonempty_list.t
+
+    let generator = generator T.generator
+    let observable = observable T.observable
+    let pp = pp T.pp
+    let equal = equal T.equal
+  end
 end
 
 module Option = struct
@@ -39,13 +134,44 @@ module Option = struct
   let equal x = Stdlib.Option.equal x
 end
 
-module Try = struct
-  type 'a t = 'a Preface.Try.t
+module Stream = struct
+  type 'a t = 'a Preface.Stream.t
 
-  let generator x = Preface.Qcheck.Util.gen_try x
-  let observable x = Preface.Qcheck.Util.obs_try x
-  let pp x = Preface.Try.pp x
-  let equal x = Preface.Try.equal x
+  let fuel = 7
+
+  let generator x =
+    let open QCheck2.Gen in
+    let rec f x () =
+      let v = generate1 x in
+      Preface.Stream.(stream v (lazy (f x ())))
+    in
+    pure (f x ())
+  ;;
+
+  let equal f a b =
+    let l = Preface.Stream.take fuel a
+    and r = Preface.Stream.take fuel b in
+    Preface.Try.equal (List.equal f) l r
+  ;;
+
+  let pp f ppf x =
+    Format.fprintf ppf "%a"
+      (Preface.Try.pp (Preface.List.pp f))
+      (Preface.Stream.take fuel x)
+  ;;
+
+  let observable subobs =
+    let open QCheck2 in
+    let print =
+      Format.asprintf "%a" (pp (Util.pp_of_print @@ Observable.print subobs))
+    and eq = equal (Observable.equal subobs)
+    and hash x =
+      let r = Preface.Stream.take fuel x in
+      let e = Preface.Qcheck.Util.obs_try (Observable.list subobs) in
+      Observable.hash e r
+    in
+    Observable.make ~hash ~eq print
+  ;;
 end
 
 module Equivalence = struct
@@ -79,6 +205,83 @@ module Pair = struct
   let equal f s = Preface.Pair.equal f s
 end
 
+module Either = struct
+  type ('a, 'b) t = ('a, 'b) Preface.Either.t
+
+  let generator l r = Preface.Qcheck.Util.gen_either l r
+  let observable l r = Preface.Qcheck.Util.obs_either l r
+  let pp l r = Preface.Qcheck.Util.pp_either l r
+  let equal l r = Preface.Qcheck.Util.equal_either l r
+
+  module Mono (T : Preface.Qcheck.Model.T0) = struct
+    type 'a t = (T.t, 'a) Preface.Either.t
+
+    let generator r = generator T.generator r
+    let observable r = observable T.observable r
+    let pp r = pp T.pp r
+    let equal r = equal T.equal r
+  end
+end
+
+module Validation = struct
+  type ('a, 'b) t = ('a, 'b) Preface.Validation.t
+
+  let pp = Preface.Validation.pp
+  let equal = Preface.Validation.equal
+
+  let generator a b =
+    let open QCheck2.Gen in
+    frequency
+      [
+        (7, a >|= Preface.Validation.valid)
+      ; (3, b >|= Preface.Validation.invalid)
+      ]
+  ;;
+
+  let observable a b =
+    let open QCheck2.Observable in
+    let hash = function
+      | Preface.Validation.Valid x -> Hashtbl.seeded_hash 42 (hash a x)
+      | Preface.Validation.Invalid x -> Hashtbl.seeded_hash 43 (hash b x)
+    and print =
+      Format.asprintf "%a"
+        (pp (Util.pp_of_print (print a)) (Util.pp_of_print (print b)))
+    and eq = Preface.Validation.equal (equal a) (equal b) in
+    make ~eq ~hash print
+  ;;
+
+  module Mono (T : Preface.Qcheck.Model.T0) = struct
+    type 'a t = ('a, T.t) Preface.Validation.t
+
+    let pp r = pp r T.pp
+    let equal r = equal r T.equal
+    let generator r = generator r T.generator
+    let observable r = observable r T.observable
+  end
+end
+
+module Validate = Validation.Mono (Nonempty_list.Mono (Exn))
+
+module Result = struct
+  type ('a, 'b) t = ('a, 'b) Preface.Result.t
+
+  let generator l r = Preface.Qcheck.Util.gen_result l r
+  let observable l r = Preface.Qcheck.Util.obs_result l r
+  let pp l r = Preface.Qcheck.Util.pp_result l r
+  let equal l r = Stdlib.Result.equal ~ok:l ~error:r
+
+  module Mono (T : Preface.Qcheck.Model.T0) = struct
+    type 'a t = ('a, T.t) Preface.Result.t
+
+    let generator r = generator r T.generator
+    let observable r = observable r T.observable
+    let pp r = pp r T.pp
+    let equal r = equal r T.equal
+  end
+end
+
+module Try = Result.Mono (Exn)
+
 module Fun = struct
   type ('a, 'b) t = ('a, 'b) Preface.Fun.t
   type ('a, 'b) generator = ('a -> 'b) QCheck2.fun_
@@ -93,6 +296,39 @@ module Fun = struct
   let run f x = f x
   let run_functional_output f x = f x
   let map_input f x = f x
+end
+
+module Continuation = struct
+  type 'a t = 'a Preface.Continuation.t
+
+  let pp f ppf x =
+    Format.fprintf ppf "<continuation -> %a>" f
+      (x.Preface.Continuation.run (fun x -> x))
+  ;;
+
+  let equal f x y =
+    let a = x.Preface.Continuation.run (fun x -> x)
+    and b = y.Preface.Continuation.run (fun x -> x) in
+    f a b
+  ;;
+
+  let generator x =
+    let open QCheck2.Gen in
+    let+ x = x in
+    Preface.Continuation.pure x
+  ;;
+
+  let observable obs =
+    let cont_equal = equal in
+    let open QCheck2.Observable in
+    let print = Format.asprintf "%a" (pp (Util.pp_of_print (print obs))) in
+    let hash x =
+      let a = x.Preface.Continuation.run (fun x -> x) in
+      hash obs a
+    in
+    let eq = cont_equal (equal obs) in
+    make ~eq ~hash print
+  ;;
 end
 
 module Mini_yocaml = struct
@@ -180,9 +416,9 @@ module Mini_yocaml = struct
           ; f =
               (function
               | Stdlib.Either.Left x ->
-                Preface.Identity.Functor.map Either.left (f x)
-              | Right x -> Preface.Identity.Monad.(map Either.right (return x))
-              )
+                Preface.Identity.Functor.map Stdlib.Either.left (f x)
+              | Right x ->
+                Preface.Identity.Monad.(map Stdlib.Either.right (return x)) )
           }
         ;;
       end)
