@@ -51,6 +51,12 @@ module Arrow_plus = Arrow_plus
 module Arrow_choice = Arrow_choice
 module Arrow_apply = Arrow_apply
 
+(** {1 Transformers} *)
+
+(** {2 Monad Transformers} *)
+
+module Writer = Writer
+
 (** {1 Model and utils} *)
 
 module Model = Model

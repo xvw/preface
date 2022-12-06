@@ -17,7 +17,8 @@ let run count =
     @ Fun.cases ~count
     @ Predicate.cases ~count
     @ Equivalence.cases ~count
-    @ Continuation.cases ~count )
+    @ Continuation.cases ~count
+    @ Writer.cases ~count )
 ;;
 
 let () = run 250
