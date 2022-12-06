@@ -1,3 +1,11 @@
+module Invariant_suite =
+  Preface.Qcheck.Invariant.Suite_contravariant
+    (Req.Predicate)
+    (Preface.Predicate.Invariant)
+    (Sample.Int)
+    (Sample.String)
+    (Sample.Float)
+
 module Contravariant_suite =
   Preface.Qcheck.Contravariant.Suite
     (Req.Predicate)
@@ -21,7 +29,8 @@ module Decidable_suite =
 let cases ~count =
   Util.with_alcotest ~count
     [
-      ("Predicate Contravariant", Contravariant_suite.tests)
+      ("Predicate Invariant", Invariant_suite.tests)
+    ; ("Predicate Contravariant", Contravariant_suite.tests)
     ; ("Predicate Divisible", Divisible_suite.tests)
     ; ("Predicate Decidable", Decidable_suite.tests)
     ]

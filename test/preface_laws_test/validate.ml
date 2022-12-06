@@ -10,6 +10,11 @@ module Functor_suite =
     (Sample.String)
     (Sample.Float)
 
+module Alt_suite =
+  Preface.Qcheck.Alt.Suite (Req.Validate) (Preface.Validate.Alt) (Sample.Int)
+    (Sample.String)
+    (Sample.Float)
+
 module Apply_suite =
   Preface.Qcheck.Apply.Suite (Req.Validate) (Preface.Validate.Applicative)
     (Sample.Int)
@@ -71,6 +76,7 @@ let cases ~count =
     [
       ("Validate Invariant", Invariant_suite.tests)
     ; ("Validate Functor", Functor_suite.tests)
+    ; ("Validate Alt", Alt_suite.tests)
     ; ("Validate Apply", Apply_suite.tests)
     ; ("Validate Applicative", Applicative_suite.tests)
     ; ("Validate Selective", Selective_suite.tests)

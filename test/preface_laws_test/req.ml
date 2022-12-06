@@ -7,6 +7,48 @@ module Exn = struct
   let equal = Preface.Qcheck.Util.equal_exn
 end
 
+module Over
+    (M : Preface.Specs.MONOID)
+    (T : Preface.Qcheck.Model.T0 with type t = M.t) =
+struct
+  include Preface.Approximation.Over (M)
+
+  module Req = struct
+    type nonrec 'a t = 'a t
+
+    let pp _ ppf (Over x) = Format.fprintf ppf "Over %a" T.pp x
+    let equal _ (Over a) (Over b) = T.equal a b
+    let generator a = QCheck2.Gen.map Applicative.pure a
+
+    let observable _ =
+      let print (Over x) = Format.asprintf "Over %a" T.pp x in
+      let eq (Over x) (Over y) = T.equal x y in
+      QCheck2.Observable.make ~eq print
+    ;;
+  end
+end
+
+module Under
+    (M : Preface.Specs.MONOID)
+    (T : Preface.Qcheck.Model.T0 with type t = M.t) =
+struct
+  include Preface.Approximation.Under (M)
+
+  module Req = struct
+    type nonrec 'a t = 'a t
+
+    let pp _ ppf (Under x) = Format.fprintf ppf "Under %a" T.pp x
+    let equal _ (Under a) (Under b) = T.equal a b
+    let generator a = QCheck2.Gen.map Applicative.pure a
+
+    let observable _ =
+      let print (Under x) = Format.asprintf "Under %a" T.pp x in
+      let eq (Under x) (Under y) = T.equal x y in
+      QCheck2.Observable.make ~eq print
+    ;;
+  end
+end
+
 module Identity = struct
   type 'a t = 'a Preface.Identity.t
 

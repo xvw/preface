@@ -1,6 +1,7 @@
 let run count =
   Alcotest.run "Preface Laws"
     ( Misc.cases ~count
+    @ Approximation.cases ~count
     @ Identity.cases ~count
     @ Option.cases ~count
     @ Either.cases ~count

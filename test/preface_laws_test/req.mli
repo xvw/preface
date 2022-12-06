@@ -12,6 +12,20 @@ module Exn : Preface.Qcheck.Model.COVARIANT_0 with type t = Preface.Exn.t
 module Identity :
   Preface.Qcheck.Model.COVARIANT_1 with type 'a t = 'a Preface.Identity.t
 
+module Over
+    (M : Preface.Specs.MONOID)
+    (T : Preface.Qcheck.Model.T0 with type t = M.t) : sig
+  include module type of Preface.Approximation.Over (M)
+  module Req : Preface.Qcheck.Model.COVARIANT_1 with type 'a t = 'a t
+end
+
+module Under
+    (M : Preface.Specs.MONOID)
+    (T : Preface.Qcheck.Model.T0 with type t = M.t) : sig
+  include module type of Preface.Approximation.Under (M)
+  module Req : Preface.Qcheck.Model.COVARIANT_1 with type 'a t = 'a t
+end
+
 module List : sig
   include Preface.Qcheck.Model.COVARIANT_1 with type 'a t = 'a list
 

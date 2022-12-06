@@ -1,3 +1,11 @@
+module Invariant_suite =
+  Preface.Qcheck.Invariant.Suite_contravariant
+    (Req.Equivalence)
+    (Preface.Equivalence.Invariant)
+    (Sample.Int)
+    (Sample.String)
+    (Sample.Float)
+
 module Contravariant_suite =
   Preface.Qcheck.Contravariant.Suite
     (Req.Equivalence)
@@ -25,7 +33,8 @@ module Decidable_suite =
 let cases ~count =
   Util.with_alcotest ~count
     [
-      ("Equivalence Contravariant", Contravariant_suite.tests)
+      ("Equivalence Invariant", Invariant_suite.tests)
+    ; ("Equivalence Contravariant", Contravariant_suite.tests)
     ; ("Equivalence Divisible", Divisible_suite.tests)
     ; ("Equivalence Decidable", Decidable_suite.tests)
     ]

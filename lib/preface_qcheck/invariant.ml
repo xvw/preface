@@ -42,3 +42,47 @@ struct
 
   let tests ~count = [ invariant_1 count; invariant_2 count ]
 end
+
+module Suite_contravariant
+    (R : Model.CONTRAVARIANT_1)
+    (I : Preface_specs.INVARIANT with type 'a t = 'a R.t)
+    (A : Model.T0)
+    (B : Model.T0)
+    (C : Model.T0) =
+struct
+  module Laws = Preface_laws.Invariant.For (I)
+
+  let invariant_1 count =
+    let generator = R.generator A.observable
+    and input = R.input A.generator in
+    Util.test ~count (Gen.tup2 generator input) Laws.invariant_1
+      (fun lhs rhs (c, x) ->
+        let c = R.lift c in
+        let left = lhs c
+        and right = rhs c in
+        R.run_equality x left right )
+  ;;
+
+  let invariant_2 count =
+    let generator =
+      Gen.tup5
+        (fun1 A.observable B.generator)
+        (fun1 B.observable A.generator)
+        (fun1 C.observable A.generator)
+        (fun1 A.observable C.generator)
+        (R.generator C.observable)
+    and input = R.input B.generator in
+    Util.test ~count (Gen.tup2 generator input) Laws.invariant_2
+      (fun lhs rhs ((f, g, h, i, c), x) ->
+        let f = Fn.apply f
+        and g = Fn.apply g
+        and h = Fn.apply h
+        and i = Fn.apply i
+        and c = R.lift c in
+        let left = lhs f g h i c
+        and right = rhs f g h i c in
+        R.run_equality x left right )
+  ;;
+
+  let tests ~count = [ invariant_1 count; invariant_2 count ]
+end
