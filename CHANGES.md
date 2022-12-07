@@ -1,5 +1,7 @@
 ## dev (unreleased)
 
+- Add `Equivalence` in `Preface.Stdlib` [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
+- Add `Preface.Laws` and `Preface.Qcheck` to allow external users to build their own test suites for implementations outside Preface [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
 - **Breaking change** change minimal version of OCaml to `>= 4.12.0` [**@gr-im**](https://github.com/gr-im)
 - Exposition of `Apply` and `Make` in `Preface.Make ` [**@gr-im**](https://github.com/gr-im)
 
@@ -7,7 +9,7 @@
 
 - Add selective to Either, Options, Result and Try [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add specialized interpreters/handlers for `Free` and `Freer` monads [**@xhtmlboi**](https://github.com/xhtmlboi)
-- Add right-associative operators for `Contravariant`, `Divisible` and `Decidable`  [**@xhtmlboi**](https://github.com/xhtmlboi)
+- Add right-associative operators for `Contravariant`, `Divisible` and `Decidable` [**@xhtmlboi**](https://github.com/xhtmlboi)
 - Add `Bind` [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add `Apply` [**@d-plaindoux**](https://github.com/d-plaindoux)
 - Add `('a, 'b) handle` to simplify handlers for `Freer_monad` [**@xvw**](https://github.com/xvw)

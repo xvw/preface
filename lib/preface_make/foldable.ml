@@ -19,7 +19,10 @@ end
 module Operation (C : Preface_specs.Foldable.CORE) = struct
   type 'a t = 'a C.t
 
-  let fold_map (type m) (module M : Preface_specs.Monoid.CORE with type t = m) f
+  let fold_map
+      (type m)
+      (module M : Preface_specs.Monoid.CORE with type t = m)
+      f
       x =
     C.fold_map' M.neutral M.combine f x
   ;;

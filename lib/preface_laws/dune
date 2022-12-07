@@ -1,0 +1,5 @@
+(library
+ (name preface_laws)
+ (public_name preface.laws)
+ (modules_without_implementation preface_laws)
+ (libraries preface.core preface.specs preface.make))

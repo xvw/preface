@@ -30,6 +30,7 @@ module Validate = Validate
 
 module Fun = Fun
 module Predicate = Predicate
+module Equivalence = Equivalence
 module Continuation = Continuation
 
 (** {2 Transformers over identity}
