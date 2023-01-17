@@ -71,4 +71,6 @@ graph {
         Arrow_alt -- Arrow_plus [style=dotted; arrowhead=none];
         Monoid -- Arrow_plus [style=dotted; arrowhead=none];
         Semigroup -- Arrow_alt [style=dotted; arrowhead=none];
+
+        Meet_semilattice -- Semigroup [style=dotted; arrowhead=none; constraint=false];
 }
