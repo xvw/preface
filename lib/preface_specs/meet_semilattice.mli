@@ -31,7 +31,7 @@ module type INFIX = sig
   type t
   (** The type held by the [Meet_semilattice]. *)
 
-  val ( ^ ) : t -> t -> t
+  val ( && ) : t -> t -> t
   (** Infix version of [meet]. *)
 end
 

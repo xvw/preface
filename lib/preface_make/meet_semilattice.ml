@@ -3,7 +3,7 @@ module Core (Req : Preface_specs.Meet_semilattice.WITH_MEET) = Req
 module Infix (Core : Preface_specs.Meet_semilattice.CORE) = struct
   type t = Core.t
 
-  let ( ^ ) = Core.meet
+  let ( && ) = Core.meet
 end
 
 module Via
