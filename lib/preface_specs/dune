@@ -45,5 +45,6 @@
   store
   env
   traced
-  semigroupoid)
+  semigroupoid
+  meet_semilattice)
  (libraries preface_core))

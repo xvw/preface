@@ -1,5 +1,6 @@
 ## dev (unreleased)
 
+- Add `Meet_semilattice` [**@xvw**](https://github.com/xvw) and [**@hakimba**](https://github.com/hakimba)
 - Add `Equivalence` in `Preface.Stdlib` [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
 - Add `Preface.Laws` and `Preface.Qcheck` to allow external users to build their own test suites for implementations outside Preface [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
 - **Breaking change** change minimal version of OCaml to `>= 4.12.0` [**@gr-im**](https://github.com/gr-im)

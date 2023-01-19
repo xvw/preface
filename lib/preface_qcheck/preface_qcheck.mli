@@ -7,6 +7,10 @@
 module Semigroup = Semigroup
 module Monoid = Monoid
 
+(** {1 Lattice hierarchy} *)
+
+module Meet_semilattice = Meet_semilattice
+
 (** {1 Functor hierarchy} *)
 
 module Invariant = Invariant

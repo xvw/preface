@@ -39,13 +39,13 @@ abstractions are more complex, others less so).
 And in general, the overall shape of the module looks like this:
 
 ```ocaml non-deterministic=command
-module S = struct 
+module S = struct
   include Core
   include Operation with type t := t
-  module Infix with type t := t
-  module Syntax with type t := t
-  include Infix
-  include Syntax
+  module Infix with type t = t
+  module Syntax with type t = t
+  include Infix : (module type of Infix with type t := t)
+  include Syntax : (module type of Syntax with type t := t)
 end
 ```
 
@@ -57,7 +57,6 @@ that builds the `Core` because from `Core`, it is possible to build
 everything else. The `Operation` functor usually takes `Core` as an
 argument, with `Infix` and `Syntax` taking `Core` and `Operation`.)
 produce the whole API.
-
 
 ## Provide a Monad module for Option using the Happy Path
 
@@ -80,13 +79,13 @@ that is fairly well understood. So far so good, let's implement a
 monad on option via the `bind` function!
 
 ```ocaml
-module Opt_monad = Preface.Make.Monad.Via_return_and_bind (struct 
-  type 'a t = 'a option 
-  
+module Opt_monad = Preface.Make.Monad.Via_return_and_bind (struct
+  type 'a t = 'a option
+
   let return x = Some x
-  
-  let bind f = function 
-    | Some x -> f x 
+
+  let bind f = function
+    | Some x -> f x
     | None -> None
 end)
 ```
@@ -95,8 +94,8 @@ And ... that's it. We can try to use our newly created monad!
 
 ```ocaml
 # let result = let open Opt_monad in
-     return 10       >>= fun x -> 
-     return (x + 15) >>= fun y -> 
+     return 10       >>= fun x ->
+     return (x + 15) >>= fun y ->
      return (y + 30) ;;
 val result : int option = Some 55
 ```
@@ -104,9 +103,9 @@ val result : int option = Some 55
 Or we can use the `let operator` for an even better result!
 
 ```ocaml
-# let result = let open Opt_monad in 
-    let* x = return 10 in 
-    let* y = return (x + 15) in 
+# let result = let open Opt_monad in
+    let* x = return 10 in
+    let* y = return (x + 15) in
     return (y + 30) ;;
 val result : int option = Some 55
 ```
@@ -118,17 +117,17 @@ could also describe a complete interface using `map` and `join` (which
 is conceptually closer to the categorical definition of a monad):
 
 ```ocaml
-module Opt_monad_2 = Preface.Make.Monad.Via_return_map_and_join (struct 
-  type 'a t = 'a option 
-  
+module Opt_monad_2 = Preface.Make.Monad.Via_return_map_and_join (struct
+  type 'a t = 'a option
+
   let return x = Some x
-  
-  let map f = function 
+
+  let map f = function
     | Some x -> Some (f x)
     | None -> None
-    
-  let join = function 
-    | Some x -> x 
+
+  let join = function
+    | Some x -> x
     | None -> None
 end)
 ```
@@ -137,8 +136,8 @@ And we can retest the code we wrote earlier, but with our new module:
 
 ```ocaml
 # let result = let open Opt_monad_2 in
-     return 10       >>= fun x -> 
-     return (x + 15) >>= fun y -> 
+     return 10       >>= fun x ->
+     return (x + 15) >>= fun y ->
      return (y + 30) ;;
 val result : int option = Some 55
 ```
@@ -148,10 +147,10 @@ val result : int option = Some 55
 Although the Happy Path is generally sufficient, sometimes the derived
 definitions (mainly for `Core` and `Operation`, as the operators and
 syntax are generally just function calls from the previous two
-modules) are not efficient enough (the cost of Abstraction!).  In the
-Haskell documentation, one can often read "*The default definition is
+modules) are not efficient enough (the cost of Abstraction!). In the
+Haskell documentation, one can often read "_The default definition is
 ``a definition`, but this may be overridden with a more efficient
-version.*" 
+version._"
 
 > It is partly for this reason that it was decided to divide the
 > Preface modules in this way. Typically, we thought, no worries if a
@@ -160,9 +159,9 @@ version.*"
 > artificial example):
 
 ```ocaml non-deterministic=command
-module My_monad_with_extra_efficient_map = struct 
-  include Preface.Make.Monad.Via_bind (struct 
-     type 'a t = 'a option 
+module My_monad_with_extra_efficient_map = struct
+  include Preface.Make.Monad.Via_bind (struct
+     type 'a t = 'a option
      let bind f = function None -> None | Some x -> f x
   end)
   let map f x = Super_powerful_module.efficient_option_map f x
@@ -185,19 +184,19 @@ implement it with bind but provide a very fast implementation of
 
 ```ocaml
 module Opt_core = struct
-  include Preface.Make.Monad.Core_via_return_and_bind (struct 
-    type 'a t = 'a option 
+  include Preface.Make.Monad.Core_via_return_and_bind (struct
+    type 'a t = 'a option
     let return x = Some x
     let bind f = function Some x -> f x | None -> None
   end)
   (** And now, I can give my magical-map-implementation *)
-  
-  let map f x = 
+
+  let map f x =
     (* Damn, why!!! Don't worry, it is only as a Proof
        that it was this map which is used. *)
-    let () = print_endline "Yeah, Im a Magic Map" in 
+    let () = print_endline "Yeah, Im a Magic Map" in
     match x with Some y -> Some (f y) | None -> None
-    
+
 end
 ```
 
@@ -215,8 +214,8 @@ Now that we have all our modules, let's group them together using the
 functor](https://ocaml-preface.github.io/preface/Preface_make/Monad/Via/index.html)!
 
 ```ocaml
-module Opt_with_magic_map = 
-   Preface.Make.Monad.Via 
+module Opt_with_magic_map =
+   Preface.Make.Monad.Via
        (Opt_core) (Opt_op) (Opt_infx) (Opt_syn)
 ```
 
@@ -247,7 +246,7 @@ And voila!
 Even if very often the Happy Path is largely sufficient, in more
 advanced cases it is possible not to rely on the automatic function
 derivation. On the other hand, as there are functors for each fragment
-of a module, it is possible to use them "*à la carte*" so that in the
+of a module, it is possible to use them "_à la carte_" so that in the
 case where only one function needs to be reimplemented... everything
 has to be written by hand! I hope this guide has helped you to
 understand how to use Preface and to be able to justify certain design

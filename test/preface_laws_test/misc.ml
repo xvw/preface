@@ -12,8 +12,67 @@ module Prod = Preface.Make.Monoid.Via_combine_and_neutral (struct
   let combine = Int.mul
 end)
 
+module Ord = struct
+  type t =
+    | Lt
+    | Eq
+    | Gt
+
+  let pp ppf = function
+    | Lt -> Format.fprintf ppf "Lt"
+    | Eq -> Format.fprintf ppf "Eq"
+    | Gt -> Format.fprintf ppf "Gt"
+  ;;
+
+  let equal a b =
+    match (a, b) with
+    | Eq, Eq -> true
+    | Lt, Lt -> true
+    | Gt, Gt -> true
+    | _ -> false
+  ;;
+
+  let generator =
+    let open QCheck2.Gen in
+    frequency [ (3, pure Lt); (3, pure Eq); (3, pure Gt) ]
+  ;;
+
+  let observable =
+    let hash = function
+      | Lt -> Hashtbl.seeded_hash 1 Lt
+      | Eq -> Hashtbl.seeded_hash 2 Eq
+      | Gt -> Hashtbl.seeded_hash 3 Gt
+    and print = Format.asprintf "%a" pp
+    and eq = equal in
+    QCheck2.Observable.make ~hash ~eq print
+  ;;
+
+  module Meet_semilattice = Preface.Make.Meet_semilattice.Via_meet (struct
+    type nonrec t = t
+
+    let meet x y =
+      match (x, y) with
+      | Lt, _ | _, Lt -> Lt
+      | Gt, x | x, Gt -> x
+      | Eq, Eq -> Eq
+    ;;
+  end)
+end
+
+module Bool_meet_semilattice = Preface.Make.Meet_semilattice.Via_meet (struct
+  type t = bool
+
+  let meet x y = x && y
+end)
+
 module Sum_monoid_suite = Preface.Qcheck.Monoid.Suite (Sample.Int) (Sum)
 module Prod_monoid_suite = Preface.Qcheck.Monoid.Suite (Sample.Int) (Prod)
+
+module Bool_meet_semilattice_suite =
+  Preface.Qcheck.Meet_semilattice.Suite (Sample.Bool) (Bool_meet_semilattice)
+
+module Ordering_meet_semilattice_suite =
+  Preface.Qcheck.Meet_semilattice.Suite (Ord) (Ord.Meet_semilattice)
 
 module YOCaml_profunctor =
   Preface.Qcheck.Profunctor.Suite
@@ -81,6 +140,8 @@ let cases ~count =
     [
       ("Sum monoid", Sum_monoid_suite.tests)
     ; ("Prod Monoid", Sum_monoid_suite.tests)
+    ; ("Bool Meet_semilattice", Bool_meet_semilattice_suite.tests)
+    ; ("Ord Meet_semilattice", Ordering_meet_semilattice_suite.tests)
     ; ("YOCaml Profunctor", YOCaml_profunctor.tests)
     ; ("YOCaml Strong", YOCaml_strong.tests)
     ; ("YOCaml Choice", YOCaml_choice.tests)
