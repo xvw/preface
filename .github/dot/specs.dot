@@ -74,4 +74,5 @@ graph {
 
         Meet_semilattice -- Semigroup [style=dotted; arrowhead=none; constraint=false];
         Join_semilattice -- Semigroup [style=dotted; arrowhead=none; constraint=false];
+        Join_semilattice -- Meet_semilattice [style=dotted; arrowhead=none; constraint=false];
 }
