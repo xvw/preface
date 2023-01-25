@@ -11,7 +11,7 @@ module Via_meet_and_top
     (Req : Preface_specs.Bounded_meet_semilattice.WITH_MEET_AND_TOP) :
   Preface_specs.BOUNDED_MEET_SEMILATTICE with type t = Req.t
 
-(** {1 Over Meet_semilattice functor}
+(** {1 Over Meet_semilattice}
 
     Produces a {!module-type:Preface_specs.BOUNDED_MEET_SEMILATTICE} from a
     {!module-type:Preface_specs.MEET_SEMILATTICE}. *)
