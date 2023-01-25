@@ -48,4 +48,5 @@
   semigroupoid
   meet_semilattice
   bounded_meet_semilattice)
+  join_semilattice)
  (libraries preface_core))
