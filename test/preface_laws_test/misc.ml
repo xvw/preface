@@ -82,6 +82,7 @@ Preface.Make.Bounded_meet_semilattice.Via_meet_and_top (struct
 
   let top = false
   let meet x y = x && y
+end)
 
 module Bool_join_semilattice = Preface.Make.Join_semilattice.Via_join (struct
   type t = bool
