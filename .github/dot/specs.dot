@@ -73,6 +73,7 @@ graph {
         Semigroup -- Arrow_alt [style=dotted; arrowhead=none];
 
         Meet_semilattice -- Semigroup [style=dotted; arrowhead=none; constraint=false];
+        Meet_semilattice -- Bounded_meet_semilattice;
         Join_semilattice -- Semigroup [style=dotted; arrowhead=none; constraint=false];
         Join_semilattice -- Meet_semilattice [style=dotted; arrowhead=none; constraint=false];
 }
