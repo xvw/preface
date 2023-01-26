@@ -1,24 +1,23 @@
 module type LAWS = sig
-  module Divisible : Preface_specs.DIVISIBLE
-  include Contravariant.LAWS with module Contravariant := Divisible
+  type 'a t
 
-  val divisible_1 : unit -> ('a Divisible.t, 'a Divisible.t) Law.t
-  val divisible_2 : unit -> ('a Divisible.t, 'a Divisible.t) Law.t
+  val divisible_1 : unit -> ('a t, 'a t) Law.t
+  val divisible_2 : unit -> ('a t, 'a t) Law.t
 
   val divisible_3 :
        unit
-    -> ( 'a Divisible.t
-       , 'a Divisible.t -> 'a Divisible.t -> 'a Divisible.t )
+    -> ( 'a t
+       , 'a t -> 'a t -> 'a t )
        Law.t
 
   val divisible_4 :
-    unit -> ('a -> 'b * 'c, 'b Divisible.t -> 'a Divisible.t) Law.t
+    unit -> ('a -> 'b * 'c, 'b t -> 'a t) Law.t
 
   val divisible_5 :
-    unit -> ('a -> 'b * 'c, 'c Divisible.t -> 'a Divisible.t) Law.t
+    unit -> ('a -> 'b * 'c, 'c t -> 'a t) Law.t
 end
 
-module For (D : Preface_specs.DIVISIBLE) : LAWS with module Divisible := D =
+module For (D : Preface_specs.DIVISIBLE) : LAWS with type 'a t := 'a D.t =
 struct
   open Law
   open Preface_core.Fun.Infix

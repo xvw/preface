@@ -1,15 +1,15 @@
 module type LAWS = sig
-  module Contravariant : Preface_specs.CONTRAVARIANT
+  type 'a t
 
-  val contravariant_1 : unit -> ('a Contravariant.t, 'a Contravariant.t) Law.t
+  val contravariant_1 : unit -> ('a t, 'a t) Law.t
 
   val contravariant_2 :
        unit
-    -> ('a -> 'b, ('b -> 'c) -> 'c Contravariant.t -> 'a Contravariant.t) Law.t
+    -> ('a -> 'b, ('b -> 'c) -> 'c t -> 'a t) Law.t
 end
 
 module For (C : Preface_specs.CONTRAVARIANT) :
-  LAWS with module Contravariant := C = struct
+  LAWS with type 'a t := 'a C.t = struct
   open Law
 
   let contravariant_1 () =
