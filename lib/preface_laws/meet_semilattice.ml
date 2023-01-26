@@ -1,21 +1,21 @@
 module type LAWS = sig
-  module Meet_semilattice : Preface_specs.MEET_SEMILATTICE
+  type t
 
   val meet_semilattice_1 :
        unit
-    -> ( Meet_semilattice.t
-       , Meet_semilattice.t -> Meet_semilattice.t -> Meet_semilattice.t )
+    -> ( t
+       , t -> t -> t )
        Law.t
 
   val meet_semilattice_2 :
-    unit -> (Meet_semilattice.t, Meet_semilattice.t -> Meet_semilattice.t) Law.t
+    unit -> (t, t -> t) Law.t
 
   val meet_semilattice_3 :
-    unit -> (Meet_semilattice.t, Meet_semilattice.t) Law.t
+    unit -> (t, t) Law.t
 end
 
 module For (L : Preface_specs.MEET_SEMILATTICE) :
-  LAWS with module Meet_semilattice := L = struct
+  LAWS with type t := L.t = struct
   open Law
 
   let meet_semilattice_1 () =
