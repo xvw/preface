@@ -1,27 +1,18 @@
 module type LAWS = sig
-  module Strong : Preface_specs.STRONG
-  include Profunctor.LAWS with module Profunctor := Strong
+  type ('a, 'b) t
 
-  val strong_1 : unit -> (('a, 'b) Strong.t, ('a * 'c, 'b * 'c) Strong.t) Law.t
-  val strong_2 : unit -> (('a, 'b) Strong.t, ('a * 'c, 'b) Strong.t) Law.t
-
-  val strong_3 :
-    unit -> ('a -> 'b, ('c, 'd) Strong.t -> ('c * 'a, 'd * 'b) Strong.t) Law.t
-
-  val strong_4 :
-    unit -> (('a, 'b) Strong.t, (('a * 'c) * 'd, ('b * 'c) * 'd) Strong.t) Law.t
-
-  val strong_5 : unit -> (('a, 'b) Strong.t, ('c * 'a, 'c * 'b) Strong.t) Law.t
-  val strong_6 : unit -> (('a, 'b) Strong.t, ('c * 'a, 'b) Strong.t) Law.t
-
-  val strong_7 :
-    unit -> ('a -> 'b, ('c, 'd) Strong.t -> ('a * 'c, 'b * 'd) Strong.t) Law.t
-
-  val strong_8 :
-    unit -> (('a, 'b) Strong.t, ('c * ('d * 'a), 'c * ('d * 'b)) Strong.t) Law.t
+  val strong_1 : unit -> (('a, 'b) t, ('a * 'c, 'b * 'c) t) Law.t
+  val strong_2 : unit -> (('a, 'b) t, ('a * 'c, 'b) t) Law.t
+  val strong_3 : unit -> ('a -> 'b, ('c, 'd) t -> ('c * 'a, 'd * 'b) t) Law.t
+  val strong_4 : unit -> (('a, 'b) t, (('a * 'c) * 'd, ('b * 'c) * 'd) t) Law.t
+  val strong_5 : unit -> (('a, 'b) t, ('c * 'a, 'c * 'b) t) Law.t
+  val strong_6 : unit -> (('a, 'b) t, ('c * 'a, 'b) t) Law.t
+  val strong_7 : unit -> ('a -> 'b, ('c, 'd) t -> ('a * 'c, 'b * 'd) t) Law.t
+  val strong_8 : unit -> (('a, 'b) t, ('c * ('d * 'a), 'c * ('d * 'b)) t) Law.t
 end
 
-module For (S : Preface_specs.STRONG) : LAWS with module Strong := S = struct
+module For (S : Preface_specs.STRONG) :
+  LAWS with type ('a, 'b) t := ('a, 'b) S.t = struct
   open Law
   open Preface_core.Fun.Infix
   include Profunctor.For (S)
