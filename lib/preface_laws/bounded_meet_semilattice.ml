@@ -1,8 +1,7 @@
 module type LAWS = sig
   type t
 
-  val bounded_meet_semilattice_1 :
-    unit -> (t, t) Law.t
+  val bounded_meet_semilattice_1 : unit -> (t, t) Law.t
 end
 
 module For (L : Preface_specs.BOUNDED_MEET_SEMILATTICE) :

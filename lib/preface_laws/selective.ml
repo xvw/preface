@@ -1,62 +1,36 @@
 module type LAWS = sig
   type 'a t
 
-  val selective_1 :
-    unit -> (('a, 'a) Either.t t, 'a t) Law.t
+  val selective_1 : unit -> (('a, 'a) Either.t t, 'a t) Law.t
 
   val selective_2 :
-       unit
-    -> ( ('a, 'b) Either.t
-       , ('a -> 'b) t -> ('a -> 'b) t -> 'b t )
-       Law.t
+    unit -> (('a, 'b) Either.t, ('a -> 'b) t -> ('a -> 'b) t -> 'b t) Law.t
 
   val selective_3 :
        unit
     -> ( ('a, 'b) Either.t t
-       ,    ('c, 'a -> 'b) Either.t t
-         -> ('c -> 'a -> 'b) t
-         -> 'b t )
+       , ('c, 'a -> 'b) Either.t t -> ('c -> 'a -> 'b) t -> 'b t )
        Law.t
 
   val selective_4 :
-       unit
-    -> ( 'a -> 'b
-       ,    ('c, 'a) Either.t t
-         -> ('c -> 'a) t
-         -> 'b t )
-       Law.t
+    unit -> ('a -> 'b, ('c, 'a) Either.t t -> ('c -> 'a) t -> 'b t) Law.t
 
   val selective_5 :
-       unit
-    -> ( 'a -> 'b
-       ,    ('a, 'c) Either.t t
-         -> ('b -> 'c) t
-         -> 'c t )
-       Law.t
+    unit -> ('a -> 'b, ('a, 'c) Either.t t -> ('b -> 'c) t -> 'c t) Law.t
 
   val selective_6 :
-       unit
-    -> ( 'a -> 'b -> 'c
-       , ('b, 'c) Either.t t -> 'a t -> 'c t )
-       Law.t
+    unit -> ('a -> 'b -> 'c, ('b, 'c) Either.t t -> 'a t -> 'c t) Law.t
 
-  val selective_7 :
-    unit -> (('a, 'b) Either.t t, ('a -> 'b) -> 'b t) Law.t
+  val selective_7 : unit -> (('a, 'b) Either.t t, ('a -> 'b) -> 'b t) Law.t
 end
 
 module type LAWS_RIGID = sig
   include LAWS
 
-  val selective_8 :
-    unit -> (('a -> 'b) t, 'a t -> 'b t) Law.t
+  val selective_8 : unit -> (('a -> 'b) t, 'a t -> 'b t) Law.t
 
   val selective_9 :
-       unit
-    -> ( 'a t
-       ,    ('b, 'c) Either.t t
-         -> ('b -> 'c) t
-         -> 'c t )
-       Law.t
+    unit -> ('a t, ('b, 'c) Either.t t -> ('b -> 'c) t -> 'c t) Law.t
 end
 
 module For (S : Preface_specs.SELECTIVE) : LAWS with type 'a t := 'a S.t =

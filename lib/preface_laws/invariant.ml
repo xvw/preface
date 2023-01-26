@@ -5,13 +5,7 @@ module type LAWS = sig
 
   val invariant_2 :
        unit
-    -> ( 'a -> 'b
-       ,    ('b -> 'a)
-         -> ('c -> 'a)
-         -> ('a -> 'c)
-         -> 'c t
-         -> 'b t )
-       Law.t
+    -> ('a -> 'b, ('b -> 'a) -> ('c -> 'a) -> ('a -> 'c) -> 'c t -> 'b t) Law.t
 end
 
 module For (I : Preface_specs.INVARIANT) : LAWS with type 'a t := 'a I.t =

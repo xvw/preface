@@ -2,12 +2,7 @@ module type LAWS = sig
   type ('a, 'b) t
 
   val semigroupoid_1 :
-       unit
-    -> ( ('a, 'b) t
-       ,    ('c, 'a) t
-         -> ('d, 'c) t
-         -> ('d, 'b) t )
-       Law.t
+    unit -> (('a, 'b) t, ('c, 'a) t -> ('d, 'c) t -> ('d, 'b) t) Law.t
 end
 
 module For (S : Preface_specs.SEMIGROUPOID) :

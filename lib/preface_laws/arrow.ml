@@ -4,21 +4,14 @@ module type LAWS = sig
   val arrow_1 : unit -> (unit, ('a, 'a) t) Law.t
   val arrow_2 : unit -> ('a -> 'b, ('b -> 'c) -> ('a, 'c) t) Law.t
   val arrow_3 : unit -> ('a -> 'b, ('a * 'c, 'b * 'c) t) Law.t
-
-  val arrow_4 :
-       unit
-    -> (('a, 'b) t, ('b, 'c) t -> ('a * 'd, 'c * 'd) t) Law.t
-
+  val arrow_4 : unit -> (('a, 'b) t, ('b, 'c) t -> ('a * 'd, 'c * 'd) t) Law.t
   val arrow_5 : unit -> (('a, 'b) t, ('a * 'c, 'b) t) Law.t
-
-  val arrow_6 :
-    unit -> (('a, 'b) t, ('c -> 'd) -> ('a * 'c, 'b * 'd) t) Law.t
-
-  val arrow_7 :
-    unit -> (('a, 'b) t, (('a * 'c) * 'd, 'b * ('c * 'd)) t) Law.t
+  val arrow_6 : unit -> (('a, 'b) t, ('c -> 'd) -> ('a * 'c, 'b * 'd) t) Law.t
+  val arrow_7 : unit -> (('a, 'b) t, (('a * 'c) * 'd, 'b * ('c * 'd)) t) Law.t
 end
 
-module For (A : Preface_specs.ARROW) : LAWS with type ('a, 'b) t := ('a, 'b) A.t = struct
+module For (A : Preface_specs.ARROW) :
+  LAWS with type ('a, 'b) t := ('a, 'b) A.t = struct
   open Law
   include Category.For (A)
 

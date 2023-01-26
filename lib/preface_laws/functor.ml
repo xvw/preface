@@ -2,9 +2,7 @@ module type LAWS = sig
   type 'a t
 
   val functor_1 : unit -> ('a t, 'a t) Law.t
-
-  val functor_2 :
-    unit -> ('a -> 'b, ('c -> 'a) -> 'c t -> 'b t) Law.t
+  val functor_2 : unit -> ('a -> 'b, ('c -> 'a) -> 'c t -> 'b t) Law.t
 end
 
 module For (F : Preface_specs.FUNCTOR) : LAWS with type 'a t := 'a F.t = struct

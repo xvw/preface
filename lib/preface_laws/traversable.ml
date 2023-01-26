@@ -7,10 +7,7 @@ module type LAWS_APPLICATIVE = sig
     module C : Preface_specs.APPLICATIVE with type 'a t = 'a G.t F.t
 
     val traversable_composition_1 :
-         unit
-      -> ( 'a -> 'b F.t
-         , ('b -> 'c G.t) -> 'a t -> 'c t C.t )
-         Law.t
+      unit -> ('a -> 'b F.t, ('b -> 'c G.t) -> 'a t -> 'c t C.t) Law.t
   end
 
   module Naturality

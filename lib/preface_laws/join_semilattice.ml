@@ -1,21 +1,13 @@
 module type LAWS = sig
   type t
 
-  val join_semilattice_1 :
-       unit
-    -> ( t
-       , t -> t -> t )
-       Law.t
-
-  val join_semilattice_2 :
-    unit -> (t, t -> t) Law.t
-
-  val join_semilattice_3 :
-    unit -> (t, t) Law.t
+  val join_semilattice_1 : unit -> (t, t -> t -> t) Law.t
+  val join_semilattice_2 : unit -> (t, t -> t) Law.t
+  val join_semilattice_3 : unit -> (t, t) Law.t
 end
 
-module For (L : Preface_specs.JOIN_SEMILATTICE) :
-  LAWS with type t := L.t = struct
+module For (L : Preface_specs.JOIN_SEMILATTICE) : LAWS with type t := L.t =
+struct
   open Law
 
   let join_semilattice_1 () =

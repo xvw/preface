@@ -3,36 +3,26 @@ module type LAWS_MONOID = sig
 
   val monad_plus_monoid_1 : unit -> ('a t, 'a t) Law.t
   val monad_plus_monoid_2 : unit -> ('a t, 'a t) Law.t
-
-  val monad_plus_monoid_3 :
-       unit
-    -> ( 'a t
-       , 'a t -> 'a t -> 'a t )
-       Law.t
+  val monad_plus_monoid_3 : unit -> ('a t, 'a t -> 'a t -> 'a t) Law.t
 end
 
 module type LAWS_LEFT_ABSORPTION = sig
   type 'a t
 
-  val monad_plus_left_absorb_1 :
-    unit -> ('a -> 'b t, 'b t) Law.t
+  val monad_plus_left_absorb_1 : unit -> ('a -> 'b t, 'b t) Law.t
 end
 
 module type LAWS_LEFT_DISTRIBUTIVITY = sig
   type 'a t
 
   val monad_plus_left_distrib_1 :
-       unit
-    -> ( 'a t
-       , 'a t -> ('a -> 'b t) -> 'b t )
-       Law.t
+    unit -> ('a t, 'a t -> ('a -> 'b t) -> 'b t) Law.t
 end
 
 module type LAWS_LEFT_CATCH = sig
   type 'a t
 
-  val monad_plus_left_catch_1 :
-    unit -> ('a, 'a t -> 'a t) Law.t
+  val monad_plus_left_catch_1 : unit -> ('a, 'a t -> 'a t) Law.t
 end
 
 module For_monoidal (M : Preface_specs.MONAD_PLUS) :

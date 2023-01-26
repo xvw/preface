@@ -3,16 +3,10 @@ module type LAWS = sig
 
   val bind_1 : unit -> ('a t t t, 'a t) Law.t
   val bind_2 : unit -> ('a -> 'b, 'a t t -> 'b t) Law.t
-
-  val bind_3 :
-       unit
-    -> ('a t, ('a -> 'b t) -> ('b -> 'c t) -> 'c t) Law.t
+  val bind_3 : unit -> ('a t, ('a -> 'b t) -> ('b -> 'c t) -> 'c t) Law.t
 
   val bind_4 :
-       unit
-    -> ( 'a -> 'b t
-       , ('b -> 'c t) -> ('c -> 'd t) -> 'a -> 'd t )
-       Law.t
+    unit -> ('a -> 'b t, ('b -> 'c t) -> ('c -> 'd t) -> 'a -> 'd t) Law.t
 end
 
 module For (B : Preface_specs.BIND) : LAWS with type 'a t := 'a B.t = struct

@@ -3,29 +3,20 @@ module type LAWS_MONOID = sig
 
   val alternative_monoid_1 : unit -> ('a t, 'a t) Law.t
   val alternative_monoid_2 : unit -> ('a t, 'a t) Law.t
-
-  val alternative_monoid_3 :
-       unit
-    -> ( 'a t
-       , 'a t -> 'a t -> 'a t )
-       Law.t
+  val alternative_monoid_3 : unit -> ('a t, 'a t -> 'a t -> 'a t) Law.t
 end
 
 module type LAWS_RIGHT_DISTRIBUTIVITY = sig
   type 'a t
 
   val alternative_right_distrib_1 :
-       unit
-    -> ( ('a -> 'b) t
-       , ('a -> 'b) t -> 'a t -> 'b t )
-       Law.t
+    unit -> (('a -> 'b) t, ('a -> 'b) t -> 'a t -> 'b t) Law.t
 end
 
 module type LAWS_RIGHT_ABSORPTION = sig
   type 'a t
 
-  val alternative_right_absorb_1 :
-    unit -> ('a t, 'a t) Law.t
+  val alternative_right_absorb_1 : unit -> ('a t, 'a t) Law.t
 end
 
 module For_monoidal (A : Preface_specs.ALTERNATIVE) :

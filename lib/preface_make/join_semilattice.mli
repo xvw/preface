@@ -1,15 +1,16 @@
 (** Building a {!module:Preface_specs.Join_semilattice} *)
 
 (** {1 Using the minimal definition}
+
     Build a {!module-type:Preface_specs.JOIN_SEMILATTICE} using
-    {!module-type:Preface_specs.Join_semilattice.WITH_JOIN}.
-    Standard method, using the minimal definition of a semigroup to derive its
-    full API. *)
+    {!module-type:Preface_specs.Join_semilattice.WITH_JOIN}. Standard method,
+    using the minimal definition of a semigroup to derive its full API. *)
 
 module Via_join (Req : Preface_specs.Join_semilattice.WITH_JOIN) :
   Preface_specs.JOIN_SEMILATTICE with type t = Req.t
 
 (** {1 Manual construction}
+
     Advanced way to build a {!module-type:Preface_specs.JOIN_SEMILATTICE},
     constructing and assembling a component-by-component of
     {!module-type:Preface_specs.JOIN_SEMILATTICE}. (In order to provide your own

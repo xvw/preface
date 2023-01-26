@@ -6,36 +6,23 @@ module type LAWS = sig
   val bifunctor_3 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
 
   val bifunctor_4 :
-       unit
-    -> ( 'a -> 'b
-       , ('c -> 'd) -> ('a, 'c) t -> ('b, 'd) t )
-       Law.t
+    unit -> ('a -> 'b, ('c -> 'd) -> ('a, 'c) t -> ('b, 'd) t) Law.t
 
   val bifunctor_5 :
        unit
     -> ( 'a -> 'b
-       ,    ('c -> 'a)
-         -> ('d -> 'e)
-         -> ('f -> 'd)
-         -> ('c, 'f) t
-         -> ('b, 'e) t )
+       , ('c -> 'a) -> ('d -> 'e) -> ('f -> 'd) -> ('c, 'f) t -> ('b, 'e) t )
        Law.t
 
   val bifunctor_6 :
-       unit
-    -> ( 'a -> 'b
-       , ('c -> 'a) -> ('c, 'd) t -> ('b, 'd) t )
-       Law.t
+    unit -> ('a -> 'b, ('c -> 'a) -> ('c, 'd) t -> ('b, 'd) t) Law.t
 
   val bifunctor_7 :
-       unit
-    -> ( 'a -> 'b
-       , ('c -> 'a) -> ('d, 'c) t -> ('d, 'b) t )
-       Law.t
+    unit -> ('a -> 'b, ('c -> 'a) -> ('d, 'c) t -> ('d, 'b) t) Law.t
 end
 
-module For (B : Preface_specs.BIFUNCTOR) : LAWS with type ('a, 'b) t := ('a, 'b) B.t =
-struct
+module For (B : Preface_specs.BIFUNCTOR) :
+  LAWS with type ('a, 'b) t := ('a, 'b) B.t = struct
   open Law
   open Preface_core.Fun.Infix
 

@@ -1,11 +1,8 @@
 module type LAWS = sig
   type 'a t
 
-  val decidable_1 :
-    unit -> ('a -> Preface_core.Void.t, 'a t -> 'a t) Law.t
-
-  val decidable_2 :
-    unit -> ('a -> Preface_core.Void.t, 'a t -> 'a t) Law.t
+  val decidable_1 : unit -> ('a -> Preface_core.Void.t, 'a t -> 'a t) Law.t
+  val decidable_2 : unit -> ('a -> Preface_core.Void.t, 'a t -> 'a t) Law.t
 end
 
 module For (D : Preface_specs.DECIDABLE) : LAWS with type 'a t := 'a D.t =

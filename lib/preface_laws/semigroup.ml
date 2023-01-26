@@ -1,12 +1,10 @@
 module type LAWS = sig
   type t
 
-  val semigroup_1 :
-    unit -> (t, t -> t -> t) Law.t
+  val semigroup_1 : unit -> (t, t -> t -> t) Law.t
 end
 
-module For (S : Preface_specs.SEMIGROUP) : LAWS with type t := S.t =
-struct
+module For (S : Preface_specs.SEMIGROUP) : LAWS with type t := S.t = struct
   open Law
 
   let semigroup_1 () =

@@ -3,18 +3,9 @@ module type LAWS = sig
 
   val applicative_1 : unit -> ('a t, 'a t) Law.t
   val applicative_2 : unit -> ('a -> 'b, 'a -> 'b t) Law.t
-
-  val applicative_3 :
-    unit -> (('a -> 'b) t, 'a -> 'b t) Law.t
-
-  val applicative_4 :
-       unit
-    -> ( ('a -> 'b) t
-       , ('c -> 'a) t -> 'c t -> 'b t )
-       Law.t
-
-  val applicative_5 :
-    unit -> ('a -> 'b, 'a t -> 'b t) Law.t
+  val applicative_3 : unit -> (('a -> 'b) t, 'a -> 'b t) Law.t
+  val applicative_4 : unit -> (('a -> 'b) t, ('c -> 'a) t -> 'c t -> 'b t) Law.t
+  val applicative_5 : unit -> ('a -> 'b, 'a t -> 'b t) Law.t
 end
 
 module For (A : Preface_specs.APPLICATIVE) : LAWS with type 'a t := 'a A.t =

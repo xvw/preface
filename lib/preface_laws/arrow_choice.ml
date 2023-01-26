@@ -2,19 +2,15 @@ module type LAWS = sig
   type ('a, 'b) t
 
   val arrow_choice_1 :
-       unit
-    -> ('a -> 'b, (('a, 'c) Either.t, ('b, 'c) Either.t) t) Law.t
+    unit -> ('a -> 'b, (('a, 'c) Either.t, ('b, 'c) Either.t) t) Law.t
 
   val arrow_choice_2 :
        unit
     -> ( ('a, 'b) t
-       ,    ('b, 'c) t
-         -> (('a, 'd) Either.t, ('c, 'd) Either.t) t )
+       , ('b, 'c) t -> (('a, 'd) Either.t, ('c, 'd) Either.t) t )
        Law.t
 
-  val arrow_choice_3 :
-       unit
-    -> (('a, 'b) t, ('a, ('b, 'c) Either.t) t) Law.t
+  val arrow_choice_3 : unit -> (('a, 'b) t, ('a, ('b, 'c) Either.t) t) Law.t
 
   val arrow_choice_4 :
        unit
@@ -25,9 +21,8 @@ module type LAWS = sig
   val arrow_choice_5 :
        unit
     -> ( ('a, 'b) t
-       , ( (('a, 'c) Either.t, 'd) Either.t
-         , ('b, ('c, 'd) Either.t) Either.t )
-         t )
+       , ((('a, 'c) Either.t, 'd) Either.t, ('b, ('c, 'd) Either.t) Either.t) t
+       )
        Law.t
 end
 

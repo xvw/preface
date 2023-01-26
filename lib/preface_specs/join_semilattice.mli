@@ -1,14 +1,16 @@
-(** A [Join_semilattice] capture the notion of a set with
-    {b least upper bound}. A join semilattice is an idempotent commutative
-    semigroup.
+(** A [Join_semilattice] capture the notion of a set with {b least upper bound}.
+    A join semilattice is an idempotent commutative semigroup.
+
     {2 Laws}
+
     To have a predictable behaviour, the instance of [Join_semilattice] must
     obey some laws.
+
     - [join a (join b c) = join (join a b) c]
     - [join a b = join b a]
     - [join a a = a] *)
 
-(** {1 Minimal definition }*)
+(** {1 Minimal definition}*)
 
 module type WITH_JOIN = sig
   type t

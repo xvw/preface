@@ -3,18 +3,9 @@ module type LAWS = sig
 
   val divisible_1 : unit -> ('a t, 'a t) Law.t
   val divisible_2 : unit -> ('a t, 'a t) Law.t
-
-  val divisible_3 :
-       unit
-    -> ( 'a t
-       , 'a t -> 'a t -> 'a t )
-       Law.t
-
-  val divisible_4 :
-    unit -> ('a -> 'b * 'c, 'b t -> 'a t) Law.t
-
-  val divisible_5 :
-    unit -> ('a -> 'b * 'c, 'c t -> 'a t) Law.t
+  val divisible_3 : unit -> ('a t, 'a t -> 'a t -> 'a t) Law.t
+  val divisible_4 : unit -> ('a -> 'b * 'c, 'b t -> 'a t) Law.t
+  val divisible_5 : unit -> ('a -> 'b * 'c, 'c t -> 'a t) Law.t
 end
 
 module For (D : Preface_specs.DIVISIBLE) : LAWS with type 'a t := 'a D.t =

@@ -3,29 +3,17 @@ module type LAWS = sig
 
   val comonad_1 : unit -> ('a t, 'a t) Law.t
   val comonad_2 : unit -> ('a t -> 'b, 'a t -> 'b) Law.t
-
-  val comonad_3 :
-       unit
-    -> ( 'a t -> 'b
-       , ('c t -> 'a) -> 'c t -> 'b t )
-       Law.t
-
+  val comonad_3 : unit -> ('a t -> 'b, ('c t -> 'a) -> 'c t -> 'b t) Law.t
   val comonad_4 : unit -> ('a t -> 'b, 'a t -> 'b) Law.t
   val comonad_5 : unit -> ('a t -> 'b, 'a t -> 'b) Law.t
 
   val comonad_6 :
-       unit
-    -> ( 'a t -> 'b
-       , ('b t -> 'c) -> ('c t -> 'd) -> 'a t -> 'd )
-       Law.t
+    unit -> ('a t -> 'b, ('b t -> 'c) -> ('c t -> 'd) -> 'a t -> 'd) Law.t
 
   val comonad_7 : unit -> ('a t, 'a t) Law.t
   val comonad_8 : unit -> ('a t, 'a t) Law.t
   val comonad_9 : unit -> ('a t, 'a t t t) Law.t
-
-  val comonad_10 :
-    unit -> ('a t -> 'b, 'a t -> 'b t) Law.t
-
+  val comonad_10 : unit -> ('a t -> 'b, 'a t -> 'b t) Law.t
   val comonad_11 : unit -> ('a t, 'a t t) Law.t
   val comonad_12 : unit -> ('a -> 'b, 'a t -> 'b t) Law.t
 end
