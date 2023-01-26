@@ -1,17 +1,17 @@
 module type LAWS = sig
-  module Semigroupoid : Preface_specs.SEMIGROUPOID
+  type ('a, 'b) t
 
   val semigroupoid_1 :
        unit
-    -> ( ('a, 'b) Semigroupoid.t
-       ,    ('c, 'a) Semigroupoid.t
-         -> ('d, 'c) Semigroupoid.t
-         -> ('d, 'b) Semigroupoid.t )
+    -> ( ('a, 'b) t
+       ,    ('c, 'a) t
+         -> ('d, 'c) t
+         -> ('d, 'b) t )
        Law.t
 end
 
 module For (S : Preface_specs.SEMIGROUPOID) :
-  LAWS with module Semigroupoid := S = struct
+  LAWS with type ('a, 'b) t := ('a, 'b) S.t = struct
   open Law
 
   let semigroupoid_1 () =
