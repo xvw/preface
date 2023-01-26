@@ -1,12 +1,11 @@
 module type LAWS = sig
-  module Apply : Preface_specs.APPLY
-  include Functor.LAWS with module Functor := Apply
+  type 'a t
 
-  val apply_1 : unit -> (unit Apply.t, 'a Apply.t -> 'a Apply.t) Law.t
-  val apply_2 : unit -> ('a Apply.t, unit Apply.t -> 'a Apply.t) Law.t
+  val apply_1 : unit -> (unit t, 'a t -> 'a t) Law.t
+  val apply_2 : unit -> ('a t, unit t -> 'a t) Law.t
 end
 
-module For (A : Preface_specs.APPLY) : LAWS with module Apply := A = struct
+module For (A : Preface_specs.APPLY) : LAWS with type 'a t := 'a A.t = struct
   open Law
   include Functor.For (A)
 

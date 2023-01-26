@@ -1,16 +1,13 @@
 module type LAWS_APPLICATIVE = sig
-  module Applicative : Preface_specs.Traversable.API_OVER_APPLICATIVE
+  type 'a t
 
-  val traversable_1 : unit -> ('a Applicative.t, 'a Applicative.t) Law.t
+  val traversable_1 : unit -> ('a t, 'a t) Law.t
 
   module Compose (F : Preface_specs.APPLICATIVE) (G : Preface_specs.APPLICATIVE) : sig
     module C : Preface_specs.APPLICATIVE with type 'a t = 'a G.t F.t
 
     val traversable_composition_1 :
-         unit
-      -> ( 'a -> 'b F.t
-         , ('b -> 'c G.t) -> 'a Applicative.t -> 'c Applicative.t C.t )
-         Law.t
+      unit -> ('a -> 'b F.t, ('b -> 'c G.t) -> 'a t -> 'c t C.t) Law.t
   end
 
   module Naturality
@@ -19,18 +16,18 @@ module type LAWS_APPLICATIVE = sig
         val run : 'a F.t -> 'a G.t
       end) : sig
     val traversable_naturality_1 :
-      unit -> ('a -> 'b F.t, 'a Applicative.t -> 'b Applicative.t G.t) Law.t
+      unit -> ('a -> 'b F.t, 'a t -> 'b t G.t) Law.t
   end
 end
 
 module type LAWS_MONAD = sig
-  module Monad : Preface_specs.Traversable.API_OVER_MONAD
+  type 'a t
 
-  val traversable_1 : unit -> ('a Monad.t, 'a Monad.t) Law.t
+  val traversable_1 : unit -> ('a t, 'a t) Law.t
 end
 
 module For_monad (T : Preface_specs.Traversable.API_OVER_MONAD) :
-  LAWS_MONAD with module Monad := T = struct
+  LAWS_MONAD with type 'a t := 'a T.t = struct
   open Law
   module TId = T.Traversable (Util.Id.Monad)
 
@@ -43,7 +40,7 @@ module For_monad (T : Preface_specs.Traversable.API_OVER_MONAD) :
 end
 
 module For_applicative (T : Preface_specs.Traversable.API_OVER_APPLICATIVE) :
-  LAWS_APPLICATIVE with module Applicative := T = struct
+  LAWS_APPLICATIVE with type 'a t := 'a T.t = struct
   open Law
   module TId = T.Traversable (Util.Id.Applicative)
 

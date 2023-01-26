@@ -1,22 +1,15 @@
 module type LAWS = sig
-  module Bind : Preface_specs.BIND
-  include Functor.LAWS with module Functor := Bind
+  type 'a t
 
-  val bind_1 : unit -> ('a Bind.t Bind.t Bind.t, 'a Bind.t) Law.t
-  val bind_2 : unit -> ('a -> 'b, 'a Bind.t Bind.t -> 'b Bind.t) Law.t
-
-  val bind_3 :
-       unit
-    -> ('a Bind.t, ('a -> 'b Bind.t) -> ('b -> 'c Bind.t) -> 'c Bind.t) Law.t
+  val bind_1 : unit -> ('a t t t, 'a t) Law.t
+  val bind_2 : unit -> ('a -> 'b, 'a t t -> 'b t) Law.t
+  val bind_3 : unit -> ('a t, ('a -> 'b t) -> ('b -> 'c t) -> 'c t) Law.t
 
   val bind_4 :
-       unit
-    -> ( 'a -> 'b Bind.t
-       , ('b -> 'c Bind.t) -> ('c -> 'd Bind.t) -> 'a -> 'd Bind.t )
-       Law.t
+    unit -> ('a -> 'b t, ('b -> 'c t) -> ('c -> 'd t) -> 'a -> 'd t) Law.t
 end
 
-module For (B : Preface_specs.BIND) : LAWS with module Bind := B = struct
+module For (B : Preface_specs.BIND) : LAWS with type 'a t := 'a B.t = struct
   open Law
   open Preface_core.Fun.Infix
   include Functor.For (B)

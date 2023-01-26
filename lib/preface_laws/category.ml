@@ -1,13 +1,12 @@
 module type LAWS = sig
-  module Category : Preface_specs.CATEGORY
-  include Semigroupoid.LAWS with module Semigroupoid := Category
+  type ('a, 'b) t
 
-  val category_1 : unit -> (('a, 'b) Category.t, ('a, 'b) Category.t) Law.t
-  val category_2 : unit -> (('a, 'b) Category.t, ('a, 'b) Category.t) Law.t
+  val category_1 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
+  val category_2 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
 end
 
-module For (C : Preface_specs.CATEGORY) : LAWS with module Category := C =
-struct
+module For (C : Preface_specs.CATEGORY) :
+  LAWS with type ('a, 'b) t := ('a, 'b) C.t = struct
   open Law
   include Semigroupoid.For (C)
 

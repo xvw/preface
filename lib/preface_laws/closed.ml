@@ -1,17 +1,13 @@
 module type LAWS = sig
-  module Closed : Preface_specs.CLOSED
-  include Profunctor.LAWS with module Profunctor := Closed
+  type ('a, 'b) t
 
-  val closed_1 :
-    unit -> ('a -> 'b, ('c, 'd) Closed.t -> ('b -> 'c, 'a -> 'd) Closed.t) Law.t
-
-  val closed_2 :
-    unit -> (('a, 'b) Closed.t, ('c -> 'd -> 'a, 'c -> 'd -> 'b) Closed.t) Law.t
-
-  val closed_3 : unit -> (('a, 'b) Closed.t, ('a, 'b) Closed.t) Law.t
+  val closed_1 : unit -> ('a -> 'b, ('c, 'd) t -> ('b -> 'c, 'a -> 'd) t) Law.t
+  val closed_2 : unit -> (('a, 'b) t, ('c -> 'd -> 'a, 'c -> 'd -> 'b) t) Law.t
+  val closed_3 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
 end
 
-module For (C : Preface_specs.CLOSED) : LAWS with module Closed := C = struct
+module For (C : Preface_specs.CLOSED) :
+  LAWS with type ('a, 'b) t := ('a, 'b) C.t = struct
   open Law
   open Preface_core.Fun.Infix
   include Profunctor.For (C)

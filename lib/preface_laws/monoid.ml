@@ -1,12 +1,11 @@
 module type LAWS = sig
-  module Monoid : Preface_specs.MONOID
-  include Semigroup.LAWS with module Semigroup := Monoid
+  type t
 
-  val monoid_1 : unit -> (Monoid.t, Monoid.t) Law.t
-  val monoid_2 : unit -> (Monoid.t, Monoid.t) Law.t
+  val monoid_1 : unit -> (t, t) Law.t
+  val monoid_2 : unit -> (t, t) Law.t
 end
 
-module For (M : Preface_specs.MONOID) : LAWS with module Monoid := M = struct
+module For (M : Preface_specs.MONOID) : LAWS with type t := M.t = struct
   open Law
   include Semigroup.For (M)
 

@@ -1,20 +1,14 @@
 module type LAWS = sig
-  module Invariant : Preface_specs.INVARIANT
+  type 'a t
 
-  val invariant_1 : unit -> ('a Invariant.t, 'a Invariant.t) Law.t
+  val invariant_1 : unit -> ('a t, 'a t) Law.t
 
   val invariant_2 :
        unit
-    -> ( 'a -> 'b
-       ,    ('b -> 'a)
-         -> ('c -> 'a)
-         -> ('a -> 'c)
-         -> 'c Invariant.t
-         -> 'b Invariant.t )
-       Law.t
+    -> ('a -> 'b, ('b -> 'a) -> ('c -> 'a) -> ('a -> 'c) -> 'c t -> 'b t) Law.t
 end
 
-module For (I : Preface_specs.INVARIANT) : LAWS with module Invariant := I =
+module For (I : Preface_specs.INVARIANT) : LAWS with type 'a t := 'a I.t =
 struct
   open Law
 

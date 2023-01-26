@@ -1,46 +1,28 @@
 module type LAWS = sig
-  module Profunctor : Preface_specs.PROFUNCTOR
+  type ('a, 'b) t
 
-  val profunctor_1 :
-    unit -> (('a, 'b) Profunctor.t, ('a, 'b) Profunctor.t) Law.t
-
-  val profunctor_2 :
-    unit -> (('a, 'b) Profunctor.t, ('a, 'b) Profunctor.t) Law.t
-
-  val profunctor_3 :
-    unit -> (('a, 'b) Profunctor.t, ('a, 'b) Profunctor.t) Law.t
+  val profunctor_1 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
+  val profunctor_2 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
+  val profunctor_3 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
 
   val profunctor_4 :
-       unit
-    -> ( 'a -> 'b
-       , ('c -> 'd) -> ('b, 'c) Profunctor.t -> ('a, 'd) Profunctor.t )
-       Law.t
+    unit -> ('a -> 'b, ('c -> 'd) -> ('b, 'c) t -> ('a, 'd) t) Law.t
 
   val profunctor_5 :
        unit
     -> ( 'a -> 'b
-       ,    ('c -> 'a)
-         -> ('d -> 'e)
-         -> ('f -> 'd)
-         -> ('b, 'f) Profunctor.t
-         -> ('c, 'e) Profunctor.t )
+       , ('c -> 'a) -> ('d -> 'e) -> ('f -> 'd) -> ('b, 'f) t -> ('c, 'e) t )
        Law.t
 
   val profunctor_6 :
-       unit
-    -> ( 'a -> 'b
-       , ('c -> 'a) -> ('b, 'd) Profunctor.t -> ('c, 'd) Profunctor.t )
-       Law.t
+    unit -> ('a -> 'b, ('c -> 'a) -> ('b, 'd) t -> ('c, 'd) t) Law.t
 
   val profunctor_7 :
-       unit
-    -> ( 'a -> 'b
-       , ('c -> 'a) -> ('d, 'c) Profunctor.t -> ('d, 'b) Profunctor.t )
-       Law.t
+    unit -> ('a -> 'b, ('c -> 'a) -> ('d, 'c) t -> ('d, 'b) t) Law.t
 end
 
-module For (P : Preface_specs.PROFUNCTOR) : LAWS with module Profunctor := P =
-struct
+module For (P : Preface_specs.PROFUNCTOR) :
+  LAWS with type ('a, 'b) t := ('a, 'b) P.t = struct
   open Law
   open Preface_core.Fun.Infix
 

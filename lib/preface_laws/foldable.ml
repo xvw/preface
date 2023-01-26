@@ -1,27 +1,23 @@
 module type LAWS = sig
-  module Foldable : Preface_specs.FOLDABLE
+  type 'a t
 
   val foldable_1 :
        unit
     -> ( (module Preface_specs.Types.T0 with type t = 'a)
-       , ('b -> 'a -> 'a) -> 'a -> 'b Foldable.t -> 'a )
+       , ('b -> 'a -> 'a) -> 'a -> 'b t -> 'a )
        Law.t
 
   val foldable_2 :
        unit
     -> ( (module Preface_specs.Types.T0 with type t = 'a)
-       , ('a -> 'b -> 'a) -> 'a -> 'b Foldable.t -> 'a )
+       , ('a -> 'b -> 'a) -> 'a -> 'b t -> 'a )
        Law.t
 
   val foldable_3 :
-       unit
-    -> ( (module Preface_specs.MONOID with type t = 'a)
-       , 'a Foldable.t -> 'a )
-       Law.t
+    unit -> ((module Preface_specs.MONOID with type t = 'a), 'a t -> 'a) Law.t
 end
 
-module For (F : Preface_specs.FOLDABLE) : LAWS with module Foldable := F =
-struct
+module For (F : Preface_specs.FOLDABLE) : LAWS with type 'a t := 'a F.t = struct
   open Law
 
   let foldable_1 () =

@@ -1,39 +1,33 @@
 module type LAWS = sig
-  module Arrow_choice : Preface_specs.ARROW_CHOICE
-  include Arrow.LAWS with module Arrow := Arrow_choice
+  type ('a, 'b) t
 
   val arrow_choice_1 :
-       unit
-    -> ('a -> 'b, (('a, 'c) Either.t, ('b, 'c) Either.t) Arrow_choice.t) Law.t
+    unit -> ('a -> 'b, (('a, 'c) Either.t, ('b, 'c) Either.t) t) Law.t
 
   val arrow_choice_2 :
        unit
-    -> ( ('a, 'b) Arrow_choice.t
-       ,    ('b, 'c) Arrow_choice.t
-         -> (('a, 'd) Either.t, ('c, 'd) Either.t) Arrow_choice.t )
+    -> ( ('a, 'b) t
+       , ('b, 'c) t -> (('a, 'd) Either.t, ('c, 'd) Either.t) t )
        Law.t
 
-  val arrow_choice_3 :
-       unit
-    -> (('a, 'b) Arrow_choice.t, ('a, ('b, 'c) Either.t) Arrow_choice.t) Law.t
+  val arrow_choice_3 : unit -> (('a, 'b) t, ('a, ('b, 'c) Either.t) t) Law.t
 
   val arrow_choice_4 :
        unit
-    -> ( ('a, 'b) Arrow_choice.t
-       , ('c -> 'd) -> (('a, 'c) Either.t, ('b, 'd) Either.t) Arrow_choice.t )
+    -> ( ('a, 'b) t
+       , ('c -> 'd) -> (('a, 'c) Either.t, ('b, 'd) Either.t) t )
        Law.t
 
   val arrow_choice_5 :
        unit
-    -> ( ('a, 'b) Arrow_choice.t
-       , ( (('a, 'c) Either.t, 'd) Either.t
-         , ('b, ('c, 'd) Either.t) Either.t )
-         Arrow_choice.t )
+    -> ( ('a, 'b) t
+       , ((('a, 'c) Either.t, 'd) Either.t, ('b, ('c, 'd) Either.t) Either.t) t
+       )
        Law.t
 end
 
 module For (A : Preface_specs.ARROW_CHOICE) :
-  LAWS with module Arrow_choice := A = struct
+  LAWS with type ('a, 'b) t := ('a, 'b) A.t = struct
   open Law
   include Arrow.For (A)
 

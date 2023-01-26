@@ -1,57 +1,41 @@
 module type LAWS = sig
-  module Choice : Preface_specs.CHOICE
-  include Profunctor.LAWS with module Profunctor := Choice
+  type ('a, 'b) t
 
   val choice_1 :
-       unit
-    -> ( ('a, 'b) Choice.t
-       , (('a, 'c) Either.t, ('b, 'c) Either.t) Choice.t )
-       Law.t
+    unit -> (('a, 'b) t, (('a, 'c) Either.t, ('b, 'c) Either.t) t) Law.t
 
-  val choice_2 :
-    unit -> (('a, 'b) Choice.t, ('a, ('b, 'c) Either.t) Choice.t) Law.t
+  val choice_2 : unit -> (('a, 'b) t, ('a, ('b, 'c) Either.t) t) Law.t
 
   val choice_3 :
        unit
-    -> ( 'a -> 'b
-       , ('c, 'd) Choice.t -> (('c, 'a) Either.t, ('d, 'b) Either.t) Choice.t
-       )
-       Law.t
+    -> ('a -> 'b, ('c, 'd) t -> (('c, 'a) Either.t, ('d, 'b) Either.t) t) Law.t
 
   val choice_4 :
        unit
-    -> ( ('a, 'b) Choice.t
-       , ( (('a, 'c) Either.t, 'd) Either.t
-         , (('b, 'c) Either.t, 'd) Either.t )
-         Choice.t )
-       Law.t
-
-  val choice_5 :
-       unit
-    -> ( ('a, 'b) Choice.t
-       , (('c, 'a) Either.t, ('c, 'b) Either.t) Choice.t )
-       Law.t
-
-  val choice_6 :
-    unit -> (('a, 'b) Choice.t, ('a, ('c, 'b) Either.t) Choice.t) Law.t
-
-  val choice_7 :
-       unit
-    -> ( 'a -> 'b
-       , ('c, 'd) Choice.t -> (('a, 'c) Either.t, ('b, 'd) Either.t) Choice.t
+    -> ( ('a, 'b) t
+       , ((('a, 'c) Either.t, 'd) Either.t, (('b, 'c) Either.t, 'd) Either.t) t
        )
        Law.t
 
+  val choice_5 :
+    unit -> (('a, 'b) t, (('c, 'a) Either.t, ('c, 'b) Either.t) t) Law.t
+
+  val choice_6 : unit -> (('a, 'b) t, ('a, ('c, 'b) Either.t) t) Law.t
+
+  val choice_7 :
+       unit
+    -> ('a -> 'b, ('c, 'd) t -> (('a, 'c) Either.t, ('b, 'd) Either.t) t) Law.t
+
   val choice_8 :
        unit
-    -> ( ('a, 'b) Choice.t
-       , ( ('c, ('d, 'a) Either.t) Either.t
-         , ('c, ('d, 'b) Either.t) Either.t )
-         Choice.t )
+    -> ( ('a, 'b) t
+       , (('c, ('d, 'a) Either.t) Either.t, ('c, ('d, 'b) Either.t) Either.t) t
+       )
        Law.t
 end
 
-module For (C : Preface_specs.CHOICE) : LAWS with module Choice := C = struct
+module For (C : Preface_specs.CHOICE) :
+  LAWS with type ('a, 'b) t := ('a, 'b) C.t = struct
   open Law
   include Profunctor.For (C)
 
