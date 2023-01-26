@@ -1,14 +1,14 @@
 module type LAWS = sig
-  module Bifunctor : Preface_specs.BIFUNCTOR
+  type ('a, 'b) t
 
-  val bifunctor_1 : unit -> (('a, 'b) Bifunctor.t, ('a, 'b) Bifunctor.t) Law.t
-  val bifunctor_2 : unit -> (('a, 'b) Bifunctor.t, ('a, 'b) Bifunctor.t) Law.t
-  val bifunctor_3 : unit -> (('a, 'b) Bifunctor.t, ('a, 'b) Bifunctor.t) Law.t
+  val bifunctor_1 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
+  val bifunctor_2 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
+  val bifunctor_3 : unit -> (('a, 'b) t, ('a, 'b) t) Law.t
 
   val bifunctor_4 :
        unit
     -> ( 'a -> 'b
-       , ('c -> 'd) -> ('a, 'c) Bifunctor.t -> ('b, 'd) Bifunctor.t )
+       , ('c -> 'd) -> ('a, 'c) t -> ('b, 'd) t )
        Law.t
 
   val bifunctor_5 :
@@ -17,24 +17,24 @@ module type LAWS = sig
        ,    ('c -> 'a)
          -> ('d -> 'e)
          -> ('f -> 'd)
-         -> ('c, 'f) Bifunctor.t
-         -> ('b, 'e) Bifunctor.t )
+         -> ('c, 'f) t
+         -> ('b, 'e) t )
        Law.t
 
   val bifunctor_6 :
        unit
     -> ( 'a -> 'b
-       , ('c -> 'a) -> ('c, 'd) Bifunctor.t -> ('b, 'd) Bifunctor.t )
+       , ('c -> 'a) -> ('c, 'd) t -> ('b, 'd) t )
        Law.t
 
   val bifunctor_7 :
        unit
     -> ( 'a -> 'b
-       , ('c -> 'a) -> ('d, 'c) Bifunctor.t -> ('d, 'b) Bifunctor.t )
+       , ('c -> 'a) -> ('d, 'c) t -> ('d, 'b) t )
        Law.t
 end
 
-module For (B : Preface_specs.BIFUNCTOR) : LAWS with module Bifunctor := B =
+module For (B : Preface_specs.BIFUNCTOR) : LAWS with type ('a, 'b) t := ('a, 'b) B.t =
 struct
   open Law
   open Preface_core.Fun.Infix
