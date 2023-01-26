@@ -1,7 +1,6 @@
 module type LAWS = sig
-  module Arrow_alt : Preface_specs.ARROW_ALT
-  include Arrow.LAWS with module Arrow := Arrow_alt
+  type ('a, 'b) t
 end
 
-module For (A : Preface_specs.ARROW_ALT) : LAWS with module Arrow_alt := A =
+module For (A : Preface_specs.ARROW_ALT) : LAWS with type ('a, 'b) t := ('a, 'b) A.t =
   Arrow.For (A)

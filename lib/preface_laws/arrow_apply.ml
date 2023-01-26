@@ -1,23 +1,22 @@
 module type LAWS = sig
-  module Arrow_apply : Preface_specs.ARROW_APPLY
-  include Arrow.LAWS with module Arrow := Arrow_apply
+  type ('a, 'b) t
 
-  val arrow_apply_1 : unit -> (unit, ('a * 'b, 'a * 'b) Arrow_apply.t) Law.t
+  val arrow_apply_1 : unit -> (unit, ('a * 'b, 'a * 'b) t) Law.t
 
   val arrow_apply_2 :
        unit
-    -> ( ('a, 'b) Arrow_apply.t
-       , (('b, 'c) Arrow_apply.t * 'a, 'c) Arrow_apply.t )
+    -> ( ('a, 'b) t
+       , (('b, 'c) t * 'a, 'c) t )
        Law.t
 
   val arrow_apply_3 :
        unit
-    -> ( ('a, 'b) Arrow_apply.t
-       , (('c, 'a) Arrow_apply.t * 'c, 'b) Arrow_apply.t )
+    -> ( ('a, 'b) t
+       , (('c, 'a) t * 'c, 'b) t )
        Law.t
 end
 
-module For (A : Preface_specs.ARROW_APPLY) : LAWS with module Arrow_apply := A =
+module For (A : Preface_specs.ARROW_APPLY) : LAWS with type ('a, 'b) t := ('a, 'b) A.t =
 struct
   open Law
   include Arrow.For (A)
