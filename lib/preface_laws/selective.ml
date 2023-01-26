@@ -1,66 +1,65 @@
 module type LAWS = sig
-  module Selective : Preface_specs.SELECTIVE
-  include Applicative.LAWS with module Applicative := Selective
+  type 'a t
 
   val selective_1 :
-    unit -> (('a, 'a) Either.t Selective.t, 'a Selective.t) Law.t
+    unit -> (('a, 'a) Either.t t, 'a t) Law.t
 
   val selective_2 :
        unit
     -> ( ('a, 'b) Either.t
-       , ('a -> 'b) Selective.t -> ('a -> 'b) Selective.t -> 'b Selective.t )
+       , ('a -> 'b) t -> ('a -> 'b) t -> 'b t )
        Law.t
 
   val selective_3 :
        unit
-    -> ( ('a, 'b) Either.t Selective.t
-       ,    ('c, 'a -> 'b) Either.t Selective.t
-         -> ('c -> 'a -> 'b) Selective.t
-         -> 'b Selective.t )
+    -> ( ('a, 'b) Either.t t
+       ,    ('c, 'a -> 'b) Either.t t
+         -> ('c -> 'a -> 'b) t
+         -> 'b t )
        Law.t
 
   val selective_4 :
        unit
     -> ( 'a -> 'b
-       ,    ('c, 'a) Either.t Selective.t
-         -> ('c -> 'a) Selective.t
-         -> 'b Selective.t )
+       ,    ('c, 'a) Either.t t
+         -> ('c -> 'a) t
+         -> 'b t )
        Law.t
 
   val selective_5 :
        unit
     -> ( 'a -> 'b
-       ,    ('a, 'c) Either.t Selective.t
-         -> ('b -> 'c) Selective.t
-         -> 'c Selective.t )
+       ,    ('a, 'c) Either.t t
+         -> ('b -> 'c) t
+         -> 'c t )
        Law.t
 
   val selective_6 :
        unit
     -> ( 'a -> 'b -> 'c
-       , ('b, 'c) Either.t Selective.t -> 'a Selective.t -> 'c Selective.t )
+       , ('b, 'c) Either.t t -> 'a t -> 'c t )
        Law.t
 
   val selective_7 :
-    unit -> (('a, 'b) Either.t Selective.t, ('a -> 'b) -> 'b Selective.t) Law.t
+    unit -> (('a, 'b) Either.t t, ('a -> 'b) -> 'b t) Law.t
 end
 
 module type LAWS_RIGID = sig
   include LAWS
 
   val selective_8 :
-    unit -> (('a -> 'b) Selective.t, 'a Selective.t -> 'b Selective.t) Law.t
+    unit -> (('a -> 'b) t, 'a t -> 'b t) Law.t
 
   val selective_9 :
        unit
-    -> ( 'a Selective.t
-       ,    ('b, 'c) Either.t Selective.t
-         -> ('b -> 'c) Selective.t
-         -> 'c Selective.t )
+    -> ( 'a t
+       ,    ('b, 'c) Either.t t
+         -> ('b -> 'c) t
+         -> 'c t )
        Law.t
 end
 
-module For (S : Preface_specs.SELECTIVE) : LAWS with module Selective := S =
+module For (S : Preface_specs.SELECTIVE) : LAWS with type 'a t := 'a S.t =
 struct
   open Law
   open Preface_core.Fun
@@ -142,7 +141,7 @@ struct
 end
 
 module For_rigid (S : Preface_specs.SELECTIVE) :
-  LAWS_RIGID with module Selective := S = struct
+  LAWS_RIGID with type 'a t := 'a S.t = struct
   open Law
   include For (S)
 

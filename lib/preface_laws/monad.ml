@@ -1,16 +1,15 @@
 module type LAWS = sig
-  module Monad : Preface_specs.MONAD
-  include Bind.LAWS with module Bind := Monad
+  type 'a t
 
-  val monad_1 : unit -> ('a Monad.t, 'a Monad.t * 'a Monad.t) Law.t
-  val monad_2 : unit -> ('a -> 'b, 'a -> 'b Monad.t) Law.t
-  val monad_3 : unit -> ('a, ('a -> 'b Monad.t) -> 'b Monad.t) Law.t
-  val monad_4 : unit -> ('a Monad.t, 'a Monad.t) Law.t
-  val monad_5 : unit -> ('a, ('a -> 'b Monad.t) -> 'b Monad.t) Law.t
-  val monad_6 : unit -> ('a, ('a -> 'b Monad.t) -> 'b Monad.t) Law.t
+  val monad_1 : unit -> ('a t, 'a t * 'a t) Law.t
+  val monad_2 : unit -> ('a -> 'b, 'a -> 'b t) Law.t
+  val monad_3 : unit -> ('a, ('a -> 'b t) -> 'b t) Law.t
+  val monad_4 : unit -> ('a t, 'a t) Law.t
+  val monad_5 : unit -> ('a, ('a -> 'b t) -> 'b t) Law.t
+  val monad_6 : unit -> ('a, ('a -> 'b t) -> 'b t) Law.t
 end
 
-module For (M : Preface_specs.MONAD) : LAWS with module Monad := M = struct
+module For (M : Preface_specs.MONAD) : LAWS with type 'a t := 'a M.t = struct
   include Bind.For (M)
   open Preface_core.Fun
   open Law
