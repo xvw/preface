@@ -10,8 +10,9 @@ module Monoid = Monoid
 (** {1 Lattice hierarchy} *)
 
 module Meet_semilattice = Meet_semilattice
-module Bounded_meet_semilattice = Bounded_meet_semilattice
 module Join_semilattice = Join_semilattice
+module Bounded_meet_semilattice = Bounded_meet_semilattice
+module Bounded_join_semilattice = Bounded_join_semilattice
 
 (** {1 Functor hierarchy} *)
 

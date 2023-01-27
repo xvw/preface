@@ -76,18 +76,24 @@ module Bool_meet_semilattice = Preface.Make.Meet_semilattice.Via_meet (struct
   let meet x y = x && y
 end)
 
-module Bool_bounded_meet_semilattice =
-Preface.Make.Bounded_meet_semilattice.Via_meet_and_top (struct
-  type t = bool
-
-  let top = false
-  let meet x y = x && y
-end)
-
 module Bool_join_semilattice = Preface.Make.Join_semilattice.Via_join (struct
   type t = bool
 
   let join x y = x || y
+end)
+
+module Bool_bounded_meet_semilattice =
+Preface.Make.Bounded_meet_semilattice.Via_meet_and_top (struct
+  include Bool_meet_semilattice
+
+  let top = false
+end)
+
+module Bool_bounded_join_semilattice =
+Preface.Make.Bounded_join_semilattice.Via_join_and_bottom (struct
+  include Bool_join_semilattice
+
+  let bottom = true
 end)
 
 module Sum_monoid_suite = Preface.Qcheck.Monoid.Suite (Sample.Int) (Sum)
@@ -99,13 +105,18 @@ module Bool_meet_semilattice_suite =
 module Ordering_meet_semilattice_suite =
   Preface.Qcheck.Meet_semilattice.Suite (Ord) (Ord.Meet_semilattice)
 
+module Bool_join_semilattice_suite =
+  Preface.Qcheck.Join_semilattice.Suite (Sample.Bool) (Bool_join_semilattice)
+
 module Bool_bounded_meet_semilattice_suite =
   Preface.Qcheck.Bounded_meet_semilattice.Suite
     (Sample.Bool)
     (Bool_bounded_meet_semilattice)
 
-module Bool_join_semilattice_suite =
-  Preface.Qcheck.Join_semilattice.Suite (Sample.Bool) (Bool_join_semilattice)
+module Bool_bounded_join_semilattice_suite =
+  Preface.Qcheck.Bounded_join_semilattice.Suite
+    (Sample.Bool)
+    (Bool_bounded_join_semilattice)
 
 module Ordering_join_semilattice_suite =
   Preface.Qcheck.Join_semilattice.Suite (Ord) (Ord.Join_semilattice)
@@ -178,9 +189,11 @@ let cases ~count =
     ; ("Prod Monoid", Sum_monoid_suite.tests)
     ; ("Bool Meet_semilattice", Bool_meet_semilattice_suite.tests)
     ; ("Ord Meet_semilattice", Ordering_meet_semilattice_suite.tests)
+    ; ("Bool Join_semilattice", Bool_join_semilattice_suite.tests)
     ; ( "Bool Bounded_meet_semilattice"
       , Bool_bounded_meet_semilattice_suite.tests )
-    ; ("Bool Join_semilattice", Bool_join_semilattice_suite.tests)
+    ; ( "Bool Bounded_join_semilattice"
+      , Bool_bounded_join_semilattice_suite.tests )
     ; ("Ord Join_semilattice", Ordering_join_semilattice_suite.tests)
     ; ("YOCaml Profunctor", YOCaml_profunctor.tests)
     ; ("YOCaml Strong", YOCaml_strong.tests)
