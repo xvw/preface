@@ -122,7 +122,8 @@ module From_bifunctor (Bifunctor : Preface_specs.Bifunctor.CORE) :
 module Via
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t) :
+    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Functor.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.FUNCTOR with type 'a t = 'a Core.t
 
 (** {2 Building Core} *)
@@ -141,3 +142,8 @@ module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Functor.INFIX with type 'a t = 'a Core.t
+
+(** {2 Deriving Syntax} *)
+
+module Syntax (Core : Preface_specs.Functor.CORE) :
+  Preface_specs.Functor.SYNTAX with type 'a t = 'a Core.t

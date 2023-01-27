@@ -30,15 +30,22 @@ struct
   include Infix_combine (Core)
 end
 
+module Syntax (Core : Preface_specs.Alt.CORE) = struct
+  include Functor.Syntax (Core)
+end
+
 module Via
     (Core : Preface_specs.Alt.CORE)
     (Operation : Preface_specs.Alt.OPERATION)
-    (Infix : Preface_specs.Alt.INFIX) =
+    (Infix : Preface_specs.Alt.INFIX)
+    (Syntax : Preface_specs.Alt.SYNTAX) =
 struct
   include Core
   include Operation
   module Infix = Infix
   include Infix
+  module Syntax = Syntax
+  include Syntax
 end
 
 module Via_map_and_combine (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) =
@@ -47,8 +54,10 @@ struct
   include Core
   module Operation = Operation (Core)
   module Infix = Infix (Core) (Operation)
+  module Syntax = Syntax (Core)
   include Operation
   include Infix
+  include Syntax
 end
 
 module Over_functor

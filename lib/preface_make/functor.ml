@@ -20,15 +20,24 @@ struct
   let ( $> ) x value = Operation.replace value x
 end
 
+module Syntax (Core : Preface_specs.Functor.CORE) = struct
+  type 'a t = 'a Core.t
+
+  let ( let+ ) x f = Core.map f x
+end
+
 module Via
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION)
-    (Infix : Preface_specs.Functor.INFIX) =
+    (Infix : Preface_specs.Functor.INFIX)
+    (Syntax : Preface_specs.Functor.SYNTAX) =
 struct
   include Core
   include Operation
   include Infix
   module Infix = Infix
+  include Syntax
+  module Syntax = Syntax
 end
 
 module Via_map (Req : Preface_specs.Functor.WITH_MAP) = struct
@@ -38,6 +47,8 @@ module Via_map (Req : Preface_specs.Functor.WITH_MAP) = struct
   include Operation
   module Infix = Infix (Core) (Operation)
   include Infix
+  module Syntax = Syntax (Core)
+  include Syntax
 end
 
 module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) =

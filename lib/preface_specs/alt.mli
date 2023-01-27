@@ -65,6 +65,15 @@ module type INFIX = sig
   (** @inline *)
 end
 
+(** Syntax operators. *)
+module type SYNTAX = sig
+  type 'a t
+  (** A type ['a t] which is an [Alt]. *)
+
+  include Functor.SYNTAX with type 'a t := 'a t
+  (** @inline *)
+end
+
 (** {1 Complete API} *)
 
 (** The complete interface of an [Alt]. *)
@@ -87,6 +96,13 @@ module type API = sig
   module Infix : INFIX with type 'a t = 'a t
 
   include INFIX with type 'a t := 'a t
+  (** @inline *)
+
+  (** {1 Syntax} *)
+
+  module Syntax : SYNTAX with type 'a t = 'a t
+
+  include SYNTAX with type 'a t := 'a t
   (** @inline *)
 end
 

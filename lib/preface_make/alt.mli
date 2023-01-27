@@ -55,7 +55,8 @@ module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
 module Via
     (Core : Preface_specs.Alt.CORE)
     (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Alt.INFIX with type 'a t = 'a Operation.t) :
+    (Infix : Preface_specs.Alt.INFIX with type 'a t = 'a Operation.t)
+    (Syntax : Preface_specs.Alt.SYNTAX with type 'a t = 'a Infix.t) :
   Preface_specs.ALT with type 'a t = 'a Infix.t
 
 (** {2 Building Core} *)
@@ -79,3 +80,8 @@ module Infix
     (Core : Preface_specs.Alt.CORE)
     (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Alt.INFIX with type 'a t = 'a Core.t
+
+(** {2 Deriving Syntax} *)
+
+module Syntax (Core : Preface_specs.Alt.CORE) :
+  Preface_specs.Alt.SYNTAX with type 'a t = 'a Core.t

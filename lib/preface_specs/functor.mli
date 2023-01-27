@@ -59,6 +59,15 @@ module type INFIX = sig
       {!val:Preface_specs.Functor.OPERATION.replace}. *)
 end
 
+(** Syntax operators. *)
+module type SYNTAX = sig
+  type 'a t
+  (** The type held by the [Functor]. *)
+
+  val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
+  (** Flipped mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
+end
+
 (** {1 Complete API} *)
 
 (** The complete interface of a [Functor]. *)
@@ -81,6 +90,13 @@ module type API = sig
   module Infix : INFIX with type 'a t = 'a t
 
   include INFIX with type 'a t := 'a t
+  (** @inline *)
+
+  (** {1 Syntax} *)
+
+  module Syntax : SYNTAX with type 'a t = 'a t
+
+  include SYNTAX with type 'a t := 'a t
   (** @inline *)
 end
 
