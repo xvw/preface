@@ -18,8 +18,8 @@ module type WITH_MAP = sig
   type 'a t
   (** The type held by the [Functor]. *)
 
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
+  include Indexed_functor.WITH_MAP with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
@@ -32,12 +32,8 @@ module type OPERATION = sig
   type 'a t
   (** The type held by the [Functor]. *)
 
-  val replace : 'a -> 'b t -> 'a t
-  (** Create a new ['a t], replacing all values in the ['b t] by given a value
-      of ['a]. *)
-
-  val void : 'a t -> unit t
-  (** Create a new [unit t], replacing all values in the ['a t] by [unit]. *)
+  include Indexed_functor.OPERATION with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Infix operators. *)
@@ -45,18 +41,8 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Functor]. *)
 
-  val ( <$> ) : ('a -> 'b) -> 'a t -> 'b t
-  (** Infix version of {!val:Preface_specs.Functor.CORE.map}. *)
-
-  val ( <&> ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Flipped and infix version of {!val:Preface_specs.Functor.CORE.map}. *)
-
-  val ( <$ ) : 'a -> 'b t -> 'a t
-  (** Infix version of {!val:Preface_specs.Functor.OPERATION.replace}. *)
-
-  val ( $> ) : 'a t -> 'b -> 'b t
-  (** Flipped and infix version of
-      {!val:Preface_specs.Functor.OPERATION.replace}. *)
+  include Indexed_functor.INFIX with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Syntax operators. *)
@@ -64,8 +50,8 @@ module type SYNTAX = sig
   type 'a t
   (** The type held by the [Functor]. *)
 
-  val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Flipped mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
+  include Indexed_functor.SYNTAX with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** {1 Complete API} *)
