@@ -45,6 +45,7 @@ module Bounded_join_semilattice = Bounded_join_semilattice
 module Indexed_functor = Indexed_functor
 module Indexed_alt = Indexed_alt
 module Indexed_apply = Indexed_apply
+module Indexed_applicative = Indexed_applicative
 
 (** {1 Functor hierarchy} *)
 

@@ -41,8 +41,7 @@ module Via_pure_and_lift2 (Req : Preface_specs.Applicative.WITH_PURE_AND_LIFT2) 
     Build a {!module-type:Preface_specs.APPLICATIVE} over an
     {!module-type:Preface_specs.APPLY}.
 
-    If you already have an Applicative, you can enrich it by passing only
-    [combine] and [neutral].. *)
+    If you already have an Apply, you can enrich it by passing only [pure]. *)
 
 module Over_apply
     (Apply : Preface_specs.APPLY)
@@ -109,6 +108,13 @@ module Const (M : Preface_specs.Monoid.CORE) : sig
   val get : 'a t -> M.t
   (** Retrieve the [Monoid] value from the [Const]. *)
 end
+
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Alt} *)
+
+module Index (F : Preface_specs.APPLICATIVE) :
+  Preface_specs.INDEXED_APPLICATIVE with type ('a, 'index) t = 'a F.t
 
 (** {1 Manual construction}
 

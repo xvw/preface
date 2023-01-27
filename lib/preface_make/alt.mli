@@ -46,9 +46,7 @@ module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
 
 (** {1 To other abstraction} *)
 
-(** {2 To an Indexed Alt}
-
-    It is possible to Index a functor. *)
+(** {2 To an Indexed Alt} *)
 
 module Index (F : Preface_specs.ALT) :
   Preface_specs.INDEXED_ALT with type ('a, 'index) t = 'a F.t

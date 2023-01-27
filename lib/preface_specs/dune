@@ -7,6 +7,7 @@
   indexed_functor
   indexed_alt
   indexed_apply
+  indexed_applicative
   functor
   apply
   applicative
