@@ -20,8 +20,9 @@ module Monoid = Monoid
 (** {1 Lattice hierarchy} *)
 
 module Meet_semilattice = Meet_semilattice
-module Bounded_meet_semilattice = Bounded_meet_semilattice
 module Join_semilattice = Join_semilattice
+module Bounded_meet_semilattice = Bounded_meet_semilattice
+module Bounded_join_semilattice = Bounded_join_semilattice
 
 (** {1 Functor hierarchy} *)
 
@@ -98,8 +99,9 @@ module Freer_monad = Freer_monad
 module type SEMIGROUP = Semigroup.API
 module type MONOID = Monoid.API
 module type MEET_SEMILATTICE = Meet_semilattice.API
-module type BOUNDED_MEET_SEMILATTICE = Bounded_meet_semilattice.API
 module type JOIN_SEMILATTICE = Join_semilattice.API
+module type BOUNDED_MEET_SEMILATTICE = Bounded_meet_semilattice.API
+module type BOUNDED_JOIN_SEMILATTICE = Bounded_join_semilattice.API
 module type FUNCTOR = Functor.API
 module type BIFUNCTOR = Bifunctor.API
 module type PROFUNCTOR = Profunctor.API
