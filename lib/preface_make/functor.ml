@@ -1,29 +1,50 @@
-open Preface_core.Fun
 module Core (Req : Preface_specs.Functor.WITH_MAP) = Req
 
 module Operation (Core : Preface_specs.Functor.CORE) = struct
   type 'a t = 'a Core.t
 
-  let replace value x = (Core.map <% const) value x
-  let void x = replace () x
+  include (
+    Indexed_functor.Operation (struct
+      type ('a, 'index) t = 'a Core.t
+
+      include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+    end) :
+      Preface_specs.Indexed_functor.OPERATION with type ('a, _) t := 'a Core.t )
 end
 
 module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) =
 struct
-  type 'a t = 'a Operation.t
+  type 'a t = 'a Core.t
 
-  let ( <$> ) = Core.map
-  let ( <&> ) x f = Core.map f x
-  let ( <$ ) value x = Operation.replace value x
-  let ( $> ) x value = Operation.replace value x
+  include (
+    Indexed_functor.Infix
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Operation.t
+
+        include (
+          Operation :
+            Preface_specs.Functor.OPERATION with type 'a t := 'a Core.t )
+      end) :
+      Preface_specs.Indexed_functor.INFIX with type ('a, _) t := 'a Core.t )
 end
 
 module Syntax (Core : Preface_specs.Functor.CORE) = struct
   type 'a t = 'a Core.t
 
-  let ( let+ ) x f = Core.map f x
+  include (
+    Indexed_functor.Syntax (struct
+      type ('a, 'index) t = 'a Core.t
+
+      include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+    end) :
+      Preface_specs.Indexed_functor.SYNTAX with type ('a, _) t := 'a Core.t )
 end
 
 module Via
