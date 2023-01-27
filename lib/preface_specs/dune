@@ -4,6 +4,7 @@
  (modules_without_implementation
   preface_specs
   types
+  indexed_functor
   functor
   apply
   applicative

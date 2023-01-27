@@ -24,6 +24,10 @@ module Join_semilattice = Join_semilattice
 module Bounded_meet_semilattice = Bounded_meet_semilattice
 module Bounded_join_semilattice = Bounded_join_semilattice
 
+(** {1 Indexed Functor hierarchy} *)
+
+module Indexed_functor = Indexed_functor
+
 (** {1 Functor hierarchy} *)
 
 module Invariant = Invariant
