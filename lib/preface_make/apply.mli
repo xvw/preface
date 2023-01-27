@@ -151,6 +151,15 @@ module Const (M : Preface_specs.Monoid.CORE) : sig
   (** Retrieve the [Monoid] value from the [Const]. *)
 end
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Apply}
+
+    It is possible to Index an apply. *)
+
+module Index (F : Preface_specs.APPLY) :
+  Preface_specs.INDEXED_APPLY with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build an {!module-type:Preface_specs.APPLY}, constructing
