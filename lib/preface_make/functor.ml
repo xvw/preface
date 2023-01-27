@@ -117,3 +117,32 @@ Via_map (struct
 
   let map f (x, y) = (F.map f x, G.map f y)
 end)
+
+module Index (F : Preface_specs.FUNCTOR) = struct
+  type ('a, 'index) t = 'a F.t
+
+  include (
+    Indexed_functor.Via
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Functor.CORE with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Functor.OPERATION with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F.Infix : Preface_specs.Functor.INFIX with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (
+          F.Syntax : Preface_specs.Functor.SYNTAX with type 'a t := 'a F.t )
+      end) :
+      Preface_specs.INDEXED_FUNCTOR with type ('a, 'index) t := ('a, 'index) t )
+end

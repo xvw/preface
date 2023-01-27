@@ -43,19 +43,18 @@ module type INFIX = sig
 
   val ( <$> ) : ('a -> 'b) -> ('a, 'index) t -> ('b, 'index) t
 
-  (** Infix version of {!val:Preface_specs.Functor.CORE.map}. *)
+  (** Infix version of {!val:CORE.map}. *)
 
   val ( <&> ) : ('a, 'index) t -> ('a -> 'b) -> ('b, 'index) t
 
-  (** Flipped and infix version of {!val:Preface_specs.Functor.CORE.map}. *)
+  (** Flipped and infix version of {!val:CORE.map}. *)
 
   val ( <$ ) : 'a -> ('b, 'index) t -> ('a, 'index) t
-  (** Infix version of {!val:Preface_specs.Functor.OPERATION.replace}. *)
+  (** Infix version of {!val:OPERATION.replace}. *)
 
   val ( $> ) : ('a, 'index) t -> 'b -> ('b, 'index) t
 
-  (** Flipped and infix version of
-      {!val:Preface_specs.Functor.OPERATION.replace}. *)
+  (** Flipped and infix version of {!val:OPERATION.replace}. *)
 end
 
 (** Syntax operators. *)

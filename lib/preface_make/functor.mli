@@ -110,6 +110,15 @@ module From_comonad (Comonad : Preface_specs.COMONAD) :
 module From_bifunctor (Bifunctor : Preface_specs.Bifunctor.CORE) :
   Preface_specs.FUNCTOR with type 'a t = ('a, 'a) Bifunctor.t
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Functor}
+
+    It is possible to Index a functor. *)
+
+module Index (F : Preface_specs.FUNCTOR) :
+  Preface_specs.INDEXED_FUNCTOR with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build a {!module-type:Preface_specs.FUNCTOR}, constructing
