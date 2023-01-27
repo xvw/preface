@@ -1,5 +1,6 @@
 ## dev (unreleased)
 
+- Add `Bounded_join_semilattice` [**@hakimba**](https://github.com/hakimba)
 - Add `Bounded_meet_semilattice` [**@hakimba**](https://github.com/hakimba)
 - Add `Join_semilattice` [**@hakimba**](https://github.com/hakimba)
 - Add `Meet_semilattice` [**@xvw**](https://github.com/xvw) and [**@hakimba**](https://github.com/hakimba)
