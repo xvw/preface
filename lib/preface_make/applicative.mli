@@ -111,7 +111,7 @@ end
 
 (** {1 To other abstraction} *)
 
-(** {2 To an Indexed Alt} *)
+(** {2 To an Indexed Applicative} *)
 
 module Index (F : Preface_specs.APPLICATIVE) :
   Preface_specs.INDEXED_APPLICATIVE with type ('a, 'index) t = 'a F.t
