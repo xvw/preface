@@ -9,6 +9,7 @@
   indexed_apply
   indexed_applicative
   indexed_alternative
+  indexed_selective
   functor
   apply
   applicative

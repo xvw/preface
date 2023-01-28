@@ -104,6 +104,13 @@ module Const (M : Preface_specs.Monoid.CORE) : sig
   (** Retrieve the [Monoid] value from the [Const]. *)
 end
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Applicative} *)
+
+module Index (F : Preface_specs.SELECTIVE) :
+  Preface_specs.INDEXED_SELECTIVE with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build a {!module-type:Preface_specs.SELECTIVE}, constructing

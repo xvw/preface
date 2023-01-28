@@ -47,6 +47,7 @@ module Indexed_alt = Indexed_alt
 module Indexed_apply = Indexed_apply
 module Indexed_applicative = Indexed_applicative
 module Indexed_alternative = Indexed_alternative
+module Indexed_selective = Indexed_selective
 
 (** {1 Functor hierarchy} *)
 
