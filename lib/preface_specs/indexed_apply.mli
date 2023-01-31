@@ -88,8 +88,7 @@ module type OPERATION = sig
   (** The type held by the [Indexed Apply]. *)
 
   val lift : ('a -> 'b) -> ('a, 'index) t -> ('b, 'index) t
-  (** Lift a ternary function that acts on arbitrary values into a function that
-      acts [t] values. *)
+  (** Mapping over [t] from ['a] to ['b]. *)
 
   val lift3 :
        ('a -> 'b -> 'c -> 'd)
@@ -97,8 +96,8 @@ module type OPERATION = sig
     -> ('b, 'index) t
     -> ('c, 'index) t
     -> ('d, 'index) t
-  (** (** Lift a quadnary function that acts on arbitrary values into a function
-      that acts [t] values. *) *)
+  (** Lift a ternary function that acts on arbitrary values into a function that
+      acts [t] values. *)
 
   include Indexed_functor.OPERATION with type ('a, 'index) t := ('a, 'index) t
   (** @inline *)

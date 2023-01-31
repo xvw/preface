@@ -15,7 +15,7 @@ module type WITH_MAP = sig
   (** The type held by the [Indexed Functor]. *)
 
   val map : ('a -> 'b) -> ('a, 'index) t -> ('b, 'index) t
-  (** Mapping over from ['a] to ['b]. *)
+  (** Mapping over [t] from ['a] to ['b]. *)
 end
 
 (** {1 Structure anatomy} *)
