@@ -1,85 +1,138 @@
-open Preface_core.Fun
-
 module Core_via_map_and_bind (Req : Preface_specs.Bind.WITH_MAP_AND_BIND) =
 struct
-  include Req
+  type 'a t = 'a Req.t
 
-  let join m = bind id m
-  let compose_left_to_right f g x = bind g (f x)
+  include (
+    Indexed_bind.Core_via_map_and_bind (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Bind.WITH_MAP_AND_BIND with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_bind.CORE with type ('a, _) t := 'a Req.t )
 end
 
 module Core_over_functor_via_bind
-    (Functor : Preface_specs.Functor.WITH_MAP)
-    (Req : Preface_specs.Bind.WITH_BIND with type 'a t = 'a Functor.t) =
+    (F : Preface_specs.Functor.WITH_MAP)
+    (Req : Preface_specs.Bind.WITH_BIND with type 'a t = 'a F.t) =
 struct
-  include Core_via_map_and_bind (struct
-    include Functor
-    include Req
-  end)
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_bind.Core_over_functor_via_bind
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (F : Preface_specs.Functor.WITH_MAP with type 'a t := 'a Req.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (Req : Preface_specs.Bind.WITH_BIND with type 'a t := 'a Req.t)
+      end) :
+      Preface_specs.Indexed_bind.CORE with type ('a, _) t := 'a Req.t )
 end
 
 module Core_via_map_and_join (Req : Preface_specs.Bind.WITH_MAP_AND_JOIN) =
 struct
-  include Req
+  type 'a t = 'a Req.t
 
-  let bind f m = join (map f m)
-  let compose_left_to_right f g x = bind g (f x)
+  include (
+    Indexed_bind.Core_via_map_and_join (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Bind.WITH_MAP_AND_JOIN with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_bind.CORE with type ('a, _) t := 'a Req.t )
 end
 
 module Core_via_map_and_kleisli_composition
     (Req : Preface_specs.Bind.WITH_MAP_AND_KLEISLI_COMPOSITION) =
 struct
-  include Req
+  type 'a t = 'a Req.t
 
-  let bind f m = (compose_left_to_right (const m) f) ()
-  let join m = bind id m
+  include (
+    Indexed_bind.Core_via_map_and_kleisli_composition (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Bind.WITH_MAP_AND_KLEISLI_COMPOSITION
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_bind.CORE with type ('a, _) t := 'a Req.t )
 end
 
 module Core_over_functor_via_kleisli_composition
-    (Functor : Preface_specs.Functor.WITH_MAP)
-    (Req : Preface_specs.Bind.WITH_KLEISLI_COMPOSITION
-             with type 'a t = 'a Functor.t) =
+    (F : Preface_specs.Functor.WITH_MAP)
+    (Req : Preface_specs.Bind.WITH_KLEISLI_COMPOSITION with type 'a t = 'a F.t) =
 struct
-  include Core_via_map_and_kleisli_composition (struct
-    include Functor
-    include Req
-  end)
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_bind.Core_over_functor_via_kleisli_composition
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (F : Preface_specs.Functor.WITH_MAP with type 'a t := 'a Req.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (
+          Req :
+            Preface_specs.Bind.WITH_KLEISLI_COMPOSITION
+              with type 'a t := 'a Req.t )
+      end) :
+      Preface_specs.Indexed_bind.CORE with type ('a, _) t := 'a Req.t )
 end
 
 module Operation (Core : Preface_specs.Bind.CORE) = struct
-  include Functor.Operation (Core)
+  type 'a t = 'a Core.t
 
-  let compose_right_to_left f g x = Core.compose_left_to_right g f x
-  let lift = Core.map
-  let lift2 f ma mb = Core.(bind (fun a -> map (fun b -> f a b) mb) ma)
+  include (
+    Indexed_bind.Operation (struct
+      type ('a, 'index) t = 'a Core.t
 
-  let lift3 f ma mb mc =
-    let open Core in
-    bind (fun a -> bind (fun b -> map (fun c -> f a b c) mc) mb) ma
-  ;;
+      include (Core : Preface_specs.Bind.CORE with type 'a t := 'a Core.t)
+    end) :
+      Preface_specs.Indexed_bind.OPERATION with type ('a, _) t := 'a Core.t )
 end
 
 module Syntax (Core : Preface_specs.Bind.CORE) = struct
   type 'a t = 'a Core.t
 
-  let ( let* ) m f = Core.bind f m
-  let ( let+ ) m f = Core.map f m
+  include (
+    Indexed_bind.Syntax (struct
+      type ('a, 'index) t = 'a Core.t
+
+      include (Core : Preface_specs.Bind.CORE with type 'a t := 'a Core.t)
+    end) :
+      Preface_specs.Indexed_bind.SYNTAX with type ('a, _) t := 'a Core.t )
 end
 
 module Infix
     (Core : Preface_specs.Bind.CORE)
     (Operation : Preface_specs.Bind.OPERATION with type 'a t = 'a Core.t) =
 struct
-  include Functor.Infix (Core) (Operation)
+  type 'a t = 'a Core.t
 
-  let ( >|= ) x f = Core.map f x
-  let ( =|< ) = Core.map
-  let ( >>= ) x f = Core.bind f x
-  let ( =<< ) = Core.bind
-  let ( >=> ) = Core.compose_left_to_right
-  let ( <=< ) = Operation.compose_right_to_left
-  let ( >> ) ma mb = ma >>= fun _ -> mb
-  let ( << ) ma _ = ma
+  include (
+    Indexed_bind.Infix
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Bind.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation :
+            Preface_specs.Bind.OPERATION with type 'a t := 'a Operation.t )
+      end) :
+      Preface_specs.Indexed_bind.INFIX with type ('a, _) t := 'a Core.t )
 end
 
 module Via
@@ -186,5 +239,36 @@ module Product (F : Preface_specs.BIND) (G : Preface_specs.BIND) =
     (struct
       type 'a t = 'a F.t * 'a G.t
 
-      let bind f (m, n) = (F.bind (fst % f) m, G.bind (snd % f) n)
+      let bind f (m, n) =
+        let open Preface_core.Fun.Infix in
+        (F.bind (fst % f) m, G.bind (snd % f) n)
+      ;;
     end)
+
+module Index (F : Preface_specs.BIND) = struct
+  type ('a, 'index) t = 'a F.t
+
+  include (
+    Indexed_bind.Via
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Bind.CORE with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Bind.OPERATION with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F.Infix : Preface_specs.Bind.INFIX with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F.Syntax : Preface_specs.Bind.SYNTAX with type 'a t := 'a F.t)
+      end) :
+      Preface_specs.INDEXED_BIND with type ('a, 'index) t := ('a, 'index) t )
+end

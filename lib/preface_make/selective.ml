@@ -217,15 +217,17 @@ struct
   include Syntax
 end
 
-module Select_from_monad (Monad : Preface_specs.MONAD) = struct
+module Select_from_monad (Monad : Preface_specs.Monad.CORE) = struct
   type 'a t = 'a Monad.t
 
-  let pure x = Monad.return x
+  include (
+    Indexed_selective.Select_from_monad (struct
+      type ('a, 'index) t = 'a Monad.t
 
-  let select xs fs =
-    let open Monad.Infix in
-    xs >>= Either.fold ~left:(fun a -> fs >|= fun f -> f a) ~right:pure
-  ;;
+      include (Monad : Preface_specs.Monad.CORE with type 'a t := 'a Monad.t)
+    end) :
+      Preface_specs.Indexed_selective.WITH_SELECT
+        with type ('a, _) t := 'a Monad.t )
 end
 
 module From_arrow_choice (A : Preface_specs.ARROW_CHOICE) =

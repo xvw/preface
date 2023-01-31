@@ -132,4 +132,8 @@ module Syntax (Core : Preface_specs.Indexed_selective.CORE) :
   Preface_specs.Indexed_selective.SYNTAX
     with type ('a, 'index) t = ('a, 'index) Core.t
 
-(* FIXME: Do not forget Select_from_monad *)
+(** {2 Deriving Select from a Monad} *)
+
+module Select_from_monad (Monad : Preface_specs.Indexed_monad.CORE) :
+  Preface_specs.Indexed_selective.WITH_SELECT
+    with type ('a, 'index) t = ('a, 'index) Monad.t

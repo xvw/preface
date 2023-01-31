@@ -10,6 +10,8 @@
   indexed_applicative
   indexed_alternative
   indexed_selective
+  indexed_bind
+  indexed_monad
   functor
   apply
   applicative

@@ -106,7 +106,7 @@ end
 
 (** {1 To other abstraction} *)
 
-(** {2 To an Indexed Applicative} *)
+(** {2 To an Indexed Selective} *)
 
 module Index (F : Preface_specs.SELECTIVE) :
   Preface_specs.INDEXED_SELECTIVE with type ('a, 'index) t = 'a F.t
@@ -170,5 +170,5 @@ module Syntax (Core : Preface_specs.Selective.CORE) :
 
 (** {2 Deriving Select from a Monad} *)
 
-module Select_from_monad (Monad : Preface_specs.MONAD) :
+module Select_from_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Monad.t

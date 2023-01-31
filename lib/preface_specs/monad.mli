@@ -27,8 +27,8 @@ module type WITH_RETURN = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
-  val return : 'a -> 'a t
-  (** Lift a value from ['a] into a new ['a t]. *)
+  include Indexed_monad.WITH_RETURN with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Minimal definition using [return] and [bind]. *)
@@ -36,8 +36,8 @@ module type WITH_RETURN_AND_BIND = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
-  include WITH_RETURN with type 'a t := 'a t
-  include Bind.WITH_BIND with type 'a t := 'a t
+  include Indexed_monad.WITH_RETURN_AND_BIND with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Minimal definition using [return], [map] and [join]. *)
@@ -45,8 +45,8 @@ module type WITH_RETURN_MAP_AND_JOIN = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
-  include WITH_RETURN with type 'a t := 'a t
-  include Bind.WITH_MAP_AND_JOIN with type 'a t := 'a t
+  include Indexed_monad.WITH_RETURN_MAP_AND_JOIN with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Minimal definition using [return] and [compose_left_to_right]. *)
@@ -54,39 +54,47 @@ module type WITH_RETURN_AND_KLEISLI_COMPOSITION = sig
   type 'a t
   (** The type held by the [Monad]. *)
 
-  include WITH_RETURN with type 'a t := 'a t
-  include Bind.WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
+  include
+    Indexed_monad.WITH_RETURN_AND_KLEISLI_COMPOSITION
+      with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
 
 (** Basis operations. *)
 module type CORE = sig
-  include WITH_RETURN_AND_BIND
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Monad]. *)
 
-  include WITH_RETURN_MAP_AND_JOIN with type 'a t := 'a t
-  (** @inline *)
-
-  include WITH_RETURN_AND_KLEISLI_COMPOSITION with type 'a t := 'a t
+  include Indexed_monad.CORE with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Additional operations. *)
 module type OPERATION = sig
-  include Bind.OPERATION
+  type 'a t
+  (** The type held by the [Monad]. *)
+
+  include Indexed_monad.OPERATION with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Syntax extensions. *)
 module type SYNTAX = sig
-  include Bind.SYNTAX
+  type 'a t
+  (** The type held by the [Monad]. *)
+
+  include Indexed_monad.SYNTAX with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Infix operators. *)
 module type INFIX = sig
-  include Bind.INFIX
+  type 'a t
+  (** The type held by the [Monad]. *)
+
+  include Indexed_monad.INFIX with type ('a, _) t := 'a t
   (** @inline *)
 end
 

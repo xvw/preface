@@ -1,6 +1,8 @@
 module type LAWS = sig
   type ('a, 'index) t
 
+  include Indexed_apply.LAWS with type ('a, 'index) t := ('a, 'index) t
+
   val applicative_1 : unit -> (('a, 'index) t, ('a, 'index) t) Law.t
   val applicative_2 : unit -> ('a -> 'b, 'a -> ('b, 'index) t) Law.t
   val applicative_3 : unit -> (('a -> 'b, 'index) t, 'a -> ('b, 'index) t) Law.t

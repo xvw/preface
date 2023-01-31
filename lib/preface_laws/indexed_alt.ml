@@ -1,6 +1,8 @@
 module type LAWS = sig
   type ('a, 'index) t
 
+  include Indexed_functor.LAWS with type ('a, 'index) t := ('a, 'index) t
+
   val alt_1 :
        unit
     -> ( ('a, 'index) t

@@ -203,3 +203,17 @@ struct
   include Infix
   include Syntax
 end
+
+module Select_from_monad (Monad : Preface_specs.Indexed_monad.CORE) = struct
+  type ('a, 'index) t = ('a, 'index) Monad.t
+
+  let pure x = Monad.return x
+
+  let select xs fs =
+    Monad.bind
+      (fun x ->
+        Either.fold ~left:(fun a -> Monad.map (fun f -> f a) fs) ~right:pure x
+        )
+      xs
+  ;;
+end

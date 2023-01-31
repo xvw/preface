@@ -32,6 +32,8 @@ module Indexed_apply = Indexed_apply
 module Indexed_applicative = Indexed_applicative
 module Indexed_alternative = Indexed_alternative
 module Indexed_selective = Indexed_selective
+module Indexed_bind = Indexed_bind
+module Indexed_monad = Indexed_monad
 
 (** {1 Functor hierarchy} *)
 
@@ -117,6 +119,8 @@ module type INDEXED_APPLY = Indexed_apply.API
 module type INDEXED_APPLICATIVE = Indexed_applicative.API
 module type INDEXED_ALTERNATIVE = Indexed_alternative.API
 module type INDEXED_SELECTIVE = Indexed_selective.API
+module type INDEXED_BIND = Indexed_bind.API
+module type INDEXED_MONAD = Indexed_monad.API
 module type FUNCTOR = Functor.API
 module type BIFUNCTOR = Bifunctor.API
 module type PROFUNCTOR = Profunctor.API
