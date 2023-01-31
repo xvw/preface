@@ -10,32 +10,40 @@
 
 (** Minimal interfaces of [Alternative] without {!module:Monad}. *)
 module type WITH_NEUTRAL_AND_COMBINE = sig
-  include Alternative.WITH_NEUTRAL_AND_COMBINE
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
+
+  include
+    Indexed_monad_plus.WITH_NEUTRAL_AND_COMBINE with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Minimal definition using [neutral], [combine], [return], [map] and [join]. *)
 module type WITH_MAP_AND_JOIN = sig
-  include Monad.WITH_RETURN_MAP_AND_JOIN
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
 
-  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  include Indexed_monad_plus.WITH_MAP_AND_JOIN with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Minimal definition using [neutral], [combine], [return],
     [compose_left_to_right]. *)
 module type WITH_KLEISLI_COMPOSITION = sig
-  include Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION
-  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
+
+  include
+    Indexed_monad_plus.WITH_KLEISLI_COMPOSITION with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Minimal definition using [neutral], [combine], [return], [bind]. *)
 module type WITH_BIND = sig
-  include Monad.WITH_RETURN_AND_BIND
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
 
-  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  include Indexed_monad_plus.WITH_BIND with type ('a, _) t := 'a t
   (** @inline *)
 end
 
@@ -43,37 +51,37 @@ end
 
 (** Basis operations. *)
 module type CORE = sig
-  include Monad.CORE
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
 
-  include WITH_NEUTRAL_AND_COMBINE with type 'a t := 'a t
+  include Indexed_monad_plus.CORE with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Additional operations. *)
 module type OPERATION = sig
-  include Monad.OPERATION
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
 
-  include Alternative.ALTERNATIVE_OPERATION with type 'a t := 'a t
+  include Indexed_monad_plus.OPERATION with type ('a, _) t := 'a t
   (** @inline *)
-
-  val filter : ('a -> bool) -> 'a t -> 'a t
-  (** Filtering over [Monad_plus]. *)
 end
 
 (** Infix operators. *)
 module type INFIX = sig
-  include Monad.INFIX
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
 
-  val ( <|> ) : 'a t -> 'a t -> 'a t
-  (** Infix version of {!val:CORE.combine}. *)
+  include Indexed_monad_plus.INFIX with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Syntax extensions *)
 module type SYNTAX = sig
-  include Monad.SYNTAX
+  type 'a t
+  (** The type held by the [Monad_plus]. *)
+
+  include Indexed_monad_plus.SYNTAX with type ('a, _) t := 'a t
   (** @inline *)
 end
 

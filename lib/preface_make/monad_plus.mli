@@ -83,6 +83,13 @@ module From_arrow_apply_and_arrow_plus
     (P : Preface_specs.ARROW_PLUS with type ('a, 'b) t = ('a, 'b) A.t) :
   Preface_specs.MONAD_PLUS with type 'a t = (unit, 'a) P.t
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Monad} *)
+
+module Index (F : Preface_specs.MONAD_PLUS) :
+  Preface_specs.INDEXED_MONAD_PLUS with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build a {!module-type:Preface_specs.MONAD_PLUS},

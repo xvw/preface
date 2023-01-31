@@ -12,6 +12,7 @@
   indexed_selective
   indexed_bind
   indexed_monad
+  indexed_monad_plus
   functor
   apply
   applicative
