@@ -36,6 +36,7 @@ module Indexed_bind = Indexed_bind
 module Indexed_monad = Indexed_monad
 module Indexed_monad_plus = Indexed_monad_plus
 module Indexed_comonad = Indexed_comonad
+module Indexed_foldable = Indexed_foldable
 
 (** {1 Functor hierarchy} *)
 
@@ -125,6 +126,7 @@ module type INDEXED_BIND = Indexed_bind.API
 module type INDEXED_MONAD = Indexed_monad.API
 module type INDEXED_MONAD_PLUS = Indexed_monad_plus.API
 module type INDEXED_COMONAD = Indexed_comonad.API
+module type INDEXED_FOLDABLE = Indexed_foldable.API
 module type FUNCTOR = Functor.API
 module type BIFUNCTOR = Bifunctor.API
 module type PROFUNCTOR = Profunctor.API

@@ -14,6 +14,7 @@
   indexed_monad
   indexed_monad_plus
   indexed_comonad
+  indexed_foldable
   functor
   apply
   applicative

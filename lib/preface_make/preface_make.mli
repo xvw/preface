@@ -52,6 +52,7 @@ module Indexed_bind = Indexed_bind
 module Indexed_monad = Indexed_monad
 module Indexed_monad_plus = Indexed_monad_plus
 module Indexed_comonad = Indexed_comonad
+module Indexed_foldable = Indexed_foldable
 
 (** {1 Functor hierarchy} *)
 

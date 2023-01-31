@@ -56,6 +56,13 @@ end
 module Product (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) :
   Preface_specs.FOLDABLE with type 'a t = 'a F.t * 'a G.t
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Foldable} *)
+
+module Index (F : Preface_specs.FOLDABLE) :
+  Preface_specs.INDEXED_FOLDABLE with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build a {!module-type:Preface_specs.FOLDABLE}, constructing

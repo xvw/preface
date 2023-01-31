@@ -1,45 +1,40 @@
 module Core_via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) =
 struct
-  include Req
+  type 'a t = 'a Req.t
 
-  let fold_map' neutral combine f x =
-    let reducer x acc = combine (f x) acc in
-    fold_right reducer x neutral
-  ;;
+  include (
+    Indexed_foldable.Core_via_fold_right (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Foldable.WITH_FOLD_RIGHT with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_foldable.CORE with type ('a, _) t := 'a Req.t )
 end
 
 module Core_via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) = struct
-  include Req
+  type 'a t = 'a Req.t
 
-  let fold_right f x acc =
-    (fold_map' (fun x -> x) (fun f g x -> f (g x)) f) x acc
-  ;;
+  include (
+    Indexed_foldable.Core_via_fold_map (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Foldable.WITH_FOLD_MAP with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_foldable.CORE with type ('a, _) t := 'a Req.t )
 end
 
 module Operation (C : Preface_specs.Foldable.CORE) = struct
   type 'a t = 'a C.t
 
-  let fold_map
-      (type m)
-      (module M : Preface_specs.Monoid.CORE with type t = m)
-      f
-      x =
-    C.fold_map' M.neutral M.combine f x
-  ;;
+  include (
+    Indexed_foldable.Operation (struct
+      type ('a, 'index) t = 'a C.t
 
-  let reduce (type m) (module M : Preface_specs.Monoid.CORE with type t = m) x =
-    fold_map (module M) (fun x -> x) x
-  ;;
-
-  let fold_left f acc x =
-    let f' x k z = k (f z x) in
-    let fold = C.fold_right f' x (fun x -> x) in
-    fold acc
-  ;;
-
-  let for_all p x = C.fold_map' true ( && ) p x
-  let exists p x = C.fold_map' false ( || ) p x
-  let length x = fold_left (fun acc _ -> succ acc) 0 x
+      include (C : Preface_specs.Foldable.CORE with type 'a t := 'a C.t)
+    end) :
+      Preface_specs.Indexed_foldable.OPERATION with type ('a, _) t := 'a C.t )
 end
 
 module Via
@@ -94,3 +89,21 @@ Via_fold_map (struct
     combine (F.fold_map' neutral combine f x) (G.fold_map' neutral combine f y)
   ;;
 end)
+
+module Index (F : Preface_specs.FOLDABLE) = struct
+  type ('a, 'index) t = 'a F.t
+
+  include (
+    Indexed_foldable.Via
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Foldable.CORE with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Foldable.OPERATION with type 'a t := 'a F.t)
+      end) :
+      Preface_specs.INDEXED_FOLDABLE with type ('a, 'index) t := ('a, 'index) t )
+end
