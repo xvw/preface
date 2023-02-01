@@ -1,5 +1,6 @@
 ## dev (unreleased)
 
+- Add `Indexed_functor`, `Indexed_alt`, `Indexed_apply`, `Indexed_applicative`, `Indexed_alternative`, `Indexed_selective`, `Indexed_bind`, `Indexed_monad`, `Indexed_monad_plus`, `Indexed_comonad`, `Indexed_foldable` [**@mspwn**](https://github.com/mspwn), [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
 - Add `Bounded_join_semilattice` [**@hakimba**](https://github.com/hakimba)
 - Add `Bounded_meet_semilattice` [**@hakimba**](https://github.com/hakimba)
 - Add `Join_semilattice` [**@hakimba**](https://github.com/hakimba)

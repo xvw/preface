@@ -16,55 +16,56 @@ type ('a, 'b) t = ('a, 'b) result =
 module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
 (** {2 Bifunctor API} *)
 
-(** {2 Delayed implementation}
+module Mono (T : Preface_specs.Types.T0) : sig
+  (** {2 Delayed implementation}
 
-    By setting the [error] type of [Result.t] it is possible to get
-    implementations for abstractions on constructors of type with an arity of 1. *)
+      By setting the [error] type of [Result.t] it is possible to get
+      implementations for abstractions on constructors of type with an arity of
+      1. *)
 
-(** {3 Functor} *)
+  (** {3 Functor} *)
 
-module Functor (T : Preface_specs.Types.T0) :
-  Preface_specs.FUNCTOR with type 'a t = ('a, T.t) Bifunctor.t
+  module Functor : Preface_specs.FUNCTOR with type 'a t = ('a, T.t) Bifunctor.t
 
-(** {3 Alt} *)
+  (** {3 Alt} *)
 
-module Alt (T : Preface_specs.Types.T0) :
-  Preface_specs.ALT with type 'a t = ('a, T.t) Bifunctor.t
+  module Alt : Preface_specs.ALT with type 'a t = ('a, T.t) Bifunctor.t
 
-(** {3 Invariant} *)
+  (** {3 Invariant} *)
 
-module Invariant (T : Preface_specs.Types.T0) :
-  Preface_specs.INVARIANT with type 'a t = ('a, T.t) Bifunctor.t
+  module Invariant :
+    Preface_specs.INVARIANT with type 'a t = ('a, T.t) Bifunctor.t
 
-(** {3 Applicative}
+  (** {3 Applicative}
 
-    [Result.t] implements {!module-type:Preface_specs.APPLICATIVE} and
-    introduces an interface to define {!module-type:Preface_specs.TRAVERSABLE}
-    using [Result] as an iterable structure. *)
+      [Result.t] implements {!module-type:Preface_specs.APPLICATIVE} and
+      introduces an interface to define {!module-type:Preface_specs.TRAVERSABLE}
+      using [Result] as an iterable structure. *)
 
-module Applicative (T : Preface_specs.Types.T0) :
-  Preface_specs.Traversable.API_OVER_APPLICATIVE
-    with type 'a t = ('a, T.t) Bifunctor.t
+  module Applicative :
+    Preface_specs.Traversable.API_OVER_APPLICATIVE
+      with type 'a t = ('a, T.t) Bifunctor.t
 
-(** {3 Selective} *)
+  (** {3 Selective} *)
 
-module Selective (T : Preface_specs.Types.T0) :
-  Preface_specs.SELECTIVE with type 'a t = ('a, T.t) Bifunctor.t
+  module Selective :
+    Preface_specs.SELECTIVE with type 'a t = ('a, T.t) Bifunctor.t
 
-(** {3 Monad}
+  (** {3 Monad}
 
-    [Result.t] implements {!module-type:Preface_specs.MONAD} and introduces an
-    interface to define {!module-type:Preface_specs.TRAVERSABLE} using [Result]
-    as an iterable structure. *)
+      [Result.t] implements {!module-type:Preface_specs.MONAD} and introduces an
+      interface to define {!module-type:Preface_specs.TRAVERSABLE} using
+      [Result] as an iterable structure. *)
 
-module Monad (T : Preface_specs.Types.T0) :
-  Preface_specs.Traversable.API_OVER_MONAD
-    with type 'a t = ('a, T.t) Bifunctor.t
+  module Monad :
+    Preface_specs.Traversable.API_OVER_MONAD
+      with type 'a t = ('a, T.t) Bifunctor.t
 
-(** {3 Foldable} *)
+  (** {3 Foldable} *)
 
-module Foldable (T : Preface_specs.Types.T0) :
-  Preface_specs.FOLDABLE with type 'a t = ('a, T.t) Bifunctor.t
+  module Foldable :
+    Preface_specs.FOLDABLE with type 'a t = ('a, T.t) Bifunctor.t
+end
 
 (** {1 Additional functions}
 

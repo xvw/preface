@@ -7,51 +7,53 @@ module Bifunctor_suite =
     (Sample.Int)
     (Sample.String)
 
+module Int_result = Preface.Result.Mono (Sample.Int)
+
 module Invariant_suite =
   Preface.Qcheck.Invariant.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Invariant (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Invariant)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
 
 module Functor_suite =
   Preface.Qcheck.Functor.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Functor (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Functor)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
 
 module Alt_suite =
   Preface.Qcheck.Alt.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Alt (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Alt)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
 
 module Apply_suite =
   Preface.Qcheck.Apply.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Applicative (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Applicative)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
 
 module Applicative_suite =
   Preface.Qcheck.Applicative.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Applicative (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Applicative)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
 
 module Selective_suite =
   Preface.Qcheck.Selective.Suite_rigid
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Selective (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Selective)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
 
 module Bind_suite =
   Preface.Qcheck.Bind.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Monad (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Monad)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
@@ -59,7 +61,7 @@ module Bind_suite =
 
 module Monad_suite =
   Preface.Qcheck.Monad.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Monad (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Monad)
     (Sample.Int)
     (Sample.String)
     (Sample.Float)
@@ -67,19 +69,19 @@ module Monad_suite =
 
 module Foldable_suite =
   Preface.Qcheck.Foldable.Suite
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Foldable (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Foldable)
     (Sample.Int)
     (Sample.String)
     (Misc.Sum)
 
 module Traversable_monad_suite =
   Preface.Qcheck.Traversable.Suite_monad
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Monad (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Monad)
     (Sample.Int)
 
 module Traversable_applicative_suite =
   Preface.Qcheck.Traversable.Suite_applicative
-    (Req.Result.Mono (Sample.Int)) (Preface.Result.Applicative (Sample.Int))
+    (Req.Result.Mono (Sample.Int)) (Int_result.Applicative)
     (Req.Option)
     (Preface.Option.Applicative)
     (Req.Try)
