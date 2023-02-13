@@ -6,7 +6,7 @@
     obey some laws.
     - [join a (join b c) = join (join a b) c]
     - [join a b = join b a]
-    - [join a a = a] 
+    - [join a a = a]
     - [join a bottom = a] *)
 
 (** {1 Minimal definition}*)
@@ -51,7 +51,7 @@ module type API = sig
 
   (** {1 Infix operators} *)
 
-  module Infix : INFIX with type t = t
+  module Infix : INFIX with type t := t
 
   include INFIX with type t := t
   (** @inline *)

@@ -143,7 +143,7 @@ module type API = sig
 
   (** {1 Infix operators} *)
 
-  module Infix : INFIX with type ('a, 'b) t = ('a, 'b) t
+  module Infix : INFIX with type ('a, 'b) t := ('a, 'b) t
 
   include INFIX with type ('a, 'b) t := ('a, 'b) t
   (** @inline *)

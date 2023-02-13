@@ -1,5 +1,6 @@
 ## dev (unreleased)
 
+- **Breaking change** Remove manifest types in submodules (`Infix` and `Syntax`) [**@mspwn**](https://github.com/mspwn)
 - Add `Indexed_functor`, `Indexed_alt`, `Indexed_apply`, `Indexed_applicative`, `Indexed_alternative`, `Indexed_selective`, `Indexed_bind`, `Indexed_monad`, `Indexed_monad_plus`, `Indexed_comonad`, `Indexed_foldable` [**@mspwn**](https://github.com/mspwn), [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
 - Add `Bounded_join_semilattice` [**@hakimba**](https://github.com/hakimba)
 - Add `Bounded_meet_semilattice` [**@hakimba**](https://github.com/hakimba)
@@ -8,7 +9,7 @@
 - Add `Equivalence` in `Preface.Stdlib` [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
 - Add `Preface.Laws` and `Preface.Qcheck` to allow external users to build their own test suites for implementations outside Preface [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
 - **Breaking change** change minimal version of OCaml to `>= 4.12.0` [**@gr-im**](https://github.com/gr-im)
-- Exposition of `Apply` and `Make` in `Preface.Make ` [**@gr-im**](https://github.com/gr-im)
+- Exposition of `Apply` and `Make` in `Preface.Make` [**@gr-im**](https://github.com/gr-im)
 
 ## v1.0.0 (May 2022)
 

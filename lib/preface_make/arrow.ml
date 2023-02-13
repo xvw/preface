@@ -86,7 +86,17 @@ struct
   module Core = Core_over_category_and_via_arrow_and_fst (Category) (Req)
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
-  module Infix = Infix_over_category (Category.Infix) (Core) (Operation)
+
+  module Infix =
+    Infix_over_category
+      (struct
+        type ('a, 'b) t = ('a, 'b) Category.t
+
+        include Category.Infix
+      end)
+      (Core)
+      (Operation)
+
   include Core
   include Operation
   include Alias
@@ -101,7 +111,17 @@ struct
   module Core = Core_over_category_and_via_arrow_and_split (Category) (Req)
   module Operation = Operation_over_category (Category) (Core)
   module Alias = Alias (Operation)
-  module Infix = Infix_over_category (Category.Infix) (Core) (Operation)
+
+  module Infix =
+    Infix_over_category
+      (struct
+        type ('a, 'b) t = ('a, 'b) Category.t
+
+        include Category.Infix
+      end)
+      (Core)
+      (Operation)
+
   include Core
   include Operation
   include Alias
