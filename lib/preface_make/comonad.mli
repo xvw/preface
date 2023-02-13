@@ -37,6 +37,13 @@ module Via_cokleisli_composition
     (Req : Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION) :
   Preface_specs.COMONAD with type 'a t = 'a Req.t
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Comonad} *)
+
+module Index (F : Preface_specs.COMONAD) :
+  Preface_specs.INDEXED_COMONAD with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build a {!module-type:Preface_specs.COMONAD}, constructing
@@ -49,8 +56,8 @@ module Via_cokleisli_composition
 module Via
     (Core : Preface_specs.Comonad.CORE)
     (Operation : Preface_specs.Comonad.OPERATION with type 'a t = 'a Core.t)
-    (Syntax : Preface_specs.Comonad.SYNTAX with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Comonad.INFIX with type 'a t = 'a Core.t) :
+    (Infix : Preface_specs.Comonad.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Comonad.SYNTAX with type 'a t = 'a Core.t) :
   Preface_specs.COMONAD with type 'a t = 'a Core.t
 
 (** {2 Building Core} *)

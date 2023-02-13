@@ -18,17 +18,17 @@ module type WITH_COMBINE = sig
   type 'a t
   (** A type ['a t] held by the [Alt]. *)
 
-  val combine : 'a t -> 'a t -> 'a t
-  (** Combine two values of ['a t] into one. *)
+  include Indexed_alt.WITH_COMBINE with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** The minimum definition of an [Alt]. It is by using the combinators of this
     module that the other combinators will be derived. *)
 module type WITH_COMBINE_AND_MAP = sig
-  include WITH_COMBINE
-  (** @inline *)
+  type 'a t
+  (** A type ['a t] held by the [Alt]. *)
 
-  include Functor.WITH_MAP with type 'a t := 'a t
+  include Indexed_alt.WITH_COMBINE_AND_MAP with type ('a, _) t := 'a t
   (** @inline *)
 end
 
@@ -42,14 +42,7 @@ module type OPERATION = sig
   type 'a t
   (** A type ['a t] held by the [Alt]. *)
 
-  val times_nel : int -> 'a t -> 'a t option
-  (** [times_nel n x] apply [combine] on [x] [n] times. If [n] is lower than [1]
-      the function will returns [None]. *)
-
-  val reduce_nel : 'a t Preface_core.Nonempty_list.t -> 'a t
-  (** Reduce a [Nonempty_list.t] using [combine]. *)
-
-  include Functor.OPERATION with type 'a t := 'a t
+  include Indexed_alt.OPERATION with type ('a, _) t := 'a t
   (** @inline *)
 end
 
@@ -58,10 +51,16 @@ module type INFIX = sig
   type 'a t
   (** A type ['a t] which is an [Alt]. *)
 
-  val ( <|> ) : 'a t -> 'a t -> 'a t
-  (** Infix version of {!val:CORE.combine} *)
+  include Indexed_alt.INFIX with type ('a, _) t := 'a t
+  (** @inline *)
+end
 
-  include Functor.INFIX with type 'a t := 'a t
+(** Syntax operators. *)
+module type SYNTAX = sig
+  type 'a t
+  (** A type ['a t] which is an [Alt]. *)
+
+  include Indexed_alt.SYNTAX with type ('a, _) t := 'a t
   (** @inline *)
 end
 
@@ -74,19 +73,7 @@ module type API = sig
   type 'a t
   (** The type held by the [Alt]. *)
 
-  (** {1 Functions} *)
-
-  include CORE with type 'a t := 'a t
-  (** @inline *)
-
-  include OPERATION with type 'a t := 'a t
-  (** @inline *)
-
-  (** {1 Infix operators} *)
-
-  module Infix : INFIX with type 'a t = 'a t
-
-  include INFIX with type 'a t := 'a t
+  include Indexed_alt.API with type ('a, _) t := 'a t
   (** @inline *)
 end
 

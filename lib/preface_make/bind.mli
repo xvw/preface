@@ -29,7 +29,7 @@ module Over_functor_via_bind
 
 (** {2 Using return, map and join}
 
-    Build a {!module-type:Preface_specs.Bind} using
+    Build a {!module-type:Preface_specs.BIND} using
     {!module-type:Preface_specs.Bind.WITH_RETURN_MAP_AND_JOIN}.
 
     Standard method, using the minimal definition of an alt to derive its full
@@ -40,7 +40,7 @@ module Via_map_and_join (Req : Preface_specs.Bind.WITH_MAP_AND_JOIN) :
 
 (** {2 Using return and the kleisli composition}
 
-    Build a {!module-type:Preface_specs.Bind} using
+    Build a {!module-type:Preface_specs.BIND} using
     {!module-type:Preface_specs.Bind.WITH_RETURN_AND_KLEISLI_COMPOSITION}.
 
     Standard method, using the minimal definition of an alt to derive its full
@@ -67,7 +67,7 @@ module Over_functor_via_kleisli_composition
 
 (** {1 Bind Algebra}
 
-    Construction of {!module-type:Preface_specs.Bind} by combining them. *)
+    Construction of {!module-type:Preface_specs.BIND} by combining them. *)
 
 (** {2 Product}
 
@@ -101,6 +101,13 @@ module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) :
 
 module From_arrow_apply (A : Preface_specs.ARROW_APPLY) :
   Preface_specs.BIND with type 'a t = (unit, 'a) A.t
+
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Bind} *)
+
+module Index (F : Preface_specs.BIND) :
+  Preface_specs.INDEXED_BIND with type ('a, 'index) t = 'a F.t
 
 (** {1 Manual construction}
 

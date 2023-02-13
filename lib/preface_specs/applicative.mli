@@ -25,8 +25,8 @@ module type WITH_PURE = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  val pure : 'a -> 'a t
-  (** Lift a value from ['a] into a new ['a t]. *)
+  include Indexed_applicative.WITH_PURE with type ('a, _) t := 'a t
+  (** inline *)
 end
 
 (** Minimal interface using [map] and [product]. *)
@@ -34,8 +34,9 @@ module type WITH_PURE_MAP_AND_PRODUCT = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  include WITH_PURE with type 'a t := 'a t
-  include Apply.WITH_MAP_AND_PRODUCT with type 'a t := 'a t
+  include
+    Indexed_applicative.WITH_PURE_MAP_AND_PRODUCT with type ('a, _) t := 'a t
+  (** inline *)
 end
 
 (** Minimal interface using [apply]. *)
@@ -43,8 +44,8 @@ module type WITH_PURE_AND_APPLY = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  include WITH_PURE with type 'a t := 'a t
-  include Apply.WITH_APPLY with type 'a t := 'a t
+  include Indexed_applicative.WITH_PURE_AND_APPLY with type ('a, _) t := 'a t
+  (** inline *)
 end
 
 (** Minimal interface using [lift2]. *)
@@ -52,22 +53,19 @@ module type WITH_PURE_AND_LIFT2 = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  include WITH_PURE with type 'a t := 'a t
-  include Apply.WITH_LIFT2 with type 'a t := 'a t
+  include Indexed_applicative.WITH_PURE_AND_LIFT2 with type ('a, _) t := 'a t
+  (** inline *)
 end
 
 (** {1 Structure anatomy} *)
 
 (** Basis operations. *)
 module type CORE = sig
-  include WITH_PURE_AND_APPLY
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Applicative]. *)
 
-  include WITH_PURE_MAP_AND_PRODUCT with type 'a t := 'a t
-  (** @inline *)
-
-  include WITH_PURE_AND_LIFT2 with type 'a t := 'a t
-  (** @inline *)
+  include Indexed_applicative.CORE with type ('a, _) t := 'a t
+  (** inline *)
 end
 
 (** Additional operations. *)
@@ -86,7 +84,8 @@ module type SYNTAX = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  include Apply.SYNTAX with type 'a t := 'a t
+  include Indexed_applicative.SYNTAX with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Infix operators. *)
@@ -94,9 +93,7 @@ module type INFIX = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  include Apply.INFIX with type 'a t := 'a t
-
-  include Functor.INFIX with type 'a t := 'a t
+  include Indexed_applicative.INFIX with type ('a, _) t := 'a t
   (** @inline *)
 end
 
@@ -109,26 +106,7 @@ module type API = sig
   type 'a t
   (** The type held by the [Applicative]. *)
 
-  (** {1 Functions} *)
-
-  include CORE with type 'a t := 'a t
-  (** @inline *)
-
-  include OPERATION with type 'a t := 'a t
-  (** @inline *)
-
-  (** {1 Infix operators} *)
-
-  module Infix : INFIX with type 'a t = 'a t
-
-  include INFIX with type 'a t := 'a t
-  (** @inline *)
-
-  (** {1 Syntax} *)
-
-  module Syntax : SYNTAX with type 'a t = 'a t
-
-  include SYNTAX with type 'a t := 'a t
+  include Indexed_applicative.API with type ('a, _) t := 'a t
   (** @inline *)
 end
 

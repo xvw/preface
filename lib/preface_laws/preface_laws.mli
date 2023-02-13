@@ -20,6 +20,20 @@ module Join_semilattice = Join_semilattice
 module Bounded_meet_semilattice = Bounded_meet_semilattice
 module Bounded_join_semilattice = Bounded_join_semilattice
 
+(** {1 Indexed Functor hierarchy} *)
+
+module Indexed_functor = Indexed_functor
+module Indexed_alt = Indexed_alt
+module Indexed_apply = Indexed_apply
+module Indexed_applicative = Indexed_applicative
+module Indexed_alternative = Indexed_alternative
+module Indexed_selective = Indexed_selective
+module Indexed_bind = Indexed_bind
+module Indexed_monad = Indexed_monad
+module Indexed_monad_plus = Indexed_monad_plus
+module Indexed_comonad = Indexed_comonad
+module Indexed_foldable = Indexed_foldable
+
 (** {1 Functor hierarchy} *)
 
 module Invariant = Invariant

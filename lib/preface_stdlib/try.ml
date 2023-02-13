@@ -4,31 +4,7 @@ let pure x = Ok x
 let ok = pure
 let error exn = Error exn
 
-module Functor = Result.Functor (struct
-  type t = exn
-end)
-
-module Invariant = Preface_make.Invariant.From_functor (Functor)
-
-module Alt = Result.Alt (struct
-  type t = exn
-end)
-
-module Applicative = Result.Applicative (struct
-  type t = exn
-end)
-
-module Monad = Result.Monad (struct
-  type t = exn
-end)
-
-module Selective = Result.Selective (struct
-  type t = exn
-end)
-
-module Foldable = Result.Foldable (struct
-  type t = exn
-end)
+include Result.Mono (Exn)
 
 let capture f = try ok (f ()) with exn -> error exn
 let case f g = function Ok x -> f x | Error exn -> g exn

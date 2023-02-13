@@ -17,6 +17,28 @@ graph {
         Monad -- Monad_plus;
         Functor -- Alt;
         Functor -- Comonad;
+
+        Functor -- Indexed_functor [style=dotted; arrowhead=none; constraint=false];
+        Alt -- Indexed_alt [style=dotted; arrowhead=none; constraint=false];
+        Apply -- Indexed_apply [style=dotted; arrowhead=none; constraint=false];
+        Applicative -- Indexed_applicative [style=dotted; arrowhead=none; constraint=false];
+        Alternative -- Indexed_alternative [style=dotted; arrowhead=none; constraint=false];
+        Selective -- Indexed_selective [style=dotted; arrowhead=none; constraint=false];
+        Bind -- Indexed_bind [style=dotted; arrowhead=none; constraint=false];
+        Monad -- Indexed_monad [style=dotted; arrowhead=none; constraint=false];
+        Monad_plus -- Indexed_monad_plus [style=dotted; arrowhead=none; constraint=false];
+        Comonad -- Indexed_comonad [style=dotted; arrowhead=none; constraint=false];
+        Foldable -- Indexed_foldable [style=dotted; arrowhead=none; constraint=false];
+
+        Indexed_functor -- Indexed_applicative -- Indexed_selective -- Indexed_monad;
+        Indexed_functor -- Indexed_apply [style=dotted; arrowhead=none; constraint=false];
+        Indexed_apply -- Indexed_applicative;
+        Indexed_bind -- Indexed_monad;
+        Indexed_functor -- Indexed_bind [style=dotted; arrowhead=none; constraint=false];
+        Indexed_applicative -- Indexed_alternative;
+        Indexed_monad -- Indexed_monad_plus;
+        Indexed_functor -- Indexed_alt;
+        Indexed_functor -- Indexed_comonad;
         
         Semigroup -- Monoid;
         Monoid -- Alternative [style=dotted; arrowhead=none; constraint=false];

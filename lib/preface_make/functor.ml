@@ -1,43 +1,98 @@
-open Preface_core.Fun
 module Core (Req : Preface_specs.Functor.WITH_MAP) = Req
 
 module Operation (Core : Preface_specs.Functor.CORE) = struct
   type 'a t = 'a Core.t
 
-  let replace value x = (Core.map <% const) value x
-  let void x = replace () x
+  include (
+    Indexed_functor.Operation (struct
+      type ('a, 'index) t = 'a Core.t
+
+      include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+    end) :
+      Preface_specs.Indexed_functor.OPERATION with type ('a, _) t := 'a Core.t )
 end
 
 module Infix
     (Core : Preface_specs.Functor.CORE)
     (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t) =
 struct
-  type 'a t = 'a Operation.t
+  type 'a t = 'a Core.t
 
-  let ( <$> ) = Core.map
-  let ( <&> ) x f = Core.map f x
-  let ( <$ ) value x = Operation.replace value x
-  let ( $> ) x value = Operation.replace value x
+  include (
+    Indexed_functor.Infix
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Operation.t
+
+        include (
+          Operation :
+            Preface_specs.Functor.OPERATION with type 'a t := 'a Core.t )
+      end) :
+      Preface_specs.Indexed_functor.INFIX with type ('a, _) t := 'a Core.t )
+end
+
+module Syntax (Core : Preface_specs.Functor.CORE) = struct
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_functor.Syntax (struct
+      type ('a, 'index) t = 'a Core.t
+
+      include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+    end) :
+      Preface_specs.Indexed_functor.SYNTAX with type ('a, _) t := 'a Core.t )
 end
 
 module Via
     (Core : Preface_specs.Functor.CORE)
-    (Operation : Preface_specs.Functor.OPERATION)
-    (Infix : Preface_specs.Functor.INFIX) =
+    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Functor.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Infix
-  module Infix = Infix
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_functor.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation :
+            Preface_specs.Functor.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Infix : Preface_specs.Functor.INFIX with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Syntax : Preface_specs.Functor.SYNTAX with type 'a t := 'a Core.t )
+      end) :
+      Preface_specs.Indexed_functor.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_map (Req : Preface_specs.Functor.WITH_MAP) = struct
-  module Core = Core (Req)
-  include Core
-  module Operation = Operation (Core)
-  include Operation
-  module Infix = Infix (Core) (Operation)
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_functor.Via_map (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (Req : Preface_specs.Functor.WITH_MAP with type 'a t := 'a Req.t)
+    end) :
+      Preface_specs.Indexed_functor.API with type ('a, _) t := 'a Req.t )
 end
 
 module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) =
@@ -85,3 +140,32 @@ Via_map (struct
 
   let map f (x, y) = (F.map f x, G.map f y)
 end)
+
+module Index (F : Preface_specs.FUNCTOR) = struct
+  type ('a, 'index) t = 'a F.t
+
+  include (
+    Indexed_functor.Via
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Functor.CORE with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F : Preface_specs.Functor.OPERATION with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (F.Infix : Preface_specs.Functor.INFIX with type 'a t := 'a F.t)
+      end)
+      (struct
+        type nonrec ('a, 'index) t = ('a, 'index) t
+
+        include (
+          F.Syntax : Preface_specs.Functor.SYNTAX with type 'a t := 'a F.t )
+      end) :
+      Preface_specs.INDEXED_FUNCTOR with type ('a, 'index) t := ('a, 'index) t )
+end

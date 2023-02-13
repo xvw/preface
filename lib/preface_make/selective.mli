@@ -40,7 +40,7 @@ module Over_applicative_via_branch
     API (including the Applicative API). *)
 
 module Over_functor_via_select
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
              with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Req.t
@@ -55,7 +55,7 @@ module Over_functor_via_select
     API (including the Applicative API). *)
 
 module Over_functor_via_branch
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
              with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Req.t
@@ -104,6 +104,13 @@ module Const (M : Preface_specs.Monoid.CORE) : sig
   (** Retrieve the [Monoid] value from the [Const]. *)
 end
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Selective} *)
+
+module Index (F : Preface_specs.SELECTIVE) :
+  Preface_specs.INDEXED_SELECTIVE with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build a {!module-type:Preface_specs.SELECTIVE}, constructing
@@ -123,13 +130,13 @@ module Via
 (** {2 Building Core} *)
 
 module Core_over_functor_via_select
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
              with type 'a t = 'a Functor.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Req.t
 
 module Core_over_functor_via_branch
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
              with type 'a t = 'a Functor.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Req.t
@@ -163,5 +170,5 @@ module Syntax (Core : Preface_specs.Selective.CORE) :
 
 (** {2 Deriving Select from a Monad} *)
 
-module Select_from_monad (Monad : Preface_specs.MONAD) :
+module Select_from_monad (Monad : Preface_specs.Monad.CORE) :
   Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Monad.t

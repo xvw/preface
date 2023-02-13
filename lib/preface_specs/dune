@@ -4,6 +4,17 @@
  (modules_without_implementation
   preface_specs
   types
+  indexed_functor
+  indexed_alt
+  indexed_apply
+  indexed_applicative
+  indexed_alternative
+  indexed_selective
+  indexed_bind
+  indexed_monad
+  indexed_monad_plus
+  indexed_comonad
+  indexed_foldable
   functor
   apply
   applicative

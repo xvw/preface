@@ -81,6 +81,13 @@ module Product (F : Preface_specs.ALTERNATIVE) (G : Preface_specs.ALTERNATIVE) :
 module From_arrow_plus (A : Preface_specs.ARROW_PLUS) :
   Preface_specs.ALTERNATIVE with type 'a t = (unit, 'a) A.t
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Alternative} *)
+
+module Index (F : Preface_specs.ALTERNATIVE) :
+  Preface_specs.INDEXED_ALTERNATIVE with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build an {!module-type:Preface_specs.ALTERNATIVE},

@@ -44,6 +44,13 @@ module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) :
 module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
   Preface_specs.ALT with type 'a t = 'a F.t * 'a G.t
 
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Alt} *)
+
+module Index (F : Preface_specs.ALT) :
+  Preface_specs.INDEXED_ALT with type ('a, 'index) t = 'a F.t
+
 (** {1 Manual construction}
 
     Advanced way to build an {!module-type:Preface_specs.ALT}, constructing and
@@ -55,7 +62,8 @@ module Product (F : Preface_specs.ALT) (G : Preface_specs.ALT) :
 module Via
     (Core : Preface_specs.Alt.CORE)
     (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t)
-    (Infix : Preface_specs.Alt.INFIX with type 'a t = 'a Operation.t) :
+    (Infix : Preface_specs.Alt.INFIX with type 'a t = 'a Operation.t)
+    (Syntax : Preface_specs.Alt.SYNTAX with type 'a t = 'a Infix.t) :
   Preface_specs.ALT with type 'a t = 'a Infix.t
 
 (** {2 Building Core} *)
@@ -79,3 +87,8 @@ module Infix
     (Core : Preface_specs.Alt.CORE)
     (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t) :
   Preface_specs.Alt.INFIX with type 'a t = 'a Core.t
+
+(** {2 Deriving Syntax} *)
+
+module Syntax (Core : Preface_specs.Alt.CORE) :
+  Preface_specs.Alt.SYNTAX with type 'a t = 'a Core.t

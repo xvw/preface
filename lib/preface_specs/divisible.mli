@@ -99,7 +99,7 @@ module type API = sig
 
   (** {1 Infix operators} *)
 
-  module Infix : INFIX with type 'a t = 'a t
+  module Infix : INFIX with type 'a t := 'a t
 
   include INFIX with type 'a t := 'a t
   (** @inline *)

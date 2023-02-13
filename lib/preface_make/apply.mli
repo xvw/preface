@@ -10,6 +10,9 @@
     Other standard method, using the minimal definition of an alt to derive its
     full API. *)
 
+module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
+  Preface_specs.APPLY with type 'a t = 'a Req.t
+
 (** {2 Using apply over functor}
 
     Build a {!module-type:Preface_specs.APPLY} using
@@ -18,8 +21,6 @@
 
     Standard method, using the minimal definition of an alt to derive its full
     API. *)
-module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) :
-  Preface_specs.APPLY with type 'a t = 'a Req.t
 
 module Over_functor_via_apply
     (Functor : Preface_specs.Functor.WITH_MAP)
@@ -150,6 +151,13 @@ module Const (M : Preface_specs.Monoid.CORE) : sig
   val get : 'a t -> M.t
   (** Retrieve the [Monoid] value from the [Const]. *)
 end
+
+(** {1 To other abstraction} *)
+
+(** {2 To an Indexed Apply} *)
+
+module Index (F : Preface_specs.APPLY) :
+  Preface_specs.INDEXED_APPLY with type ('a, 'index) t = 'a F.t
 
 (** {1 Manual construction}
 

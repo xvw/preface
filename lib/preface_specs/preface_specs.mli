@@ -24,6 +24,20 @@ module Join_semilattice = Join_semilattice
 module Bounded_meet_semilattice = Bounded_meet_semilattice
 module Bounded_join_semilattice = Bounded_join_semilattice
 
+(** {1 Indexed Functor hierarchy} *)
+
+module Indexed_functor = Indexed_functor
+module Indexed_alt = Indexed_alt
+module Indexed_apply = Indexed_apply
+module Indexed_applicative = Indexed_applicative
+module Indexed_alternative = Indexed_alternative
+module Indexed_selective = Indexed_selective
+module Indexed_bind = Indexed_bind
+module Indexed_monad = Indexed_monad
+module Indexed_monad_plus = Indexed_monad_plus
+module Indexed_comonad = Indexed_comonad
+module Indexed_foldable = Indexed_foldable
+
 (** {1 Functor hierarchy} *)
 
 module Invariant = Invariant
@@ -102,6 +116,17 @@ module type MEET_SEMILATTICE = Meet_semilattice.API
 module type JOIN_SEMILATTICE = Join_semilattice.API
 module type BOUNDED_MEET_SEMILATTICE = Bounded_meet_semilattice.API
 module type BOUNDED_JOIN_SEMILATTICE = Bounded_join_semilattice.API
+module type INDEXED_FUNCTOR = Indexed_functor.API
+module type INDEXED_ALT = Indexed_alt.API
+module type INDEXED_APPLY = Indexed_apply.API
+module type INDEXED_APPLICATIVE = Indexed_applicative.API
+module type INDEXED_ALTERNATIVE = Indexed_alternative.API
+module type INDEXED_SELECTIVE = Indexed_selective.API
+module type INDEXED_BIND = Indexed_bind.API
+module type INDEXED_MONAD = Indexed_monad.API
+module type INDEXED_MONAD_PLUS = Indexed_monad_plus.API
+module type INDEXED_COMONAD = Indexed_comonad.API
+module type INDEXED_FOLDABLE = Indexed_foldable.API
 module type FUNCTOR = Functor.API
 module type BIFUNCTOR = Bifunctor.API
 module type PROFUNCTOR = Profunctor.API

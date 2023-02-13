@@ -1,6 +1,6 @@
-(** A [Monad] allow to sequences operations that are dependent from one to
+(** A [Bind] allow to sequences operations that are dependent from one to
     another, in contrast to {!module:Applicative}, which executes a series of
-    independent actions.*)
+    independent actions. It is a Monad without [return] operation. *)
 
 (** {2 Laws}
 
@@ -19,168 +19,97 @@
 (** Minimal definition using [bind]. *)
 module type WITH_BIND = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  val bind : ('a -> 'b t) -> 'a t -> 'b t
-  (** [bind f m] passes the result of computation [m] to function [f]. *)
+  include Indexed_bind.WITH_BIND with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
-(** Minimal definition using [return], [map] and [join]. *)
+(** Minimal definition using [map] and [join]. *)
 module type WITH_MAP_AND_JOIN = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  val map : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
-
-  val join : 'a t t -> 'a t
-  (** [join] remove one level of monadic structure, projecting its bound
-      argument into the outer level. *)
+  include Indexed_bind.WITH_MAP_AND_JOIN with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
-(** Minimal definition using [return] and [compose_left_to_right]. *)
+(** Minimal definition using [compose_left_to_right]. *)
 module type WITH_KLEISLI_COMPOSITION = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  val compose_left_to_right : ('a -> 'b t) -> ('b -> 'c t) -> 'a -> 'c t
-  (** Composing monadic functions using Kleisli Arrow (from left to right). *)
+  include Indexed_bind.WITH_KLEISLI_COMPOSITION with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Minimal definition using [map] and [bind]. *)
 module type WITH_MAP_AND_BIND = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  include Functor.WITH_MAP with type 'a t := 'a t
-  include WITH_BIND with type 'a t := 'a t
+  include Indexed_bind.WITH_MAP_AND_BIND with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Minimal definition using [map] and [compose_left_to_right]. *)
 module type WITH_MAP_AND_KLEISLI_COMPOSITION = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  include Functor.WITH_MAP with type 'a t := 'a t
-  include WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
+  include
+    Indexed_bind.WITH_MAP_AND_KLEISLI_COMPOSITION with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** {1 Structure anatomy} *)
 
 (** Basis operations. *)
 module type CORE = sig
-  include WITH_BIND
-  (** @inline *)
+  type 'a t
+  (** The type held by the [Bind]. *)
 
-  include WITH_MAP_AND_JOIN with type 'a t := 'a t
-  (** @inline *)
-
-  include WITH_KLEISLI_COMPOSITION with type 'a t := 'a t
+  include Indexed_bind.CORE with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Additional operations. *)
 module type OPERATION = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  val compose_right_to_left : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
-  (** Composing monadic functions using Kleisli Arrow (from right to left). *)
-
-  val lift : ('a -> 'b) -> 'a t -> 'b t
-  (** Mapping over from ['a] to ['b] over ['a t] to ['b t]. *)
-
-  val lift2 : ('a -> 'b -> 'c) -> 'a t -> 'b t -> 'c t
-  (** Mapping over from ['a] and ['b] to ['c] over ['a t] and ['b t] to ['c t]. *)
-
-  val lift3 : ('a -> 'b -> 'c -> 'd) -> 'a t -> 'b t -> 'c t -> 'd t
-  (** Mapping over from ['a] and ['b] and ['c] to ['d] over ['a t] and ['b t]
-      and ['c t] to ['d t]. *)
-
-  include Functor.OPERATION with type 'a t := 'a t
+  include Indexed_bind.OPERATION with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** Syntax extensions. *)
 module type SYNTAX = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  val ( let* ) : 'a t -> ('a -> 'b t) -> 'b t
-  (** Syntactic shortcuts for flipped version of {!val:CORE.bind}:
-
-      [let* x = e in f] is equals to [bind (fun x -> f) e]. *)
-
-  val ( let+ ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Syntactic shortcuts for flipped version of {!val:CORE.map}:
-
-      [let+ x = e in f] is equals to [map (fun x -> f) e]. *)
+  include Indexed_bind.SYNTAX with type ('a, _) t := 'a t
+  (** @inline *)
 end
 
 (** Infix operators. *)
 module type INFIX = sig
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  val ( =|< ) : ('a -> 'b) -> 'a t -> 'b t
-  (** Infix version of {!val:CORE.map}. *)
-
-  val ( >|= ) : 'a t -> ('a -> 'b) -> 'b t
-  (** Infix flipped version of {!val:CORE.map}. *)
-
-  val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
-  (** Infix flipped version of {!val:CORE.bind}. *)
-
-  val ( =<< ) : ('a -> 'b t) -> 'a t -> 'b t
-  (** Infix version of {!val:CORE.bind}. *)
-
-  val ( >=> ) : ('a -> 'b t) -> ('b -> 'c t) -> 'a -> 'c t
-  (** Infix version of {!val:CORE.compose_left_to_right}. *)
-
-  val ( <=< ) : ('b -> 'c t) -> ('a -> 'b t) -> 'a -> 'c t
-  (** Infix version of {!val:OPERATION.compose_right_to_left}. *)
-
-  val ( >> ) : unit t -> 'b t -> 'b t
-  (** Sequentially compose two actions, discarding any value produced by the
-      first. *)
-
-  val ( << ) : 'a t -> unit t -> 'a t
-  (** Sequentially compose two actions, discarding any value produced by the
-      second. *)
-
-  include Functor.INFIX with type 'a t := 'a t
+  include Indexed_bind.INFIX with type ('a, _) t := 'a t
   (** @inline *)
 end
 
 (** {1 Complete API} *)
 
-(** The complete interface of a [Monad]. *)
+(** The complete interface of a [Bind]. *)
 module type API = sig
   (** {1 Type} *)
 
   type 'a t
-  (** The type held by the [Monad]. *)
+  (** The type held by the [Bind]. *)
 
-  (** {1 Functions} *)
-
-  include CORE with type 'a t := 'a t
-  (** @inline *)
-
-  include OPERATION with type 'a t := 'a t
-  (** @inline *)
-
-  (** {1 Infix operators} *)
-
-  module Infix : INFIX with type 'a t = 'a t
-
-  include INFIX with type 'a t := 'a t
-  (** @inline *)
-
-  (** {1 Syntax} *)
-
-  module Syntax : SYNTAX with type 'a t = 'a t
-
-  include SYNTAX with type 'a t := 'a t
+  include Indexed_bind.API with type ('a, _) t := 'a t
   (** @inline *)
 end
 

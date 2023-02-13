@@ -101,26 +101,7 @@ module type API = sig
   type 'a t
   (** The type held by the [Alternative]. *)
 
-  (** {1 Functions} *)
-
-  include CORE with type 'a t := 'a t
-  (** @inline *)
-
-  include OPERATION with type 'a t := 'a t
-  (** @inline *)
-
-  (** {1 Infix operators} *)
-
-  module Infix : INFIX with type 'a t = 'a t
-
-  include INFIX with type 'a t := 'a t
-  (** @inline *)
-
-  (** {1 Syntax} *)
-
-  module Syntax : SYNTAX with type 'a t = 'a t
-
-  include SYNTAX with type 'a t := 'a t
+  include Indexed_alternative.API with type ('a, _) t := 'a t
   (** @inline *)
 end
 
