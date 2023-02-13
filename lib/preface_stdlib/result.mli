@@ -14,7 +14,33 @@ type ('a, 'b) t = ('a, 'b) result =
 (** {2 Bifunctor} *)
 
 module Bifunctor : Preface_specs.BIFUNCTOR with type ('a, 'b) t = ('a, 'b) t
-(** {2 Bifunctor API} *)
+
+(** {2 Functor} *)
+
+module Functor : Preface_specs.INDEXED_FUNCTOR with type ('a, 'b) t = ('a, 'b) t
+
+(** {2 Alt} *)
+
+module Alt : Preface_specs.INDEXED_ALT with type ('a, 'b) t = ('a, 'b) t
+
+(** {2 Applicative} *)
+
+module Applicative :
+  Preface_specs.INDEXED_APPLICATIVE with type ('a, 'b) t = ('a, 'b) t
+
+(** {2 Selective} *)
+
+module Selective :
+  Preface_specs.INDEXED_SELECTIVE with type ('a, 'b) t = ('a, 'b) t
+
+(** {2 Monad} *)
+
+module Monad : Preface_specs.INDEXED_MONAD with type ('a, 'b) t = ('a, 'b) t
+
+(** {2 Foldable} *)
+
+module Foldable :
+  Preface_specs.INDEXED_FOLDABLE with type ('a, 'b) t = ('a, 'b) t
 
 module Mono (T : Preface_specs.Types.T0) : sig
   (** {2 Delayed implementation}

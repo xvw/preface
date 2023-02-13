@@ -12,6 +12,49 @@ module Bifunctor = Preface_make.Bifunctor.Via_bimap (struct
   let bimap f g = function Ok x -> Ok (f x) | Error x -> Error (g x)
 end)
 
+module Functor = Preface_make.Indexed_functor.Via_map (struct
+  type nonrec ('a, 'b) t = ('a, 'b) t
+
+  let map f x = Bifunctor.bimap f id x
+end)
+
+module Alt =
+  Preface_make.Indexed_alt.Over_functor
+    (Functor)
+    (struct
+      type nonrec ('a, 'b) t = ('a, 'b) t
+
+      let combine x y = match (x, y) with Error _, a -> a | a, _ -> a
+    end)
+
+module Applicative = Preface_make.Indexed_applicative.Via_pure_and_apply (struct
+  type nonrec ('a, 'b) t = ('a, 'b) t
+
+  let pure = pure
+
+  let apply fa xa =
+    match (fa, xa) with Ok f, x -> Functor.map f x | Error x, _ -> Error x
+  ;;
+end)
+
+module Monad = Preface_make.Indexed_monad.Via_return_and_bind (struct
+  type nonrec ('a, 'b) t = ('a, 'b) t
+
+  let return = pure
+  let bind f = function Ok x -> f x | Error x -> Error x
+end)
+
+module Selective =
+  Preface_make.Indexed_selective.Over_applicative_via_select
+    (Applicative)
+    (Preface_make.Indexed_selective.Select_from_monad (Monad))
+
+module Foldable = Preface_make.Indexed_foldable.Via_fold_right (struct
+  type nonrec ('a, 'b) t = ('a, 'b) t
+
+  let fold_right f x acc = match x with Error _ -> acc | Ok v -> f v acc
+end)
+
 module Mono (T : Preface_specs.Types.T0) = struct
   module Functor = Preface_make.Functor.Via_map (struct
     type nonrec 'a t = ('a, T.t) t
