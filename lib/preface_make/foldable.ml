@@ -41,20 +41,47 @@ module Via
     (C : Preface_specs.Foldable.CORE)
     (O : Preface_specs.Foldable.OPERATION with type 'a t = 'a C.t) =
 struct
-  include C
-  include (O : Preface_specs.Foldable.OPERATION with type 'a t := 'a t)
+  type 'a t = 'a C.t
+
+  include (
+    Indexed_foldable.Via
+      (struct
+        type ('a, 'index) t = 'a C.t
+
+        include (C : Preface_specs.Foldable.CORE with type 'a t := 'a C.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a C.t
+
+        include (O : Preface_specs.Foldable.OPERATION with type 'a t := 'a C.t)
+      end) :
+      Preface_specs.Indexed_foldable.API with type ('a, _) t := 'a C.t )
 end
 
 module Via_fold_right (Req : Preface_specs.Foldable.WITH_FOLD_RIGHT) = struct
-  module C = Core_via_fold_right (Req)
-  module O = Operation (C)
-  include Via (C) (O)
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_foldable.Via_fold_right (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Foldable.WITH_FOLD_RIGHT with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_foldable.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_fold_map (Req : Preface_specs.Foldable.WITH_FOLD_MAP) = struct
-  module C = Core_via_fold_map (Req)
-  module O = Operation (C)
-  include Via (C) (O)
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_foldable.Via_fold_map (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Foldable.WITH_FOLD_MAP with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_foldable.API with type ('a, _) t := 'a Req.t )
 end
 
 module Composition (F : Preface_specs.FOLDABLE) (G : Preface_specs.FOLDABLE) =

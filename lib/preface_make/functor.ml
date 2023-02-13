@@ -49,27 +49,50 @@ end
 
 module Via
     (Core : Preface_specs.Functor.CORE)
-    (Operation : Preface_specs.Functor.OPERATION)
-    (Infix : Preface_specs.Functor.INFIX)
-    (Syntax : Preface_specs.Functor.SYNTAX) =
+    (Operation : Preface_specs.Functor.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Functor.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Functor.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Infix
-  module Infix = Infix
-  include Syntax
-  module Syntax = Syntax
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_functor.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Functor.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation :
+            Preface_specs.Functor.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Infix : Preface_specs.Functor.INFIX with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Syntax : Preface_specs.Functor.SYNTAX with type 'a t := 'a Core.t )
+      end) :
+      Preface_specs.Indexed_functor.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_map (Req : Preface_specs.Functor.WITH_MAP) = struct
-  module Core = Core (Req)
-  include Core
-  module Operation = Operation (Core)
-  include Operation
-  module Infix = Infix (Core) (Operation)
-  include Infix
-  module Syntax = Syntax (Core)
-  include Syntax
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_functor.Via_map (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (Req : Preface_specs.Functor.WITH_MAP with type 'a t := 'a Req.t)
+    end) :
+      Preface_specs.Indexed_functor.API with type ('a, _) t := 'a Req.t )
 end
 
 module Composition (F : Preface_specs.FUNCTOR) (G : Preface_specs.FUNCTOR) =

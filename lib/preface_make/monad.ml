@@ -98,54 +98,85 @@ end
 
 module Via
     (Core : Preface_specs.Monad.CORE)
-    (Operation : Preface_specs.Monad.OPERATION)
-    (Infix : Preface_specs.Monad.INFIX)
-    (Syntax : Preface_specs.Monad.SYNTAX) =
+    (Operation : Preface_specs.Monad.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Monad.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Monad.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-  module Syntax = Syntax
-  module Infix = Infix
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_monad.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Monad.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation : Preface_specs.Monad.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Infix : Preface_specs.Monad.INFIX with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Syntax : Preface_specs.Monad.SYNTAX with type 'a t := 'a Core.t)
+      end) :
+      Preface_specs.Indexed_monad.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_return_and_bind (Req : Preface_specs.Monad.WITH_RETURN_AND_BIND) =
 struct
-  module Core = Core_via_return_and_bind (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_monad.Via_return_and_bind (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Monad.WITH_RETURN_AND_BIND with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_monad.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_return_map_and_join
     (Req : Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN) =
 struct
-  module Core = Core_via_return_map_and_join (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_monad.Via_return_map_and_join (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Monad.WITH_RETURN_MAP_AND_JOIN
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_monad.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_return_and_kleisli_composition
     (Req : Preface_specs.Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION) =
 struct
-  module Core = Core_via_return_and_kleisli_composition (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_monad.Via_return_and_kleisli_composition (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Monad.WITH_RETURN_AND_KLEISLI_COMPOSITION
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_monad.API with type ('a, _) t := 'a Req.t )
 end
 
 module From_monad_plus (Monad_plus : Preface_specs.MONAD_PLUS) = Monad_plus

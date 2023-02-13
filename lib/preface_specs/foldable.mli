@@ -53,12 +53,7 @@ module type API = sig
   type 'a t
   (** The type held by the [Foldable]. *)
 
-  (** {1 Functions} *)
-
-  include CORE with type 'a t := 'a t
-  (** @inline *)
-
-  include OPERATION with type 'a t := 'a t
+  include Indexed_foldable.API with type ('a, _) t := 'a t
   (** @inline *)
 end
 

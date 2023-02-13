@@ -135,11 +135,17 @@ module Over_monad
     end)
     (Operation_over_monad (Monad) (Req))
     (struct
+      type ('a, 'index) t = ('a, 'index) Monad.t
+
       include Monad.Infix
 
       let ( <|> ) = Req.combine
     end)
-    (Monad.Syntax)
+    (struct
+      type ('a, 'index) t = ('a, 'index) Monad.t
+
+      include Monad.Syntax
+    end)
 
 module Over_monad_and_alternative
     (Monad : Preface_specs.INDEXED_MONAD)

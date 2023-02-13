@@ -67,53 +67,72 @@ end
 
 module Via
     (Core : Preface_specs.Alt.CORE)
-    (Operation : Preface_specs.Alt.OPERATION)
-    (Infix : Preface_specs.Alt.INFIX)
-    (Syntax : Preface_specs.Alt.SYNTAX) =
+    (Operation : Preface_specs.Alt.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Alt.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Alt.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  module Infix = Infix
-  include Infix
-  module Syntax = Syntax
-  include Syntax
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_alt.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Alt.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation : Preface_specs.Alt.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Infix : Preface_specs.Alt.INFIX with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Syntax : Preface_specs.Alt.SYNTAX with type 'a t := 'a Core.t)
+      end) :
+      Preface_specs.Indexed_alt.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_map_and_combine (Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP) =
 struct
-  module Core = Core (Req)
-  include Core
-  module Operation = Operation (Core)
-  module Infix = Infix (Core) (Operation)
-  module Syntax = Syntax (Core)
-  include Operation
-  include Infix
-  include Syntax
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_alt.Via_map_and_combine (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Alt.WITH_COMBINE_AND_MAP with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_alt.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_functor
     (F : Preface_specs.FUNCTOR)
     (Combine : Preface_specs.Alt.WITH_COMBINE with type 'a t = 'a F.t) =
 struct
-  module Core' = Core_over_functor (F) (Combine)
-  module Operation' = Operation (Core')
+  type 'a t = 'a F.t
 
-  module Infix' = struct
-    include Infix (Core') (Operation')
-    include F.Infix
-  end
+  include (
+    Indexed_alt.Over_functor
+      (struct
+        type ('a, 'index) t = 'a F.t
 
-  module Syntax' = struct
-    include F.Syntax
-  end
+        include (F : Preface_specs.FUNCTOR with type 'a t := 'a F.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a F.t
 
-  include Core'
-  include Operation'
-  include F
-  module Infix = Infix'
-  include Infix
-  module Syntax = Syntax'
-  include Syntax
+        include (
+          Combine : Preface_specs.Alt.WITH_COMBINE with type 'a t := 'a F.t )
+      end) :
+      Preface_specs.Indexed_alt.API with type ('a, _) t := 'a F.t )
 end
 
 module Composition (F : Preface_specs.ALT) (G : Preface_specs.FUNCTOR) =

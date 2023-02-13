@@ -100,53 +100,89 @@ end
 
 module Via
     (Core : Preface_specs.Applicative.CORE)
-    (Operation : Preface_specs.Applicative.OPERATION)
-    (Infix : Preface_specs.Applicative.INFIX)
-    (Syntax : Preface_specs.Applicative.SYNTAX) =
+    (Operation : Preface_specs.Applicative.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Applicative.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Applicative.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-  module Infix = Infix
-  module Syntax = Syntax
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_applicative.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Core : Preface_specs.Applicative.CORE with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation :
+            Preface_specs.Applicative.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Infix : Preface_specs.Applicative.INFIX with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Syntax : Preface_specs.Applicative.SYNTAX with type 'a t := 'a Core.t )
+      end) :
+      Preface_specs.Indexed_applicative.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_pure_map_and_product
     (Req : Preface_specs.Applicative.WITH_PURE_MAP_AND_PRODUCT) =
 struct
-  module Core = Core_via_pure_map_and_product (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_applicative.Via_pure_map_and_product (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Applicative.WITH_PURE_MAP_AND_PRODUCT
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_applicative.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_pure_and_apply (Req : Preface_specs.Applicative.WITH_PURE_AND_APPLY) =
 struct
-  module Core = Core_via_pure_and_apply (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_applicative.Via_pure_and_apply (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Applicative.WITH_PURE_AND_APPLY
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_applicative.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_pure_and_lift2 (Req : Preface_specs.Applicative.WITH_PURE_AND_LIFT2) =
 struct
-  module Core = Core_via_pure_and_lift2 (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_applicative.Via_pure_and_lift2 (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Applicative.WITH_PURE_AND_LIFT2
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_applicative.API with type ('a, _) t := 'a Req.t )
 end
 
 module From_monad (Monad : Preface_specs.MONAD) = struct

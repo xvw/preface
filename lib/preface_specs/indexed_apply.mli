@@ -157,15 +157,15 @@ module type API = sig
 
   (** {1 Infix operators} *)
 
-  module Infix : INFIX with type ('a, 'index) t = ('a, 'index) t
+  module Infix : INFIX with type ('a, 'index) t := ('a, 'index) t
 
-  include module type of Infix with type ('a, 'index) t := ('a, 'index) t
+  include INFIX with type ('a, 'index) t := ('a, 'index) t
   (** @inline *)
 
   (** {1 Syntax} *)
 
-  module Syntax : SYNTAX with type ('a, 'index) t = ('a, 'index) t
+  module Syntax : SYNTAX with type ('a, 'index) t := ('a, 'index) t
 
-  include module type of Syntax with type ('a, 'index) t := ('a, 'index) t
+  include SYNTAX with type ('a, 'index) t := ('a, 'index) t
   (** @inline *)
 end

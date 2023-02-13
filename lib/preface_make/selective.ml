@@ -1,5 +1,5 @@
 module Core_over_functor_via_select
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
              with type 'a t = 'a Functor.t) =
 struct
@@ -11,7 +11,8 @@ struct
         type ('a, 'index) t = 'a Req.t
 
         include (
-          Functor : Preface_specs.Functor.CORE with type 'a t := 'a Functor.t )
+          Functor :
+            Preface_specs.Functor.WITH_MAP with type 'a t := 'a Functor.t )
       end)
       (struct
         type ('a, 'index) t = 'a Req.t
@@ -25,7 +26,7 @@ struct
 end
 
 module Core_over_functor_via_branch
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
              with type 'a t = 'a Functor.t) =
 struct
@@ -37,7 +38,8 @@ struct
         type ('a, 'index) t = 'a Req.t
 
         include (
-          Functor : Preface_specs.Functor.CORE with type 'a t := 'a Functor.t )
+          Functor :
+            Preface_specs.Functor.WITH_MAP with type 'a t := 'a Functor.t )
       end)
       (struct
         type ('a, 'index) t = 'a Req.t
@@ -147,74 +149,131 @@ end
 
 module Via
     (Core : Preface_specs.Selective.CORE)
-    (Operation : Preface_specs.Selective.OPERATION)
-    (Infix : Preface_specs.Selective.INFIX)
-    (Syntax : Preface_specs.Selective.SYNTAX) =
+    (Operation : Preface_specs.Selective.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Selective.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Selective.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-  module Infix = Infix
-  module Syntax = Syntax
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_selective.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Selective.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation :
+            Preface_specs.Selective.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Infix : Preface_specs.Selective.INFIX with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Syntax : Preface_specs.Selective.SYNTAX with type 'a t := 'a Core.t )
+      end) :
+      Preface_specs.Indexed_selective.API with type ('a, _) t := 'a Core.t )
 end
 
 module Over_functor_via_select
-    (Functor : Preface_specs.Functor.CORE)
-    (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
-             with type 'a t = 'a Functor.t) =
+    (F : Preface_specs.Functor.WITH_MAP)
+    (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT with type 'a t = 'a F.t) =
 struct
-  module Core = Core_over_functor_via_select (Functor) (Req)
-  module Operation = Operation (Core)
-  module Infix = Infix (Core) (Operation)
-  module Syntax = Syntax (Core)
-  include Core
-  include Operation
-  include Infix
-  include Syntax
+  type 'a t = 'a F.t
+
+  include (
+    Indexed_selective.Over_functor_via_select
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (F : Preface_specs.Functor.WITH_MAP with type 'a t := 'a F.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (
+          Req :
+            Preface_specs.Selective.WITH_PURE_AND_SELECT
+              with type 'a t := 'a F.t )
+      end) :
+      Preface_specs.Indexed_selective.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_functor_via_branch
-    (Functor : Preface_specs.Functor.CORE)
-    (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
-             with type 'a t = 'a Functor.t) =
+    (F : Preface_specs.Functor.WITH_MAP)
+    (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH with type 'a t = 'a F.t) =
 struct
-  module Core = Core_over_functor_via_branch (Functor) (Req)
-  module Operation = Operation (Core)
-  module Infix = Infix (Core) (Operation)
-  module Syntax = Syntax (Core)
-  include Core
-  include Operation
-  include Infix
-  include Syntax
+  type 'a t = 'a F.t
+
+  include (
+    Indexed_selective.Over_functor_via_branch
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (F : Preface_specs.Functor.WITH_MAP with type 'a t := 'a F.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (
+          Req :
+            Preface_specs.Selective.WITH_PURE_AND_BRANCH
+              with type 'a t := 'a F.t )
+      end) :
+      Preface_specs.Indexed_selective.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_applicative_via_select
-    (Applicative : Preface_specs.APPLICATIVE)
-    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a Applicative.t) =
+    (A : Preface_specs.APPLICATIVE)
+    (Req : Preface_specs.Selective.WITH_SELECT with type 'a t = 'a A.t) =
 struct
-  module Core = Core_over_applicative_via_select (Applicative) (Req)
-  module Operation = Operation (Core)
-  module Infix = Infix (Core) (Operation)
-  module Syntax = Syntax (Core)
-  include Core
-  include Operation
-  include Infix
-  include Syntax
+  type 'a t = 'a A.t
+
+  include (
+    Indexed_selective.Over_applicative_via_select
+      (struct
+        type ('a, 'index) t = 'a A.t
+
+        include (A : Preface_specs.APPLICATIVE with type 'a t := 'a A.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a A.t
+
+        include (
+          Req : Preface_specs.Selective.WITH_SELECT with type 'a t := 'a A.t )
+      end) :
+      Preface_specs.Indexed_selective.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_applicative_via_branch
-    (Applicative : Preface_specs.APPLICATIVE)
-    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a Applicative.t) =
+    (A : Preface_specs.APPLICATIVE)
+    (Req : Preface_specs.Selective.WITH_BRANCH with type 'a t = 'a A.t) =
 struct
-  module Core = Core_over_applicative_via_branch (Applicative) (Req)
-  module Operation = Operation (Core)
-  module Infix = Infix (Core) (Operation)
-  module Syntax = Syntax (Core)
-  include Core
-  include Operation
-  include Infix
-  include Syntax
+  type 'a t = 'a A.t
+
+  include (
+    Indexed_selective.Over_applicative_via_branch
+      (struct
+        type ('a, 'index) t = 'a A.t
+
+        include (A : Preface_specs.APPLICATIVE with type 'a t := 'a A.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a A.t
+
+        include (
+          Req : Preface_specs.Selective.WITH_BRANCH with type 'a t := 'a A.t )
+      end) :
+      Preface_specs.Indexed_selective.API with type ('a, _) t := 'a Req.t )
 end
 
 module Select_from_monad (Monad : Preface_specs.Monad.CORE) = struct

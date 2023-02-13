@@ -153,92 +153,141 @@ end
 
 module Via
     (Core : Preface_specs.Apply.CORE)
-    (Operation : Preface_specs.Apply.OPERATION)
-    (Infix : Preface_specs.Apply.INFIX)
-    (Syntax : Preface_specs.Apply.SYNTAX) =
+    (Operation : Preface_specs.Apply.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Apply.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Apply.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-  module Infix = Infix
-  module Syntax = Syntax
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_apply.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Apply.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation : Preface_specs.Apply.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Infix : Preface_specs.Apply.INFIX with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Syntax : Preface_specs.Apply.SYNTAX with type 'a t := 'a Core.t)
+      end) :
+      Preface_specs.Indexed_apply.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_map_and_apply (Req : Preface_specs.Apply.WITH_MAP_AND_APPLY) = struct
-  module Core = Core_via_map_and_apply (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_apply.Via_map_and_apply (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Apply.WITH_MAP_AND_APPLY with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_apply.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_map_and_product (Req : Preface_specs.Apply.WITH_MAP_AND_PRODUCT) =
 struct
-  module Core = Core_via_map_and_product (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_apply.Via_map_and_product (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Apply.WITH_MAP_AND_PRODUCT with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_apply.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_map_and_lift2 (Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2) = struct
-  module Core = Core_via_map_and_lift2 (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_apply.Via_map_and_lift2 (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Apply.WITH_MAP_AND_LIFT2 with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_apply.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_functor_via_apply
-    (Functor : Preface_specs.Functor.WITH_MAP)
-    (Req : Preface_specs.Apply.WITH_APPLY with type 'a t = 'a Functor.t) =
+    (F : Preface_specs.Functor.WITH_MAP)
+    (Req : Preface_specs.Apply.WITH_APPLY with type 'a t = 'a F.t) =
 struct
-  module Core = Core_over_functor_via_apply (Functor) (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_apply.Over_functor_via_apply
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (F : Preface_specs.Functor.WITH_MAP with type 'a t := 'a F.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (Req : Preface_specs.Apply.WITH_APPLY with type 'a t := 'a Req.t)
+      end) :
+      Preface_specs.Indexed_apply.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_functor_via_product
-    (Functor : Preface_specs.Functor.WITH_MAP)
-    (Req : Preface_specs.Apply.WITH_PRODUCT with type 'a t = 'a Functor.t) =
+    (F : Preface_specs.Functor.WITH_MAP)
+    (Req : Preface_specs.Apply.WITH_PRODUCT with type 'a t = 'a F.t) =
 struct
-  module Core = Core_over_functor_via_product (Functor) (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_apply.Over_functor_via_product
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (F : Preface_specs.Functor.WITH_MAP with type 'a t := 'a F.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (
+          Req : Preface_specs.Apply.WITH_PRODUCT with type 'a t := 'a Req.t )
+      end) :
+      Preface_specs.Indexed_apply.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_functor_via_lift2
-    (Functor : Preface_specs.Functor.WITH_MAP)
-    (Req : Preface_specs.Apply.WITH_LIFT2 with type 'a t = 'a Functor.t) =
+    (F : Preface_specs.Functor.WITH_MAP)
+    (Req : Preface_specs.Apply.WITH_LIFT2 with type 'a t = 'a F.t) =
 struct
-  module Core = Core_over_functor_via_lift2 (Functor) (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_apply.Over_functor_via_lift2
+      (struct
+        type ('a, 'index) t = 'a F.t
+
+        include (F : Preface_specs.Functor.WITH_MAP with type 'a t := 'a F.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (Req : Preface_specs.Apply.WITH_LIFT2 with type 'a t := 'a Req.t)
+      end) :
+      Preface_specs.Indexed_apply.API with type ('a, _) t := 'a Req.t )
 end
 
 module From_bind (Bind : Preface_specs.Bind.CORE) = struct

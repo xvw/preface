@@ -137,65 +137,101 @@ end
 
 module Via
     (Core : Preface_specs.Bind.CORE)
-    (Operation : Preface_specs.Bind.OPERATION)
-    (Infix : Preface_specs.Bind.INFIX)
-    (Syntax : Preface_specs.Bind.SYNTAX) =
+    (Operation : Preface_specs.Bind.OPERATION with type 'a t = 'a Core.t)
+    (Infix : Preface_specs.Bind.INFIX with type 'a t = 'a Core.t)
+    (Syntax : Preface_specs.Bind.SYNTAX with type 'a t = 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Syntax
-  include Infix
-  module Syntax = Syntax
-  module Infix = Infix
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_bind.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Bind.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation : Preface_specs.Bind.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Infix : Preface_specs.Bind.INFIX with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Syntax : Preface_specs.Bind.SYNTAX with type 'a t := 'a Core.t)
+      end) :
+      Preface_specs.Indexed_bind.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_map_and_bind (Req : Preface_specs.Bind.WITH_MAP_AND_BIND) = struct
-  module Core = Core_via_map_and_bind (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_bind.Via_map_and_bind (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Bind.WITH_MAP_AND_BIND with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_bind.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_map_and_join (Req : Preface_specs.Bind.WITH_MAP_AND_JOIN) = struct
-  module Core = Core_via_map_and_join (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_bind.Via_map_and_join (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Bind.WITH_MAP_AND_JOIN with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_bind.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_map_and_kleisli_composition
     (Req : Preface_specs.Bind.WITH_MAP_AND_KLEISLI_COMPOSITION) =
 struct
-  module Core = Core_via_map_and_kleisli_composition (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_bind.Via_map_and_kleisli_composition (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Bind.WITH_MAP_AND_KLEISLI_COMPOSITION
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_bind.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_functor_via_bind
     (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Bind.WITH_BIND with type 'a t = 'a Functor.t) =
 struct
-  module Core = Core_over_functor_via_bind (Functor) (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_bind.Over_functor_via_bind
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (
+          Functor : Preface_specs.Functor.WITH_MAP with type 'a t := 'a Req.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (Req : Preface_specs.Bind.WITH_BIND with type 'a t := 'a Req.t)
+      end) :
+      Preface_specs.Indexed_bind.API with type ('a, _) t := 'a Req.t )
 end
 
 module Over_functor_via_kleisli_composition
@@ -203,14 +239,25 @@ module Over_functor_via_kleisli_composition
     (Req : Preface_specs.Bind.WITH_KLEISLI_COMPOSITION
              with type 'a t = 'a Functor.t) =
 struct
-  module Core = Core_over_functor_via_kleisli_composition (Functor) (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_bind.Over_functor_via_kleisli_composition
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (
+          Functor : Preface_specs.Functor.WITH_MAP with type 'a t := 'a Req.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Req.t
+
+        include (
+          Req :
+            Preface_specs.Bind.WITH_KLEISLI_COMPOSITION
+              with type 'a t := 'a Req.t )
+      end) :
+      Preface_specs.Indexed_bind.API with type ('a, _) t := 'a Req.t )
 end
 
 module From_monad (Monad : Preface_specs.MONAD) = Monad

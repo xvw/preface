@@ -40,7 +40,7 @@ module Over_applicative_via_branch
     API (including the Applicative API). *)
 
 module Over_functor_via_select
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
              with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Req.t
@@ -55,7 +55,7 @@ module Over_functor_via_select
     API (including the Applicative API). *)
 
 module Over_functor_via_branch
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
              with type 'a t = 'a Functor.t) :
   Preface_specs.SELECTIVE with type 'a t = 'a Req.t
@@ -130,13 +130,13 @@ module Via
 (** {2 Building Core} *)
 
 module Core_over_functor_via_select
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_SELECT
              with type 'a t = 'a Functor.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Req.t
 
 module Core_over_functor_via_branch
-    (Functor : Preface_specs.Functor.CORE)
+    (Functor : Preface_specs.Functor.WITH_MAP)
     (Req : Preface_specs.Selective.WITH_PURE_AND_BRANCH
              with type 'a t = 'a Functor.t) :
   Preface_specs.Selective.CORE with type 'a t = 'a Req.t

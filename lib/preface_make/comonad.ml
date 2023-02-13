@@ -94,53 +94,85 @@ end
 
 module Via
     (Core : Preface_specs.Comonad.CORE)
-    (Operation : Preface_specs.Comonad.OPERATION)
-    (Infix : Preface_specs.Comonad.INFIX)
-    (Syntax : Preface_specs.Comonad.SYNTAX) =
+    (Operation : Preface_specs.Comonad.OPERATION with type 'a t := 'a Core.t)
+    (Infix : Preface_specs.Comonad.INFIX with type 'a t := 'a Core.t)
+    (Syntax : Preface_specs.Comonad.SYNTAX with type 'a t := 'a Core.t) =
 struct
-  include Core
-  include Operation
-  include Syntax
-  module Syntax = Syntax
-  include Infix
-  module Infix = Infix
+  type 'a t = 'a Core.t
+
+  include (
+    Indexed_comonad.Via
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Core : Preface_specs.Comonad.CORE with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Operation :
+            Preface_specs.Comonad.OPERATION with type 'a t := 'a Core.t )
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (Infix : Preface_specs.Comonad.INFIX with type 'a t := 'a Core.t)
+      end)
+      (struct
+        type ('a, 'index) t = 'a Core.t
+
+        include (
+          Syntax : Preface_specs.Comonad.SYNTAX with type 'a t := 'a Core.t )
+      end) :
+      Preface_specs.Indexed_comonad.API with type ('a, _) t := 'a Core.t )
 end
 
 module Via_map_and_duplicate
     (Req : Preface_specs.Comonad.WITH_MAP_AND_DUPLICATE) =
 struct
-  module Core = Core_via_map_and_duplicate (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_comonad.Via_map_and_duplicate (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Comonad.WITH_MAP_AND_DUPLICATE
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_comonad.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_extend (Req : Preface_specs.Comonad.WITH_EXTEND) = struct
-  module Core = Core_via_extend (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_comonad.Via_extend (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req : Preface_specs.Comonad.WITH_EXTEND with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_comonad.API with type ('a, _) t := 'a Req.t )
 end
 
 module Via_cokleisli_composition
     (Req : Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION) =
 struct
-  module Core = Core_via_cokleisli_composition (Req)
-  module Operation = Operation (Core)
-  module Syntax = Syntax (Core)
-  module Infix = Infix (Core) (Operation)
-  include Core
-  include Operation
-  include Syntax
-  include Infix
+  type 'a t = 'a Req.t
+
+  include (
+    Indexed_comonad.Via_cokleisli_composition (struct
+      type ('a, 'index) t = 'a Req.t
+
+      include (
+        Req :
+          Preface_specs.Comonad.WITH_COKLEISLI_COMPOSITION
+            with type 'a t := 'a Req.t )
+    end) :
+      Preface_specs.Indexed_comonad.API with type ('a, _) t := 'a Req.t )
 end
 
 module Index (F : Preface_specs.COMONAD) = struct

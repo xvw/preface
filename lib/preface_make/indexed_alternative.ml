@@ -121,8 +121,14 @@ module Over_applicative
       let reduce list = List.fold_left Req.combine Req.neutral list
     end)
     (struct
+      type ('a, 'index) t = ('a, 'index) Applicative.t
+
       include Applicative.Infix
 
       let ( <|> ) = Req.combine
     end)
-    (Applicative.Syntax)
+    (struct
+      type ('a, 'index) t = ('a, 'index) Applicative.t
+
+      include Applicative.Syntax
+    end)
