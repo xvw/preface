@@ -1,5 +1,6 @@
 ## dev (unreleased)
 
+- Add `Bounded_lattice` [**@hakimba**](https://github.com/hakimba)
 - **Breaking change** Move Monomorphized version of `Result` abstraction under the module `Result.Mono` and provide Indexed abstraction [**@mspwn**](https://github.com/mspwn)
 - **Breaking change** Remove manifest types in submodules (`Infix` and `Syntax`) [**@mspwn**](https://github.com/mspwn)
 - Add `Indexed_functor`, `Indexed_alt`, `Indexed_apply`, `Indexed_applicative`, `Indexed_alternative`, `Indexed_selective`, `Indexed_bind`, `Indexed_monad`, `Indexed_monad_plus`, `Indexed_comonad`, `Indexed_foldable` [**@mspwn**](https://github.com/mspwn), [**@gr-im**](https://github.com/gr-im), [**@gxvw**](https://github.com/xvw)
