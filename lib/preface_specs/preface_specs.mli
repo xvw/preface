@@ -23,6 +23,7 @@ module Meet_semilattice = Meet_semilattice
 module Join_semilattice = Join_semilattice
 module Bounded_meet_semilattice = Bounded_meet_semilattice
 module Bounded_join_semilattice = Bounded_join_semilattice
+module Bounded_lattice = Bounded_lattice
 
 (** {1 Indexed Functor hierarchy} *)
 
@@ -116,6 +117,7 @@ module type MEET_SEMILATTICE = Meet_semilattice.API
 module type JOIN_SEMILATTICE = Join_semilattice.API
 module type BOUNDED_MEET_SEMILATTICE = Bounded_meet_semilattice.API
 module type BOUNDED_JOIN_SEMILATTICE = Bounded_join_semilattice.API
+module type BOUNDED_LATTICE = Bounded_lattice.API
 module type INDEXED_FUNCTOR = Indexed_functor.API
 module type INDEXED_ALT = Indexed_alt.API
 module type INDEXED_APPLY = Indexed_apply.API

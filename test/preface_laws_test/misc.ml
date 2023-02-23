@@ -96,6 +96,12 @@ Preface.Make.Bounded_join_semilattice.Via_join_and_bottom (struct
   let bottom = true
 end)
 
+module Bool_bounded_lattice =
+Preface.Make.Bounded_lattice.Via_bounded_join_and_bounded_meet (struct
+  include Bool_bounded_join_semilattice
+  include Bool_bounded_meet_semilattice
+end)
+
 module Sum_monoid_suite = Preface.Qcheck.Monoid.Suite (Sample.Int) (Sum)
 module Prod_monoid_suite = Preface.Qcheck.Monoid.Suite (Sample.Int) (Prod)
 
@@ -117,6 +123,9 @@ module Bool_bounded_join_semilattice_suite =
   Preface.Qcheck.Bounded_join_semilattice.Suite
     (Sample.Bool)
     (Bool_bounded_join_semilattice)
+
+module Bool_bounded_lattice_suite =
+  Preface.Qcheck.Bounded_lattice.Suite (Sample.Bool) (Bool_bounded_lattice)
 
 module Ordering_join_semilattice_suite =
   Preface.Qcheck.Join_semilattice.Suite (Ord) (Ord.Join_semilattice)
@@ -194,6 +203,7 @@ let cases ~count =
       , Bool_bounded_meet_semilattice_suite.tests )
     ; ( "Bool Bounded_join_semilattice"
       , Bool_bounded_join_semilattice_suite.tests )
+    ; ("Bool Bounded_lattice", Bool_bounded_lattice_suite.tests)
     ; ("Ord Join_semilattice", Ordering_join_semilattice_suite.tests)
     ; ("YOCaml Profunctor", YOCaml_profunctor.tests)
     ; ("YOCaml Strong", YOCaml_strong.tests)
