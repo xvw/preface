@@ -35,7 +35,7 @@ module type API = sig
 
   (** {1 Infix operators} *)
 
-  module Infix : INFIX with type t = t
+  module Infix : INFIX with type t := t
 
   include INFIX with type t := t
   (** @inline *)
