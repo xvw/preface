@@ -3,14 +3,14 @@
 
 (** {1 Minimal definition}*)
 
-module type WITH_BOUNDED_JOIN_AND_BOUNDED_MEET = sig
+module type WITH_BOUNDED_JOIN_LATTICE_AND_BOUNDED_MEET_LATTICE = sig
   include Bounded_join_semilattice.WITH_JOIN_AND_BOTTOM
   include Bounded_meet_semilattice.WITH_MEET_AND_TOP with type t := t
 end
 
 (** {1 Structure anatomy} *)
 
-module type CORE = WITH_BOUNDED_JOIN_AND_BOUNDED_MEET
+module type CORE = WITH_BOUNDED_JOIN_LATTICE_AND_BOUNDED_MEET_LATTICE
 (** Basis operations *)
 
 (** Infix operators. *)

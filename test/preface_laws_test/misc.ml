@@ -97,7 +97,7 @@ Preface.Make.Bounded_join_semilattice.Via_join_and_bottom (struct
 end)
 
 module Bool_bounded_lattice =
-Preface.Make.Bounded_lattice.Via_bounded_join_and_bounded_meet (struct
+Preface.Make.Bounded_lattice.Via_bounded_join_lattice_and_bounded_meet_lattice (struct
   include Bool_bounded_join_semilattice
   include Bool_bounded_meet_semilattice
 end)
