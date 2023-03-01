@@ -100,4 +100,6 @@ graph {
         Join_semilattice -- Bounded_join_semilattice;
         Join_semilattice -- Meet_semilattice [style=dotted; arrowhead=none; constraint=false];
         Bounded_join_semilattice -- Bounded_meet_semilattice [style=dotted; arrowhead=none; constraint=false];
+        Bounded_join_semilattice -- Bounded_lattice
+        Bounded_meet_semilattice -- Bounded_lattice
 }
