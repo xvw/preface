@@ -61,5 +61,6 @@
   join_semilattice
   bounded_meet_semilattice
   bounded_join_semilattice
-  bounded_lattice)
+  bounded_lattice
+  lattice)
  (libraries preface_core))
