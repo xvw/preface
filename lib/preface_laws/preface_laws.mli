@@ -20,6 +20,7 @@ module Join_semilattice = Join_semilattice
 module Bounded_meet_semilattice = Bounded_meet_semilattice
 module Bounded_join_semilattice = Bounded_join_semilattice
 module Bounded_lattice = Bounded_lattice
+module Lattice = Lattice
 
 (** {1 Indexed Functor hierarchy} *)
 
