@@ -13,3 +13,4 @@ esy.lock
 .github/figures/*
 .idea
 *.iml
+_opam

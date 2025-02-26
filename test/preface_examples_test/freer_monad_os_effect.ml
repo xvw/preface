@@ -4,13 +4,13 @@ let try_testable a =
     (Preface.Try.equal (Alcotest.equal a))
 ;;
 
-type 'a effect =
-  | Get_home : string effect
-  | Print : string -> unit effect
+type 'a an_effect =
+  | Get_home : string an_effect
+  | Print : string -> unit an_effect
 
 module Effect = struct
   include Preface.Make.Freer_monad.Over (struct
-    type 'a t = 'a effect
+    type 'a t = 'a an_effect
   end)
 
   let get_home = perform Get_home
@@ -41,8 +41,8 @@ let happy_path_without_path () =
     run
       {
         handler =
-          (fun resume effect ->
-            let f : type b. (b -> 'a) -> b effect -> 'a =
+          (fun resume an_effect ->
+            let f : type b. (b -> 'a) -> b an_effect -> 'a =
              fun resume -> function
               | Print message ->
                 let () = record output ("print " ^ message) in
@@ -51,7 +51,7 @@ let happy_path_without_path () =
                 let () = record output "get_home" in
                 resume "/xhtmlboi"
             in
-            f resume effect )
+            f resume an_effect )
       }
       (program None)
   in
@@ -67,8 +67,8 @@ let happy_path_with_path () =
     run
       {
         handler =
-          (fun resume effect ->
-            let f : type b. (b -> 'a) -> b effect -> 'a =
+          (fun resume an_effect ->
+            let f : type b. (b -> 'a) -> b an_effect -> 'a =
              fun resume -> function
               | Print message ->
                 let () = record output ("print " ^ message) in
@@ -77,7 +77,7 @@ let happy_path_with_path () =
                 let () = record output "get_home" in
                 resume "/xhtmlboi"
             in
-            f resume effect )
+            f resume an_effect )
       }
       (program (Some "./a-path"))
   in
@@ -93,8 +93,8 @@ let unhappy_path_without_path () =
     run
       {
         handler =
-          (fun resume effect ->
-            let f : type b. (b -> 'a) -> b effect -> 'a =
+          (fun resume an_effect ->
+            let f : type b. (b -> 'a) -> b an_effect -> 'a =
              fun resume -> function
               | Print message ->
                 let () = record output ("print " ^ message) in
@@ -103,7 +103,7 @@ let unhappy_path_without_path () =
                 let () = record output "get_home" in
                 Preface.Try.error No_home
             in
-            f resume effect )
+            f resume an_effect )
       }
       (program None)
   in

@@ -4,13 +4,13 @@ let try_testable a =
     (Preface.Try.equal (Alcotest.equal a))
 ;;
 
-type 'a effect =
+type 'a an_effect =
   | Get_home of (string -> 'a)
   | Print of (string * (unit -> 'a))
 
 module Effect = struct
   include Preface.Make.Freer_monad.Over (struct
-    type 'a t = 'a effect
+    type 'a t = 'a an_effect
   end)
 
   let get_home = perform (Get_home Fun.id)
