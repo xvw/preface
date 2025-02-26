@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build
-        uses: ocaml/setup-ocaml@v2
+        uses: ocaml/setup-ocaml@v3
         with:
-          ocaml-compiler: 4.14.x
+          ocaml-compiler: 5.3.0
           opam-depext-flags: --with-doc
 
       - run: opam install . --deps-only --with-doc --with-test
