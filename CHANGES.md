@@ -1,4 +1,4 @@
-## dev (unreleased)
+## v1.1.0 (February 2025)
 
 - Some fixture for `5.3.0` [**@xvw**](https://github.com/xvw)
 - Add `Lattice` [**@hakimba**](https://github.com/hakimba)
